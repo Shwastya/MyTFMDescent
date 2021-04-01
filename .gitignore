@@ -1,0 +1,10 @@
+build
+lib
+third_party
+.vs
+.vscode
+activities
+
+
+# files from assimp linux or many system
+# need recompile
