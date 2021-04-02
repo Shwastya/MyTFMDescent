@@ -114,13 +114,13 @@ void render(uint32_t VAO, uint32_t program) {
 int main(int, char*[]) {
     Window* window = Window::instance();
 
-    glClearColor(0.0f, 0.3f, 0.6f, 1.0f);
+    glClearColor(0.7f, 0.1f, 0.5f, 1.0f);
 
     uint32_t VBO, EBO;
     const uint32_t VAO = createVertexData(&VBO, &EBO);
     const uint32_t program = createProgram();
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINES);
 
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);

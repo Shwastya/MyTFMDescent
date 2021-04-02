@@ -18,8 +18,9 @@ include(cmake/compiler.cmake)
 set(ENGINE_SRC_FILES
 
     # old classes
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/camera.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/deps.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/deps.cpp # ficheros de depencias
+
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/camera.cpp    
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/mesh.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/model.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/shader.cpp

@@ -2,66 +2,46 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <cstdint>
 
 namespace TFM_ECS {
 
 class RenderSystem_t {
 
-	explicit RenderSystem_t() 
-	{
-		initglfw();
+public:
 
-    	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	explicit RenderSystem_t(const uint32_t w, const uint32_t h, const char* t); 	
+	~RenderSystem_t();
 
-   
-    	initWindow();
+	/* RULE OF FIVE */
+	RenderSystem_t(const RenderSystem_t&) = default;
+   RenderSystem_t& operator=(const RenderSystem_t&) = default;
+   RenderSystem_t(RenderSystem_t&&) noexcept = default;
+   RenderSystem_t& operator=(RenderSystem_t&&) noexcept = default;
+	/****************/
+	
+	/* EVENTS */
+	// aqui iran los eventos de input entre otros
+	/**********/
 
-    	glfwMakeContextCurrent(_window);
+	uint32_t getWidth()  const;
+	uint32_t getHeight() const;	
 
-    	if (!gladLoadGL()) {
-			 std::cout << "Error Initializing GLAD" << std::endl;
-			 glfwTerminate();
-			 //return -1;
-    }
+	void update() const;
 
-    glfwSetFramebufferSizeCallback(window, onChangeFrameBufferSize);
+	bool alive() const;
+	void frame() const;
 
-    glClearColor(0.0f, 0.3f, 0.6f, 1.0f);
+private:
 
-    while(!glfwWindowShouldClose(_window)) {
-		 
-		 handleInput(_window);
-		 
-		 //render();
+	GLFWwindow* _window;
 
-        glfwSwapBuffers(_window);
-        glfwPollEvents();
-    }
+	const char* _title { "" };
 
-    glfwTerminate();
-	}
-	int initglfw() {
-		if (!glfwInit()) {
-        std::cout << "Error Initializing GLFW" << std::endl;
-        return -1;
-    }
-	}
-	 int initWindow() 
-	 {
-		 _window = glfwCreateWindow(_width, _height, "04MVID", nullptr, nullptr);
-		 if (!_window) {
-        std::cout << "Error Creating Window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-	 }
-	}
-	private:
+	const uint32_t _width  { 0 };
+	const uint32_t _height { 0 };
+	
+	};
+	
 
-		GLFWwindow* _window;
-		const uint32_t _width = 1920;
-      const uint32_t _height = 1080;
-
-};}
+} // namespace TFM_ECS
