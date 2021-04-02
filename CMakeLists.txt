@@ -16,6 +16,8 @@ include(cmake/compiler.cmake)
 #Engine Source Files
 
 set(ENGINE_SRC_FILES
+
+    # old classes
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/camera.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/deps.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/mesh.cpp
@@ -29,10 +31,26 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/sphere.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/teapot.cpp
 
+    ########################
     # TFM From scratchs
+    ########################
+
+    # ImGUI 
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/ImGui/imgui_impl_opengl3.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/ImGui/imgui_impl_glfw.cpp
+
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/ImGui/imgui_draw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/ImGui/imgui_tables.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/ImGui/imgui_widgets.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/ImGui/imgui.cpp
+    
+
+    # ECS
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/render.cpp)
 
 set(ENGINE_HEADER_FILES
+
+    # old classes    
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/camera.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/input.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/mesh.hpp
@@ -47,7 +65,11 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/teapot.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/teapotdata.hpp
 
+    ########################
     # TFM From scratchs
+    ########################  
+
+    # ECS 
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/render.hpp)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/engine/ PREFIX "Source Files" FILES ${ENGINE_SRC_FILES})
