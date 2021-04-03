@@ -47,9 +47,6 @@ namespace TFM_ECS {
 			glClear(GL_COLOR_BUFFER_BIT);
 			RenderSystem_t::frame();
 		}
-		
-
-
 	}
 
 	bool RenderSystem_t::alive() const {

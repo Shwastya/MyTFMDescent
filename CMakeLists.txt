@@ -47,11 +47,12 @@ set(ENGINE_SRC_FILES
     
 
     # ECS
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/render.cpp)
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/render.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/manager/entitymanager.cpp)
 
 set(ENGINE_HEADER_FILES
 
-    # old classes    
+    # old classes        
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/camera.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/input.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/mesh.hpp
@@ -71,7 +72,8 @@ set(ENGINE_HEADER_FILES
     ########################  
 
     # ECS 
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/render.hpp)
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/render.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/manager/entitymanager.hpp)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/engine/ PREFIX "Source Files" FILES ${ENGINE_SRC_FILES})
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/include/engine PREFIX "Header Files" FILES ${ENGINE_HEADER_FILES})
@@ -109,7 +111,7 @@ endif()
 # List of projects
 set(PROJECT_LIST AG01 AG02 AG03 AG04 AG05 AG06 AG07 AG08_01 AG08_02
     AG09_01 AG09_02 AG09_03 AG09_04 AG10 AG11_01 AG11_02 AG11_03 AG12 AG13 AG14 AG15
-    MyTFMDescent tests)
+    MyTFMDescent study tests)
 
 #Root path of the projects
 set(PROJECTS_PATH ${CMAKE_CURRENT_LIST_DIR}/games)
