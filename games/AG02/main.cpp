@@ -106,8 +106,9 @@ uint32_t createVertexData(uint32_t* VBO, uint32_t* EBO) {
 void render(uint32_t VAO, uint32_t program) {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glUseProgram(program);
-    glBindVertexArray(VAO);
+    // no era preciso q estuviera en el render
+/*     glUseProgram(program);
+    glBindVertexArray(VAO); */
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }
 
@@ -124,6 +125,11 @@ int main(int, char*[]) {
 
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
+
+
+    /* no era preciso q estuviera en el render */
+    glUseProgram(program);
+    glBindVertexArray(VAO);
 
     while(window->alive()) {
         handleInput();
