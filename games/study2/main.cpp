@@ -32,15 +32,42 @@ bool checkShader(uint32_t id, uint32_t type)
 }
 
 
+struct ShaderProgramSources {
+	std::string vertexSource;
+	std::string fragmentSource;
+};
 
-
-static void ParseShader(const std::string& filepath) 
+static ShaderProgramSources ParseShader(const std::string& filepath) 
 {
 
 	std::ifstream stream(filepath);
 
+	enum class ShaderType
+	{
+		NONE = -1, VERTEX = 0, FRAGMENT = 1
+	};
 
+	std::string line;
+	std::stringstream ss[2];
+	ShaderType type = ShaderType::NONE;
 
+	while (getline(stream, line))
+	{
+		if (line.find("#Shader") != std::string::npos)
+		{
+			if (line.find("Vertex") != std::string::npos) {
+				type = ShaderType::VERTEX;
+			}
+			else if (line.find("Fragment") != std::string::npos) {
+				type = ShaderType::FRAGMENT;
+			}
+		}
+		else 
+		{
+			ss[(int)type] << line << '\n';
+		}
+	}
+	return { ss[0].str(), ss[1].str() };
 }
 
 
@@ -130,9 +157,13 @@ int main(int, char* []) {
 
 
 	float vertex[] = {
-        0.5f, -0.5f, 0.0f,     
-        -0.5f, -0.5f, 0.0f,    
-        0.0f, 0.5f, 0.0f,      
+        -0.5f, -0.5f,    
+        0.5f, -0.5f,   
+        0.5f, 0.5f,
+
+		  
+
+
     };
 
     uint32_t indices[] = {
@@ -145,33 +176,33 @@ int main(int, char* []) {
 	uint32_t VBO, EBO, VAO;	         
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO); 	 // Se genera el buffer VBO
-	glGenBuffers(1, &EBO);
+//	glGenBuffers(1, &EBO);
 
 	glBindVertexArray(VAO);   // se bindea el VAO
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);  // se bindean los objetos de vertices
    glBufferData(GL_ARRAY_BUFFER, sizeof(vertex), vertex, GL_STATIC_DRAW); // se suben a la GPU
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+   //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 	
 	
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*)0); // puntero en el espacio
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0); // puntero en el espacio
 	glEnableVertexAttribArray(0);
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glEnableVertexAttribArray(0);
-   glBindVertexArray(0);
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+	//glEnableVertexAttribArray(0);
+   //glBindVertexArray(0);
 
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+   //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	/* PROGRAM */	
 
-	
+	ShaderProgramSources source = ParseShader("../assets/shaders/basic.shader");
 
-	//uint32_t shader = createShader(vertexShader, fragmentShader);
+	uint32_t shader = createShader(source.vertexSource, source.fragmentSource);
 	glUseProgram(shader);
-	glBindVertexArray(VAO);
+	//glBindVertexArray(VAO);
 
 	/* somo SETS   */
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -189,8 +220,8 @@ int main(int, char* []) {
 		/******************/
 		/* code to render */
 		/******************/
-		//glDrawArrays(GL_TRIANGLES, 0, 3);		
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+		glDrawArrays(GL_TRIANGLES, 0, 3);		
+		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 
 		/******************/
 		/* Swap front and back buffers */
