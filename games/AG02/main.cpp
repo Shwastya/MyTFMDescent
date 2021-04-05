@@ -103,7 +103,7 @@ uint32_t createVertexData(uint32_t* VBO, uint32_t* EBO) {
 }
 
 
-void render(uint32_t VAO, uint32_t program) {
+void render(/* uint32_t VAO, uint32_t program*/) {
     glClear(GL_COLOR_BUFFER_BIT);
 
     // no era preciso q estuviera en el render
@@ -133,7 +133,7 @@ int main(int, char*[]) {
 
     while(window->alive()) {
         handleInput();
-        render(VAO, program);
+        render(/*VAO, program*/);
         window->frame();
     }
 

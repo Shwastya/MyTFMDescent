@@ -111,7 +111,7 @@ endif()
 # List of projects
 set(PROJECT_LIST AG01 AG02 AG03 AG04 AG05 AG06 AG07 AG08_01 AG08_02
     AG09_01 AG09_02 AG09_03 AG09_04 AG10 AG11_01 AG11_02 AG11_03 AG12 AG13 AG14 AG15
-    MyTFMDescent study tests)
+    MyTFMDescent study study2 tests)
 
 #Root path of the projects
 set(PROJECTS_PATH ${CMAKE_CURRENT_LIST_DIR}/games)

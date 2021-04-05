@@ -1,9 +1,42 @@
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "engine/window.hpp"
 #include "engine/shader.hpp"
 
-void handleInput() {/*Intentionally Left BLank*/ }
+#include "engine/input.hpp"
+
+#include <iostream>
+
+static float R = 0.2f, G = 0.0f, B = 0.0F; 
+//const static Shader shader("../games/AG03/vertex.vs", "../games/AG03/fragment.fs");
+
+void handleInput(float dt, const Shader& s) 
+{
+    Input* input = Input::instance();
+
+    if (input->isKeyPressed(GLFW_KEY_R) && (R < 1.0f)) {        
+        R += 0.005;
+        s.use();
+        s.set("addColor", R, G, B);
+        std::cout << "Red:   " << R << std::endl;  
+    }
+
+    if (input->isKeyPressed(GLFW_KEY_B) && (B < 1.0f)) {        
+        B += 0.005;
+        s.use();
+        s.set("addColor", R, G, B);
+        std::cout << "Blue:  " << B << std::endl;  
+    }
+
+    if (input->isKeyPressed(GLFW_KEY_G) && (G < 1.0f)) {        
+        G += 0.005;
+        s.use();
+        s.set("addColor", R, G, B);
+        std::cout << "Green: " << G << std::endl;  
+    }
+}
 
 uint32_t createVertexData(uint32_t* VBO, uint32_t* EBO) {
     float vertices[] = {
@@ -45,13 +78,10 @@ uint32_t createVertexData(uint32_t* VBO, uint32_t* EBO) {
 }
 
 
-void render(uint32_t VAO, const Shader& shader) {
+void render() {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    shader.use();
-    shader.set("addColor", 0.2f, 0.0f, 0.0f);
-
-    glBindVertexArray(VAO);
+   
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }
 
@@ -60,18 +90,37 @@ int main(int, char* []) {
 
     glClearColor(0.0f, 0.3f, 0.6f, 1.0f);
 
+    
+
     uint32_t VBO, EBO;
     const uint32_t VAO = createVertexData(&VBO, &EBO);
-    const Shader shader("../games/AG03/vertex.vs", "../games/AG03/fragment.fs");
+    
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 
-    while (window->alive()) {
-        handleInput();
-        render(VAO, shader);
+    //shaderLoad();
+    const Shader shader("../games/AG03/vertex.vs", "../games/AG03/fragment.fs");
+    shader.use();
+    shader.set("addColor", R, G, B);
+    
+
+    glBindVertexArray(VAO);
+
+    float lastFrame = 0.0f;
+
+    while (window->alive())
+    {
+        const float currentFrame = glfwGetTime();
+        const float deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
+        handleInput(deltaTime, shader);
+
+        render();
+
         window->frame();
     }
 

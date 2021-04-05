@@ -128,7 +128,7 @@ int main(int, char* []) {
     Input::instance()->setKeyPressedCallback(onKeyPress);
     Input::instance()->setMouseMoveCallback(onMouseMoved);
     Input::instance()->setScrollMoveCallback(onScrollMoved);
-
+    
     while (window->alive()) {
         const float currentFrame = glfwGetTime();
         const float deltaTime = currentFrame - lastFrame;

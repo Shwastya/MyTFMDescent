@@ -2,13 +2,13 @@
 #include <GLFW/glfw3.h>
 #include <cstdint>
 #include <iostream>
-void render(uint32_t VAO, uint32_t program) {
-    glClear(GL_COLOR_BUFFER_BIT);
+#include <fstream>
+#include <sstream>
 
-    glUseProgram(program);
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-}
+
+
+
+
 bool checkShader(uint32_t id, uint32_t type)
 {
     int success;  
@@ -31,21 +31,17 @@ bool checkShader(uint32_t id, uint32_t type)
     return true;
 }
 
-bool checkProgram(uint32_t program) {
 
-    int success;
-    char infoLog[512];
-    glGetProgramiv(program, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(program, 512, nullptr, infoLog);
-        std::cout << "Error Linking Program " << infoLog << std::endl;
-        return false;
-    }
-    return true;
+
+
+static void ParseShader(const std::string& filepath) 
+{
+
+	std::ifstream stream(filepath);
+
+
+
 }
-
-
-
 
 
 
@@ -171,26 +167,14 @@ int main(int, char* []) {
 
 	/* PROGRAM */	
 
-	std::string vertexShader   = 
-			"#version 330 core\n"
-			"layout (location=0) in vec3 aPos;\n"
-			"void main() {\n"
-			"    gl_Position = vec4(aPos, 1.0);\n"
-			"}\0";
-	std::string fragmentShader = 
-			"#version 330 core\n"
-			"out vec4 FragColor;\n"
-			"void main() {\n"
-			"    FragColor = vec4(0.6, 0.6, 0.1, 1.0);\n"
-			"}\0";
+	
 
-
-	uint32_t shader = createShader(vertexShader, fragmentShader);
+	//uint32_t shader = createShader(vertexShader, fragmentShader);
 	glUseProgram(shader);
 	glBindVertexArray(VAO);
 
 	/* somo SETS   */
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
    glEnable(GL_CULL_FACE);
    glCullFace(GL_BACK); 
