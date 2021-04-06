@@ -15,12 +15,12 @@ void main()
 
 out vec4 FragColor;
 
-//uniform vec4 u_color;
+uniform vec4 u_color;
 
 void main() 
 
 {
 	
-	FragColor = vec4(0.8, 0.6, 0.1, 1.0);	
-	//FragColor = color;
+	//FragColor = vec4(0.8, 0.6, 0.1, 1.0);	
+	FragColor = u_color;
 }

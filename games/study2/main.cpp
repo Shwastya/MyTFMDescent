@@ -1,6 +1,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -8,8 +8,10 @@
 #include <sstream>
 
 #include <cstdint>
-// #include <assert.h>
+#include <assert.h>
 
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 #ifdef _MSC_VER
 	#define ASSERT(x) if (!(x)) __debugbreak()
@@ -19,7 +21,7 @@
 	#define ASSERT(x) if (!(x)) raise(SIGTRAP)
 #endif
 
-#define logCall(x) GLClearError();\
+#define GLCALL(x) GLClearError();\
 	x;\
 	ASSERT(GLLogCall(#x, __FILE__, __LINE__))
 
@@ -86,21 +88,21 @@ static ShaderProgramSources ParseShader(const std::string& filepath)
 bool checkShader(uint32_t id, uint32_t type)
 {
     int success;  
-    logCall(glGetShaderiv(id, GL_COMPILE_STATUS, &success));
+    GLCALL(glGetShaderiv(id, GL_COMPILE_STATUS, &success));
     if (success == GL_FALSE) 
 	 {
 
 		  int length;
-		  logCall(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
+		  GLCALL(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
 
 		  /* allocate memory to avoid memory leak */
 		  char* infolog = static_cast<char*>(alloca(length * sizeof(char)));
 
-        logCall(glGetShaderInfoLog(id, length, &length, infolog));
+        GLCALL(glGetShaderInfoLog(id, length, &length, infolog));
         std::cout << "Failed to compile " << 
 		  	(type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader!" << std::endl;
 		  std::cout << infolog << std::endl;
-		  logCall(glDeleteShader(id));
+		  GLCALL(glDeleteShader(id));
         return false;
     }
     return true;
@@ -111,8 +113,8 @@ static uint32_t compileShader(uint32_t type, const std::string& source) {
 
 	const uint32_t id = glCreateShader(type);
 	const char* src = source.c_str();
-	logCall(glShaderSource(id, 1, &src, nullptr));
-	logCall(glCompileShader(id));
+	GLCALL(glShaderSource(id, 1, &src, nullptr));
+	GLCALL(glCompileShader(id));
 	
 	checkShader(id, GL_VERTEX_SHADER); // error handling
 
@@ -125,13 +127,13 @@ static uint32_t createShader(const std::string& vs, const std::string& fs) {
 	uint32_t _vs = compileShader(GL_VERTEX_SHADER, vs);
 	uint32_t _fs = compileShader(GL_FRAGMENT_SHADER, fs);
 
-	logCall(glAttachShader(program, _vs));
-	logCall(glAttachShader(program, _fs));
-	logCall(glLinkProgram(program));
-	logCall(glValidateProgram(program));
+	GLCALL(glAttachShader(program, _vs));
+	GLCALL(glAttachShader(program, _fs));
+	GLCALL(glLinkProgram(program));
+	GLCALL(glValidateProgram(program));
 
-	logCall(glDeleteShader(_vs));
-	logCall(glDeleteShader(_fs));
+	GLCALL(glDeleteShader(_vs));
+	GLCALL(glDeleteShader(_fs));
 
 	return program;
 }
@@ -166,6 +168,8 @@ int main(int, char* [])
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 
+	glfwSwapInterval(1);
+
 	/* Initialize glad */ /// ever!! after opengl contextCurrent
 	if (!gladLoadGL()) {
         std::cout << "Error Initializing GLAD" << std::endl;
@@ -193,66 +197,79 @@ int main(int, char* [])
     };
 
 	uint32_t VAO;	         
-	logCall(glGenVertexArrays(1, &VAO));
-	logCall(glBindVertexArray(VAO)); 
+	GLCALL(glGenVertexArrays(1, &VAO));
+	GLCALL(glBindVertexArray(VAO)); 
 
 	uint32_t VBO;	 
-	logCall(glGenBuffers(1, &VBO));
-	logCall(glBindBuffer(GL_ARRAY_BUFFER, VBO));
-   logCall(glBufferData(GL_ARRAY_BUFFER, sizeof(vertex), vertex, GL_STATIC_DRAW));
+	GLCALL(glGenBuffers(1, &VBO));
+	GLCALL(glBindBuffer(GL_ARRAY_BUFFER, VBO));
+   GLCALL(glBufferData(GL_ARRAY_BUFFER, sizeof(vertex), vertex, GL_STATIC_DRAW));
 
-	logCall(glEnableVertexAttribArray(0));
-	logCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0));
+	GLCALL(glEnableVertexAttribArray(0));
+	GLCALL(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0));
 	
 	uint32_t EBO;
-	logCall(glGenBuffers(1, &EBO));
-	logCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
-   logCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
+	GLCALL(glGenBuffers(1, &EBO));
+	GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
+   GLCALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
 	
-	logCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+	GLCALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
 	
-   logCall(glBindVertexArray(0));
+   GLCALL(glBindVertexArray(0));
 
-   logCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+   GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 
-	logCall(glBindVertexArray(VAO));
+	GLCALL(glBindVertexArray(VAO));
 
 
 
 	/* PROGRAM */	
 
 	ShaderProgramSources source = ParseShader("../assets/shaders/basic.shader");
-
 	uint32_t shader = createShader(source.vertexSource, source.fragmentSource);	
-	
-	logCall(glUseProgram(shader));	
-	
-	
-	
-	/* some SETS   */
-	logCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
+	GLCALL(glUseProgram(shader));	
 
-   logCall(glEnable(GL_CULL_FACE));
-   logCall(glCullFace(GL_BACK)); 
-
-	logCall(glClearColor(0.0f, 0.3f, 0.6f, 1.0f));
-
+	
 
 	/* UNIFORMS */
-	int location = glGetUniformLocation(shader, "u_color");
-	//assert(location != 1);
-	//glUniform4fv(glGetUniformLocation(id_, name), 1, glm::value_ptr(value))
+	const int location = glGetUniformLocation(shader, "u_color");
+	assert(location != 1);
 
+	GLCALL(glUniform4f(location, 0.9f, 0.3f, 0.4f, 1.0f));
+	
+	
+
+
+
+	/* some SETS   */
+	GLCALL(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+
+   GLCALL(glEnable(GL_CULL_FACE));
+   GLCALL(glCullFace(GL_BACK)); 
+
+	//GLCALL(glClearColor(0.0f, 0.3f, 0.6f, 1.0f));
+
+
+	
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
-		logCall(glClear(GL_COLOR_BUFFER_BIT));
-		//glDrawArrays(GL_TRIANGLES, 0, 4);		
+		
+		GLCALL(glClear(GL_COLOR_BUFFER_BIT));
 
-		//GLClearError();
-		logCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
-		//ASSERT(GLLogCall()); // Wrap with macro define
+
+		const double timer { glfwGetTime() };
+		const float R { static_cast<float>(abs(sin(timer))) };
+		const float G { static_cast<float>(abs(sin(timer + M_PI / 2))) };
+		const float B { static_cast<float>(abs(sin(timer + M_PI / 4))) };
+
+		std::cout << "Red:   " << R << std::endl << "Blue:  " << B << std::endl << "Green: " << G << std::endl;
+
+		GLCALL(glUniform4f(location, R, G, B, 1.0f));
+		GLCALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+
+		
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
