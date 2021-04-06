@@ -8,6 +8,17 @@
 #include <sstream>
 
 #include <cstdint>
+#include <assert.h>
+
+
+#ifdef _MSC_VER
+// code for windows to implement
+// #define DEBUG_BREAK __debugbreak()
+#define ASSERT(x) if (!(x)) __debugbreak()
+#else
+#include <signal.h>
+#define ASSERT(x) if (!(x)) raise(SIGTRAP)
+#endif
 
 
 
@@ -15,7 +26,7 @@ static void GLClearError()
 {
 	while (glGetError() != GL_NO_ERROR);	
 }
-static bool GLCheckError()
+static bool GLLogCall()
 {
 	while (GLenum error = glGetError())
 	{
@@ -238,15 +249,22 @@ int main(int, char* []) {
 
 	glClearColor(0.0f, 0.3f, 0.6f, 1.0f);
 
+
+	/* UNIFORMS */
+	int location = glGetUniformLocation(shader, "u_color");
+	assert(location != 1);
+	//glUniform4fv(glGetUniformLocation(id_, name), 1, glm::value_ptr(value))
+
+
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
 		//glDrawArrays(GL_TRIANGLES, 0, 4);		
 
-		//GLClearError();
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-		//GLCheckError();
+		GLClearError();
+		glDrawElements(GL_TRIANGLES, 6, GL_INT, nullptr);
+		ASSERT(GLLogCall()); // Wrap with macro define
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
