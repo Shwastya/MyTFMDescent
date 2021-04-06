@@ -1,35 +1,30 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <cstdint>
+
+
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <sstream>
 
+#include <cstdint>
 
 
 
-
-bool checkShader(uint32_t id, uint32_t type)
+static void GLClearError()
 {
-    int success;  
-    glGetShaderiv(id, GL_COMPILE_STATUS, &success);
-    if (success == GL_FALSE) 
-	 {
-
-		  int length;
-		  glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-
-		  /* allocate memory to avoid memory leak */
-		  char* infolog = static_cast<char*>(alloca(length * sizeof(char)));
-
-        glGetShaderInfoLog(id, length, &length, infolog);
-        std::cout << "Failed to compile " << 
-		  	(type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader!" << std::endl;
-		  std::cout << infolog << std::endl;
-        return false;
-    }
-    return true;
+	while (glGetError() != GL_NO_ERROR);	
 }
+static bool GLCheckError()
+{
+	while (GLenum error = glGetError())
+	{
+		std::cout << "[OpenGL Error] ("  << error << ")" << std::endl;
+		return false;
+	}
+	return true;
+}
+
 
 
 struct ShaderProgramSources {
@@ -73,7 +68,29 @@ static ShaderProgramSources ParseShader(const std::string& filepath)
 
 
 
-/* 2 a */
+bool checkShader(uint32_t id, uint32_t type)
+{
+    int success;  
+    glGetShaderiv(id, GL_COMPILE_STATUS, &success);
+    if (success == GL_FALSE) 
+	 {
+
+		  int length;
+		  glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
+
+		  /* allocate memory to avoid memory leak */
+		  char* infolog = static_cast<char*>(alloca(length * sizeof(char)));
+
+        glGetShaderInfoLog(id, length, &length, infolog);
+        std::cout << "Failed to compile " << 
+		  	(type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader!" << std::endl;
+		  std::cout << infolog << std::endl;
+        return false;
+    }
+    return true;
+}
+
+
 static uint32_t compileShader(uint32_t type, const std::string& source) {
 
 	const uint32_t id = glCreateShader(type);
@@ -88,7 +105,7 @@ static uint32_t compileShader(uint32_t type, const std::string& source) {
 	return id;
 }
 
-/* 2 */
+
 static uint32_t createShader(const std::string& vs, const std::string& fs) {
 
 	uint32_t program = glCreateProgram();
@@ -157,54 +174,63 @@ int main(int, char* []) {
 
 
 	float vertex[] = {
-        -0.5f, -0.5f,    
-        0.5f, -0.5f,   
-        0.5f, 0.5f,
+        -0.5f, -0.5f,  // 0  
+        0.5f, -0.5f,   // 1
+       // 0.5f, 0.5f,
 
-		  
-
+		  0.5f, 0.5f,    // 2
+		  -0.5f, 0.5f,   // 3
+		 // -0.5f, -0.5f
 
     };
 
     uint32_t indices[] = {
-        0, 2, 1
+        0, 1, 2,
+		  2, 3, 0
+
     };
 
 
 
 
-	uint32_t VBO, EBO, VAO;	         
+	uint32_t VAO;	         
 	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO); 	 // Se genera el buffer VBO
-//	glGenBuffers(1, &EBO);
+	glBindVertexArray(VAO);   
 
-	glBindVertexArray(VAO);   // se bindea el VAO
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);  // se bindean los objetos de vertices
-   glBufferData(GL_ARRAY_BUFFER, sizeof(vertex), vertex, GL_STATIC_DRAW); // se suben a la GPU
-
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-   //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	uint32_t VBO;	 
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);  
+   glBufferData(GL_ARRAY_BUFFER, sizeof(vertex), vertex, GL_STATIC_DRAW); 
 	
-	
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0); // puntero en el espacio
 	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0); 
+	
+	uint32_t EBO;
+	glGenBuffers(1, &EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	
+   glBindVertexArray(0);
 
-	//glBindBuffer(GL_ARRAY_BUFFER, 0);
-	//glEnableVertexAttribArray(0);
-   //glBindVertexArray(0);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-   //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindVertexArray(VAO);
+
+
 
 	/* PROGRAM */	
 
 	ShaderProgramSources source = ParseShader("../assets/shaders/basic.shader");
 
-	uint32_t shader = createShader(source.vertexSource, source.fragmentSource);
-	glUseProgram(shader);
-	//glBindVertexArray(VAO);
-
-	/* somo SETS   */
+	uint32_t shader = createShader(source.vertexSource, source.fragmentSource);	
+	
+	glUseProgram(shader);	
+	
+	
+	
+	/* some SETS   */
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
    glEnable(GL_CULL_FACE);
@@ -215,23 +241,19 @@ int main(int, char* []) {
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
-		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT);
-		/******************/
-		/* code to render */
-		/******************/
-		glDrawArrays(GL_TRIANGLES, 0, 3);		
-		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+		//glDrawArrays(GL_TRIANGLES, 0, 4);		
 
-		/******************/
-		/* Swap front and back buffers */
+		//GLClearError();
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+		//GLCheckError();
+
 		glfwSwapBuffers(window);
-
-		/* Poll for and process events */
 		glfwPollEvents();
 	}
 	glDeleteVertexArrays(1, &VAO);
    glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
 
    glDeleteProgram(shader);
 	glfwTerminate();
