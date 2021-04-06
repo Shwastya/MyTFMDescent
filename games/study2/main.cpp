@@ -8,17 +8,20 @@
 #include <sstream>
 
 #include <cstdint>
-#include <assert.h>
+// #include <assert.h>
 
 
 #ifdef _MSC_VER
-// code for windows to implement
-// #define DEBUG_BREAK __debugbreak()
-#define ASSERT(x) if (!(x)) __debugbreak()
-#else
-#include <signal.h>
-#define ASSERT(x) if (!(x)) raise(SIGTRAP)
+	#define ASSERT(x) if (!(x)) __debugbreak()
 #endif
+#ifdef __linux__
+	#include <signal.h>
+	#define ASSERT(x) if (!(x)) raise(SIGTRAP)
+#endif
+
+#define logCall(x) GLClearError();\
+	x;\
+	ASSERT(GLLogCall(#x, __FILE__, __LINE__))
 
 
 
@@ -26,11 +29,12 @@ static void GLClearError()
 {
 	while (glGetError() != GL_NO_ERROR);	
 }
-static bool GLLogCall()
+static bool GLLogCall(const char* function, const char* file, int line)
 {
 	while (GLenum error = glGetError())
 	{
-		std::cout << "[OpenGL Error] ("  << error << ")" << std::endl;
+		std::cout << "[OpenGL Error] (" << error << "): " << 
+		function  << " " << file << ": " << line << std::endl;
 		return false;
 	}
 	return true;
@@ -252,7 +256,7 @@ int main(int, char* []) {
 
 	/* UNIFORMS */
 	int location = glGetUniformLocation(shader, "u_color");
-	assert(location != 1);
+	//assert(location != 1);
 	//glUniform4fv(glGetUniformLocation(id_, name), 1, glm::value_ptr(value))
 
 
@@ -262,9 +266,9 @@ int main(int, char* []) {
 		glClear(GL_COLOR_BUFFER_BIT);
 		//glDrawArrays(GL_TRIANGLES, 0, 4);		
 
-		GLClearError();
-		glDrawElements(GL_TRIANGLES, 6, GL_INT, nullptr);
-		ASSERT(GLLogCall()); // Wrap with macro define
+		//GLClearError();
+		logCall(glDrawElements(GL_TRIANGLES, 6, GL_INT, nullptr));
+		//ASSERT(GLLogCall()); // Wrap with macro define
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
