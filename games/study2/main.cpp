@@ -1,8 +1,7 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <engine/GLhandleErrors.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <iostream>
+
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -12,36 +11,6 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
-
-#ifdef _MSC_VER
-	#define ASSERT(x) if (!(x)) __debugbreak()
-#endif
-#ifdef __linux__
-	#include <signal.h>
-	#define ASSERT(x) if (!(x)) raise(SIGTRAP)
-#endif
-
-#define GLCALL(x) GLClearError();\
-	x;\
-	ASSERT(GLLogCall(#x, __FILE__, __LINE__))
-
-
-
-static void GLClearError()
-{
-	while (glGetError() != GL_NO_ERROR);	
-}
-static bool GLLogCall(const char* function, const char* file, int line)
-{
-	while (GLenum error = glGetError())
-	{
-		std::cout << "[OpenGL Error] (" << error << "): " << 
-		function  << " " << file << ": " << line << std::endl;
-		return false;
-	}
-	return true;
-}
-
 
 
 struct ShaderProgramSources {
@@ -88,33 +57,34 @@ static ShaderProgramSources ParseShader(const std::string& filepath)
 bool checkShader(uint32_t id, uint32_t type)
 {
     int success;  
-    GLCALL(glGetShaderiv(id, GL_COMPILE_STATUS, &success));
+    GLHE_(glGetShaderiv(id, GL_COMPILE_STATUS, &success));
     if (success == GL_FALSE) 
 	 {
 
 		  int length;
-		  GLCALL(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
+		  GLHE_(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
 
 		  /* allocate memory to avoid memory leak */
 		  char* infolog = static_cast<char*>(alloca(length * sizeof(char)));
 
-        GLCALL(glGetShaderInfoLog(id, length, &length, infolog));
+        GLHE_(glGetShaderInfoLog(id, length, &length, infolog));
         std::cout << "Failed to compile " << 
 		  	(type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader!" << std::endl;
 		  std::cout << infolog << std::endl;
-		  GLCALL(glDeleteShader(id));
+		  GLHE_(glDeleteShader(id));
         return false;
     }
     return true;
 }
 
 
-static uint32_t compileShader(uint32_t type, const std::string& source) {
+static uint32_t compileShader(uint32_t type, const std::string& source) 
+{
 
-	const uint32_t id = glCreateShader(type);
+	GLHE_(const uint32_t id = glCreateShader(type));
 	const char* src = source.c_str();
-	GLCALL(glShaderSource(id, 1, &src, nullptr));
-	GLCALL(glCompileShader(id));
+	GLHE_(glShaderSource(id, 1, &src, nullptr));
+	GLHE_(glCompileShader(id));
 	
 	checkShader(id, GL_VERTEX_SHADER); // error handling
 
@@ -123,17 +93,17 @@ static uint32_t compileShader(uint32_t type, const std::string& source) {
 
 static uint32_t createShader(const std::string& vs, const std::string& fs) {
 
-	uint32_t program = glCreateProgram();
+	GLHE_(uint32_t program = glCreateProgram());
 	uint32_t _vs = compileShader(GL_VERTEX_SHADER, vs);
 	uint32_t _fs = compileShader(GL_FRAGMENT_SHADER, fs);
 
-	GLCALL(glAttachShader(program, _vs));
-	GLCALL(glAttachShader(program, _fs));
-	GLCALL(glLinkProgram(program));
-	GLCALL(glValidateProgram(program));
+	GLHE_(glAttachShader(program, _vs));
+	GLHE_(glAttachShader(program, _fs));
+	GLHE_(glLinkProgram(program));
+	GLHE_(glValidateProgram(program));
 
-	GLCALL(glDeleteShader(_vs));
-	GLCALL(glDeleteShader(_fs));
+	GLHE_(glDeleteShader(_vs));
+	GLHE_(glDeleteShader(_fs));
 
 	return program;
 }
@@ -197,29 +167,29 @@ int main(int, char* [])
     };
 
 	uint32_t VAO;	         
-	GLCALL(glGenVertexArrays(1, &VAO));
-	GLCALL(glBindVertexArray(VAO)); 
+	GLHE_(glGenVertexArrays(1, &VAO));
+	GLHE_(glBindVertexArray(VAO)); 
 
 	uint32_t VBO;	 
-	GLCALL(glGenBuffers(1, &VBO));
-	GLCALL(glBindBuffer(GL_ARRAY_BUFFER, VBO));
-   GLCALL(glBufferData(GL_ARRAY_BUFFER, sizeof(vertex), vertex, GL_STATIC_DRAW));
+	GLHE_(glGenBuffers(1, &VBO));
+	GLHE_(glBindBuffer(GL_ARRAY_BUFFER, VBO));
+   GLHE_(glBufferData(GL_ARRAY_BUFFER, sizeof(vertex), vertex, GL_STATIC_DRAW));
 
-	GLCALL(glEnableVertexAttribArray(0));
-	GLCALL(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0));
+	GLHE_(glEnableVertexAttribArray(0));
+	GLHE_(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0));
 	
 	uint32_t EBO;
-	GLCALL(glGenBuffers(1, &EBO));
-	GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
-   GLCALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
+	GLHE_(glGenBuffers(1, &EBO));
+	GLHE_(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
+   GLHE_(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
 	
-	GLCALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
+	GLHE_(glBindBuffer(GL_ARRAY_BUFFER, 0));
 	
-   GLCALL(glBindVertexArray(0));
+   GLHE_(glBindVertexArray(0));
 
-   GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+   GLHE_(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 
-	GLCALL(glBindVertexArray(VAO));
+	GLHE_(glBindVertexArray(VAO));
 
 
 
@@ -227,27 +197,26 @@ int main(int, char* [])
 
 	ShaderProgramSources source = ParseShader("../assets/shaders/basic.shader");
 	uint32_t shader = createShader(source.vertexSource, source.fragmentSource);	
-	GLCALL(glUseProgram(shader));	
+	GLHE_(glUseProgram(shader));	
 
-	
 
 	/* UNIFORMS */
-	const int location = glGetUniformLocation(shader, "u_color");
+	GLHE_(const uint32_t location = glGetUniformLocation(shader, "u_color"));
 	assert(location != 1);
 
-	GLCALL(glUniform4f(location, 0.9f, 0.3f, 0.4f, 1.0f));
+	GLHE_(glUniform4f(location, 0.9f, 0.3f, 0.4f, 1.0f));
 	
 	
 
 
 
 	/* some SETS   */
-	GLCALL(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+	GLHE_(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 
-   GLCALL(glEnable(GL_CULL_FACE));
-   GLCALL(glCullFace(GL_BACK)); 
+   GLHE_(glEnable(GL_CULL_FACE));
+   GLHE_(glCullFace(GL_BACK)); 
 
-	//GLCALL(glClearColor(0.0f, 0.3f, 0.6f, 1.0f));
+	GLHE_(glClearColor(0.0f, 0.3f, 0.6f, 1.0f));
 
 
 	
@@ -256,7 +225,7 @@ int main(int, char* [])
 	while (!glfwWindowShouldClose(window))
 	{
 		
-		GLCALL(glClear(GL_COLOR_BUFFER_BIT));
+		GLHE_(glClear(GL_COLOR_BUFFER_BIT));
 
 
 		const double timer { glfwGetTime() };
@@ -264,21 +233,21 @@ int main(int, char* [])
 		const float G { static_cast<float>(abs(sin(timer + M_PI / 2))) };
 		const float B { static_cast<float>(abs(sin(timer + M_PI / 4))) };
 
-		std::cout << "Red:   " << R << std::endl << "Blue:  " << B << std::endl << "Green: " << G << std::endl;
+		// std::cout << "Red:   " << R << std::endl << "Blue:  " << B << std::endl << "Green: " << G << std::endl;
 
-		GLCALL(glUniform4f(location, R, G, B, 1.0f));
-		GLCALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+		GLHE_(glUniform4f(location, R, G, B, 1.0f));
+		GLHE_(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
 		
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-	glDeleteVertexArrays(1, &VAO);
-   glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
+	GLHE_(glDeleteVertexArrays(1, &VAO));
+   GLHE_(glDeleteBuffers(1, &VBO));
+	GLHE_(glDeleteBuffers(1, &EBO));
 
-   glDeleteProgram(shader);
+   GLHE_(glDeleteProgram(shader));
 	glfwTerminate();
 	return 0;
 }

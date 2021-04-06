@@ -72,6 +72,10 @@ set(ENGINE_HEADER_FILES
     ########################  
 
     # ECS 
+
+    # handle OpenGL Errors
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/GLhandleErrors.hpp
+
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/render.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/manager/entitymanager.hpp)
 
