@@ -86,20 +86,21 @@ static ShaderProgramSources ParseShader(const std::string& filepath)
 bool checkShader(uint32_t id, uint32_t type)
 {
     int success;  
-    glGetShaderiv(id, GL_COMPILE_STATUS, &success);
+    logCall(glGetShaderiv(id, GL_COMPILE_STATUS, &success));
     if (success == GL_FALSE) 
 	 {
 
 		  int length;
-		  glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
+		  logCall(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
 
 		  /* allocate memory to avoid memory leak */
 		  char* infolog = static_cast<char*>(alloca(length * sizeof(char)));
 
-        glGetShaderInfoLog(id, length, &length, infolog);
+        logCall(glGetShaderInfoLog(id, length, &length, infolog));
         std::cout << "Failed to compile " << 
 		  	(type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader!" << std::endl;
 		  std::cout << infolog << std::endl;
+		  logCall(glDeleteShader(id));
         return false;
     }
     return true;
@@ -110,16 +111,13 @@ static uint32_t compileShader(uint32_t type, const std::string& source) {
 
 	const uint32_t id = glCreateShader(type);
 	const char* src = source.c_str();
-	glShaderSource(id, 1, &src, nullptr);
-	glCompileShader(id);
+	logCall(glShaderSource(id, 1, &src, nullptr));
+	logCall(glCompileShader(id));
+	
+	checkShader(id, GL_VERTEX_SHADER); // error handling
 
-	// error handling
-	checkShader(id, GL_VERTEX_SHADER);
-
-	//if (!check) glDeleteShader(id);
 	return id;
 }
-
 
 static uint32_t createShader(const std::string& vs, const std::string& fs) {
 
@@ -127,27 +125,24 @@ static uint32_t createShader(const std::string& vs, const std::string& fs) {
 	uint32_t _vs = compileShader(GL_VERTEX_SHADER, vs);
 	uint32_t _fs = compileShader(GL_FRAGMENT_SHADER, fs);
 
-	glAttachShader(program, _vs);
-	glAttachShader(program, _fs);
-	glLinkProgram(program);
-	glValidateProgram(program);
+	logCall(glAttachShader(program, _vs));
+	logCall(glAttachShader(program, _fs));
+	logCall(glLinkProgram(program));
+	logCall(glValidateProgram(program));
 
-	glDeleteShader(_vs);
-	glDeleteShader(_fs);
+	logCall(glDeleteShader(_vs));
+	logCall(glDeleteShader(_fs));
 
 	return program;
-
 }
 
-int main(int, char* []) {
-
-	
-	/* Initialize the library */
-	if (!glfwInit()) {
+int main(int, char* []) 
+{
+	if (!glfwInit()) 
+	{
 		std::cout << "Error Initializing GLFW" << std::endl;
 		return -1;
 	}
-
 
 	/* Render context */
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -171,20 +166,14 @@ int main(int, char* []) {
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 
-
 	/* Initialize glad */ /// ever!! after opengl contextCurrent
 	if (!gladLoadGL()) {
         std::cout << "Error Initializing GLAD" << std::endl;
         glfwTerminate();
         return -1;
    }
-	
-	
-
 	/* Show VERSION */
-	std::cout << glGetString(GL_VERSION) << std::endl;
-
-	
+	std::cout << glGetString(GL_VERSION) << std::endl;	
 
 
 
@@ -196,42 +185,37 @@ int main(int, char* []) {
 		  0.5f, 0.5f,    // 2
 		  -0.5f, 0.5f,   // 3
 		 // -0.5f, -0.5f
-
     };
 
     uint32_t indices[] = {
         0, 1, 2,
 		  2, 3, 0
-
     };
 
-
-
-
 	uint32_t VAO;	         
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);   
+	logCall(glGenVertexArrays(1, &VAO));
+	logCall(glBindVertexArray(VAO)); 
 
 	uint32_t VBO;	 
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);  
-   glBufferData(GL_ARRAY_BUFFER, sizeof(vertex), vertex, GL_STATIC_DRAW); 
-	
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0); 
+	logCall(glGenBuffers(1, &VBO));
+	logCall(glBindBuffer(GL_ARRAY_BUFFER, VBO));
+   logCall(glBufferData(GL_ARRAY_BUFFER, sizeof(vertex), vertex, GL_STATIC_DRAW));
+
+	logCall(glEnableVertexAttribArray(0));
+	logCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0));
 	
 	uint32_t EBO;
-	glGenBuffers(1, &EBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	logCall(glGenBuffers(1, &EBO));
+	logCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
+   logCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
 	
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	logCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 	
-   glBindVertexArray(0);
+   logCall(glBindVertexArray(0));
 
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+   logCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 
-	glBindVertexArray(VAO);
+	logCall(glBindVertexArray(VAO));
 
 
 
@@ -241,17 +225,17 @@ int main(int, char* []) {
 
 	uint32_t shader = createShader(source.vertexSource, source.fragmentSource);	
 	
-	glUseProgram(shader);	
+	logCall(glUseProgram(shader));	
 	
 	
 	
 	/* some SETS   */
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	logCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 
-   glEnable(GL_CULL_FACE);
-   glCullFace(GL_BACK); 
+   logCall(glEnable(GL_CULL_FACE));
+   logCall(glCullFace(GL_BACK)); 
 
-	glClearColor(0.0f, 0.3f, 0.6f, 1.0f);
+	logCall(glClearColor(0.0f, 0.3f, 0.6f, 1.0f));
 
 
 	/* UNIFORMS */
@@ -263,11 +247,11 @@ int main(int, char* []) {
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
+		logCall(glClear(GL_COLOR_BUFFER_BIT));
 		//glDrawArrays(GL_TRIANGLES, 0, 4);		
 
 		//GLClearError();
-		logCall(glDrawElements(GL_TRIANGLES, 6, GL_INT, nullptr));
+		logCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 		//ASSERT(GLLogCall()); // Wrap with macro define
 
 		glfwSwapBuffers(window);
