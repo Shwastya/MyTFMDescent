@@ -17,6 +17,6 @@ private:
 
 	uint32_t _VBO_ID { 0 };
 	const uint32_t _nVertices { 0 };
-};
 
-} // namespace TFM_ECS
+
+};} // namespace TFM_ECS

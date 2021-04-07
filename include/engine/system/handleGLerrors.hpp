@@ -11,7 +11,6 @@
 	#include <signal.h>
 	#define ASSERT(x) if (!(x)) raise(SIGTRAP)
 #endif
-// GLHE (GL Handle Errors)
 #define GLHE_(x) GLClearError();\
 	x;\
 	ASSERT(GLLogCall(#x, __FILE__, __LINE__))

@@ -15,6 +15,7 @@
 
 #include "engine/object/vbo.hpp"
 #include "engine/object/ebo.hpp"
+#include "engine/object/vao.hpp"
 
 using namespace TFM_ECS;
 
@@ -172,32 +173,28 @@ int main(int, char* [])
 		  2, 3, 0
     };
 
-	uint32_t VAO;	         
-	GLHE_(glGenVertexArrays(1, &VAO));
-	GLHE_(glBindVertexArray(VAO)); 
-	/* When we BIND VAO an we BIND VBO nothing actually links the two 
-	   until the line of code -> glVertexAttribPointer(0 ....) with index 0
-	*/
+	//uint32_t VAO;	         
+	//GLHE_(glGenVertexArrays(1, &VAO));
+	//GLHE_(glBindVertexArray(VAO)); 
+
+	vao_t VAO;	
+	vbo_t VBO(vertex, sizeof(vertex));
+
+	vbl_t layout;
+	layout.push<float>(2); // glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0)
+	VAO.addBuffer(VBO, layout);  //VAO.AddBuffer(VBO);
+
+	//BufferLayout layout;
+	//layout.Push<float>(3);
+	//VAO.addLayout(layout);
 
 
+	/* GLHE_(glEnableVertexAttribArray(0));
+	GLHE_(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0)); */
 
-	uint32_t VBO;	 
-	GLHE_(glGenBuffers(1, &VBO));
-	GLHE_(glBindBuffer(GL_ARRAY_BUFFER, VBO));
-   GLHE_(glBufferData(GL_ARRAY_BUFFER, sizeof(vertex), vertex, GL_STATIC_DRAW)); 
+
+	ebo_t EBO(indices, sizeof(indices));
 	
-
-	// bind VAO & VBO
-	GLHE_(glEnableVertexAttribArray(0));
-	GLHE_(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0));
-
-
-
-	
-	uint32_t EBO;
-	GLHE_(glGenBuffers(1, &EBO));
-	GLHE_(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
-   GLHE_(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
 	
 	/* PROGRAM */	
 
@@ -214,11 +211,13 @@ int main(int, char* [])
 	
 	
 	/* UNBINDS */
-	GLHE_(glBindVertexArray(0));							 // unbind VAO
+	//GLHE_(glBindVertexArray(0));							 // unbind VAO
+	VAO.unbind();
 	GLHE_(glUseProgram(0));									 // unbind shader program
 	GLHE_(glBindBuffer(GL_ARRAY_BUFFER, 0));			 // unbind VBO
 	GLHE_(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)); // unbind EBO
-
+	//VBO.unbind();
+	//EBO.unbind();
 	
 
 
@@ -251,9 +250,9 @@ int main(int, char* [])
 		GLHE_(glUniform4f(location, R, G, B, 1.0f));	
 
 
-		GLHE_(glBindVertexArray(VAO));
-		GLHE_(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));		
-		
+		//GLHE_(glBindVertexArray(VAO));
+		VAO.bind();
+		EBO.bind();
 		
 		GLHE_(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
@@ -268,9 +267,9 @@ int main(int, char* [])
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-	GLHE_(glDeleteVertexArrays(1, &VAO));
-   GLHE_(glDeleteBuffers(1, &VBO));
-	GLHE_(glDeleteBuffers(1, &EBO));
+	//GLHE_(glDeleteVertexArrays(1, &VAO));
+/*    GLHE_(glDeleteBuffers(1, &VBO));
+	GLHE_(glDeleteBuffers(1, &EBO)); */
 
    GLHE_(glDeleteProgram(shader));
 	}

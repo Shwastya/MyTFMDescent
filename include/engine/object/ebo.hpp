@@ -19,6 +19,6 @@ private:
 
 	uint32_t _EBO_ID { 0 };
 	const uint32_t _nElements { 0 };
-};
 
-} 
+
+};} 
