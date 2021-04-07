@@ -1,28 +1,13 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <iostream>
-
-#ifdef _MSC_VER
-	#define ASSERT(x) if (!(x)) __debugbreak()
-#endif
-#ifdef __linux__
-	#include <signal.h>
-	#define ASSERT(x) if (!(x)) raise(SIGTRAP)
-#endif
-// GLHE (GL Handle Errors)
-#define GLHE_(x) GLClearError();\
-	x;\
-	ASSERT(GLLogCall(#x, __FILE__, __LINE__))
+#include "engine/system/handleGLerrors.hpp"
 
 
-
-static void GLClearError()
+void GLClearError()
 {
 	while (glGetError() != GL_NO_ERROR);	
 }
 
 
-static bool GLLogCall(const char* function, const char* file, int line)
+bool GLLogCall(const char* function, const char* file, int line)
 {
 	while (GLenum error = glGetError())
 	{

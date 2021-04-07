@@ -47,6 +47,12 @@ set(ENGINE_SRC_FILES
     
 
     # ECS
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/object/ebo.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/object/vbo.cpp
+    
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/handleGLerrors.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer.cpp
+
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/render.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/manager/entitymanager.cpp)
 
@@ -73,8 +79,12 @@ set(ENGINE_HEADER_FILES
 
     # ECS 
 
-    # handle OpenGL Errors
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/GLhandleErrors.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/object/ebo.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/object/vbo.hpp
+
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/handleGLerrors.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer.hpp
+
 
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/render.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/manager/entitymanager.hpp)

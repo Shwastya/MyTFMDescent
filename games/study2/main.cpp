@@ -1,4 +1,4 @@
-#include <engine/GLhandleErrors.hpp>
+#include <engine/system/handleGLerrors.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 
@@ -12,6 +12,11 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+
+#include "engine/object/vbo.hpp"
+#include "engine/object/ebo.hpp"
+
+using namespace TFM_ECS;
 
 struct ShaderProgramSources {
 	std::string vertexSource;
@@ -110,6 +115,7 @@ static uint32_t createShader(const std::string& vs, const std::string& fs) {
 
 int main(int, char* []) 
 {
+	{
 	if (!glfwInit()) 
 	{
 		std::cout << "Error Initializing GLFW" << std::endl;
@@ -151,7 +157,7 @@ int main(int, char* [])
 
 
 
-	float vertex[] = {
+	const float vertex[8] = {
         -0.5f, -0.5f,  // 0  
         0.5f, -0.5f,   // 1
        // 0.5f, 0.5f,
@@ -161,7 +167,7 @@ int main(int, char* [])
 		 // -0.5f, -0.5f
     };
 
-    uint32_t indices[] = {
+    uint32_t indices[6] = {
         0, 1, 2,
 		  2, 3, 0
     };
@@ -169,30 +175,31 @@ int main(int, char* [])
 	uint32_t VAO;	         
 	GLHE_(glGenVertexArrays(1, &VAO));
 	GLHE_(glBindVertexArray(VAO)); 
+	/* When we BIND VAO an we BIND VBO nothing actually links the two 
+	   until the line of code -> glVertexAttribPointer(0 ....) with index 0
+	*/
 
+	vbo_t VBO(vertex, sizeof(vertex));
+	/*
 	uint32_t VBO;	 
 	GLHE_(glGenBuffers(1, &VBO));
 	GLHE_(glBindBuffer(GL_ARRAY_BUFFER, VBO));
-   GLHE_(glBufferData(GL_ARRAY_BUFFER, sizeof(vertex), vertex, GL_STATIC_DRAW));
+   GLHE_(glBufferData(GL_ARRAY_BUFFER, sizeof(vertex), vertex, GL_STATIC_DRAW)); 
+	*/
 
+	// bind VAO & VBO
 	GLHE_(glEnableVertexAttribArray(0));
 	GLHE_(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0));
+
+
+	//std::cout << "sizeOf indices: " << sizeof(indices) << std::endl;
+	ebo_t EBO(indices, sizeof(indices));
 	
-	uint32_t EBO;
+	/* uint32_t EBO;
 	GLHE_(glGenBuffers(1, &EBO));
 	GLHE_(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
-   GLHE_(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
+   GLHE_(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW)); */
 	
-	GLHE_(glBindBuffer(GL_ARRAY_BUFFER, 0));
-	
-   GLHE_(glBindVertexArray(0));
-
-   GLHE_(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-
-	GLHE_(glBindVertexArray(VAO));
-
-
-
 	/* PROGRAM */	
 
 	ShaderProgramSources source = ParseShader("../assets/shaders/basic.shader");
@@ -207,6 +214,17 @@ int main(int, char* [])
 	GLHE_(glUniform4f(location, 0.9f, 0.3f, 0.4f, 1.0f));
 	
 	
+	/* UNBINDS */
+	GLHE_(glBindVertexArray(0));							 // unbind VAO
+	GLHE_(glUseProgram(0));									 // unbind shader program
+	//GLHE_(glBindBuffer(GL_ARRAY_BUFFER, 0));			 // unbind VBO
+	//GLHE_(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)); // unbind EBO
+	VBO.unbind();
+	EBO.unbind();
+	
+
+
+
 
 
 
@@ -219,7 +237,10 @@ int main(int, char* [])
 	GLHE_(glClearColor(0.0f, 0.3f, 0.6f, 1.0f));
 
 
-	
+	double timer;
+	float R;
+	float G;
+	float B;
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
@@ -228,26 +249,33 @@ int main(int, char* [])
 		GLHE_(glClear(GL_COLOR_BUFFER_BIT));
 
 
-		const double timer { glfwGetTime() };
-		const float R { static_cast<float>(abs(sin(timer))) };
-		const float G { static_cast<float>(abs(sin(timer + M_PI / 2))) };
-		const float B { static_cast<float>(abs(sin(timer + M_PI / 4))) };
+		GLHE_(glUseProgram(shader));
+		GLHE_(glUniform4f(location, R, G, B, 1.0f));	
 
-		// std::cout << "Red:   " << R << std::endl << "Blue:  " << B << std::endl << "Green: " << G << std::endl;
 
-		GLHE_(glUniform4f(location, R, G, B, 1.0f));
+		GLHE_(glBindVertexArray(VAO));
+		//GLHE_(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));		
+		EBO.bind();
+		
 		GLHE_(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
 		
+		timer = glfwGetTime();
+		R = static_cast<float>(abs(sin(timer)));
+		G = static_cast<float>(abs(sin(timer + M_PI / 2)));
+		B = static_cast<float>(abs(sin(timer + M_PI / 4)));
+
+
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 	GLHE_(glDeleteVertexArrays(1, &VAO));
-   GLHE_(glDeleteBuffers(1, &VBO));
-	GLHE_(glDeleteBuffers(1, &EBO));
+/*    GLHE_(glDeleteBuffers(1, &VBO));
+	GLHE_(glDeleteBuffers(1, &EBO)); */
 
    GLHE_(glDeleteProgram(shader));
+	}
 	glfwTerminate();
 	return 0;
 }

@@ -116,13 +116,13 @@ void Geometry::uploadData(const float* positions, const float* uvs, const float*
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    glBindVertexArray(_VAO);
+    
 
     delete[] tangents;
     delete[] biTangents;
 }
 
 void Geometry::render() const {
-   // glBindVertexArray(_VAO);
+    glBindVertexArray(_VAO);
     glDrawElements(GL_TRIANGLES, _nElements, GL_UNSIGNED_INT, 0);
 }
