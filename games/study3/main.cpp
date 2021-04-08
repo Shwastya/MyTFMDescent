@@ -71,7 +71,7 @@ bool checkShader(uint32_t id, uint32_t type)
 		  GLHE_(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
 
 		  /* allocate memory to avoid memory leak */
-		  char* infolog = static_cast<char*>(alloca(length * sizeof(char)));
+		  char* infolog = static_cast<char*>(_malloca(length * sizeof(char)));
 
         GLHE_(glGetShaderInfoLog(id, length, &length, infolog));
         std::cout << "Failed to compile " << 
@@ -168,20 +168,31 @@ int main(int, char* [])
 		 // -0.5f, -0.5f
     };
 
+	const glm::vec2 vertices[4] =
+	{
+		glm::vec2(-0.5f, -0.5f),
+		glm::vec2( 0.5f, -0.5f),
+		glm::vec2( 0.5f,  0.5f),
+		glm::vec2(-0.5f,  0.5f)
+	};
+
     uint32_t indices[6] = {
         0, 1, 2,
 		  2, 3, 0
     };
 
+	std::cout << "size of float vertex:      " << sizeof(vertex) << std::endl;
+	std::cout << "size of vec2 float vertex: " << sizeof(vertices) << std::endl;
 	//uint32_t VAO;	         
 	//GLHE_(glGenVertexArrays(1, &VAO));
 	//GLHE_(glBindVertexArray(VAO)); 
 
 	vao_t VAO;	
-	vbo_t VBO(vertex, sizeof(vertex));
-
+	//vbo_t VBO(vertex, sizeof(vertex));
+	vbo_t VBO;// (vertex, sizeof(vertex));
+	VBO.setBufferObject(vertices, sizeof(vertices));
 	vbl_t layout;
-	layout.push<float>(2); // glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0)
+	layout.push<float>(2, "triangulo"); // glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0)
 	VAO.addBuffer(VBO, layout);  //VAO.AddBuffer(VBO);
 
 	//BufferLayout layout;
@@ -234,10 +245,10 @@ int main(int, char* [])
 	GLHE_(glClearColor(0.0f, 0.3f, 0.6f, 1.0f));
 
 
-	double timer;
-	float R;
-	float G;
-	float B;
+	double timer = 0.0;
+	float R = 0.0f;
+	float G = 0.0f;
+	float B = 0.0f;
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))

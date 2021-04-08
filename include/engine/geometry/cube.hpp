@@ -9,6 +9,6 @@ class Cube final : public Geometry {
         explicit Cube(float size);
 
     private:
-        float _size;
+        const float _size = 0;
 };
 #endif

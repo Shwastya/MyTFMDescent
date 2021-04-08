@@ -5,7 +5,7 @@
 
 #include "engine/texture.hpp"
 #include "engine/geometry/cube.hpp"
-#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 
 void handleInput() {/*Intentionally Left BLank*/ }
@@ -34,6 +34,8 @@ void render(const Geometry& geom, const Shader& shader, Texture& tex) {
 
 int main(int, char* []) {
     Window* window = Window::instance();
+
+    
 
     glClearColor(0.0f, 0.3f, 0.6f, 1.0f);
 

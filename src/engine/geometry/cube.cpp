@@ -1,10 +1,41 @@
 #include "engine/geometry/cube.hpp"
 
-Cube::Cube(float size) : _size(size) {
+
+
+
+Cube::Cube(float size) : _size { size } 
+{
     _nVertices = 6 * 2 * 3;   //6 faces * 2 triangles * 3 vertices;
     _nElements = _nVertices;
 
     const float half = size / 2.0f;
+
+    v3 pos[36] =
+    {
+        //front
+        v3(-half, -half, half), v3(half, -half, half), v3(half, half, half),
+        v3(-half, -half, half), v3(half, half, half), v3(-half, half, half),
+
+        //right
+        v3(half, -half, half), v3(half, -half, -half), v3(half, half, -half),
+        v3(half, -half, half), v3(half, half, -half), v3(half, half, half),
+
+        //back
+        v3(half, -half, -half), v3(-half, -half, -half), v3(-half, half, -half),
+        v3(half, -half, -half), v3(-half, half, -half), v3(half, half, -half),
+
+        //left
+        v3(-half, -half, -half), v3(-half, -half, half), v3(-half, half, half),
+        v3(-half, -half, -half), v3(-half, half, half), v3(-half, half, -half),
+
+        //bottom
+        v3(-half, -half, -half), v3(half, -half, -half), v3(half, -half, half),
+        v3(-half, -half, -half), v3(half, -half, half), v3(-half, -half, half),
+
+        //top
+        v3(-half, half, half), v3(half, half, half), v3(half, half, -half),
+        v3(-half, half, half), v3(half, half, -half), v3(-half, half, -half)
+    };
 
     float positions[] = { -half, -half, half,    //front
                           half, -half, half,
@@ -54,31 +85,31 @@ Cube::Cube(float size) : _size(size) {
                           half, half, -half,
                           -half, half, -half};
 
-    float uvs[] = { 0.0f, 0.0f,   //front
-                    1.0f, 0.0f,
-                    1.0f, 1.0f,
 
-                    0.0f, 0.0f,
-                    1.0f, 1.0f,
-                    0.0f, 1.0f,
 
-                    0.0f, 0.0f,   //right
-                    1.0f, 0.0f,
-                    1.0f, 1.0f,
+                    //front
+    float uvs[] = { 0.0f, 0.0f, 1.0f, 
+                    0.0f, 1.0f, 1.0f,
 
-                    0.0f, 0.0f,
-                    1.0f, 1.0f,
-                    0.0f, 1.0f,
+                    0.0f, 0.0f, 1.0f, 
+                    1.0f, 0.0f, 1.0f,
+                    
+                    //right
+                    0.0f, 0.0f, 1.0f, 
+                    0.0f, 1.0f, 1.0f,
 
-                    0.0f, 0.0f,   //back
-                    1.0f, 0.0f,
-                    1.0f, 1.0f,
+                    0.0f, 0.0f, 1.0f, 
+                    1.0f, 0.0f, 1.0f,
+                    
+                    //back
+                    0.0f, 0.0f, 1.0f, 
+                    0.0f, 1.0f, 1.0f,
 
-                    0.0f, 0.0f,
-                    1.0f, 1.0f,
-                    0.0f, 1.0f,
-
-                    0.0f, 0.0f,   //left
+                    0.0f, 0.0f, 1.0f, 
+                    1.0f, 0.0f, 1.0f,
+                    
+                    //left
+                    0.0f, 0.0f,   
                     1.0f, 0.0f,
                     1.0f, 1.0f,
 
@@ -148,7 +179,7 @@ Cube::Cube(float size) : _size(size) {
 
                         0.0f, 1.0f, 0.0f,
                         0.0f, 1.0f, 0.0f,
-                        0.0f, 1.0f, 0.0f};
+                        0.0f, 1.0f, 0.0f };
 
     uint32_t indices[] = { 0, 1, 2,       3 , 4, 5,  //front
                             6,7,8, 9,10, 11, //right

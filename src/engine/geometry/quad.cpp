@@ -14,13 +14,10 @@ Quad::Quad(float size) : _size(size) {
                           -half, half, 0.0f,
                           -half, -half, 0.0f };
 
-    float uvs[] = { 1.0f, 1.0f,
-                    1.0f, 0.0f,
-                    0.0f, 1.0f,
-
-                    1.0f, 0.0f,
-                    0.0f, 1.0f,
-                    0.0f, 0.0f };
+    float uvs[] = { 1.0f, 1.0f, 1.0f, 
+                    0.0f, 0.0f, 1.0f, 
+                    1.0f, 0.0f, 0.0f, 
+                    1.0f, 0.0f, 0.0f, };
 
     float normals[] = { 0.0f, 0.0f, 1.0f,
                         0.0f, 0.0f, 1.0f,

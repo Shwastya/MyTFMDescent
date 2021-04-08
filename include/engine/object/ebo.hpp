@@ -10,6 +10,12 @@ public:
 	ebo_t(const uint32_t* elementdata, const uint32_t nElements); // size sin usar
 	~ebo_t();
 
+	ebo_t(const ebo_t&) = default;
+	ebo_t& operator=(const ebo_t&) = default;
+
+	ebo_t(ebo_t&&) noexcept = default;
+	ebo_t& operator=(ebo_t&&) noexcept = default;
+
 	void bind()   const;
 	void unbind() const;
 

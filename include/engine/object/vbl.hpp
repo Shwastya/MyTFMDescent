@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <cstdint>
 #include "engine/system/handleGLerrors.hpp"
 
 
@@ -9,10 +10,11 @@ struct vbe_t // vertex buffer element
 {
 								// count, type    , normalize   
 	// glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0)
-	u_int32_t type;
-	u_int32_t count;	
-	u_char    normalized;
-
+	uint32_t type;
+	uint32_t count;	
+	unsigned char normalized;
+	std::string name = "noname";
+	
 	static unsigned int getSizeOfType(uint32_t type)
 	{
 		switch (type)
@@ -38,12 +40,18 @@ public:
 
 	vbl_t() :_stride{0} {}
 
+	vbl_t(const vbl_t&) = default;
+	vbl_t& operator=(const vbl_t&) = default;
+
+	vbl_t(vbl_t&&) noexcept = default;
+	vbl_t& operator=(vbl_t&&) noexcept = default;
+
 	
 	template<typename T>		
-	void push(uint32_t count)
+	void push(const uint32_t count, const std::string name = "empty")
 	{
-		std::cout << "template count: " << count << std::endl;
-		static_assert(false, "this function has to be implemented for desired type");
+		
+		static_assert(count == -1, "Implemented for overload push function");
 	}
 
 	const std::vector<vbe_t> getElements() const { return _elements; }
@@ -52,28 +60,28 @@ public:
 
 
 template<>
-inline void vbl_t::push<float>(uint32_t count)
+inline void vbl_t::push<float>(const uint32_t count, const std::string name)
 {
 	std::cout << "type:   GL_FLOAT" << count << std::endl;
-	_elements.push_back({GL_FLOAT, count, GL_FALSE});
+	_elements.push_back({GL_FLOAT, count, GL_FALSE, name});
 	_stride += count * vbe_t::getSizeOfType(GL_FLOAT);
 }
 
 template<>
-inline void vbl_t::push<uint32_t>(uint32_t count)
+inline void vbl_t::push<uint32_t>(const uint32_t count, const std::string name)
 {
 								// count, type    , normalize   
 // glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0)
 	std::cout << "type:   GL_UNSIGNED_INT" << count << std::endl;
-	_elements.push_back({GL_UNSIGNED_INT, count, GL_FALSE});
+	_elements.push_back({GL_UNSIGNED_INT, count, GL_FALSE, name});
 	_stride += count * vbe_t::getSizeOfType(GL_UNSIGNED_INT);
 }
 
 template<>
-inline void vbl_t::push<u_char>(uint32_t count)
+inline void vbl_t::push<unsigned char>(const uint32_t count, const std::string name)
 {
 	std::cout << "type:   GL_UNSIGNED_BYTE" << count << std::endl;
-	_elements.push_back({GL_UNSIGNED_BYTE, count, GL_TRUE});
+	_elements.push_back({GL_UNSIGNED_BYTE, count, GL_TRUE, name});
 	_stride += count * vbe_t::getSizeOfType(GL_UNSIGNED_BYTE);
 }
 }

@@ -1,6 +1,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/gtc/matrix_transform.hpp>
 
 #include "engine/camera.hpp"
 #include "engine/geometry/cube.hpp"
@@ -70,7 +70,7 @@ void render(const Geometry& geom, const Shader& shader, Texture& tex) {
     glm::mat4 view = glm::mat4(1.0f);
     view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
-    glm::mat4 proj = glm::perspective(glm::radians(camera.getFOV()), 800.0f / 600.0f, 0.1f, 100.0f);
+    glm::mat4 proj = glm::perspective(glm::radians(camera.getFOV()), 1920.0f / 1080.0f, 0.1f, 100.0f);
 
     shader.use();
 

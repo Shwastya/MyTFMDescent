@@ -3,9 +3,9 @@ extern "C" {
 #include <string.h>
 }
 #include "engine/geometry/geometry.hpp"
-#include <glm/vec3.hpp>
-#include <glm/vec2.hpp>
-#include <glm/detail/func_geometric.inl>
+
+//#include <glm/detail/func_geometric.inl>
+
 
 
 
@@ -68,14 +68,67 @@ void Geometry::calcTangents(const float* positions, const float* uvs, const floa
 
 void Geometry::uploadData(const float* positions, const float* uvs, const float* normals,
     const uint32_t* indices) {
-    const size_t length = _nVertices * 3;
+    
+    const size_t length    = static_cast<size_t>(_nVertices) * 3;
+    const size_t uv_lenght = static_cast<size_t>(_nVertices) * 2;
+
     const auto tangents = new float[length];
     const auto biTangents = new float[length];
 
-    memset(tangents, 0.0f, length * sizeof(float));
-    memset(biTangents, 0.0f, length * sizeof(float));
+    int fileCount = 0;
+
+    const auto data = new float[uv_lenght];
+
+    glm::vec3 t[5] = 
+    {
+        { 0.0f, 0.1f, 0.3f },
+        { 0.3f, 0.1f, 0.3f },
+        { 0.3f, 0.5f, 0.0f },
+        { 0.3f, 0.5f, 0.0f },
+        { 0.3f, 0.5f, 0.0f },
+    };
+    glm::vec3 t2[3] =
+    {
+        { 0.0f, 0.1f, 0.3f },
+        { 0.3f, 0.1f, 0.3f },
+        { 0.3f, 0.5f, 0.0f },       
+    };
+
+    glm::vec3 test[10] =
+    {
+        *t, *t2
+    };
+
+    std::cout << t << std::endl;
+  
+
+    for (size_t i = 0; i < length; ++i)
+    {
+        
+
+
+
+
+        ++fileCount;
+        if (fileCount == 3)
+        {
+            std::cout << std::endl;
+            fileCount = 0;
+        }
+    
+    }
+
+   // memset(tangents, 0.0f, length * sizeof(float));
+    //memset(biTangents, 0.0f, length * sizeof(float));
 
     calcTangents(positions, uvs, normals, tangents, biTangents);
+
+  
+ 
+   // std::cout << "length     : " << length << std::endl;
+
+
+    //std::cout << "sizeof positions: " << sizeof(*positions)/sizeof(positions[0]) << std::endl;
 
     glGenVertexArrays(1, &_VAO);
     glGenBuffers(6, _VBO);

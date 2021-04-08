@@ -10,6 +10,12 @@ public:
 	vao_t();
 	~vao_t();
 
+	vao_t(const vao_t&) = default;
+	vao_t& operator=(const vao_t&) = default;
+
+	vao_t(vao_t&&) noexcept = default;
+	vao_t& operator=(vao_t&&) noexcept = default;
+
 	void addBuffer(const vbo_t& VBO, const vbl_t& VBlayout);
 
 	void bind()   const;
@@ -19,6 +25,7 @@ public:
 private:
 
 	uint32_t _VAO_ID { 0 };
+	uint32_t _count{ 0 };
 
 
 };}

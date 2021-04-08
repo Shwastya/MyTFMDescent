@@ -70,7 +70,7 @@ bool checkShader(uint32_t id, uint32_t type)
 		  GLHE_(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
 
 		  /* allocate memory to avoid memory leak */
-		  char* infolog = static_cast<char*>(alloca(length * sizeof(char)));
+		  char* infolog = static_cast<char*>(_malloca(length * sizeof(char)));
 
         GLHE_(glGetShaderInfoLog(id, length, &length, infolog));
         std::cout << "Failed to compile " << 
