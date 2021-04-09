@@ -190,7 +190,7 @@ int main(int, char* [])
 	vao_t VAO;	
 	//vbo_t VBO(vertex, sizeof(vertex));
 	vbo_t VBO;// (vertex, sizeof(vertex));
-	VBO.setBufferObject(vertices, sizeof(vertices));
+	VBO.set(vertices, sizeof(vertices));
 	vbl_t layout;
 	layout.push<float>(2, "triangulo"); // glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0)
 	VAO.addBuffer(VBO, layout);  //VAO.AddBuffer(VBO);

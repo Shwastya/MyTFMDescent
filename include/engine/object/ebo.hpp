@@ -7,7 +7,8 @@ class ebo_t
 {
 public:
 
-	ebo_t(const uint32_t* elementdata, const uint32_t nElements); // size sin usar
+	ebo_t() = default;
+	ebo_t(const uint32_t* data, const uint32_t nElements); // size sin usar
 	~ebo_t();
 
 	ebo_t(const ebo_t&) = default;
@@ -15,6 +16,8 @@ public:
 
 	ebo_t(ebo_t&&) noexcept = default;
 	ebo_t& operator=(ebo_t&&) noexcept = default;
+
+	void set(const uint32_t* elementdata, const uint32_t nElements);
 
 	void bind()   const;
 	void unbind() const;
@@ -24,7 +27,7 @@ public:
 private:
 
 	uint32_t _EBO_ID { 0 };
-	const uint32_t _nElements { 0 };
+	uint32_t _nElements { 0 };
 
 
 };} 

@@ -48,11 +48,10 @@ protected: // protected attributes
     uint32_t _nElements = 0;
 
 private:   // private attributes
-
-
  
     TFM_ECS::vao_t VAO;
     TFM_ECS::vbo_t VBO;
+    TFM_ECS::ebo_t EBO;
     TFM_ECS::vbl_t _layout;
 
    /* enum BufferObjectType

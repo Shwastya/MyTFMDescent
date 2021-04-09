@@ -13,13 +13,13 @@ struct vbe_t // vertex buffer element
 	uint32_t type;
 	uint32_t count;	
 	unsigned char normalized;
-	std::string name = "noname";
+	std::string name;
 	
 	static unsigned int getSizeOfType(uint32_t type)
 	{
 		switch (type)
 		{
-			case GL_FLOAT: 		  return 4; break;
+			case GL_FLOAT: 		   return 4; break;
 			case GL_UNSIGNED_INT:  return 4; break;
 			case GL_UNSIGNED_BYTE: return 1; break;		
 		}
@@ -62,7 +62,7 @@ public:
 template<>
 inline void vbl_t::push<float>(const uint32_t count, const std::string name)
 {
-	std::cout << "type:   GL_FLOAT" << count << std::endl;
+	std::cout << "Stride: "<< _stride << std::endl;
 	_elements.push_back({GL_FLOAT, count, GL_FALSE, name});
 	_stride += count * vbe_t::getSizeOfType(GL_FLOAT);
 }

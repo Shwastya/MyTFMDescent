@@ -17,14 +17,15 @@ public:
 	vbo_t(vbo_t&&) noexcept = default;
 	vbo_t& operator=(vbo_t&&) noexcept = default;
 
-	void setBufferObject(const void* data, const uint32_t nVertices);
+	void set(const void* data, const uint32_t nVertices);
 
 	void bind()   const;
 	void unbind() const;
 
 private:
 
-	uint32_t _VBO_ID { 0 };
+	int count { 0 };
+	uint32_t _VBO_ID[5];
 	uint32_t _nVertices { 0 };
 
 

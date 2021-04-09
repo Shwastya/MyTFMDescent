@@ -10,32 +10,32 @@ Cube::Cube(float size) : _size { size }
 
     const float half = size / 2.0f;
 
-    v3 pos[36] =
-    {
-        //front
-        v3(-half, -half, half), v3(half, -half, half), v3(half, half, half),
-        v3(-half, -half, half), v3(half, half, half), v3(-half, half, half),
+    //v3 pos[36] =
+    //{
+    //    //front
+    //    v3(-half, -half, half), v3(half, -half, half), v3(half, half, half),
+    //    v3(-half, -half, half), v3(half, half, half), v3(-half, half, half),
 
-        //right
-        v3(half, -half, half), v3(half, -half, -half), v3(half, half, -half),
-        v3(half, -half, half), v3(half, half, -half), v3(half, half, half),
+    //    //right
+    //    v3(half, -half, half), v3(half, -half, -half), v3(half, half, -half),
+    //    v3(half, -half, half), v3(half, half, -half), v3(half, half, half),
 
-        //back
-        v3(half, -half, -half), v3(-half, -half, -half), v3(-half, half, -half),
-        v3(half, -half, -half), v3(-half, half, -half), v3(half, half, -half),
+    //    //back
+    //    v3(half, -half, -half), v3(-half, -half, -half), v3(-half, half, -half),
+    //    v3(half, -half, -half), v3(-half, half, -half), v3(half, half, -half),
 
-        //left
-        v3(-half, -half, -half), v3(-half, -half, half), v3(-half, half, half),
-        v3(-half, -half, -half), v3(-half, half, half), v3(-half, half, -half),
+    //    //left
+    //    v3(-half, -half, -half), v3(-half, -half, half), v3(-half, half, half),
+    //    v3(-half, -half, -half), v3(-half, half, half), v3(-half, half, -half),
 
-        //bottom
-        v3(-half, -half, -half), v3(half, -half, -half), v3(half, -half, half),
-        v3(-half, -half, -half), v3(half, -half, half), v3(-half, -half, half),
+    //    //bottom
+    //    v3(-half, -half, -half), v3(half, -half, -half), v3(half, -half, half),
+    //    v3(-half, -half, -half), v3(half, -half, half), v3(-half, -half, half),
 
-        //top
-        v3(-half, half, half), v3(half, half, half), v3(half, half, -half),
-        v3(-half, half, half), v3(half, half, -half), v3(-half, half, -half)
-    };
+    //    //top
+    //    v3(-half, half, half), v3(half, half, half), v3(half, half, -half),
+    //    v3(-half, half, half), v3(half, half, -half), v3(-half, half, -half)
+    //};
 
     float positions[] = { -half, -half, half,    //front
                           half, -half, half,
@@ -88,25 +88,31 @@ Cube::Cube(float size) : _size { size }
 
 
                     //front
-    float uvs[] = { 0.0f, 0.0f, 1.0f, 
-                    0.0f, 1.0f, 1.0f,
+    float uvs[] = { 0.0f, 0.0f, 
+                    1.0f, 0.0f, 
+                    1.0f, 1.0f,
 
-                    0.0f, 0.0f, 1.0f, 
-                    1.0f, 0.0f, 1.0f,
+                    0.0f, 0.0f, 
+                    1.0f, 1.0f, 
+                    0.0f, 1.0f,
                     
                     //right
-                    0.0f, 0.0f, 1.0f, 
-                    0.0f, 1.0f, 1.0f,
+                    0.0f, 0.0f,
+                    1.0f, 0.0f, 
+                    1.0f, 1.0f,
 
-                    0.0f, 0.0f, 1.0f, 
-                    1.0f, 0.0f, 1.0f,
+                    0.0f, 0.0f,
+                    1.0f, 1.0f, 
+                    0.0f, 1.0f,
                     
                     //back
-                    0.0f, 0.0f, 1.0f, 
-                    0.0f, 1.0f, 1.0f,
+                    0.0f, 0.0f,
+                    1.0f, 0.0f,     
+                    1.0f, 1.0f,
 
-                    0.0f, 0.0f, 1.0f, 
-                    1.0f, 0.0f, 1.0f,
+                    0.0f, 0.0f, 
+                    1.0f, 1.0f,     
+                    0.0f, 1.0f,
                     
                     //left
                     0.0f, 0.0f,   
