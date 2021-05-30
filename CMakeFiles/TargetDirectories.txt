@@ -1,0 +1,6 @@
+C:/Users/Jose/Desktop/code/CPlusPlus/MyTFMDescent/CMakeFiles/MyTFMDescent.dir
+C:/Users/Jose/Desktop/code/CPlusPlus/MyTFMDescent/CMakeFiles/Tests.dir
+C:/Users/Jose/Desktop/code/CPlusPlus/MyTFMDescent/CMakeFiles/EngineLib.dir
+C:/Users/Jose/Desktop/code/CPlusPlus/MyTFMDescent/CMakeFiles/MH_Editor.dir
+C:/Users/Jose/Desktop/code/CPlusPlus/MyTFMDescent/CMakeFiles/ALL_BUILD.dir
+C:/Users/Jose/Desktop/code/CPlusPlus/MyTFMDescent/CMakeFiles/ZERO_CHECK.dir

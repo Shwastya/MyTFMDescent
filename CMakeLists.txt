@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20)
 
 project(MyTFMDescent CXX C)
 
@@ -16,25 +16,24 @@ include(cmake/compiler.cmake)
 #Engine Source Files
 
 set(ENGINE_SRC_FILES
+    #####################
+    # old classes removed
+    # empty at moment 
+    #####################
 
-    # old classes
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/deps.cpp # ficheros de depencias
+    #####################
+    # TFM From scratchs #
+    #####################
 
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/camera.cpp    
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/mesh.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/model.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/shader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/texture.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/window.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/cube.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/geometry.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/quad.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/sphere.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/teapot.cpp
 
-    ########################
-    # TFM From scratchs
-    ########################
+   
+    # MartianHelmet Application (main program) #
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/engine.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/mhpch.cpp
+
+
+
+    
 
     # ImGUI 
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/ImGui/imgui_impl_opengl3.cpp
@@ -45,52 +44,47 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/ImGui/imgui_widgets.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/ImGui/imgui.cpp
     
+    # window context on window S.O platform
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/platform/windows/windowWin.cpp
 
-    # ECS
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/object/ebo.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/object/vao.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/object/vbo.cpp
+    # Core OpenGL
     
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/handleGLerrors.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer.cpp
+    
 
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/render.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/manager/entitymanager.cpp)
+    # Projectes dependency
+    )
 
 set(ENGINE_HEADER_FILES
 
-    # old classes        
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/camera.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/input.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/mesh.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/model.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/shader.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/texture.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/window.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/cube.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/geometry.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/quad.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/sphere.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/teapot.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/teapotdata.hpp
+    #####################
+    # old classes removed
+    # empty at moment 
+    #####################  
 
     ########################
     # TFM From scratchs
     ########################  
 
+    # MartianHelmet Application (main program) #
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/engine.hpp 
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/mainPoint.hpp      
+
+    # events 
+
+
+
+    # window interface and SO Layers
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/baseWindow.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/platform/windows/windowWin.hpp
+
+    # Core OpenGL
+
+    
     # ECS 
 
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/object/ebo.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/object/vao.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/object/vbo.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/object/vbl.hpp
 
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/handleGLerrors.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer.hpp
-
-
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/render.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/manager/entitymanager.hpp)
+    # Projectes dependency
+    )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/engine/ PREFIX "Source Files" FILES ${ENGINE_SRC_FILES})
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/include/engine PREFIX "Header Files" FILES ${ENGINE_HEADER_FILES})
@@ -122,26 +116,24 @@ if (WIN32) # assimp files in windows macro #
     "${CMAKE_CURRENT_LIST_DIR}/lib/$<CONFIGURATION>/assimp-vc142-mt.dll" 
     $<TARGET_FILE_DIR:EngineLib>)
 endif()
-#****************************************************
-# Projects
-#****************************************************
+
+
 # List of projects
-set(PROJECT_LIST AG01 AG02 AG03 AG04 AG05 AG06 AG07 AG08_01 AG08_02
-    AG09_01 AG09_02 AG09_03 AG09_04 AG10 AG11_01 AG11_02 AG11_03 AG12 AG13 AG14 AG15
-    MyTFMDescent study study2 study3 tests)
+set(PROJECT_LIST Tests MyTFMDescent MH_Editor)
+
 
 #Root path of the projects
-set(PROJECTS_PATH ${CMAKE_CURRENT_LIST_DIR}/games)
+set(PROJECTS_PATH ${CMAKE_CURRENT_LIST_DIR}/projects)
 #Configure All Projects
 foreach(PROJECT ${PROJECT_LIST})
     message("Generating Project " ${PROJECT})
 
     #Create Directory and main.cpp
     file(MAKE_DIRECTORY ${PROJECTS_PATH}/${PROJECT})
-    file(TOUCH ${PROJECTS_PATH}/${PROJECT}/main.cpp)
+    file(TOUCH ${PROJECTS_PATH}/${PROJECT}/${PROJECT}.cpp)
 
     #Create Project and configure
-    add_executable(${PROJECT} ${PROJECTS_PATH}/${PROJECT}/main.cpp ${DEPS_SRC_FILES})
+    add_executable(${PROJECT} ${PROJECTS_PATH}/${PROJECT}/${PROJECT}.cpp ${DEPS_SRC_FILES})
     target_include_directories(${PROJECT} PRIVATE ${INCLUDE_PATHS})
     target_compile_definitions(${PROJECT} PRIVATE -D_GLFW_USE_OPENGL=1)
     target_link_libraries(${PROJECT} PRIVATE EngineLib)

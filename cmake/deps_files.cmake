@@ -3,7 +3,9 @@ set(INCLUDE_PATHS
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/glfw
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/stb
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui)
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/Mhelmet
+    )
 
 #Common Dependency Files
 set(DEPS_SRC_FILES_COMMON
@@ -23,7 +25,12 @@ set(DEPS_SRC_FILES_COMMON
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui/imgui.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui/imstb_rectpack.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui/imstb_textedit.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui/imstb_truetype.h)
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui/imstb_truetype.h
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/MHelmet/MHelmet.h # headers of engine motor    
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/MHelmet/MHpch.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/MHelmet/MHKeyCodes.h
+    )
 
 #Windows Dependency Files
 set(DEPS_SRC_FILES_WIN
