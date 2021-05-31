@@ -11,16 +11,19 @@ namespace MHelmet {
 
 		void Init() override;
 
-		std::shared_ptr<spdlog::logger>& GetCoreLogger() override;
-		std::shared_ptr<spdlog::logger>& GetClientLogger() override;
-
-		virtual ~LogStrategy_1() 
+		inline std::shared_ptr<spdlog::logger>& EngineLogger() override
 		{
-			printf("Se destruye LogStrategy_1\n");
+			return m_EngineLogger;
+		}
+		inline std::shared_ptr<spdlog::logger>& ClientLogger() override
+		{
+			return m_ClientLogger;
 		}
 
+		virtual ~LogStrategy_1() = default;
+
 	private:
-		std::shared_ptr<spdlog::logger> m_CoreLogger;
+		std::shared_ptr<spdlog::logger> m_EngineLogger;
 		std::shared_ptr<spdlog::logger> m_ClientLogger;
 
 	};
@@ -28,27 +31,5 @@ namespace MHelmet {
 
 
 
-
-
-
-	struct LogStrategy_2 : public Log
-	{
-		inline LogStrategy_2() { Init(); }
-
-		void Init() override;
-
-		std::shared_ptr<spdlog::logger>& GetCoreLogger() override;
-		std::shared_ptr<spdlog::logger>& GetClientLogger() override;
-
-		virtual ~LogStrategy_2() 
-		{
-			printf("Se destruye LogStrategy_2\n");
-		}
-
-	private:
-		std::shared_ptr<spdlog::logger> m_CoreLogger;
-		std::shared_ptr<spdlog::logger> m_ClientLogger;
-
-	};
 
 }

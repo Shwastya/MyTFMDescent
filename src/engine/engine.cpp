@@ -17,9 +17,9 @@ namespace MHelmet
 
 	void Engine::run()
 	{
-		//MHelmet::Log::GetCoreLogger()->info("[Engine]-> Is running now");
+		MH_ENGINE_INFO("Engine is running now!");
 		
-		while (_alive)
+		//while (_alive)
 		{
 			
 		}

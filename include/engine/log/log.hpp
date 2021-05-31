@@ -9,8 +9,8 @@ namespace MHelmet {
 
 		virtual void Init() = 0;
 
-		virtual std::shared_ptr<spdlog::logger>& GetCoreLogger()   = 0;
-		virtual std::shared_ptr<spdlog::logger>& GetClientLogger() = 0;
+		virtual std::shared_ptr<spdlog::logger>& EngineLogger() = 0;
+		virtual std::shared_ptr<spdlog::logger>& ClientLogger() = 0;
 
 		inline virtual ~Log() {};
 

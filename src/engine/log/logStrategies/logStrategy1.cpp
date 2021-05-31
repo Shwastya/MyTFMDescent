@@ -1,11 +1,8 @@
 #include "engine/log/logStrategies/logStrategy1.hpp"
 #include "spdlog/sinks/stdout_color_sinks.h"
 
-namespace MHelmet {
-
-	//std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
-	//std::shared_ptr<spdlog::logger> Log::s_ClientLogger;
-
+namespace MHelmet 
+{
 	void LogStrategy_1::Init()
 	{
 		/* STRING FORMAT EXAMPLES: */
@@ -30,47 +27,10 @@ namespace MHelmet {
 		//	off      = SPDLOG_LEVEL_OFF,
 		//	n_levels
 
-		m_CoreLogger = spdlog::stdout_color_mt("MHELMET");
-		m_CoreLogger->set_level(spdlog::level::trace);
+		m_EngineLogger = spdlog::stdout_color_mt("MHELMET");
+		m_EngineLogger->set_level(spdlog::level::trace);
 
 		m_ClientLogger = spdlog::stdout_color_mt("PROJECT");
 		m_ClientLogger->set_level(spdlog::level::trace);		
 	}
-
-	std::shared_ptr<spdlog::logger>& LogStrategy_1::GetCoreLogger()
-	{
-		return m_CoreLogger;
-	}
-	std::shared_ptr<spdlog::logger>& LogStrategy_1::GetClientLogger()
-	{
-		return m_ClientLogger;
-	}
-
-
-
-
-
-
-
-	void LogStrategy_2::Init()
-	{
-
-		spdlog::set_pattern("%^-%T- %n: %v%$");
-
-		m_CoreLogger = spdlog::stdout_color_mt("ENGINE");
-		m_CoreLogger->set_level(spdlog::level::trace);
-
-		m_ClientLogger = spdlog::stdout_color_mt("APP");
-		m_ClientLogger->set_level(spdlog::level::trace);
-	}
-
-	std::shared_ptr<spdlog::logger>& LogStrategy_2::GetCoreLogger()
-	{
-		return m_CoreLogger;
-	}
-	std::shared_ptr<spdlog::logger>& LogStrategy_2::GetClientLogger()
-	{
-		return m_ClientLogger;
-	}
-
 }
