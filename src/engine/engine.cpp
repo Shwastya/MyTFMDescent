@@ -1,5 +1,7 @@
-#include <MHpch.h>
+
 #include "engine/engine.hpp"
+
+
 
 #include <GLFW/glfw3.h>
 
@@ -15,7 +17,7 @@ namespace MHelmet
 
 	void Engine::run()
 	{
-		std::cout << "Empieza a correr el engine" << std::endl;
+		MHelmet::Log::GetCoreLogger()->info("[Engine]-> Is running now");
 		
 		while (_alive)
 		{

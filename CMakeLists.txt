@@ -32,6 +32,8 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/mhpch.cpp
 
 
+    # log classes
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/log/log.cpp
 
     
 
@@ -68,6 +70,11 @@ set(ENGINE_HEADER_FILES
     # MartianHelmet Application (main program) #
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/engine.hpp 
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/mainPoint.hpp      
+
+
+    # log classes
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/log/log.hpp 
+
 
     # events 
 

@@ -13,12 +13,9 @@ public:
 	~Editor() {}
 };
 
-/// Prototipo en Engine dentro del namespace
-/// Enviado al Entry Point (main principal)
 std::unique_ptr<MHelmet::Engine> MHelmet::createApp() 
 {
-	
-	std::cout << "retorno proyecto a mainPoint" << std::endl;
+	MHelmet::Log::GetClientLogger()->info("[Project]-> Return pointer Editor app'");
 
 	return std::make_unique<Editor>();
 }

@@ -6,7 +6,8 @@
 
 #include "engine/engine.hpp"
 
-// hub apps
+
+// general main engine for all apps
 #include "engine/mainPoint.hpp"
 
-// rest
+// rest of all
