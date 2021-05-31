@@ -33,7 +33,9 @@ set(ENGINE_SRC_FILES
 
 
     # log classes
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/log/log.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/log/logManager.cpp
+        # Log strategies
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/log/logStrategies/logStrategy1.cpp
 
     
 
@@ -73,7 +75,11 @@ set(ENGINE_HEADER_FILES
 
 
     # log classes
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/log/log.hpp 
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/log/logManager.hpp 
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/log/log.hpp # base log class 
+            # Log strategies
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/log/logStrategies/logStrategy1.hpp
+
 
 
     # events 

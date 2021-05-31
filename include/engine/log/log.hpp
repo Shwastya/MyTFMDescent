@@ -1,27 +1,22 @@
 #pragma once
 
 #include <spdlog/spdlog.h>
-#include <memory>
+
 namespace MHelmet {
 
-	class Log
-	{
-	public:
+	struct Log
+	{		
 
-		static void Init();
+		virtual void Init() = 0;
 
-		inline static std::shared_ptr<spdlog::logger>& GetCoreLogger()
-		{
-			return s_CoreLogger;
-		}
-		inline static std::shared_ptr<spdlog::logger>& GetClientLogger()
-		{
-			return s_ClientLogger;
-		}
+		virtual std::shared_ptr<spdlog::logger>& GetCoreLogger()   = 0;
+		virtual std::shared_ptr<spdlog::logger>& GetClientLogger() = 0;
+
+		inline virtual ~Log() {};
 
 	private:
-		static std::shared_ptr<spdlog::logger> s_CoreLogger;
-		static std::shared_ptr<spdlog::logger> s_ClientLogger;
+		// static std::shared_ptr<spdlog::logger> s_CoreLogger;
+		// static std::shared_ptr<spdlog::logger> s_ClientLogger;
 
 	};
 

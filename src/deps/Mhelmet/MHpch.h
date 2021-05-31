@@ -15,4 +15,5 @@
 //#include <sstream>
 
 
-#include "engine/log/log.hpp"
+#include "engine/log/logManager.hpp"
+

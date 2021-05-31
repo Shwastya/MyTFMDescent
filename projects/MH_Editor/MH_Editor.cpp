@@ -15,7 +15,7 @@ public:
 
 std::unique_ptr<MHelmet::Engine> MHelmet::createApp() 
 {
-	MHelmet::Log::GetClientLogger()->info("[Project]-> Return pointer Editor app'");
+	//MHelmet::Log::GetClientLogger()->info("[Project]-> Return pointer Editor app'");
 
 	return std::make_unique<Editor>();
 }
