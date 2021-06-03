@@ -6,7 +6,7 @@ namespace MHelmet {
 
 	enum class LogType 
 	{
-		STRATEGY1, STRATEGY2
+		SIMPLE_LOG, OTHER_LOG
 	};
 
 	class LogManager
@@ -15,21 +15,22 @@ namespace MHelmet {
 		~LogManager();
 
 		static LogManager& p();
-		Log& log();
+		Log& GetLog();
 
-		void switchLog(const LogType type);
+		void SwitchLog(const LogType type);
 
 	private:
 		LogManager();
 
 		Log* m_Log = nullptr;
 
-		LogType m_selected = LogType::STRATEGY1;
+		LogType m_selected = LogType::SIMPLE_LOG;
 		
 	};
 }
-#define ENGINE_LOG ::MHelmet::LogManager::p().log().EngineLogger()
-#define CLIENT_LOG ::MHelmet::LogManager::p().log().ClientLogger()
+
+#define ENGINE_LOG ::MHelmet::LogManager::p().GetLog().EngineLogger()
+#define CLIENT_LOG ::MHelmet::LogManager::p().GetLog().ClientLogger()
 
 #define MH_ENGINE_TRACE(...) ENGINE_LOG->trace (__VA_ARGS__)
 #define MH_ENGINE_INFO(...)  ENGINE_LOG->info  (__VA_ARGS__)
@@ -37,8 +38,8 @@ namespace MHelmet {
 #define MH_ENGINE_ERROR(...) ENGINE_LOG->error (__VA_ARGS__)
 #define MH_ENGINE_FATAL(...) ENGINE_LOG->fatal (__VA_ARGS__)
 
-#define MH_CLIENT_TRACE(...) CLIENT_LOG->trace (__VA_ARGS__)
-#define MH_CLIENT_INFO(...)  CLIENT_LOG->info  (__VA_ARGS__)
-#define MH_CLIENT_WARN(...)  CLIENT_LOG->warn  (__VA_ARGS__)
-#define MH_CLIENT_ERROR(...) CLIENT_LOG->error (__VA_ARGS__)
-#define MH_CLIENT_FATAL(...) CLIENT_LOG->fatal (__VA_ARGS__)
+#define MH_TRACE(...) CLIENT_LOG->trace (__VA_ARGS__)
+#define MH_INFO(...)  CLIENT_LOG->info  (__VA_ARGS__)
+#define MH_WARN(...)  CLIENT_LOG->warn  (__VA_ARGS__)
+#define MH_ERROR(...) CLIENT_LOG->error (__VA_ARGS__)
+#define MH_FATAL(...) CLIENT_LOG->fatal (__VA_ARGS__)

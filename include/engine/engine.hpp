@@ -1,6 +1,6 @@
 #pragma once
 #include <MHpch.h>
-#include "engine/baseWindow.hpp"
+#include "engine/platform/window.hpp"
 
 namespace MHelmet 
 {
@@ -15,7 +15,7 @@ namespace MHelmet
 		void run();	
 		
 	private:
-		bool _alive = true;
+		bool m_Running = true;
 	};
 	
 	std::unique_ptr<Engine> createApp(); // definido en cliente

@@ -4,10 +4,16 @@
 
 namespace MHelmet {
 
-	struct LogStrategy_1 : public Log
+	struct SimpleLog : public Log
 	{
+		inline SimpleLog()
+		{ 
+			Init();
 
-		inline LogStrategy_1() { Init(); }
+			static int instance = 0;
+			++instance;
+			printf("Instancias de log creadas %i\n", instance);
+		}
 
 		void Init() override;
 
@@ -20,12 +26,11 @@ namespace MHelmet {
 			return m_ClientLogger;
 		}
 
-		virtual ~LogStrategy_1() = default;
+		virtual ~SimpleLog() = default;
 
 	private:
 		std::shared_ptr<spdlog::logger> m_EngineLogger;
 		std::shared_ptr<spdlog::logger> m_ClientLogger;
-
 	};
 
 

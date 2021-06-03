@@ -1,9 +1,12 @@
 #include "engine/log/logManager.hpp"
-#include "engine/log/logStrategies/logStrategy1.hpp"
+#include "engine/log/strategies/simpleLog.hpp"
 
 MHelmet::LogManager::LogManager()
 {
-	m_Log = new LogStrategy_1();
+	m_Log = new SimpleLog();
+	static int instance = 0;
+	instance++;
+	printf("Instancias de SINGLETON LogManager creadas %i\n", instance);
 }
 
 MHelmet::LogManager::~LogManager()
@@ -17,12 +20,12 @@ MHelmet::LogManager& MHelmet::LogManager::p()
 	return instance;
 }
 
-MHelmet::Log& MHelmet::LogManager::log()
+MHelmet::Log& MHelmet::LogManager::GetLog()
 {
 	return *m_Log;
 }
 
-void MHelmet::LogManager::switchLog(const MHelmet::LogType type)
+void MHelmet::LogManager::SwitchLog(const MHelmet::LogType type)
 {
 	//	I probably won't use it
 }

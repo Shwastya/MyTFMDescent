@@ -35,7 +35,7 @@ set(ENGINE_SRC_FILES
     # log classes
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/log/logManager.cpp
         # Log strategies
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/log/logStrategies/logStrategy1.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/log/strategies/simpleLog.cpp
 
     
 
@@ -77,18 +77,34 @@ set(ENGINE_HEADER_FILES
     # log classes
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/log/logManager.hpp 
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/log/log.hpp # base log class 
-            # Log strategies
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/log/logStrategies/logStrategy1.hpp
+        # Log strategies
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/log/strategies/simpleLog.hpp
 
 
 
-    # events 
+    # events & event sender     
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/events/Event.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/events/EventSender.hpp
+        # KeyEvents : event
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/events/KeyEvents/KeyEvent.hpp
+            # OnKeyEvents : KeyEvents : event
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/events/KeyEvents/OnKeyEvents.hpp
+        # MouseEvents : event
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/events/MouseEvents/MouseButtonEvent.hpp
+            # OnMouseEvents : MouseButtonEvent : event
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/events/MouseEvents/OnMouseEvents.hpp
+        # AppEvent : event
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/events/AppEvents/OnAppEvents.hpp
 
 
 
-    # window interface and SO Layers
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/baseWindow.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/platform/windows/windowWin.hpp
+    
+
+
+
+    # window interface and PLATFORM Layers
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/platform/window.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/platform/Windows/windowWin.hpp
 
     # Core OpenGL
 

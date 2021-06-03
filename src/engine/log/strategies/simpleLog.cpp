@@ -1,9 +1,11 @@
-#include "engine/log/logStrategies/logStrategy1.hpp"
+#include "engine/log/strategies/simpleLog.hpp"
 #include "spdlog/sinks/stdout_color_sinks.h"
+//#include "spdlog/sinks/basic_file_sink.h"
+
 
 namespace MHelmet 
 {
-	void LogStrategy_1::Init()
+	void SimpleLog::Init()
 	{
 		/* STRING FORMAT EXAMPLES: */
 		// %^ - Start color range (can be used only once)
