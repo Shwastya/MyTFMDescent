@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/log/log.hpp"
+#include "engine/log/Log.hpp"
 
 namespace MHelmet {
 
@@ -26,9 +26,12 @@ namespace MHelmet {
 			return m_ClientLogger;
 		}
 
-		virtual ~SimpleLog() = default;
+		virtual void ShutDown() override;
+
+		virtual ~SimpleLog();
 
 	private:
+		bool m_Alive = false;
 		std::shared_ptr<spdlog::logger> m_EngineLogger;
 		std::shared_ptr<spdlog::logger> m_ClientLogger;
 	};

@@ -1,5 +1,5 @@
-#include "engine/log/logManager.hpp"
-#include "engine/log/strategies/simpleLog.hpp"
+#include "engine/log/LogManager.hpp"
+#include "engine/log/strategies/SimpleLog.hpp"
 
 MHelmet::LogManager::LogManager()
 {

@@ -1,5 +1,5 @@
 
-#include "engine/engine.hpp"
+#include "engine/Engine.hpp"
 
 #include "engine/events/AppEvents/OnAppEvents.hpp"
 #include "engine/events/KeyEvents/OnKeyEvents.hpp"
@@ -20,7 +20,7 @@ namespace MHelmet
 
 	void Engine::run()
 	{
-		MH_ENGINE_INFO("Engine is running now!");
+		MH_CORE_INFO("Engine is running now!");
 		
 		OnWindowResize e(1280, 720);
 
@@ -62,7 +62,7 @@ namespace MHelmet
 		else           printf("Big Endian\n");*/
 
 		
-		while (m_Running)
+		//while (m_Running)
 		{
 			
 		}

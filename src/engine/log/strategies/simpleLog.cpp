@@ -1,4 +1,4 @@
-#include "engine/log/strategies/simpleLog.hpp"
+#include "engine/log/strategies/SimpleLog.hpp"
 #include "spdlog/sinks/stdout_color_sinks.h"
 //#include "spdlog/sinks/basic_file_sink.h"
 
@@ -33,6 +33,19 @@ namespace MHelmet
 		m_EngineLogger->set_level(spdlog::level::trace);
 
 		m_ClientLogger = spdlog::stdout_color_mt("PROJECT");
-		m_ClientLogger->set_level(spdlog::level::trace);		
+		m_ClientLogger->set_level(spdlog::level::trace);	
+
+		m_Alive = true;
+	}
+	void SimpleLog::ShutDown()
+	{
+		m_Alive = false;
+		m_ClientLogger.reset();
+		m_EngineLogger.reset();
+		spdlog::drop_all();		
+	}
+	SimpleLog::~SimpleLog()
+	{
+		if (m_Alive) ShutDown();	
 	}
 }

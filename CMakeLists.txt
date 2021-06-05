@@ -16,11 +16,11 @@ include(cmake/compiler.cmake)
 #Engine Source Files
 
 set(ENGINE_SRC_FILES
-    #####################
-    # old classes removed
-    # empty at moment 
-    #####################
 
+    #####################
+    # old dependences removed # empty at moment 
+    #####################
+    # ....
     #####################
     # TFM From scratchs #
     #####################
@@ -28,14 +28,15 @@ set(ENGINE_SRC_FILES
 
    
     # MartianHelmet Application (main program) #
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/engine.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/mhpch.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/MHCore.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/Engine.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/MHpch.cpp
 
 
     # log classes
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/log/logManager.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/log/LogManager.cpp
         # Log strategies
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/log/strategies/simpleLog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/log/Strategies/SimpleLog.cpp
 
     
 
@@ -49,7 +50,7 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/ImGui/imgui.cpp
     
     # window context on window S.O platform
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/platform/windows/windowWin.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/platform/Windows/WindowWin.cpp
 
     # Core OpenGL
     
@@ -61,24 +62,25 @@ set(ENGINE_SRC_FILES
 set(ENGINE_HEADER_FILES
 
     #####################
-    # old classes removed
-    # empty at moment 
-    #####################  
-
-    ########################
-    # TFM From scratchs
-    ########################  
+    # old dependences removed # empty at moment 
+    #####################
+    # ....
+    #####################
+    # TFM From scratchs #
+    #####################
 
     # MartianHelmet Application (main program) #
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/engine.hpp 
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/mainPoint.hpp      
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/MHCore.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/MHSetup.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/Engine.hpp 
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/MainPoint.hpp      
 
 
     # log classes
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/log/logManager.hpp 
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/log/log.hpp # base log class 
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/log/LogManager.hpp 
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/log/Log.hpp # base log class 
         # Log strategies
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/log/strategies/simpleLog.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/log/strategies/SimpleLog.hpp
 
 
 
@@ -103,8 +105,8 @@ set(ENGINE_HEADER_FILES
 
 
     # window interface and PLATFORM Layers
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/platform/window.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/platform/Windows/windowWin.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/platform/Window.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/platform/Windows/WindowWin.hpp
 
     # Core OpenGL
 

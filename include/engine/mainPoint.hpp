@@ -13,10 +13,12 @@ int main(int argc, char** argv )
 	//MHelmet::Log::GetClientLogger()->info("[EntryPoint]-> calls create application");
 	//CheckLeaks(1);
 	{
-		MH_ENGINE_WARN("Initialized Log System!");		
+		CORE::Init();
 
 		auto project = MHelmet::createApp();
 		project->run();
+
+		CORE::Stop();
 	}
 	//CheckLeaks(2);
 

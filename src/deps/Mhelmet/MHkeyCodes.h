@@ -3,11 +3,8 @@
 #include <cstdint>
 #include <ostream>
 
-
-
 namespace MHelmet
-{
-	
+{	
 	typedef enum class KeyCode : uint16_t
 	{
 		// FILE glfw3.h

@@ -1,6 +1,6 @@
 #pragma once
-#include <MHpch.h>
-#include "engine/platform/window.hpp"
+#include "engine/MHCore.hpp"
+#include "engine/platform/Window.hpp"
 
 namespace MHelmet 
 {

@@ -1,5 +1,8 @@
 #pragma once
-#define STB_IMAGE_IMPLEMENTATION /* stbi.h image implementation */
+
+/* Future Work - defines for different platforms */
+#include <Windows.h>
+/*************************************************/
 
 #include <iostream>
 #include <cstdint>
@@ -12,9 +15,7 @@
 #include <algorithm>
 
 #include <fstream>
-//#include <sstream>
 
-
-#include "engine/log/logManager.hpp"
-#include "engine/events/event.hpp"
+#include "engine/events/Event.hpp"
+#include "engine/events/EventSender.hpp"
 
