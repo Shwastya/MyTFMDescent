@@ -29,8 +29,7 @@ namespace MHelmet
 		E_MOUSE_BUTTON_RELEASED,
 		E_MOUSE_MOVED,
 		E_MOUSE_SCROLLED,	
-	};
-	
+	};	
 
 	enum EventCategory
 	{
@@ -39,8 +38,7 @@ namespace MHelmet
 		E_CATG_INPUT		= (1 << 1),
 		E_CATG_KEYBOARD		= (1 << 2),	
 		E_CATG_MOUSE		= (1 << 3),
-		E_CATG_MOUSE_BUTTON = (1 << 4),
-		
+		E_CATG_MOUSE_BUTTON = (1 << 4),		
 	};
 
 	struct Event
@@ -55,9 +53,6 @@ namespace MHelmet
 		{
 			return GetCategoryFlags() & category;
 		}
-
-
-
 	};	
 
 	inline std::ostream& operator<<(std::ostream& os, const Event& event)

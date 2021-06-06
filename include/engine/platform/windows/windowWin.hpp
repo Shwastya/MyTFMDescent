@@ -8,13 +8,14 @@ namespace MHelmet {
 
 	class WindowWin : public Window 
 	{
-
-
 		struct WindowData
 		{
-			const char* Title;
-			UI_Vec	    Size;
+			std::string Title;
+			Size_Vec	Size;
 			bool        VSync;
+
+			// Event System CallBacks
+			CALLBACK CallBack;
 		};
 
 	public:
@@ -22,29 +23,36 @@ namespace MHelmet {
 		virtual ~WindowWin();
 
 		virtual void Init() override;		
-		virtual void SwapBuffers() override;
+		virtual void SwapBuffers() override; // updating
+
+		virtual void Maximize() override;
 
 		inline uint32_t GetWidth()  const override { return m_Data.Size.Width; }
 		inline uint32_t GetHeight() const override { return m_Data.Size.Height; }
 
-		virtual UI_Vec	 GetSize()  const override { return  m_Data.Size; }
-		virtual FL_Vec	 GetPos()   const override;
+		inline virtual Size_Vec GetSize()  const override { return  m_Data.Size; }
+		virtual Pos_Vec GetPos() const override;
 
-		virtual void Maximize() override;
+		inline virtual void* GetWindow() const override { return m_Window;  };
+
+
+		inline virtual void SetCallBack(const CALLBACK& cb) override
+		{
+			m_Data.CallBack = cb;
+		}
 
 		virtual void SetVSync(bool toggle) override;
-		virtual bool IsVSync() const override;
+		inline virtual bool IsVSync() const override { return m_Data.VSync; };
+
 	private:
 		void ShutDown();
 
 	private:
 		GLFWwindow* m_Window;
 		WindowSpec  m_Spec;
-
+		
 		WindowData m_Data;
-		float m_LastFrame = 0.0f;		
-
-
+		float m_LastFrame = 0.0f;	
 	};
 
 }

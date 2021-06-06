@@ -11,13 +11,18 @@ public:
 
 	Editor() {}
 	~Editor() {}
+
+	inline std::string getName(const std::string name) const { return m_ProjectName; };
+
+private:
+	std::string m_ProjectName = "Editor";
 };
 
 std::unique_ptr<MHelmet::Engine> MHelmet::createApp() 
 {
-	const char* name = "Editor";
-	//MHelmet::Log::GetClientLogger()->info("[Project]-> Return pointer Editor app'");
-	MH_INFO("Created and running! App={0}", "Editor");
+
+	
+	MH_INFO("Created Application: {}", "Engine!");
 
 	return std::make_unique<Editor>();
 }

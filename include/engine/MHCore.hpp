@@ -84,6 +84,10 @@ namespace CORE
 	#define MH_VERIFY(...)
 	#define MH_CORE_VERIFY(...)
 #endif
+// Function Pointer to Event base class
+#define CALLBACK std::function<void(Event&)>
+// Perform Event Tasks
+#define BIND(x) std::bind(&Engine::x, this, std::placeholders::_1)
 
 
 

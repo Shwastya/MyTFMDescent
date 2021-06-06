@@ -9,10 +9,6 @@ namespace MHelmet {
 		inline SimpleLog()
 		{ 
 			Init();
-
-			static int instance = 0;
-			++instance;
-			printf("Instancias de log creadas %i\n", instance);
 		}
 
 		void Init() override;

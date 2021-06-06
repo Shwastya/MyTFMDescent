@@ -4,9 +4,6 @@
 MHelmet::LogManager::LogManager()
 {
 	m_Log = new SimpleLog();
-	static int instance = 0;
-	instance++;
-	printf("Instancias de SINGLETON LogManager creadas %i\n", instance);
 }
 
 MHelmet::LogManager::~LogManager()

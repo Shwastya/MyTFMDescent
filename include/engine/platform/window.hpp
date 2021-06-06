@@ -2,6 +2,7 @@
 #include "engine/MHCore.hpp"
 #include <functional>
 
+//#define CALLBACK std::function<void(Event&)>
 
 namespace MHelmet {
 	
@@ -11,36 +12,43 @@ namespace MHelmet {
 	// pero lo dejo como NOTA por si en el futuro tuviera problemas
 	// poder disponer de todas las pistas posibles
 	/****************************************************************/
-	struct UI_Vec { uint32_t Width = 0, Height = 0;    };
-	struct FL_Vec { float Width = 0.0f, Height = 0.0f; };
+	struct Size_Vec { uint32_t Width = 0, Height = 0;    };
+	struct Pos_Vec { float X = 0.0f, Y = 0.0f; };
 
 	struct WindowSpec /* Window Specification */
 	{
-		const char* Title = MH_TITLE;
-		UI_Vec  Size	  = { MH_WIDTH, MH_HEIGHT };
+		std::string Title = MH_TITLE;
+		Size_Vec  Size	  = { MH_WIDTH, MH_HEIGHT };
 		bool FullScreen	  = MH_FULL_SRC;
 		bool VSync		  = MH_VSYNC;
 	};	
 
 	struct Window
-	{		
+	{	
 		virtual ~Window() {}
 
 		virtual void Init() = 0;
-		virtual void SwapBuffers() = 0;
+		virtual void SwapBuffers() = 0; // updating
+
+		virtual void Maximize() = 0;
 
 		virtual uint32_t GetWidth()  const = 0;
 		virtual uint32_t GetHeight() const = 0;
 
-		virtual UI_Vec GetSize()  const = 0;
-		virtual FL_Vec GetPos()   const = 0;
+		virtual Size_Vec GetSize()   const = 0;
+		virtual Pos_Vec  GetPos()    const = 0;
 
-		virtual void Maximize() = 0;
+		virtual void* GetWindow()	 const = 0;
+
+		
+		virtual void SetCallBack(const CALLBACK& cb) = 0;
 
 		virtual void SetVSync(bool toggle) = 0;
-		virtual bool IsVSync() const = 0;
+		virtual bool IsVSync() const = 0;		
 
-
+		// NOTA
+		// Aqui para que fuera independientemente de la plataforma
+		// haria falta un tipo de declaracion switch (podria ser a nivel de pre-proceso)
 		static Window* Create(const WindowSpec& spec = WindowSpec());
 	};
 }

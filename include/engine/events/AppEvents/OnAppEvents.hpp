@@ -6,12 +6,12 @@ namespace MHelmet {
 	
 	struct OnWindowResize : public Event
 	{
-		OnWindowResize(uint32_t width, uint32_t height)
+		OnWindowResize(unsigned int width, unsigned int height)
 			: m_Width(width), m_Height(height) // previous size?
 		{ } 
 
-		inline uint32_t GetWidth()  const { return m_Width; }
-		inline uint32_t GetHeight() const { return m_Height; }
+		inline unsigned int GetWidth()  const { return m_Width; }
+		inline unsigned int GetHeight() const { return m_Height; }
 
 		static  inline EventType GetStaticType() { return EventType::E_WINDOW_RESIZE; }
 
@@ -20,18 +20,18 @@ namespace MHelmet {
 		virtual inline std::string Print()	    const override
 		{
 			std::stringstream ss;			
-			ss << "OnWindowResize: " << m_Width + ", " << m_Height;
+			ss << "OnWindowResize: " << m_Width << ", " << m_Height;
 			return ss.str();
 		}
 
 	private:
-		uint32_t m_Width, m_Height;
+		unsigned int m_Width, m_Height;
 		
 	};
 
 	struct OnWindowClose : public Event
 	{
-		OnWindowClose() {}
+		OnWindowClose() = default;
 
 		static  inline EventType GetStaticType() { return EventType::E_WINDOW_CLOSE; }
 
