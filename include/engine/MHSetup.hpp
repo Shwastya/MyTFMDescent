@@ -3,6 +3,9 @@
 #define MH_ENGINE  "MHelmet Engine {}"
 #define MH_VERSION "Alpha Version 0.1"
 
+/* OpenGl eith GLFW option*/
+#define MH_ENABLE_CORE true
+
 #define MH_PLATFORM_WIN 1
 #define MH_DEBUG 1
 #define MH_LOG_SYSTEM 1

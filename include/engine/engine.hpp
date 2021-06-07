@@ -1,7 +1,9 @@
 #pragma once
-#include "engine/MHCore.hpp"
-#include "engine/platform/Window.hpp"
-#include "engine/events/AppEvents/OnAppEvents.hpp"
+#include "engine/system/MHCore.hpp"
+#include "engine/system/platform/Window.hpp"
+#include "engine/system/node/NodeLayer.hpp"
+
+#include "engine/system/events/AppEvents/OnAppEvents.hpp"
 
 namespace MHelmet 
 {
@@ -17,6 +19,9 @@ namespace MHelmet
 
 
 		void OnEvent(Event& event);
+
+		void PushLayer(NodeLayer* layer);
+		void PushOverlay(NodeLayer* layer);
 		
 	private: /// Private Methods
 		bool WindowCloseTask(OnWindowClose& e); // perform event
@@ -24,7 +29,7 @@ namespace MHelmet
 	private:
 		std::unique_ptr<Window> m_Window;
 		bool m_Alive = true;
-		
+		NodeManager m_Layers;
 	};
 	
 	std::unique_ptr<Engine> createApp(); // definido en cliente

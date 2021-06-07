@@ -28,29 +28,37 @@ set(ENGINE_SRC_FILES
 
    
     # MartianHelmet Application (main program) #
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/MHCore.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/MHCore.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/Engine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/MHpch.cpp
 
 
+    # Node System
+    # layer system
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/node/nodeLayer.cpp
+
     # log classes
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/log/LogManager.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/log/LogManager.cpp
         # Log strategies
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/log/Strategies/SimpleLog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/log/strategies/SimpleLog.cpp
 
     
 
     # ImGUI 
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/ImGui/imgui_impl_opengl3.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/ImGui/imgui_impl_glfw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/imgui_impl_opengl3.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/imgui_impl_glfw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/imgui_draw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/imgui_tables.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/imgui_widgets.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/imgui.cpp
+        # ImGUI Source for Engine
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/ImGui/ImGuiLayer.cpp
 
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/ImGui/imgui_draw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/ImGui/imgui_tables.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/ImGui/imgui_widgets.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/ImGui/imgui.cpp
     
     # window context on window S.O platform
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/platform/Windows/WindowWin.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/Windows/WindowWin.cpp
+
+    
 
     # Core OpenGL
     
@@ -70,33 +78,40 @@ set(ENGINE_HEADER_FILES
     #####################
 
     # MartianHelmet Application (main program) #
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/MHCore.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/MHCore.hpp
+    
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/MHSetup.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/Engine.hpp 
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/MainPoint.hpp      
 
+    # Node system
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/node/Node.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/node/NodeLayer.hpp
+
 
     # log classes
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/log/LogManager.hpp 
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/log/Log.hpp # base log class 
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/log/LogManager.hpp 
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/log/Log.hpp # base log class 
+
         # Log strategies
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/log/strategies/SimpleLog.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/log/strategies/SimpleLog.hpp
 
-
+    # ImGUI Source for Engine
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/ImGui/ImGuiLayer.hpp
 
     # events & event sender     
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/events/Event.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/events/EventSender.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/events/Event.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/events/EventSender.hpp
         # KeyEvents : event
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/events/KeyEvents/KeyEvent.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/events/KeyEvents/KeyEvent.hpp
             # OnKeyEvents : KeyEvents : event
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/events/KeyEvents/OnKeyEvents.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/events/KeyEvents/OnKeyEvents.hpp
         # MouseEvents : event
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/events/MouseEvents/MouseButtonEvent.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/events/MouseEvents/MouseButtonEvent.hpp
             # OnMouseEvents : MouseButtonEvent : event
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/events/MouseEvents/OnMouseEvents.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/events/MouseEvents/OnMouseEvents.hpp
         # AppEvent : event
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/events/AppEvents/OnAppEvents.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/events/AppEvents/OnAppEvents.hpp
 
 
 
@@ -105,8 +120,11 @@ set(ENGINE_HEADER_FILES
 
 
     # window interface and PLATFORM Layers
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/platform/Window.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/platform/Windows/WindowWin.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/Window.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/Windows/WindowWin.hpp
+
+
+    
 
     # Core OpenGL
 

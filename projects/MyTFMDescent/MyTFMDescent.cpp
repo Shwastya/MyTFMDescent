@@ -1,38 +1,46 @@
-//#include "../../include/engine/engine.hpp"
-
-
 #include <MHelmet.h>
+/**************************************
+*       Proyecto Cliente Layer        *
+* *************************************/
+class ExampleLayer : public MHelmet::NodeLayer
+{
+public:
+	ExampleLayer() : NodeLayer("EditorLayer")
+	{
+	}
 
+	void Update() override
+	{
+#if 1
+		static int s_UpdateCount = 0;
+		MH_INFO("ExampleLayer::{0}", ++s_UpdateCount);
+#endif
+	}
+	void OnEvent(MHelmet::Event& event) override
+	{
+		MH_INFO("{0}", event);
+	}
+};
 /**************************************
 *           Proyecto Cliente          *
 * *************************************/
-
-class MiProyecto : public MHelmet::Engine {
+class ProjectExample : public MHelmet::Engine {
 
 public:
+	ProjectExample()
+	{
+		PushLayer(new ExampleLayer());
+	}
 
-	MiProyecto() {}
-	~MiProyecto() {}
+	~ProjectExample()
+	{
+
+	}
 };
-
-
-//MHelmet::Engine* buildApp()
-//{
-//	return new MiProyecto();
-//}
-
-
-
-
-//MHelmet::Engine* MHelmet::createApp()
-//{
-//	return new MiProyecto();
-//}
 
 std::unique_ptr<MHelmet::Engine> MHelmet::createApp()
 {
-	//std::unique_ptr<MHelmet::Engine> e = std::make_unique<MiProyecto>();
-	std::cout << "retorno proyecto a mainPoint" << std::endl;
-	return std::make_unique<MiProyecto>();
+	MH_INFO("Created Application: {}", "ProjectExample!");
+
+	return std::make_unique<ProjectExample>();
 }
-//buildApp()
