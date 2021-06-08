@@ -1,10 +1,11 @@
 #include "engine/system/MHCore.hpp"
 #include "engine/system/platform/Windows/WindowInput.hpp"
-
+#include "engine/system/platform/Windows/WindowWin.hpp"
 #include "engine/Engine.hpp";
 #include <GLFW/glfw3.h> // siempre dentro de la plataforma CPP especifica
 
-#define NativeWindow  static_cast<GLFWwindow*>(Engine::p().GetWindow().GetOriginalWindow())
+#define ENGINE_WIN  static_cast<WindowWin&>(Engine::p().GetWindow()) // void* ptr
+#define NATIVE_WIN  static_cast<GLFWwindow*>
 
 namespace MHelmet 
 {
@@ -15,48 +16,73 @@ namespace MHelmet
 
 	Input* Input::s_Inst = new WindowInput();
 
-	bool WindowInput::IsKeyPressedImpl(int keycode)
+	bool WindowInput::IsKeyPressed(KeyCode keycode)
 	{
-		// obtenemos el puntero a window especifivo desde Engine global
-		// que tiene la propiedad window (no global)
-		auto w = NativeWindow; // void* ptr
-		auto s = glfwGetKey(w, keycode); // state
+		// obtenemos el puntero a window especifico desde Engine global
+		// que tiene el atributo GLFW window 
+		// de las clases derrivadas de Window.hpp (no global)
+		// asegurando que sea una instancia de WindowWin
+		// ya que este input tiene que ser especifico para windows
 
-		return (s == GLFW_PRESS || s == GLFW_REPEAT);
+		WindowWin& w = ENGINE_WIN;
+
+		int K = glfwGetKey // get key state
+		(
+			NATIVE_WIN(w.GetOriginalWindow()),
+			static_cast<int32_t>(keycode)
+		); 
+
+		return (K == GLFW_PRESS || K == GLFW_REPEAT);
 	}
-	bool WindowInput::IsMouseButtonPressedImpl(int button)
+	bool WindowInput::IsMouseButtonPressed(MouseButton button)
 	{
-		auto w = NativeWindow; // void* ptr
-		auto s = glfwGetMouseButton(w, button); // state
+		WindowWin& w = ENGINE_WIN;
 
-		return (s == GLFW_PRESS);
-		//return false;
+		int b = glfwGetMouseButton // get button mouse state
+		(
+			NATIVE_WIN(w.GetOriginalWindow()), 
+			static_cast<int32_t>(button)
+		);
+
+		return (b == GLFW_PRESS);
 	}
 	
-	float WindowInput::GetMouseXImpl()
+	float WindowInput::GetMouseX()
 	{
-		auto w = NativeWindow; // void* ptr
-		double X_pos, Y_pos;
-		glfwGetCursorPos(w, &X_pos, &Y_pos); // state
+		WindowWin& w = ENGINE_WIN;
+		double x, y;
 
-		return (float)X_pos;
+		glfwGetCursorPos // get mouse cursor position
+		(
+			NATIVE_WIN(w.GetOriginalWindow()),
+			&x, &y
+		); 
+
+		return static_cast<float>(x);
 	}
 
-	float WindowInput::GetMouseYImpl()
+	float WindowInput::GetMouseY()
 	{
-		auto w = NativeWindow; // void* ptr
-		double X_pos, Y_pos;
-		glfwGetCursorPos(w, &X_pos, &Y_pos); // state
+		WindowWin& w = ENGINE_WIN;
+		double x, y;
+		glfwGetCursorPos // get mouse cursor position
+		(
+			NATIVE_WIN(w.GetOriginalWindow()),
+			&x, &y
+		); 
 
-		return (float)Y_pos;
+		return static_cast<float>(y);
 	}
 
-	MousePos WindowInput::GetMousePosImpl()
+	MousePosition WindowInput::GetMousePos()
 	{
 		return 
 		{ 
-			WindowInput::GetMouseXImpl(), 
-			WindowInput::GetMouseYImpl() 
+			// Averiguar si el hecho de si llamar a dos funciones
+			// para resolver este caso es una perdidad de eficacia
+
+			WindowInput::GetMouseX(), // get mouse cursor position X
+			WindowInput::GetMouseY()  // get mouse cursor position Y
 		};
 	}	
 }

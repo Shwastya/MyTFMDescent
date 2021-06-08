@@ -1,22 +1,21 @@
 #pragma once
 
 #include "engine/system/Input.hpp"
+#include ""
 
 
 namespace MHelmet
 {
-	
-
 	class WindowInput : public Input
 	{	
 	protected:
 
-	virtual bool  IsKeyPressedImpl(int keycode) override;
-	virtual bool  IsMouseButtonPressedImpl(int button) override;
+	virtual bool  IsKeyPressed(KeyCode keycode) override;
+	virtual bool  IsMouseButtonPressed(MouseButton button) override;
 		
-	virtual float GetMouseXImpl()	override;
-	virtual float GetMouseYImpl()	override;
+	virtual float GetMouseX()	override;
+	virtual float GetMouseY()	override;
 
-	virtual MousePos GetMousePosImpl() override;		
+	virtual MousePosition GetMousePos() override;
 	};
 }

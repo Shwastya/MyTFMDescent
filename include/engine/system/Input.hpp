@@ -1,6 +1,6 @@
 #pragma once
 // INPUT POLLIN - STATIC  GLOBAL MANAGER
-
+#include <MHkeyCodes.h>
 
 // Tenemos un event system, podemos recibir eventos de tipo key, mouse y app
 // Tratandose de un sistema de layers necesitamos empaquetar los cambios de estado
@@ -17,40 +17,60 @@
 
 namespace MHelmet
 {
-	struct MousePos
+	struct MousePosition
 	{
 		float x, y;
 	};
+
+	enum class CursorState 
+	{
+		Visible = 0, Hidden, Locked
+	};
+
+
 	class Input
 	{
-	public:
-		
+	public:	
 
-		static bool  IsKeyPressed(int keycode) { 
-			return s_Inst->IsKeyPressedImpl(keycode);}
+		// KeyCode viene de las definiciones propias
+		// creadas a proposito para esta aplicacion
+		// archivo MHKeyCodes en /deps
+		static bool  IsKeyPressed(KeyCode keycode) 
+		{ 
+			return s_Inst->IsKeyPressed(keycode);
+		}
 
-		static bool  IsMouseButtonPressed(int button) {
-			return s_Inst->IsMouseButtonPressedImpl(button);}
+		// MouseButton tambien en MHKeyCodes
+		// tal vez no es el sitio mas apropiado para ubicarlo
+		static bool  IsMouseButtonPressed(MouseButton button) 
+		{
+			return s_Inst->IsMouseButtonPressed(button);
+		}
 
-		static float GetMouseX() {
-			return s_Inst->GetMouseXImpl();}
+		static float GetMouseX() 
+		{
+			return s_Inst->GetMouseX();
+		}
 
-		static float getMouseY() {
-			return s_Inst->GetMouseYImpl();}
+		static float getMouseY() 
+		{
+			return s_Inst->GetMouseY();
+		}
 
-		static MousePos getMousePos() {
-			return s_Inst->GetMousePosImpl();
+		static MousePosition getMousePos() 
+		{
+			return s_Inst->GetMousePos();
 		}
 
 	protected:
 
 		
 
-		virtual bool  IsKeyPressedImpl(int keycode) = 0;
-		virtual bool  IsMouseButtonPressedImpl(int button) = 0;
-		virtual float GetMouseXImpl() = 0;
-		virtual float GetMouseYImpl() = 0;
-		virtual MousePos  GetMousePosImpl() = 0;
+		virtual bool  IsKeyPressed(KeyCode keycode) = 0;
+		virtual bool  IsMouseButtonPressed(MouseButton button) = 0;
+		virtual float GetMouseX() = 0;
+		virtual float GetMouseY() = 0;
+		virtual MousePosition GetMousePos() = 0;
 
 	private:
 		static Input* s_Inst;

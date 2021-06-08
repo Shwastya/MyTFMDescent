@@ -25,15 +25,17 @@ namespace MHelmet
 	void Engine::run()								 
 	{												 
 		MH_CORE_INFO("Engine is running!");			 
-													 
+									
+		//Input::IsKeyPressed(GLFW_KEY_TAB);
+
 		while (m_Alive)								 
 		{											 
 			glClearColor(0.7f, 0.3f, 0.6f, 1.0f);	 
 			glClear(GL_COLOR_BUFFER_BIT);	
 			
-			MH_CORE_TRACE("{0}, {1}",
+			/*MH_CORE_TRACE("{0}, {1}",
 				Input::getMousePos().x,
-				Input::getMousePos().y);
+				Input::getMousePos().y);*/
 			
 			for (NodeLayer* layer : m_Layers)
 			{

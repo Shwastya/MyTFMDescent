@@ -3,11 +3,28 @@
 #include <cstdint>
 #include <ostream>
 
+// Definicion propia de KeyCode para MHelmet Engine - key & Mouse Codes -
+
+// MHelmet dispone de su propia defenición de IO Codes
+// Reduciendo la dependencia de la Api de GLFW 
+// Y no necesitar constantemente en cualquier ambito
+// tener que recurrir a sus definiciones (GLFW)
+
+// De esta manera podemos en algun momento aislar
+// a la parte cliente/proyecto del conocimiento 
+// de la biblioteca GLFW que en teoria solo debe ser conocida por el engine
+
+// IMPORTANTE
+// de momento los keycodes solo funcionan en sistemas x64 sw vindows
+// ya sea para sistema windows x34 o otras plataformas (Unix, MacOS..)
+// HABRIA QUE HACER MULTIPLES DEFINICIONES PARA CADA UNO 
+// Y CONDICIONALES EN TIEMPO DE PREPROCESAMIENTO
+
 namespace MHelmet
 {	
 	typedef enum class KeyCode : uint16_t
 	{
-		// FILE glfw3.h
+		// Robado de file glfw3.h
 		Space = 32,
 		Apostrophe = 39,	/* ' */
 		Comma = 44,			/* , */
@@ -145,9 +162,31 @@ namespace MHelmet
 		os << static_cast<int32_t>(keyCode);
 		return os;
 	}
+
+	typedef enum class MouseButton : uint16_t
+	{
+		Button0 = 0,
+		Button1 = 1,
+		Button2 = 2,
+		Button3 = 3,
+		Button4 = 4,
+		Button5 = 5,
+		Left = Button0,
+		Right = Button1,
+		Middle = Button2
+
+	} Button;
+
+	
+	inline std::ostream& operator<<(std::ostream& os, MouseButton button)
+	{
+		os << static_cast<int32_t>(button);
+		return os;
+	}
 }
 
-using MHKey = MHelmet::Key;
+using MHKey = ::MHelmet::Key;
+using MHButton = ::MHelmet::Button;
 	
 // FILE glfw3.h
 #define MH_KEY_SPACE              MHKey::Space
