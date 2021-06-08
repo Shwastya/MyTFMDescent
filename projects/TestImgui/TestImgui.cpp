@@ -1,17 +1,14 @@
 #include <MHelmet.h>
-
-
-
-
-
-
+#include "engine/system/ImGui/ImGuiLayer.hpp"
 /**************************************
 *       Proyecto Cliente Layer        *
 * *************************************/
-class ExampleLayer : public MHelmet::NodeLayer
+//class ImGuiLayer;
+
+class TestingLayer : public MHelmet::NodeLayer
 {
 public:
-	ExampleLayer() : MHelmet::NodeLayer("EditorLayer")
+	TestingLayer() : MHelmet::NodeLayer("TestingLayer")
 	{
 	}
 
@@ -19,7 +16,7 @@ public:
 	{
 #if 1
 		static int s_UpdateCount = 0;
-		MH_INFO("ExampleLayer::{0}", ++s_UpdateCount);
+		MH_INFO("TestingLayer::{0}", ++s_UpdateCount);
 #endif
 	}
 	void OnEvent(MHelmet::Event& event) override
@@ -30,29 +27,33 @@ public:
 /**************************************
 *           Proyecto Cliente          *
 * *************************************/
-class ProjectExample : public MHelmet::Engine {
+class ProjectTesting : public MHelmet::Engine {
 
 public:
-	ProjectExample()
+	ProjectTesting()
 	{
-		PushLayer(new ExampleLayer());
+		PushLayer(new TestingLayer());
+
+		// MHelmet::ImGuiLayer* temp(MHelmet::ImGuiLayer());
+
+		//PushOverlay(new MHelmet::ImGuiLayer());
+
+		PushOverlay(new MHelmet::ImGuiLayer());
 	}
 
-	~ProjectExample()
+	~ProjectTesting()
 	{
 	}
 };
 
-
 extern std::unique_ptr<MHelmet::Engine> MHelmet::createApp()
 {
-	MH_INFO("Created Application: {}", "ProjectExample!");
-	return std::make_unique<ProjectExample>();
+	return std::make_unique<ProjectTesting>();
 }
-//extern std::unique_ptr<MHelmet::Engine> MHelmet::createApp();
 
 int main(int argc, char** argv)
 {
+	
 
 	CORE::Init();
 

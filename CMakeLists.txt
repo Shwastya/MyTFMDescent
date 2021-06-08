@@ -53,6 +53,8 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/imgui.cpp
         # ImGUI Source for Engine
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/ImGui/ImGuiLayer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/ImGui/imgui_hack_opengl3.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/ImGui/imgui_hack_glfw.cpp
 
     
     # window context on window S.O platform
@@ -98,6 +100,10 @@ set(ENGINE_HEADER_FILES
 
     # ImGUI Source for Engine
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/ImGui/ImGuiLayer.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/ImGui/imgui_hack_opengl3.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/ImGui/imgui_hack_glfw.h
+
+
 
     # events & event sender     
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/events/Event.hpp
@@ -168,7 +174,7 @@ endif()
 
 
 # List of projects
-set(PROJECT_LIST Tests MyTFMDescent MH_Editor)
+set(PROJECT_LIST Tests TestImgui MyTFMDescent MH_Editor)
 
 
 #Root path of the projects

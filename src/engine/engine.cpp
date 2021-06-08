@@ -4,12 +4,17 @@
 
 namespace MHelmet 
 {
-
+	Engine* Engine::s_Instance = nullptr;
 	
 	Engine::Engine()
 	{
+		MH_CORE_ASSERT(!s_Instance, "App exists!");
+		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());		
-		m_Window->SetCallBack(BIND(OnEvent));		
+		m_Window->SetCallBack(BIND(OnEvent));	
+
+
+		
 	}
 	Engine::~Engine() {}	
 

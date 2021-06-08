@@ -22,6 +22,11 @@ namespace MHelmet
 
 		void PushLayer(NodeLayer* layer);
 		void PushOverlay(NodeLayer* layer);
+
+
+		inline static Engine& p() { return *s_Instance; }
+		inline Window& GetWindow() { return *m_Window; }
+
 		
 	private: /// Private Methods
 		bool WindowCloseTask(OnWindowClose& e); // perform event
@@ -30,6 +35,9 @@ namespace MHelmet
 		std::unique_ptr<Window> m_Window;
 		bool m_Alive = true;
 		NodeManager m_Layers;
+
+		// necesito pasar el window al ImgUI Layer
+		static Engine* s_Instance;
 	};
 	
 	std::unique_ptr<Engine> createApp(); // definido en cliente
