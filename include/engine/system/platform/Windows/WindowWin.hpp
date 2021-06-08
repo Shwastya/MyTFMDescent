@@ -33,7 +33,7 @@ namespace MHelmet {
 		inline virtual Size_Vec GetSize()  const override { return  m_Data.Size; }
 		virtual Pos_Vec GetPos() const override;
 
-		inline virtual void* GetWindow() const override { return m_Window;  };
+		inline virtual void* GetOriginalWindow() const override { return m_Window;  };
 
 
 		inline virtual void SetCallBack(const CALLBACK& cb) override

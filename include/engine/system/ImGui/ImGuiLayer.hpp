@@ -4,6 +4,7 @@
 #include "engine/system/events/KeyEvents/OnKeyEvents.hpp"
 #include "engine/system/events/MouseEvents/OnMouseEvents.hpp"
 #include "engine/system/events/AppEvents/OnAppEvents.hpp"
+#include "engine/system/events/EventSender.hpp"
 
 namespace MHelmet 
 {
@@ -25,11 +26,11 @@ namespace MHelmet
 
 		bool MouseButtonPressed(OnMouseButtonPressed& e);
 		bool MouseButtonReleased(OnMouseButtonReleased& e);
-		bool MouseMoved(OnMouseScrolled& e);
+		bool MouseMoved(OnMouseMoved& e);
 		bool MouseScrolled(OnMouseScrolled& e);
 		bool KeyPressed(OnKeyPressed& e);
 		bool KeyReleased(OnKeyReleased& e);
-		// OnKeyTyped(KeyTyped& e);
+		bool KeyTyped(OnKeyTyped& e);
 		bool WindowResize(OnWindowResize& e);
 
 		float m_Time = 0.0f;

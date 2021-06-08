@@ -59,7 +59,8 @@ set(ENGINE_SRC_FILES
     
     # window context on window S.O platform
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/Windows/WindowWin.cpp
-
+        # INPUT for WINDOW
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/Windows/WindowInput.cpp
     
 
     # Core OpenGL
@@ -120,14 +121,16 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/events/AppEvents/OnAppEvents.hpp
 
 
+    # INPUT
 
-    
-
-
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/Input.hpp
 
     # window interface and PLATFORM Layers
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/Window.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/Windows/WindowWin.hpp
+        # INPUT for WINDOW
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/Windows/WindowInput.hpp
+
 
 
     

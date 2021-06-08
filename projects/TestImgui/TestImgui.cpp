@@ -14,14 +14,14 @@ public:
 
 	void Update() override
 	{
-#if 1
+#if 0
 		static int s_UpdateCount = 0;
 		MH_INFO("TestingLayer::{0}", ++s_UpdateCount);
 #endif
 	}
 	void OnEvent(MHelmet::Event& event) override
 	{
-		MH_INFO("{0}", event);
+		//MH_INFO("{0}", event);
 	}
 };
 /**************************************

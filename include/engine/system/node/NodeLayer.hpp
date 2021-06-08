@@ -7,9 +7,9 @@ namespace MHelmet
 	struct NodeLayer : public Node
 	{
 		NodeLayer() {};
-#if MH_DEBUG
+//#if MH_DEBUG
 		NodeLayer(const std::string& name = "noname") : m_Name(name) {};
-#endif
+//#endif
 		virtual ~NodeLayer() {};
 
 		virtual void Join() override {};	// Node base
@@ -19,11 +19,11 @@ namespace MHelmet
 
 		virtual void OnEvent(Event& e) {}
 
-#if MH_DEBUG
+//#if MH_DEBUG
 		inline const std::string& GetName() const { return m_Name; }
 	protected:
 		std::string m_Name;
-#endif
+//#endif
 	};
 
 	class NodeManager
@@ -55,6 +55,8 @@ namespace MHelmet
 		std::vector<NodeLayer*> m_Layers;
 
 		uint32_t m_IdxLast = 0;
+
+		uint32_t m_TotalLayers = 0;
 	};
 
 }

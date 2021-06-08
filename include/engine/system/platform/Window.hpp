@@ -38,7 +38,7 @@ namespace MHelmet {
 		virtual Size_Vec GetSize()   const = 0;
 		virtual Pos_Vec  GetPos()    const = 0;
 
-		virtual void* GetWindow()	 const = 0;
+		virtual void* GetOriginalWindow()	 const = 0;
 
 		
 		virtual void SetCallBack(const CALLBACK& cb) = 0;

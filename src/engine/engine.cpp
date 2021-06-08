@@ -1,6 +1,6 @@
 #include "engine/Engine.hpp"
 #include <GLFW/glfw3.h>
-
+#include "engine/system/Input.hpp"
 
 namespace MHelmet 
 {
@@ -11,7 +11,7 @@ namespace MHelmet
 		MH_CORE_ASSERT(!s_Instance, "App exists!");
 		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());		
-		m_Window->SetCallBack(BIND(OnEvent));	
+		m_Window->SetCallBack(BINDAPPEVENT(OnEvent));
 
 
 		
@@ -19,7 +19,7 @@ namespace MHelmet
 	Engine::~Engine() {}	
 
 	
-	///////////////////////////////////////////////////
+	///////////////////////////////////////////////////S
 	//				  ENGINE LOOP					 //
 	///////////////////////////////////////////////////
 	void Engine::run()								 
@@ -31,7 +31,9 @@ namespace MHelmet
 			glClearColor(0.7f, 0.3f, 0.6f, 1.0f);	 
 			glClear(GL_COLOR_BUFFER_BIT);	
 			
-			
+			MH_CORE_TRACE("{0}, {1}",
+				Input::getMousePos().x,
+				Input::getMousePos().y);
 			
 			for (NodeLayer* layer : m_Layers)
 			{
@@ -47,8 +49,8 @@ namespace MHelmet
 	{
 		//auto ex = std::make_unique<Layer>;
 		PerformEvent perform(e);
-		perform.DoTask<OnWindowClose>(BIND(WindowCloseTask));
-		MH_CORE_TRACE("{0}", e);
+		perform.DoTask<OnWindowClose>(BINDAPPEVENT(WindowCloseTask));
+		//MH_CORE_TRACE("{0}", e);
 		
 
 		for (auto it = m_Layers.end(); it != m_Layers.begin();)
@@ -78,10 +80,5 @@ namespace MHelmet
 		m_Alive = false;
 		return m_Alive;
 	}
-
-
-	
-
-
 }
 

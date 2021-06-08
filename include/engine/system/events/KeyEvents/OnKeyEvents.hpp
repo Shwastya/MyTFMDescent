@@ -71,4 +71,6 @@ namespace MHelmet {
 
 		virtual inline std::string GetName() const override { return "KeyTyped"; }
 	};
+
+
 }
