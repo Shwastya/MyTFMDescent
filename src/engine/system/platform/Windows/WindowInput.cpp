@@ -1,7 +1,7 @@
 #include "engine/system/MHCore.hpp"
-#include "engine/system/platform/Windows/WindowInput.hpp"
 #include "engine/system/platform/Windows/WindowWin.hpp"
-#include "engine/Engine.hpp";
+#include "engine/Engine.hpp"
+#include "engine/system/Input.hpp"
 #include <GLFW/glfw3.h> // siempre dentro de la plataforma CPP especifica
 
 #define ENGINE_WIN  static_cast<WindowWin&>(Engine::p().GetWindow()) // void* ptr
@@ -14,9 +14,9 @@ namespace MHelmet
 	// podemos sin miedo hacer un allocate e instanciar
 	// el singleton Input con una instancia de WindowInput
 
-	Input* Input::s_Inst = new WindowInput();
+	//Input* Input::s_Inst = new WindowInput();
 
-	bool WindowInput::IsKeyPressed(KeyCode keycode)
+	bool Input::IsKeyPressed(KeyCode keycode)
 	{
 		// obtenemos el puntero a window especifico desde Engine global
 		// que tiene el atributo GLFW window 
@@ -34,7 +34,7 @@ namespace MHelmet
 
 		return (K == GLFW_PRESS || K == GLFW_REPEAT);
 	}
-	bool WindowInput::IsMouseButtonPressed(MouseButton button)
+	bool Input::IsMouseButtonPressed(MouseButton button)
 	{
 		WindowWin& w = ENGINE_WIN;
 
@@ -47,7 +47,7 @@ namespace MHelmet
 		return (b == GLFW_PRESS);
 	}
 	
-	float WindowInput::GetMouseX()
+	float Input::GetMouseX()
 	{
 		WindowWin& w = ENGINE_WIN;
 		double x, y;
@@ -61,7 +61,7 @@ namespace MHelmet
 		return static_cast<float>(x);
 	}
 
-	float WindowInput::GetMouseY()
+	float Input::GetMouseY()
 	{
 		WindowWin& w = ENGINE_WIN;
 		double x, y;
@@ -74,15 +74,15 @@ namespace MHelmet
 		return static_cast<float>(y);
 	}
 
-	MousePosition WindowInput::GetMousePos()
+	MousePosition Input::GetMousePos()
 	{
 		return 
 		{ 
 			// Averiguar si el hecho de si llamar a dos funciones
 			// para resolver este caso es una perdidad de eficacia
 
-			WindowInput::GetMouseX(), // get mouse cursor position X
-			WindowInput::GetMouseY()  // get mouse cursor position Y
+			Input::GetMouseX(), // get mouse cursor position X
+			Input::GetMouseY()  // get mouse cursor position Y
 		};
 	}	
 }

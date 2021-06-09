@@ -19,14 +19,18 @@ set(DEPS_SRC_FILES_COMMON
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/glad/glad.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/stb/stb_image.h
 
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui/imgui.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui/imconfig.h
+
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui/imgui_impl_glfw.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui/imgui_impl_opengl3.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui/imgui_internal.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui/imgui.h
+    #${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui/imgui_impl_sdl.h
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui/imgui_internal.h    
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui/imstb_rectpack.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui/imstb_textedit.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui/imstb_truetype.h
+    
 
     #${CMAKE_CURRENT_SOURCE_DIR}/src/deps/spdlog/include/spdlog
 

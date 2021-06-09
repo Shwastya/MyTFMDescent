@@ -19,5 +19,11 @@
 #include "engine/system/events/Event.hpp"
 #include "engine/system/events/EventSender.hpp"
 
+/* ImGui System */
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+#include "engine/system/ImGui/ImGuiLayer.hpp"
+
 
 

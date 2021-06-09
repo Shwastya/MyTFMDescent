@@ -35,14 +35,14 @@ namespace MHelmet
 		// KeyCode viene de las definiciones propias
 		// creadas a proposito para esta aplicacion
 		// archivo MHKeyCodes en /deps
-		static bool  IsKeyPressed(KeyCode keycode) 
+		/*static bool  IsKeyPressed(KeyCode keycode) 
 		{ 
 			return s_Inst->IsKeyPressed(keycode);
-		}
+		}*/
 
 		// MouseButton tambien en MHKeyCodes
 		// tal vez no es el sitio mas apropiado para ubicarlo
-		static bool  IsMouseButtonPressed(MouseButton button) 
+		/*static bool  IsMouseButtonPressed(MouseButton button) 
 		{
 			return s_Inst->IsMouseButtonPressed(button);
 		}
@@ -60,20 +60,18 @@ namespace MHelmet
 		static MousePosition getMousePos() 
 		{
 			return s_Inst->GetMousePos();
-		}
+		}*/
 
-	protected:
+//	protected:	
 
-		
-
-		virtual bool  IsKeyPressed(KeyCode keycode) = 0;
-		virtual bool  IsMouseButtonPressed(MouseButton button) = 0;
-		virtual float GetMouseX() = 0;
-		virtual float GetMouseY() = 0;
-		virtual MousePosition GetMousePos() = 0;
+		static bool  IsKeyPressed(KeyCode keycode);
+		static bool  IsMouseButtonPressed(MouseButton button);
+		static float GetMouseX();
+		static float GetMouseY();
+		static MousePosition GetMousePos();
 
 	private:
-		static Input* s_Inst;
+		//static Input* s_Inst;
 	};
 
 

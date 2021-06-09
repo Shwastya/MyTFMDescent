@@ -17,6 +17,8 @@ namespace MHelmet
 
 		virtual void Update() override {};	// Node base
 
+		virtual void ImGuiRender() {};
+
 		virtual void OnEvent(Event& e) {}
 
 //#if MH_DEBUG

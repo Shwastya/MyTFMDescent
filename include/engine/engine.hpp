@@ -32,9 +32,11 @@ namespace MHelmet
 		bool WindowCloseTask(OnWindowClose& e); // perform event
 
 	private:
-		std::unique_ptr<Window> m_Window;
+		std::unique_ptr<Window>		m_Window;
+		
 		bool m_Alive = true;
 		NodeManager m_Layers;
+		NodeManager m_ImGuiLayers;
 
 		// necesito pasar el window al ImgUI Layer
 		static Engine* s_Instance;

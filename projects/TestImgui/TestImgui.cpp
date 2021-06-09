@@ -12,23 +12,40 @@ public:
 	{
 	}
 
-	void Update() override
+	void Update() override 
 	{
 #if 0
 		static int s_UpdateCount = 0;
 		MH_INFO("TestingLayer::{0}", ++s_UpdateCount);
 #endif
 
+	
 		if (MHelmet::Input::IsKeyPressed(MHelmet::Key::Space))
-			MH_TRACE("SPACE 1 is pressed");
+			//MH_TRACE("SPACE 1 is pressed");
+
 		if (MHelmet::Input::IsKeyPressed(MH_KEY_SPACE))
 		{
-			MH_TRACE("SPACE 2 is pressed");
+			//MH_TRACE("SPACE 2 is pressed");
 		}
 	}
 	void OnEvent(MHelmet::Event& event) override
 	{
-		//MH_INFO("{0}", event);
+		// FILTRADO DE EVENTOS
+		if (event.GetEventType() == MHelmet::EventType::E_KEY_PRESSED)
+		{
+			// sabiendo que es KEY_PRESSED 
+			// guardamos como tal usando un alias
+			// ya que el event pasado como paramentro
+			// no tiene esa informacion
+			MHelmet::OnKeyPressed& e = (MHelmet::OnKeyPressed&)event;
+
+			if (e.GetKeyCode() == MH_KEY_SPACE)
+			{
+				MH_TRACE("COMEME LOS GUEVOS");
+			}
+		
+			MH_ERROR(static_cast<char>(e.GetKeyCode()));
+		}
 	}
 };
 /**************************************
@@ -40,12 +57,7 @@ public:
 	ProjectTesting()
 	{
 		PushLayer(new TestingLayer());
-
-		// MHelmet::ImGuiLayer* temp(MHelmet::ImGuiLayer());
-
 		//PushOverlay(new MHelmet::ImGuiLayer());
-
-		PushOverlay(new MHelmet::ImGuiLayer());
 	}
 
 	~ProjectTesting()

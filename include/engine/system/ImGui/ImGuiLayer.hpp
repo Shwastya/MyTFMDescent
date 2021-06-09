@@ -16,22 +16,18 @@ namespace MHelmet
 		ImGuiLayer();
 		~ImGuiLayer();
 
-		void Join();
-		void Free();
+		virtual void Join()   override;
+		virtual void Free()   override;
 
-		void Update();
-		void OnEvent(Event& event);
+		// darle una personalizacion al comportamiento de las capas de ImGui
+		// encerrar en capas su funcionalidad
+		void Begin();
+		void End();
+
+		virtual void ImGuiRender() override;
+		
 
 	private:
-
-		bool MouseButtonPressed(OnMouseButtonPressed& e);
-		bool MouseButtonReleased(OnMouseButtonReleased& e);
-		bool MouseMoved(OnMouseMoved& e);
-		bool MouseScrolled(OnMouseScrolled& e);
-		bool KeyPressed(OnKeyPressed& e);
-		bool KeyReleased(OnKeyReleased& e);
-		bool KeyTyped(OnKeyTyped& e);
-		bool WindowResize(OnWindowResize& e);
 
 		float m_Time = 0.0f;
 	};

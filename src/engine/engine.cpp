@@ -1,6 +1,8 @@
 #include "engine/Engine.hpp"
 #include <GLFW/glfw3.h>
+#include "glm/glm.hpp"
 #include "engine/system/Input.hpp"
+
 
 namespace MHelmet 
 {
@@ -8,7 +10,8 @@ namespace MHelmet
 	
 	Engine::Engine()
 	{
-		MH_CORE_ASSERT(!s_Instance, "App exists!");
+		m_ImGuiLayer = std::make_unique<ImGuiLayer>();
+
 		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());		
 		m_Window->SetCallBack(BINDAPPEVENT(OnEvent));

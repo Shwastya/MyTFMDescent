@@ -45,16 +45,20 @@ set(ENGINE_SRC_FILES
     
 
     # ImGUI 
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/imgui_impl_opengl3.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/imgui_impl_glfw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/imgui_draw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/imgui_tables.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/imgui_widgets.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/imgui.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/imgui-docking/examples/imgui_impl_opengl3.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/imgui-docking/examples/imgui_impl_glfw.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/src/engine/system/imgui-docking/examples/imgui_impl_sdl.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/imgui-docking/imgui.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/imgui-docking/imgui_demo.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/imgui-docking/imgui_draw.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/src/engine/system/imgui-docking/imgui_tables.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/imgui-docking/imgui_widgets.cpp
+    
         # ImGUI Source for Engine
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/ImGui/ImGuiLayer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/ImGui/imgui_hack_opengl3.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/ImGui/imgui_hack_glfw.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/src/engine/system/ImGui/imgui_hack_opengl3.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/src/engine/system/ImGui/imgui_hack_glfw.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/src/engine/system/ImGui/ImGuildHackBuild.cpp
 
     
     # window context on window S.O platform
@@ -101,9 +105,11 @@ set(ENGINE_HEADER_FILES
 
     # ImGUI Source for Engine
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/ImGui/ImGuiLayer.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/ImGui/imgui_hack_opengl3.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/ImGui/imgui_hack_glfw.h
-
+   # ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/ImGui/imgui_hack_opengl3.h
+    #${CMAKE_CURRENT_LIST_DIR}/include/engine/system/ImGui/imgui_hack_glfw.h
+    #${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/MODImGui/imgui_impl_opengl3.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/MODImGui/imgui_impl_glfw.cpp
+    
 
 
     # events & event sender     
@@ -129,7 +135,7 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/Window.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/Windows/WindowWin.hpp
         # INPUT for WINDOW
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/Windows/WindowInput.hpp
+    #${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/Windows/WindowInput.hpp
 
 
 
