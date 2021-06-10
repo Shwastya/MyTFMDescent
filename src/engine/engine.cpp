@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 //#include "glm/glm.hpp"
 #include "engine/system/Input.hpp"
+#include "engine/system/geometry/triangle.hpp"
 
 
 namespace MHelmet 
@@ -24,7 +25,26 @@ namespace MHelmet
 		// vertex buffer oobject VBO
 		glGenBuffers(1, &m_VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+
+		Triangle tri;
+
+		MH_CORE_WARN("{}", tri.Positions()[3]);
+		MH_CORE_WARN("{}", tri.SizePos());
+		MH_CORE_WARN("{}", tri.SizeInd());
+		MH_CORE_WARN("{}", tri.Indices()[2]);			
+		
+		glBufferData(GL_ARRAY_BUFFER, tri.SizePos(), tri.Positions(), GL_STATIC_DRAW);
+		
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+
 		// index  buffer object  EBO
+		glGenBuffers(1, &m_EBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
+	
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, tri.SizeInd(), tri.Indices(), GL_STATIC_DRAW);
+		
+		
 		// shader
 		
 	}
@@ -42,9 +62,13 @@ namespace MHelmet
 
 		while (m_Alive)								 
 		{											 
-			glClearColor(0.7f, 0.3f, 0.6f, 1.0f);	 
+			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);	 
 			glClear(GL_COLOR_BUFFER_BIT);	
 			
+
+			glBindVertexArray(m_VAO);
+			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+
 			for (NodeLayer* layer : m_Layers) layer->Update();
 
 			m_ImGuiLayers->Begin();

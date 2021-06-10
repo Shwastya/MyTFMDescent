@@ -1,5 +1,4 @@
-#ifndef __QUAD_H__
-#define __QUAD_H__ 1
+#pragma once
 
 #include "geometry.hpp"
 
@@ -8,7 +7,14 @@ class Quad final: public Geometry {
         Quad() = delete;
         explicit Quad(float size);
 
+    
+        virtual float*  Positions() override;
+        virtual uint32_t* Indices() override;
+
+        virtual size_t SizePos() const override;
+        virtual size_t SizeInd() const override;
+
     private:
-        float _size;
+        float _size;   
+      
 };
-#endif

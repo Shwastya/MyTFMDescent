@@ -1,5 +1,4 @@
-#ifndef __GEOMETRY_H__
-#define __GEOMETRY_H__ 1
+#pragma once
 
 #include <cstdint>
 
@@ -19,19 +18,20 @@ class Geometry {
         Geometry(Geometry&&) noexcept = default;
         Geometry& operator=(Geometry&&) noexcept = default;
 
-        virtual void render() const;
+        virtual float*  Positions() = 0;
+        virtual uint32_t* Indices() = 0;
 
-    protected:
-        void uploadData(const float* positions, const float* uvs,
-            const float* normals, const uint32_t* indices);
+        virtual size_t SizePos() const = 0;
+        virtual size_t SizeInd() const = 0;
+        //virtual float UVS()    const = 0;
 
-        void calcTangents(const float* positions, const float* uvs,
-            const float* normals, float* tangents, float* biTangents) const;
-    protected:
-        uint32_t _VAO = 0;
-        uint32_t _VBO[6] { 0,0,0,0,0,0 };
-        uint32_t _nVertices = 0;
-        uint32_t _nElements = 0;
+    protected:       
+        uint32_t m_Vertices = 0;
+        uint32_t m_Elements = 0;
+
+        
+
+
+        
 
 };
-#endif
