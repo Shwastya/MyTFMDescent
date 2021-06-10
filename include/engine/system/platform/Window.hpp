@@ -28,7 +28,7 @@ namespace MHelmet {
 		virtual ~Window() {}
 
 		virtual void Init() = 0;
-		virtual void SwapBuffers() = 0; // updating
+		virtual void Update() = 0; // updating
 
 		virtual void Maximize() = 0;
 

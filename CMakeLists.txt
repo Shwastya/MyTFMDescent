@@ -67,7 +67,11 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/Windows/WindowInput.cpp
     
 
-    # Core OpenGL
+
+    # Render System
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/RendererContext.cpp
+        # OpenGL API Abstraction
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLContext.cpp
     
     
 
@@ -139,9 +143,10 @@ set(ENGINE_HEADER_FILES
 
 
 
-    
-
-    # Core OpenGL
+    # Render System
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/RendererContext.hpp
+        # OpenGL API Abstraction
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLContext.hpp
 
     
     # ECS 

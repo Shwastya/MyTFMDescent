@@ -14,8 +14,10 @@ public:
 
 	void Update() override 
 	{
-		static int s_UpdateCount = 0;
-		MH_INFO("TestingLayer::{0}", ++s_UpdateCount);	
+#if 0
+			static int s_UpdateCount = 0;
+			MH_INFO("TestingImGui::{0}", ++s_UpdateCount);	
+#endif
 		//if (MHelmet::Input::IsKeyPressed(MHelmet::Key::Space))	MH_TRACE("SPACE 1 is pressed");
 		//if (MHelmet::Input::IsKeyPressed(MH_KEY_SPACE))     MH_TRACE("SPACE 2 is pressed");
 		

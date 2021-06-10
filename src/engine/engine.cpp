@@ -44,7 +44,7 @@ namespace MHelmet
 			m_ImGuiLayers->End();
 
 
-			m_Window->SwapBuffers();				 
+			m_Window->Update();				 
 		}											 
 	}												 
 	///////////////////////////////////////////////////

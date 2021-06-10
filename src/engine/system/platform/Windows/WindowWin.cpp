@@ -1,9 +1,14 @@
 #include <MHpch.h>
-#include <glad/glad.h>
+
+//#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 #include "engine/system/platform/windows/WindowWin.hpp"
 #include "engine/system/events/AppEvents/OnAppEvents.hpp"
 #include "engine/system/events/KeyEvents/OnKeyEvents.hpp"
 #include "engine/system/events/MouseEvents/OnMouseEvents.hpp"
+
+#include "engine/system/platform/RenderAPI/OpenGL/OpenGLContext.hpp"
 
 namespace MHelmet 
 {
@@ -28,6 +33,8 @@ namespace MHelmet
 		m_Data.Title = m_Spec.Title;
 		m_Data.Size  = m_Spec.Size;
 
+		
+
 		MH_CORE_INFO("Created window {0} {1} {2}", m_Spec.Title, m_Spec.Size.Width, m_Spec.Size.Height);
 
 		if (!s_GLFWInitialized) // window context render initialized
@@ -51,35 +58,38 @@ namespace MHelmet
 			const GLFWvidmode* m = glfwGetVideoMode(PrimaryMonitor);
 
 			m_Window = glfwCreateWindow(m->width, m->height, m_Data.Title.c_str() , PrimaryMonitor, nullptr);
+		
+			
 		}
 		else 
 		{
-			m_Window = glfwCreateWindow(
+				m_Window = glfwCreateWindow(
 				static_cast<int>(m_Spec.Size.Width), 
 				static_cast<int>(m_Spec.Size.Height), 
 				m_Data.Title.c_str(), nullptr, nullptr
-			);
+				);
+				
 		}		
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->Init();
 
+		/*
+		////////////// OpenGL Contex - BEGIN - //////////////
 		if (MH_ENABLE_CORE) // temporal 
 		{
 			MH_CORE_WARN("OpenGL CORE profile enabled:");
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4.1);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4.1);
 			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);			
-		}
-
-		
-		//////////////////////////////////////////////////////////////
-		////////      API'S ABSTRACTIONS next    /////////////////////
-		glfwMakeContextCurrent(m_Window);     ////////////////////////
+		}		
+	
+		glfwMakeContextCurrent(m_Window);    
 		int result = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		//////////////////////////////////////////////////////////////
-
-
-
+		////////////// OpenGL Contex - END -   //////////////	
 		MH_CORE_ASSERT(result, "Error initializing GLAD!");		
 		MH_CORE_INFO("OpenGL v.{}", glGetString(GL_VERSION));
+		*/
+
 
 		// Puntero a la instancia actual del window
 		glfwSetWindowUserPointer(m_Window, &m_Data);
@@ -200,10 +210,14 @@ namespace MHelmet
 		});
 	}
 
-	void WindowWin::SwapBuffers() // updating
+	//void WindowWin::SwapBuffers() 
+	void WindowWin::Update()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
+		//glfwSwapBuffers(m_Window);
+		m_Context->SwapBuffers();
+
+		//
 
 		float time = glfwGetTime();
 		float delta = time - m_LastFrame;

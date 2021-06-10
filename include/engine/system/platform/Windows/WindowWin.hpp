@@ -1,7 +1,11 @@
 #pragma once
 
 #include "engine/system/platform/Window.hpp"
-#include <GLFW/glfw3.h>
+
+#include "engine/system/renderer/RendererContext.hpp"
+
+
+
 
 
 namespace MHelmet {
@@ -23,7 +27,7 @@ namespace MHelmet {
 		virtual ~WindowWin();
 
 		virtual void Init() override;		
-		virtual void SwapBuffers() override; // updating
+		virtual void Update() override; // updating
 
 		virtual void Maximize() override;
 
@@ -53,6 +57,9 @@ namespace MHelmet {
 		
 		WindowData m_Data;
 		float m_LastFrame = 0.0f;	
+
+		
+		RendererContext* m_Context;
 	};
 
 }
