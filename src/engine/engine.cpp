@@ -26,12 +26,7 @@ namespace MHelmet
 		glGenBuffers(1, &m_VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 
-		Triangle tri;
-
-		MH_CORE_WARN("{}", tri.Positions()[3]);
-		MH_CORE_WARN("{}", tri.SizePos());
-		MH_CORE_WARN("{}", tri.SizeInd());
-		MH_CORE_WARN("{}", tri.Indices()[2]);			
+		Triangle tri;	
 		
 		glBufferData(GL_ARRAY_BUFFER, tri.SizePos(), tri.Positions(), GL_STATIC_DRAW);
 		
@@ -43,15 +38,12 @@ namespace MHelmet
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
 	
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, tri.SizeInd(), tri.Indices(), GL_STATIC_DRAW);
-		
-		
-		// shader
-		
+
 	}
 	Engine::~Engine() {}	
 
 	
-	///////////////////////////////////////////////////S
+	///////////////////////////////////////////////////
 	//				  ENGINE LOOP					 //
 	///////////////////////////////////////////////////
 	void Engine::run()								 
