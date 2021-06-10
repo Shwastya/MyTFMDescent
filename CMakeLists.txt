@@ -25,9 +25,8 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/triangle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/quad.cpp
 
-    #####################
-    # TFM From scratchs #
-    #####################
+    
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/shader.cpp
 
 
    
@@ -92,7 +91,7 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/geometry/triangle.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/geometry/quad.hpp
     
-
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/shader.hpp
 
 
     #####################
