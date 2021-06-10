@@ -20,7 +20,11 @@ set(ENGINE_SRC_FILES
     #####################
     # old dependences removed # empty at moment 
     #####################
-    # ....
+    # rescued geometry classes and modified
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/geometry.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/triangle.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/quad.cpp
+
     #####################
     # TFM From scratchs #
     #####################
@@ -83,7 +87,14 @@ set(ENGINE_HEADER_FILES
     #####################
     # old dependences removed # empty at moment 
     #####################
-    # ....
+    # rescued geometry classes and modified
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/geometry/geometry.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/geometry/triangle.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/geometry/quad.hpp
+    
+
+
+
     #####################
     # TFM From scratchs #
     #####################

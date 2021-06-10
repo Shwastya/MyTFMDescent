@@ -1,6 +1,7 @@
 #include "engine/Engine.hpp"
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "glm/glm.hpp"
+//#include "glm/glm.hpp"
 #include "engine/system/Input.hpp"
 
 
@@ -10,14 +11,21 @@ namespace MHelmet
 	
 	Engine::Engine()
 	{
-		
-
 		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());		
 		m_Window->SetCallBack(BINDAPPEVENT(OnEvent));
 
 		m_ImGuiLayers = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayers);
+
+		// vertex array object   VAO
+		glGenVertexArrays(1, &m_VAO);
+		glBindVertexArray(m_VAO);
+		// vertex buffer oobject VBO
+		glGenBuffers(1, &m_VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+		// index  buffer object  EBO
+		// shader
 		
 	}
 	Engine::~Engine() {}	

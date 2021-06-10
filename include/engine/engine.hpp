@@ -39,6 +39,11 @@ namespace MHelmet
 		LayerManager  m_Layers;
 		ImGuiLayer* m_ImGuiLayers;
 
+		uint32_t m_VAO;
+		uint32_t m_VBO;
+		uint32_t m_EBO;
+
+	private:
 		// necesito pasar el window al ImgUI Layer
 		static Engine* s_Instance;
 	};
