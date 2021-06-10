@@ -2,6 +2,7 @@
 #include "engine/system/MHCore.hpp"
 #include "engine/system/platform/Window.hpp"
 #include "engine/system/node/NodeLayer.hpp"
+#include "engine/system/ImGui/ImGuiLayer.hpp"
 
 #include "engine/system/events/AppEvents/OnAppEvents.hpp"
 
@@ -35,8 +36,8 @@ namespace MHelmet
 		std::unique_ptr<Window>		m_Window;
 		
 		bool m_Alive = true;
-		NodeManager m_Layers;
-		NodeManager m_ImGuiLayers;
+		LayerManager  m_Layers;
+		ImGuiLayer* m_ImGuiLayers;
 
 		// necesito pasar el window al ImgUI Layer
 		static Engine* s_Instance;

@@ -12,8 +12,8 @@
 
 /* Default window Props  */
 #define MH_TITLE	"MHelmet"
-#define MH_WIDTH	1280
-#define MH_HEIGHT	720
+#define MH_WIDTH	1920
+#define MH_HEIGHT	1080
 #define MH_FULL_SRC	false
 #define MH_VSYNC	true
 

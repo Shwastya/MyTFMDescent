@@ -3,20 +3,20 @@
 namespace MHelmet 
 {
 
-	NodeManager::NodeManager(size_t reserve) 
+	LayerManager::LayerManager(size_t reserve)
 	{
 		// 1.
 		// se calcula una reserva, tambien se puede escoger pasarlo por parametro
 		m_Layers.reserve(reserve);
 		//m_Layers.reserve(300);
 	}
-	NodeManager::~NodeManager()
+	LayerManager::~LayerManager()
 	{
 		
 	}
 	// Push en la primera MITAD de la lista
 	// begin mas last index
-	void NodeManager::PushLayer(NodeLayer* layer) // AddLayer
+	void LayerManager::PushLayer(NodeLayer* layer) // AddLayer
 	{
 		m_Layers.emplace(m_Layers.begin() + m_IdxLast, layer);
 		m_IdxLast++;
@@ -27,7 +27,7 @@ namespace MHelmet
 		MH_CORE_TRACE("Total Layers {0}", ++m_TotalLayers);
 	}
 	// Push en la segunda MITAD de la lista
-	void NodeManager::PushOverlay(NodeLayer* overlay)
+	void LayerManager::PushOverlay(NodeLayer* overlay)
 	{
 		m_Layers.emplace_back(overlay);
 
@@ -35,7 +35,7 @@ namespace MHelmet
 
 		MH_CORE_TRACE("Total Layers {0}", ++m_TotalLayers);
 	}
-	void NodeManager::PopLayer(NodeLayer* layer)
+	void LayerManager::PopLayer(NodeLayer* layer)
 	{
 		auto it = std::find(m_Layers.begin(), m_Layers.end(), layer);
 		if (it != m_Layers.end())
@@ -45,7 +45,7 @@ namespace MHelmet
 		}
 	}
 	
-	void NodeManager::PopOverlay(NodeLayer* overlay)
+	void LayerManager::PopOverlay(NodeLayer* overlay)
 	{
 		auto it = std::find(m_Layers.begin(), m_Layers.end(), overlay);
 		if (it != m_Layers.end())

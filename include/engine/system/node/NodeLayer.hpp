@@ -17,9 +17,9 @@ namespace MHelmet
 
 		virtual void Update() override {};	// Node base
 
-		virtual void ImGuiRender() {};
+		virtual void ImGuiRender() {};		// propio
 
-		virtual void OnEvent(Event& e) {}
+		virtual void OnEvent(Event& e) {}	// propio
 
 //#if MH_DEBUG
 		inline const std::string& GetName() const { return m_Name; }
@@ -28,15 +28,15 @@ namespace MHelmet
 //#endif
 	};
 
-	class NodeManager
+	class LayerManager
 	{
 	public:
 	
 		//using PrtLayer   = std::shared_ptr<NodeLayer>;
 		//using LayerGrp = std::vector<std::shared_ptr<NodeLayer>>;
 
-		NodeManager(size_t reserve = 300);
-		~NodeManager();
+		LayerManager(size_t reserve = 300);
+		~LayerManager();
 
 		void PushLayer(NodeLayer* layer); //AddLayer		
 		void PushOverlay(NodeLayer* overlay);

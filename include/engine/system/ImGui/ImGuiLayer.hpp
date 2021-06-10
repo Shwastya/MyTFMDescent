@@ -8,10 +8,10 @@
 
 namespace MHelmet 
 {
-	using Layer = NodeLayer;
+	
 
 	
-	struct ImGuiLayer : public Layer
+	struct ImGuiLayer : public NodeLayer
 	{
 		ImGuiLayer();
 		~ImGuiLayer();

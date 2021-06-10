@@ -13,7 +13,7 @@
 
 namespace MHelmet
 {
-	ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer")
+	ImGuiLayer::ImGuiLayer() : NodeLayer("ImGuiLayer")
 	{
 	}
 
@@ -49,7 +49,10 @@ namespace MHelmet
 		}
 
 		// Setup Platform/Renderer bindings
+		GLFWwindow* window = static_cast<GLFWwindow*>(Engine::p().GetWindow().GetOriginalWindow());
+
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
+		const char* glsl_version = "#version 410";
 		ImGui_ImplOpenGL3_Init(glsl_version);
 		
 	}
@@ -75,8 +78,8 @@ namespace MHelmet
 		Engine& engine = Engine::p(); // ptr Engine
 		io.DisplaySize = ImVec2
 		{
-			engine.GetWindow().GetWidth(),
-			engine.GetWindow().GetHeight()
+			static_cast<float>(engine.GetWindow().GetWidth()),
+			static_cast<float>(engine.GetWindow().GetHeight())
 		};
 
 		// Rendering 

@@ -46,6 +46,8 @@ namespace MHelmet
 	public:
 		bool Handled = false;
 
+		virtual ~Event() = default;
+
 		virtual EventType GetEventType()	const = 0;	
 		virtual int GetCategoryFlags()		const = 0;
 		virtual std::string Print()		const = 0;

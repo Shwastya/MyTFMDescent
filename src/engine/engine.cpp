@@ -10,13 +10,14 @@ namespace MHelmet
 	
 	Engine::Engine()
 	{
-		m_ImGuiLayer = std::make_unique<ImGuiLayer>();
+		
 
 		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());		
 		m_Window->SetCallBack(BINDAPPEVENT(OnEvent));
 
-
+		m_ImGuiLayers = new ImGuiLayer();
+		PushOverlay(m_ImGuiLayers);
 		
 	}
 	Engine::~Engine() {}	
@@ -36,14 +37,13 @@ namespace MHelmet
 			glClearColor(0.7f, 0.3f, 0.6f, 1.0f);	 
 			glClear(GL_COLOR_BUFFER_BIT);	
 			
-			/*MH_CORE_TRACE("{0}, {1}",
-				Input::getMousePos().x,
-				Input::getMousePos().y);*/
-			
-			for (NodeLayer* layer : m_Layers)
-			{
-				layer->Update();				
-			}
+			for (NodeLayer* layer : m_Layers) layer->Update();
+
+			m_ImGuiLayers->Begin();
+			for (NodeLayer* layer : m_Layers) layer->ImGuiRender();
+			m_ImGuiLayers->End();
+
+
 			m_Window->SwapBuffers();				 
 		}											 
 	}												 

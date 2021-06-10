@@ -64,14 +64,20 @@ namespace MHelmet
 		if (MH_ENABLE_CORE) // temporal 
 		{
 			MH_CORE_WARN("OpenGL CORE profile enabled:");
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4.6);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4.6);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4.1);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4.1);
 			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);			
 		}
 
-		// Crear Render Context
-		glfwMakeContextCurrent(m_Window);
+		
+		//////////////////////////////////////////////////////////////
+		////////      API'S ABSTRACTIONS next    /////////////////////
+		glfwMakeContextCurrent(m_Window);     ////////////////////////
 		int result = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		//////////////////////////////////////////////////////////////
+
+
+
 		MH_CORE_ASSERT(result, "Error initializing GLAD!");		
 		MH_CORE_INFO("OpenGL v.{}", glGetString(GL_VERSION));
 

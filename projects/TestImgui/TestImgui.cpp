@@ -14,20 +14,22 @@ public:
 
 	void Update() override 
 	{
-#if 0
 		static int s_UpdateCount = 0;
-		MH_INFO("TestingLayer::{0}", ++s_UpdateCount);
-#endif
-
-	
-		if (MHelmet::Input::IsKeyPressed(MHelmet::Key::Space))
-			//MH_TRACE("SPACE 1 is pressed");
-
-		if (MHelmet::Input::IsKeyPressed(MH_KEY_SPACE))
-		{
-			//MH_TRACE("SPACE 2 is pressed");
-		}
+		MH_INFO("TestingLayer::{0}", ++s_UpdateCount);	
+		//if (MHelmet::Input::IsKeyPressed(MHelmet::Key::Space))	MH_TRACE("SPACE 1 is pressed");
+		//if (MHelmet::Input::IsKeyPressed(MH_KEY_SPACE))     MH_TRACE("SPACE 2 is pressed");
+		
 	}
+
+	void ImGuiRender()
+	{
+		ImGui::Begin("verganegra");
+		ImGui::Text("inyourapple");
+		ImGui::End();
+	}
+
+
+
 	void OnEvent(MHelmet::Event& event) override
 	{
 		// FILTRADO DE EVENTOS
