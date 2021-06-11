@@ -4,9 +4,12 @@
 //#include <glm/vec3.hpp>
 //#include <glm/vec2.hpp>
 //#include <glm/detail/func_geometric.inl>
-
-Geometry::~Geometry() 
+namespace MHelmet 
 {
-   
+	Geometry::~Geometry()
+	{
+		// aun estoy decidiendo que hacer con esto
+	}
 }
+
 

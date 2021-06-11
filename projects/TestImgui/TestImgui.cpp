@@ -25,9 +25,9 @@ public:
 
 	void ImGuiRender()
 	{
-		ImGui::Begin("verganegra");
-		ImGui::Text("inyourapple");
-		ImGui::End();
+		/*ImGui::Begin("hola");
+		ImGui::Text("caracola");
+		ImGui::End();*/
 	}
 
 

@@ -6,10 +6,13 @@
 
 #include "engine/system/events/AppEvents/OnAppEvents.hpp"
 
+#include "engine/system/shader.hpp" // temporal
+
 namespace MHelmet 
 {
 
-	class Engine {
+	class Engine 
+	{
 
 	public:
 
@@ -17,7 +20,6 @@ namespace MHelmet
 		virtual ~Engine();
 
 		void run();
-
 
 		void OnEvent(Event& event);
 
@@ -29,11 +31,11 @@ namespace MHelmet
 		inline Window& GetWindow() { return *m_Window; }
 
 		
-	private: /// Private Methods
+	private: 
 		bool WindowCloseTask(OnWindowClose& e); // perform event
 
 	private:
-		std::unique_ptr<Window>		m_Window;
+		std::unique_ptr<Window>	m_Window;
 		
 		bool m_Alive = true;
 		LayerManager  m_Layers;
@@ -42,6 +44,8 @@ namespace MHelmet
 		uint32_t m_VAO;
 		uint32_t m_VBO;
 		uint32_t m_EBO;
+
+		std::unique_ptr<Shader> m_Shader;
 
 	private:
 		// necesito pasar el window al ImgUI Layer

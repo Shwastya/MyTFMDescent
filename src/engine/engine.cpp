@@ -5,7 +5,6 @@
 #include "engine/system/Input.hpp"
 #include "engine/system/geometry/triangle.hpp"
 
-
 namespace MHelmet 
 {
 	Engine* Engine::s_Instance = nullptr;
@@ -39,7 +38,18 @@ namespace MHelmet
 	
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, tri.SizeInd(), tri.Indices(), GL_STATIC_DRAW);
 
+		// no es necesario hacer unique ptr
+		// la clase shader es basicamente un monton 
+		// de funciones con solo el atributo del id
+		// y podemos ahorrarnos hacer un allocate
+
+		m_Shader.reset(new Shader(
+			"../assets/shaders/basic/vertex.vs", 
+			"../assets/shaders/basic/fragment.fs")
+		);
 	}
+
+
 	Engine::~Engine() {}	
 
 	
@@ -57,6 +67,7 @@ namespace MHelmet
 			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);	 
 			glClear(GL_COLOR_BUFFER_BIT);	
 			
+			m_Shader->Use();
 
 			glBindVertexArray(m_VAO);
 			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
