@@ -10,8 +10,8 @@ void main()
 
 {
 	
-	//FragColor = vec4(0.8, 0.6, 0.1, 1.0);	
+	//FragColor = vec4(0.8, 0.6157, 0.102, 1.0);	
 	//FragColor = u_color;
 
-    FragColor = vec4(test_position_as_Color, 1.0);	
+    FragColor = vec4(test_position_as_Color * 0.5 + 0.5, 1.0);	
 }

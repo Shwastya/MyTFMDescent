@@ -73,10 +73,14 @@ set(ENGINE_SRC_FILES
 
     # Render System
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/RendererContext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/Renderer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/VBO.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/EBO.cpp
         # OpenGL API Abstraction
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLContext.cpp
-    
-    
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLEBO.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLVAO.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLVBO.cpp 
 
     # Projectes dependency
     )
@@ -155,10 +159,16 @@ set(ENGINE_HEADER_FILES
 
     # Render System
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/RendererContext.hpp
-        # OpenGL API Abstraction
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLContext.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/Renderer.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/VBO.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/EBO.hpp
+        # OpenGL API Abstraction   
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLEBO.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLVAO.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLVBO.hpp
+  
 
-    
+
     # ECS 
 
 

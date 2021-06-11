@@ -7,6 +7,7 @@
 #include "engine/system/events/AppEvents/OnAppEvents.hpp"
 
 #include "engine/system/shader.hpp" // temporal
+#include "engine/system/renderer/VBO.hpp"
 
 namespace MHelmet 
 {
@@ -46,6 +47,7 @@ namespace MHelmet
 		uint32_t m_EBO;
 
 		std::unique_ptr<Shader> m_Shader;
+		//std::unique_ptr<VBO> m_VBO;
 
 	private:
 		// necesito pasar el window al ImgUI Layer
