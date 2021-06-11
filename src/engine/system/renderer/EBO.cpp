@@ -5,7 +5,7 @@
 
 namespace MHelmet
 {
-	EBO* EBO::Create(uint32_t* indices, uint32_t size)
+	std::unique_ptr<EBO> EBO::Create(uint32_t* indices, uint32_t size)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -13,7 +13,9 @@ namespace MHelmet
 			// PONER MENSAJE DE ERROR (NOT SUPPORTED)
 			break;
 		case RendererAPI::OpenGL:
-			return new OpenGLEBO(indices, size);
+			
+			return std::make_unique<OpenGLEBO>(indices, size);
+
 			break;
 		case RendererAPI::DirectX:
 			// NADA DE MOMENTO

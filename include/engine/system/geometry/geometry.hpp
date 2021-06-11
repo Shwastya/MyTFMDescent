@@ -19,11 +19,11 @@ namespace MHelmet
         Geometry(Geometry&&) noexcept = default;
         Geometry& operator=(Geometry&&) noexcept = default;
 
-        virtual float* Positions() = 0;
+        virtual float*  Positions() = 0;
         virtual uint32_t* Indices() = 0;
 
-        virtual size_t SizePos() const = 0;
-        virtual size_t SizeInd() const = 0;
+        virtual size_t   Size()  const = 0;
+        virtual uint32_t Count() const = 0;
         //virtual float UVS()    const = 0;
 
     protected:

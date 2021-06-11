@@ -8,6 +8,7 @@
 
 #include "engine/system/shader.hpp" // temporal
 #include "engine/system/renderer/VBO.hpp"
+#include <engine/system/renderer/EBO.hpp>
 
 namespace MHelmet 
 {
@@ -42,12 +43,12 @@ namespace MHelmet
 		LayerManager  m_Layers;
 		ImGuiLayer* m_ImGuiLayers;
 
-		uint32_t m_VAO;
-		uint32_t m_VBO;
-		uint32_t m_EBO;
-
 		std::unique_ptr<Shader> m_Shader;
-		//std::unique_ptr<VBO> m_VBO;
+
+		uint32_t m_VAO;
+		std::unique_ptr<VBO> m_VBO;
+		std::unique_ptr<EBO> m_EBO;
+
 
 	private:
 		// necesito pasar el window al ImgUI Layer

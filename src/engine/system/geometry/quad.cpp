@@ -77,14 +77,14 @@ namespace MHelmet
         return uint32_t();
     }
 
-    size_t Quad::SizePos() const
+    size_t Quad::Size() const
     {
         return 0;
     }
 
-    size_t Quad::SizeInd() const
+    uint32_t Quad::Count() const
     {
-        return size_t();
+        return uint32_t();
     }
 }
 

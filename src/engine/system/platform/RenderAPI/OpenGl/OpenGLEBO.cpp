@@ -3,10 +3,11 @@
 
 namespace MHelmet
 {
-	OpenGLEBO::OpenGLEBO(uint32_t* indices, uint32_t size)
+	OpenGLEBO::OpenGLEBO(uint32_t* indices, uint32_t n_indices) : m_IndicesCount(n_indices)
 	{
 		glGenBuffers(1, &m_ID_EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ID_EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, n_indices * sizeof(uint32_t), indices, GL_STATIC_DRAW);
 	}
 
 	OpenGLEBO::~OpenGLEBO()

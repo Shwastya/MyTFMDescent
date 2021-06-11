@@ -11,6 +11,8 @@ namespace MHelmet
 		virtual void Bind() const   = 0;
 		virtual void Unbind() const = 0;
 
-		static EBO* Create(uint32_t* indices, uint32_t size);
+		virtual uint32_t Count() const = 0;
+
+		static std::unique_ptr<EBO> Create(uint32_t* indices, uint32_t n_indices);
 	};
 }

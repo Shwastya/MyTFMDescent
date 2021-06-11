@@ -102,12 +102,11 @@ set(ENGINE_HEADER_FILES
     # TFM From scratchs #
     #####################
 
-    # MartianHelmet Application (main program) #
+    # MartianHelmet Application (main program) 
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/MHCore.hpp
     
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/MHSetup.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/Engine.hpp 
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/MainPoint.hpp      
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/Engine.hpp     
 
     # Node system
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/node/Node.hpp
@@ -162,6 +161,7 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/Renderer.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/VBO.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/EBO.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/ShaderLayout.hpp
         # OpenGL API Abstraction   
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLEBO.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLVAO.hpp

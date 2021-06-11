@@ -13,8 +13,8 @@ namespace MHelmet
         virtual float* Positions() override;
         virtual uint32_t* Indices() override;
 
-        virtual size_t SizePos() const override;
-        virtual size_t SizeInd() const override;
+        virtual size_t   Size()  const override;
+        virtual uint32_t Count() const override;
 
     private:
         float _size;

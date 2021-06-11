@@ -26,14 +26,14 @@ namespace MHelmet
 
 	uint32_t* Triangle::Indices() { return m_Indices; }
 
-	size_t Triangle::SizePos() const
+	size_t Triangle::Size() const
 	{
 		return sizeof(m_Positions);
 	}
 
-	size_t Triangle::SizeInd() const
+	uint32_t Triangle::Count() const
 	{
-		return sizeof(m_Indices);
+		return m_Elements;
 	}
 }
 

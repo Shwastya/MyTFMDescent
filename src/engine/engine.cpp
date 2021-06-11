@@ -4,6 +4,7 @@
 //#include "glm/glm.hpp"
 #include "engine/system/Input.hpp"
 #include "engine/system/geometry/triangle.hpp"
+#include "engine/system/renderer/ShaderLayout.hpp"
 
 namespace MHelmet 
 {
@@ -18,36 +19,29 @@ namespace MHelmet
 		m_ImGuiLayers = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayers);
 
-		// vertex array object   VAO
+
+
+
+			
+
 		glGenVertexArrays(1, &m_VAO);
 		glBindVertexArray(m_VAO);
-		// vertex buffer oobject VBO
-		/*glGenBuffers(1, &m_VBO);
-		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);*/
+
+		Triangle T;
+
+		m_VBO = VBO::Create(T.Positions(), T.Size());
+		
+		SHADER::Layout layout =
+		{
+			{ SHADER::DataType::Float3, "a_Position "}
+		};
+
 		
 
-		Triangle T;	
-		///m_VBO = std::make_unique<VBO>(VBO::Create(T.Positions(), T.SizePos()));
-		///m_VBO->Bind();
-		//m_VBO.reset(VBO::Create(T.Positions(), T.SizePos()));
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
-		//VBO vbo = VBO::Create(sizeof(vertices), vertices)
-		
-		///glBufferData(GL_ARRAY_BUFFER, tri.SizePos(), tri.Positions(), GL_STATIC_DRAW);
-		
-		///glEnableVertexAttribArray(0);
-		///glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-
-		// index  buffer object  EBO
-		///glGenBuffers(1, &m_EBO);
-		///glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-	
-		///glBufferData(GL_ELEMENT_ARRAY_BUFFER, tri.SizeInd(), tri.Indices(), GL_STATIC_DRAW);
-
-		// no es necesario hacer unique ptr
-		// la clase shader es basicamente un monton 
-		// de funciones con solo el atributo del id
-		// y podemos ahorrarnos hacer un allocate
+		m_EBO = EBO::Create(T.Indices(), T.Count());
 
 		m_Shader.reset(new Shader(
 			"../assets/shaders/basic/vertex.vs", 
@@ -73,10 +67,10 @@ namespace MHelmet
 			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);	 
 			glClear(GL_COLOR_BUFFER_BIT);	
 			
-			//m_Shader->Use();
+			m_Shader->Use();
 
-			//glBindVertexArray(m_VAO);
-			//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+			glBindVertexArray(m_VAO);
+			glDrawElements(GL_TRIANGLES, m_EBO->Count(), GL_UNSIGNED_INT, nullptr);
 
 			for (NodeLayer* layer : m_Layers) layer->Update();
 

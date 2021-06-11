@@ -6,6 +6,7 @@ namespace MHelmet
 	OpenGLVBO::OpenGLVBO(float* vertices, uint32_t size)
 	{
 		glGenBuffers(1, &m_ID_VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, m_ID_VBO);
 		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
 	}
 

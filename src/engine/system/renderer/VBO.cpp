@@ -5,7 +5,7 @@
 
 namespace MHelmet
 {
-	VBO* VBO::Create(float* vertices, uint32_t size)
+	std::unique_ptr<VBO> VBO::Create(float* vertices, uint32_t size)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -13,7 +13,8 @@ namespace MHelmet
 			// PONER MENSAJE DE ERROR (NOT SUPPORTED)
 			break;
 		case RendererAPI::OpenGL:
-			return new OpenGLVBO(vertices, size);
+			//return new OpenGLVBO(vertices, size);
+			return std::make_unique<OpenGLVBO>(vertices, size);
 			break;
 		case RendererAPI::DirectX:
 			// NADA DE MOMENTO
@@ -22,7 +23,7 @@ namespace MHelmet
 			// CON Vulkan PODEMOS FLIPAR
 			break;
 		default:
-			// MENSAJE DE ERRAR (API desconocida)
+			// MENSAJE DE ERROR (API desconocida)
 			return nullptr;
 			break;
 		}
