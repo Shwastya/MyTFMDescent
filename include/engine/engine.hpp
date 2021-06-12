@@ -46,7 +46,11 @@ namespace MHelmet
 		std::unique_ptr<Shader> m_Shader;
 
 		uint32_t m_VAO;
-		std::unique_ptr<VBO> m_VBO;
+		std::unique_ptr<VBO> m_VBO;		
+		std::unique_ptr<VBO> m_VBO2;
+
+		
+
 		std::unique_ptr<EBO> m_EBO;
 
 

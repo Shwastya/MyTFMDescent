@@ -42,12 +42,13 @@ namespace MHelmet
 
 			std::string Name;
 			DataType Type;
-			uint32_t Offset = 0;
+			uint32_t Offset;
 			uint32_t Size;
 			bool Normalized;
+		
 
 			Element(DataType type, const std::string& name, bool normalized = false)
-				:Name(name), Type(type), Size(DataTypeSize(type)), Normalized(normalized)
+				:Name(name), Type(type), Size(DataTypeSize(type)), Normalized(normalized), Offset(0)
 			{}
 
 			uint32_t ComponentCount() const
@@ -80,6 +81,7 @@ namespace MHelmet
 			Layout(const std::initializer_list<Element>& elements) 
 				: m_Elements(elements)
 			{
+				//m_Elements.reserve(10);
 				CalculateOffsetAndStride();
 			}
 
@@ -97,9 +99,9 @@ namespace MHelmet
 				m_Stride = 0;
 				for (auto& element : m_Elements)
 				{
-					element.Name = offset;
+					element.Offset = offset;
 					offset   += element.Size;
-					m_Stride += element.Offset;
+					m_Stride += element.Size;
 				}
 			}
 		private:

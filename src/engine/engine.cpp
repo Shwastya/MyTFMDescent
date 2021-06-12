@@ -37,23 +37,28 @@ namespace MHelmet
 		m_Window->SetCallBack(BINDAPPEVENT(OnEvent));
 
 		m_ImGuiLayers = new ImGuiLayer();
-		PushOverlay(m_ImGuiLayers);
-
-
-
-
-			
+		PushOverlay(m_ImGuiLayers);			
 
 		glGenVertexArrays(1, &m_VAO);
 		glBindVertexArray(m_VAO);
 
 		Triangle T;
 
-		m_VBO = VBO::Create(T.Positions(), T.Size());
+		//m_VBO = VBO::Create(T.Positions(), T.Size());
+
+		float vertices[3 * 7] =
+		{
+			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+			 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+		 	 0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f
+		};
 		
+		m_VBO2 = VBO::Create(vertices, sizeof(vertices));
+
 		BUFFER::Layout layout =
 		{
-			{ BUFFER::DataType::Float3, "a_Position", true}
+			{ BUFFER::DataType::Float3, "aPos"},
+			{ BUFFER::DataType::Float4, "aColor"}
 		};
 
 		uint32_t idx = 0;
@@ -72,14 +77,16 @@ namespace MHelmet
 			++idx;
 		}
 
-		
+		uint32_t indices[3] = { 0, 1, 2 };
 
-		m_EBO = EBO::Create(T.Indices(), T.Count());
+		m_EBO = EBO::Create(indices, sizeof(indices) / sizeof(uint32_t));
 
 		m_Shader.reset(new Shader(
 			"../assets/shaders/basic/vertex.vs", 
 			"../assets/shaders/basic/fragment.fs")
 		);
+
+		m_Shader->Use();
 	}
 
 
