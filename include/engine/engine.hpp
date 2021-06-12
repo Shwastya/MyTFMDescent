@@ -49,14 +49,10 @@ namespace MHelmet
 		//uint32_t m_VAO;
 		std::shared_ptr<Shader> m_Shader;
 		std::shared_ptr<VAO> m_VAO;
-		std::shared_ptr<VBO> m_VBO;		
-		std::shared_ptr<EBO> m_EBO;
 
 
 		std::shared_ptr<Shader> m_Shader_Test;
 		std::shared_ptr<VAO> m_VAO_Test;
-		std::shared_ptr<VBO> VBO_Test;
-		std::shared_ptr<EBO> EBO_Test;
 		
 
 

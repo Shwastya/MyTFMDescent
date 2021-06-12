@@ -5,7 +5,7 @@
 
 namespace MHelmet
 {
-	std::shared_ptr<EBO> EBO::Create(uint32_t* indices, uint32_t size)
+	EBO* EBO::Create(uint32_t* indices, uint32_t size)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -14,7 +14,7 @@ namespace MHelmet
 			break;
 		case RendererAPI::OpenGL:
 			
-			return std::make_shared<OpenGLEBO>(indices, size);
+			return new OpenGLEBO(indices, size);
 
 			break;
 		case RendererAPI::DirectX:

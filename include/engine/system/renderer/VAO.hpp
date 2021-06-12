@@ -27,6 +27,9 @@ namespace MHelmet
 		virtual const PtrEBO& GetEBO() const = 0;		
 
 		// FABRICA
-		std::shared_ptr<VAO> Create();
+		static VAO* Create();
+
+	protected:
+		//uint32_t m_ID_VAO[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	};
 }

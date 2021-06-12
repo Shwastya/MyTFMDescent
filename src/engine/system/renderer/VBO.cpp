@@ -5,7 +5,7 @@
 
 namespace MHelmet
 {
-	std::shared_ptr<VBO> VBO::Create(float* vertices, uint32_t size)
+	VBO* VBO::Create(float* vertices, uint32_t size)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -13,8 +13,8 @@ namespace MHelmet
 			// PONER MENSAJE DE ERROR (NOT SUPPORTED)
 			break;
 		case RendererAPI::OpenGL:
-			//return new OpenGLVBO(vertices, size);
-			return std::make_shared<OpenGLVBO>(vertices, size);
+			return new OpenGLVBO(vertices, size);
+		
 			break;
 		case RendererAPI::DirectX:
 			// NADA DE MOMENTO

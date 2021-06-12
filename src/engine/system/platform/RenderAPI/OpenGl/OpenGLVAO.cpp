@@ -24,11 +24,11 @@ namespace MHelmet
 
 	OpenGLVAO::OpenGLVAO()
 	{
-		glDeleteVertexArrays(1, &m_ID_VAO);
+		glGenVertexArrays(1, &m_ID_VAO);
 	}
 	OpenGLVAO::~OpenGLVAO()
 	{
-		glBindVertexArray(0);
+		glDeleteVertexArrays(1, &m_ID_VAO);
 	}
 	void OpenGLVAO::Bind() const
 	{

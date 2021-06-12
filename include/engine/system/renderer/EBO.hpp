@@ -13,6 +13,6 @@ namespace MHelmet
 
 		virtual uint32_t Count() const = 0;
 
-		std::shared_ptr<EBO> Create(uint32_t* indices, uint32_t n_indices);
+		static EBO* Create(uint32_t* indices, uint32_t n_indices);
 	};
 }

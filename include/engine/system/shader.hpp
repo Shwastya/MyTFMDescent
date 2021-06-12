@@ -4,6 +4,25 @@
 #include <string>
 #include <glm/glm.hpp>
 
+
+//namespace MHelmet
+//{
+//	class Shader
+//	{
+//	public:
+//		Shader(const std::string& vertexSrc, const std::string& fragmentSrc);
+//		~Shader();
+//
+//		void Bind();
+//		void Unbind();
+//
+//	private:
+//		static void loadShader(const std::string* vertexSrc, std::string* fragmentSrc);
+//	private:
+//		uint32_t m_ShaderID;
+//	};
+//}
+
 namespace MHelmet 
 {
     class Shader
@@ -26,8 +45,8 @@ namespace MHelmet
         Shader& operator=(const Shader&) = default;
         Shader& operator=(Shader&&) = default;
 
-        void Use()  const;
-        void Free() const;
+        void Bind()  const;
+        void Unbind() const;
 
         void Set(const char* name, int value) const;
         void Set(const char* name, float value) const;

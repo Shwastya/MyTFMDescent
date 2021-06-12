@@ -6,6 +6,9 @@
 #include "engine/system/geometry/triangle.hpp"
 #include "engine/system/renderer/BufferLayout.hpp"
 
+#include "engine/system/platform/RenderAPI/OpenGL/OpenGLVBO.hpp";
+#include "engine/system/platform/RenderAPI/OpenGL/OpenGLEBO.hpp";
+
 namespace MHelmet 
 {
 	Engine* Engine::s_Instance = nullptr;
@@ -24,80 +27,68 @@ namespace MHelmet
 		//Triangle T;
 
 		//m_VBO = VBO::Create(T.Positions(), T.Size());
+		
+		m_VAO.reset(VAO::Create());
+
+		float vertices[3 * 7] =
 		{
-			m_VAO = m_VAO->Create();
+			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+				0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+				0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f
+		};
 
-			float vertices[3 * 7] =
-			{
-				-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-				 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-				 0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f
-			};
+		std::shared_ptr<VBO> VBO_T;
+		VBO_T.reset(VBO::Create(vertices, sizeof(vertices)));
 
-			m_VBO = m_VBO->Create(vertices, sizeof(vertices));
+		VBO_T->SetLayout
+		({
+			{ BUFFER::DataType::Float3, "aPos"},
+			{ BUFFER::DataType::Float4, "aColor"}
+			});
 
-			m_VBO->SetLayout
-			({
-				{ BUFFER::DataType::Float3, "aPos"},
-				{ BUFFER::DataType::Float4, "aColor"}
-				});
+		m_VAO->Add__VBO(VBO_T);
 
-			m_VAO->Add__VBO(m_VBO);
+		uint32_t indices[3] = { 0, 1, 2 };
+		std::shared_ptr<EBO> EBO_T;
+		EBO_T.reset(EBO::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 
-			uint32_t indices[3] = { 0, 1, 2 };
+		m_VAO->Add__EBO(EBO_T);		
 
-			m_EBO = m_EBO->Create(indices, sizeof(indices) / sizeof(uint32_t));
-			m_VAO->Add__EBO(m_EBO);
-
-			m_Shader = std::make_shared<Shader>(
-				"../assets/shaders/basic/vertex.vs",
-				"../assets/shaders/basic/fragment.fs"
-				);
-		}
+		m_Shader = std::make_shared<Shader>("../assets/shaders/basic/vertex.vs", "../assets/shaders/basic/fragment.fs");
 		
-	//	m_Shader->Use();
-		/******************************************/
-		// testing new layout
+		
+
+	/******************************************/
+	// testing new layout
+		
+		m_VAO_Test.reset(VAO::Create());
+
+		float vTest[3 * 4] =
 		{
-			m_VAO_Test = m_VAO_Test->Create();
+			-0.75f, -0.75f, 0.0f,    //upper right triangle
+			 0.75f, -0.75f, 0.0f,
+			 0.75f,  0.75f, 0.0f,
+			-0.75f,  0.75f, 0.0f,   //lower left triangle
 
-			float vTest[3 * 4] =
-			{
-				-0.5, -0.5f, 0.0f,    //upper right triangle
-				 0.5, -0.5f, 0.0f,
-				-0.5f, 0.5, 0.0f,
-				-0.5f, -0.5, 0.0f,   //lower left triangle
+		};
+		std::shared_ptr<VBO> VBO_Test = std::make_shared<OpenGLVBO>(vTest, sizeof(vTest));
+		VBO_Test->Create(vTest, sizeof(vTest));
 
-			};
-			VBO_Test = VBO_Test->Create(vTest, sizeof(vTest));
+		VBO_Test->SetLayout({ {BUFFER::DataType::Float3, "aPos"} });
+		m_VAO_Test->Add__VBO(VBO_Test);
+			
+		uint32_t indices_test[6] = { 0, 1, 2, 2, 3, 0 };
 
-			VBO_Test->SetLayout({ {BUFFER::DataType::Float3, "aPos"} });
-			//m_VAO_Test->Add__VBO(VBO_Test);
+		std::shared_ptr<EBO> EBO_Test = std::make_shared<OpenGLEBO>(indices_test, sizeof(indices_test) / sizeof(uint32_t));
 
-		//	uint32_t indices_test[6] = { 0, 1, 2, 2, 3, 0 };
-
-		//	EBO_Test = EBO_Test->Create(indices_test, sizeof(indices_test) / sizeof(uint32_t));
-		//	m_VAO_Test->Add__EBO(EBO_Test);
-
-		//	m_Shader_Test = std::make_shared<Shader>(
-		//		"../assets/shaders/basic/vertex-2.vs",
-		//		"../assets/shaders/basic/fragment-2.fs"
-		//	);
-		}
-		
-
-		
-	
-
-
-
-
-
-		
+		m_VAO_Test->Add__EBO(EBO_Test);
+		m_Shader_Test = std::make_shared<Shader>(
+			"../assets/shaders/basic/vertex-2.vs",
+			"../assets/shaders/basic/fragment-2.fs"
+		);
 
 		//m_Shader->Use();
 	}
-
 
 	Engine::~Engine() {}	
 
@@ -116,13 +107,13 @@ namespace MHelmet
 			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);	 
 			glClear(GL_COLOR_BUFFER_BIT);	
 			
-			//m_Shader_Test->Use();
-			//m_VAO->Bind();
-			////m_VAO_Test->Bind();
-			//glDrawElements(GL_TRIANGLES, 6 , GL_UNSIGNED_INT, nullptr);
+			m_Shader_Test->Bind();			
+			m_VAO_Test->Bind();
+			glDrawElements(GL_TRIANGLES, m_VAO_Test->GetEBO()->Count(), GL_UNSIGNED_INT, nullptr);
+
+
 			m_VAO->Bind();
-			m_Shader->Use();
-			
+			m_Shader->Bind();			
 			glDrawElements(GL_TRIANGLES, m_VAO->GetEBO()->Count(), GL_UNSIGNED_INT, nullptr);
 
 			for (NodeLayer* layer : m_Layers) layer->Update();
