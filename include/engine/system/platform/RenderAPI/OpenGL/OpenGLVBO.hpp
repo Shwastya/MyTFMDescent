@@ -13,11 +13,11 @@ namespace MHelmet
 		virtual void Bind()   const override;
 		virtual void Unbind() const override;
 
-		inline virtual const SHADER::Layout& GetLayout() const override
+		inline virtual const BUFFER::Layout& GetLayout() const override
 		{
 			return m_Layout;
 		}
-		inline virtual void SetLayout(const SHADER::Layout& layout) override
+		inline virtual void SetLayout(const BUFFER::Layout& layout) override
 		{
 			m_Layout = layout;
 		}
@@ -25,6 +25,6 @@ namespace MHelmet
 	private:
 		//uint32_t m_ID_VAO;
 		uint32_t m_ID_VBO;	
-		SHADER::Layout m_Layout;
+		BUFFER::Layout m_Layout;
 	};
 }

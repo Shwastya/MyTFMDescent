@@ -1,6 +1,6 @@
 #pragma once
 #include "engine/system/MHCore.hpp"
-#include "engine/system/renderer/ShaderLayout.hpp"
+#include "engine/system/renderer/BufferLayout.hpp"
 
 namespace MHelmet
 {	
@@ -12,8 +12,8 @@ namespace MHelmet
 		virtual void Bind() const   = 0;
 		virtual void Unbind() const = 0;
 
-		virtual const SHADER::Layout& GetLayout() const = 0;
-		virtual void SetLayout(const SHADER::Layout& layout) = 0;
+		virtual const BUFFER::Layout& GetLayout() const = 0;
+		virtual void SetLayout(const BUFFER::Layout& layout) = 0;
 		
 
 

@@ -4,11 +4,31 @@
 //#include "glm/glm.hpp"
 #include "engine/system/Input.hpp"
 #include "engine/system/geometry/triangle.hpp"
-#include "engine/system/renderer/ShaderLayout.hpp"
+#include "engine/system/renderer/BufferLayout.hpp"
 
 namespace MHelmet 
 {
 	Engine* Engine::s_Instance = nullptr;
+
+
+	static GLenum ToOpenGLBaseType(BUFFER::DataType type)
+	{
+		switch (type)
+		{		  
+		case MHelmet::BUFFER::DataType::Float:  return GL_FLOAT;
+		case MHelmet::BUFFER::DataType::Float2: return GL_FLOAT;
+		case MHelmet::BUFFER::DataType::Float3:	return GL_FLOAT;
+		case MHelmet::BUFFER::DataType::Float4:	return GL_FLOAT;
+		case MHelmet::BUFFER::DataType::Int:	return GL_INT;
+		case MHelmet::BUFFER::DataType::Int2:	return GL_INT;
+		case MHelmet::BUFFER::DataType::Int3:	return GL_INT;
+		case MHelmet::BUFFER::DataType::Int4:	return GL_INT;
+		case MHelmet::BUFFER::DataType::Mat3:	return GL_FLOAT;
+		case MHelmet::BUFFER::DataType::Mat4:	return GL_FLOAT;
+		case MHelmet::BUFFER::DataType::Bool:	return GL_BOOL;
+		}
+		return 0;
+	}
 	
 	Engine::Engine()
 	{
@@ -31,15 +51,28 @@ namespace MHelmet
 
 		m_VBO = VBO::Create(T.Positions(), T.Size());
 		
-		SHADER::Layout layout =
+		BUFFER::Layout layout =
 		{
-			{ SHADER::DataType::Float3, "a_Position "}
+			{ BUFFER::DataType::Float3, "a_Position", true}
 		};
 
-		
+		uint32_t idx = 0;
+		for (const auto& e : layout)
+		{
+			glEnableVertexAttribArray(idx);
+			glVertexAttribPointer
+			(
+				idx, 
+				e.ComponentCount(), 
+				ToOpenGLBaseType(e.Type), 
+				e.Normalized ? GL_TRUE : GL_FALSE, 
+				layout.Stride(),
+				(const void*)e.Offset
+			);
+			++idx;
+		}
 
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		
 
 		m_EBO = EBO::Create(T.Indices(), T.Count());
 
