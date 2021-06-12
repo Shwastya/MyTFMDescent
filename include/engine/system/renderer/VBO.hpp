@@ -12,8 +12,8 @@ namespace MHelmet
 		virtual void Bind() const   = 0;
 		virtual void Unbind() const = 0;
 
-		virtual const BUFFER::Layout& GetLayout() const = 0;
-		virtual void SetLayout(const BUFFER::Layout& layout) = 0;
+		virtual const Layout& GetLayout() const = 0;
+		virtual void SetLayout(const Layout& layout) = 0;
 		
 
 

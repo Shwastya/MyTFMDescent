@@ -10,26 +10,26 @@ namespace MHelmet
 {
 	Engine* Engine::s_Instance = nullptr;
 
-
-	static GLenum ToOpenGLBaseType(BUFFER::DataType type)
+	/* pasado a VAO Opengl*/
+	static GLenum ToOpenGLBaseType(DataType type)
 	{
 		switch (type)
 		{		  
-		case MHelmet::BUFFER::DataType::Float:  return GL_FLOAT;
-		case MHelmet::BUFFER::DataType::Float2: return GL_FLOAT;
-		case MHelmet::BUFFER::DataType::Float3:	return GL_FLOAT;
-		case MHelmet::BUFFER::DataType::Float4:	return GL_FLOAT;
-		case MHelmet::BUFFER::DataType::Int:	return GL_INT;
-		case MHelmet::BUFFER::DataType::Int2:	return GL_INT;
-		case MHelmet::BUFFER::DataType::Int3:	return GL_INT;
-		case MHelmet::BUFFER::DataType::Int4:	return GL_INT;
-		case MHelmet::BUFFER::DataType::Mat3:	return GL_FLOAT;
-		case MHelmet::BUFFER::DataType::Mat4:	return GL_FLOAT;
-		case MHelmet::BUFFER::DataType::Bool:	return GL_BOOL;
+		case MHelmet::DataType::Float:  return GL_FLOAT;
+		case MHelmet::DataType::Float2: return GL_FLOAT;
+		case MHelmet::DataType::Float3:	return GL_FLOAT;
+		case MHelmet::DataType::Float4:	return GL_FLOAT;
+		case MHelmet::DataType::Int:	return GL_INT;
+		case MHelmet::DataType::Int2:	return GL_INT;
+		case MHelmet::DataType::Int3:	return GL_INT;
+		case MHelmet::DataType::Int4:	return GL_INT;
+		case MHelmet::DataType::Mat3:	return GL_FLOAT;
+		case MHelmet::DataType::Mat4:	return GL_FLOAT;
+		case MHelmet::DataType::Bool:	return GL_BOOL;
 		}
 		return 0;
 	}
-	
+	/**********************/
 	Engine::Engine()
 	{
 		s_Instance = this;
@@ -55,12 +55,20 @@ namespace MHelmet
 		
 		m_VBO2 = VBO::Create(vertices, sizeof(vertices));
 
-		BUFFER::Layout layout =
+		Layout layout =
 		{
-			{ BUFFER::DataType::Float3, "aPos"},
-			{ BUFFER::DataType::Float4, "aColor"}
+			{ DataType::Float3, "aPos"},
+			{ DataType::Float4, "aColor"},
+			{ DataType::Float4, "aColor"}
 		};
 
+		std::cout 
+			<<
+			"Numero de elementos: " <<
+			layout.GetNumberOfElements() 
+			<< std::endl;
+
+		/* pasado a VAO Opengl*/
 		uint32_t idx = 0;
 		for (const auto& e : layout)
 		{
@@ -76,6 +84,7 @@ namespace MHelmet
 			);
 			++idx;
 		}
+		/************************/
 
 		uint32_t indices[3] = { 0, 1, 2 };
 
