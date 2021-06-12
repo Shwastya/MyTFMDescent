@@ -21,39 +21,81 @@ namespace MHelmet
 
 		
 
-		Triangle T;
+		//Triangle T;
 
 		//m_VBO = VBO::Create(T.Positions(), T.Size());
-
-		m_VAO = VAO::Create();
-
-		float vertices[3 * 7] =
 		{
-			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-			 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-		 	 0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f
-		};
+			m_VAO = m_VAO->Create();
+
+			float vertices[3 * 7] =
+			{
+				-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+				 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+				 0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f
+			};
+
+			m_VBO = m_VBO->Create(vertices, sizeof(vertices));
+
+			m_VBO->SetLayout
+			({
+				{ BUFFER::DataType::Float3, "aPos"},
+				{ BUFFER::DataType::Float4, "aColor"}
+				});
+
+			m_VAO->Add__VBO(m_VBO);
+
+			uint32_t indices[3] = { 0, 1, 2 };
+
+			m_EBO = m_EBO->Create(indices, sizeof(indices) / sizeof(uint32_t));
+			m_VAO->Add__EBO(m_EBO);
+
+			m_Shader = std::make_shared<Shader>(
+				"../assets/shaders/basic/vertex.vs",
+				"../assets/shaders/basic/fragment.fs"
+				);
+		}
 		
-		m_VBO = VBO::Create(vertices, sizeof(vertices));
-		Layout layout =
+	//	m_Shader->Use();
+		/******************************************/
+		// testing new layout
 		{
-			{ DataType::Float3, "aPos"},
-			{ DataType::Float4, "aColor"}			
-		};
-		m_VBO->SetLayout(layout);
-		m_VAO->Add__VBO(m_VBO);
+			m_VAO_Test = m_VAO_Test->Create();
 
-		uint32_t indices[3] = { 0, 1, 2 };
+			float vTest[3 * 4] =
+			{
+				-0.5, -0.5f, 0.0f,    //upper right triangle
+				 0.5, -0.5f, 0.0f,
+				-0.5f, 0.5, 0.0f,
+				-0.5f, -0.5, 0.0f,   //lower left triangle
 
-		m_EBO = EBO::Create(indices, sizeof(indices) / sizeof(uint32_t));
-		m_VAO->Add__EBO(m_EBO);
+			};
+			VBO_Test = VBO_Test->Create(vTest, sizeof(vTest));
 
-		m_Shader.reset(new Shader(
-			"../assets/shaders/basic/vertex.vs", 
-			"../assets/shaders/basic/fragment.fs")
-		);
+			VBO_Test->SetLayout({ {BUFFER::DataType::Float3, "aPos"} });
+			//m_VAO_Test->Add__VBO(VBO_Test);
 
-		m_Shader->Use();
+		//	uint32_t indices_test[6] = { 0, 1, 2, 2, 3, 0 };
+
+		//	EBO_Test = EBO_Test->Create(indices_test, sizeof(indices_test) / sizeof(uint32_t));
+		//	m_VAO_Test->Add__EBO(EBO_Test);
+
+		//	m_Shader_Test = std::make_shared<Shader>(
+		//		"../assets/shaders/basic/vertex-2.vs",
+		//		"../assets/shaders/basic/fragment-2.fs"
+		//	);
+		}
+		
+
+		
+	
+
+
+
+
+
+		
+
+		//m_Shader->Use();
 	}
 
 
@@ -74,10 +116,14 @@ namespace MHelmet
 			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);	 
 			glClear(GL_COLOR_BUFFER_BIT);	
 			
-			m_Shader->Use();
+			//m_Shader_Test->Use();
+			//m_VAO->Bind();
+			////m_VAO_Test->Bind();
+			//glDrawElements(GL_TRIANGLES, 6 , GL_UNSIGNED_INT, nullptr);
 			m_VAO->Bind();
-			//glBindVertexArray(m_VAO);
-			glDrawElements(GL_TRIANGLES, m_EBO->Count(), GL_UNSIGNED_INT, nullptr);
+			m_Shader->Use();
+			
+			glDrawElements(GL_TRIANGLES, m_VAO->GetEBO()->Count(), GL_UNSIGNED_INT, nullptr);
 
 			for (NodeLayer* layer : m_Layers) layer->Update();
 

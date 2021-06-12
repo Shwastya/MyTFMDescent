@@ -9,7 +9,7 @@ namespace MHelmet
 	public:
 
 		OpenGLVAO();
-		virtual ~OpenGLVAO() = default;
+		virtual ~OpenGLVAO();
 
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
@@ -17,6 +17,11 @@ namespace MHelmet
 		// conteo de referencias
 		virtual void Add__VBO(const PtrVBO& _vbo) override;
 		virtual void Add__EBO(const PtrEBO& _ebo) override;
+
+		inline
+			virtual const std::vector<PtrVBO>& GetVBO() const override { return  m_VBOs; }
+		inline
+			virtual const PtrEBO& GetEBO() const override { return m_EBO; }
 
 	private:
 

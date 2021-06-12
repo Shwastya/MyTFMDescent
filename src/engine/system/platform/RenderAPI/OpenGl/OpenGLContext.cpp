@@ -4,7 +4,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#define MH_ENABLE_CORE true
+#define MH_ENABLE_CORE false
 
 namespace MHelmet
 {	OpenGLContext::OpenGLContext(GLFWwindow* _GLFWwindow)

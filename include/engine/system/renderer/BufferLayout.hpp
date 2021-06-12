@@ -4,8 +4,8 @@
 
 namespace MHelmet 
 {
-	//namespace BUFFER
-	//{
+	namespace BUFFER
+	{
 		enum class DataType
 		{
 			None = 0,
@@ -19,17 +19,17 @@ namespace MHelmet
 		{
 			switch (type)
 			{
-			case MHelmet::DataType::Float:  return 4;
-			case MHelmet::DataType::Float2:	return 4 * 2;
-			case MHelmet::DataType::Float3:	return 4 * 3;
-			case MHelmet::DataType::Float4:	return 4 * 4;
-			case MHelmet::DataType::Int:	return 4;
-			case MHelmet::DataType::Int2:	return 4 * 2;
-			case MHelmet::DataType::Int3:	return 4 * 3;
-			case MHelmet::DataType::Int4:	return 4 * 4;
-			case MHelmet::DataType::Mat3:	return 4 * 3 * 3;
-			case MHelmet::DataType::Mat4:	return 4 * 4 * 4;
-			case MHelmet::DataType::Bool:	return 1;
+			case MHelmet::BUFFER::DataType::Float:  return 4;
+			case MHelmet::BUFFER::DataType::Float2:	return 4 * 2;
+			case MHelmet::BUFFER::DataType::Float3:	return 4 * 3;
+			case MHelmet::BUFFER::DataType::Float4:	return 4 * 4;
+			case MHelmet::BUFFER::DataType::Int:	return 4;
+			case MHelmet::BUFFER::DataType::Int2:	return 4 * 2;
+			case MHelmet::BUFFER::DataType::Int3:	return 4 * 3;
+			case MHelmet::BUFFER::DataType::Int4:	return 4 * 4;
+			case MHelmet::BUFFER::DataType::Mat3:	return 4 * 3 * 3;
+			case MHelmet::BUFFER::DataType::Mat4:	return 4 * 4 * 4;
+			case MHelmet::BUFFER::DataType::Bool:	return 1;
 			
 			}
 			// mensaje de error en caso de no conocer el tipo
@@ -55,22 +55,21 @@ namespace MHelmet
 			{
 				switch (Type)
 				{
-				case MHelmet::DataType::Float:  return 1;
-				case MHelmet::DataType::Float2:	return 2;
-				case MHelmet::DataType::Float3:	return 3;
-				case MHelmet::DataType::Float4:	return 4;
-				case MHelmet::DataType::Int:	return 1;
-				case MHelmet::DataType::Int2:	return 2;
-				case MHelmet::DataType::Int3:	return 3;
-				case MHelmet::DataType::Int4:	return 4;
-				case MHelmet::DataType::Mat3:	return 3 * 3;
-				case MHelmet::DataType::Mat4:	return 4 * 4;
-				case MHelmet::DataType::Bool:	return 1;
+				case MHelmet::BUFFER::DataType::Float:  return 1;
+				case MHelmet::BUFFER::DataType::Float2:	return 2;
+				case MHelmet::BUFFER::DataType::Float3:	return 3;
+				case MHelmet::BUFFER::DataType::Float4:	return 4;
+				case MHelmet::BUFFER::DataType::Int:	return 1;
+				case MHelmet::BUFFER::DataType::Int2:	return 2;
+				case MHelmet::BUFFER::DataType::Int3:	return 3;
+				case MHelmet::BUFFER::DataType::Int4:	return 4;
+				case MHelmet::BUFFER::DataType::Mat3:	return 3 * 3;
+				case MHelmet::BUFFER::DataType::Mat4:	return 4 * 4;
+				case MHelmet::BUFFER::DataType::Bool:	return 1;
 
 				}
 				// mensaje de error o algun tipo de assert con DEBUG_BREAK
-				return 0;
-				
+				return 0;				
 			}
 		};
 
@@ -110,5 +109,5 @@ namespace MHelmet
 			std::vector<Element> m_Elements;
 			uint32_t m_Stride = 0;
 		};
-	//}
+	}
 }

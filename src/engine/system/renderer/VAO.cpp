@@ -6,7 +6,7 @@
 namespace MHelmet
 {
 	
-	std::unique_ptr<VAO> VAO::Create()
+	std::shared_ptr<VAO> VAO::Create()
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -15,7 +15,7 @@ namespace MHelmet
 			break;
 		case RendererAPI::OpenGL:
 			//return new OpenGLVBO(vertices, size);
-			return std::make_unique<OpenGLVAO>();
+			return std::make_shared<OpenGLVAO>();
 			break;
 		case RendererAPI::DirectX:
 			// NADA DE MOMENTO
@@ -29,4 +29,5 @@ namespace MHelmet
 			break;
 		}
 	}
+	
 }

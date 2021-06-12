@@ -10,7 +10,7 @@ namespace MHelmet
 	using PtrVBO = std::shared_ptr<VBO>;
 	using PtrEBO = std::shared_ptr<EBO>;
 
-	class VAO // virtual table of dispatchs clases de puraS funciones
+	class VAO // virtual table of dispatchs 
 	{
 	public:
 		virtual ~VAO() = default;
@@ -20,12 +20,13 @@ namespace MHelmet
 
 		// conteo de referencias
 		virtual void Add__VBO(const PtrVBO& _vbo) = 0;
+		// EBO de momento solo tiene capacidad 1, no se cree necesario mas
 		virtual void Add__EBO(const PtrEBO& _ebo) = 0;
 		
+		virtual const std::vector<PtrVBO>& GetVBO() const = 0;
+		virtual const PtrEBO& GetEBO() const = 0;		
 
-
-		static std::unique_ptr<VAO> Create();
-
-
+		// FABRICA
+		std::shared_ptr<VAO> Create();
 	};
 }

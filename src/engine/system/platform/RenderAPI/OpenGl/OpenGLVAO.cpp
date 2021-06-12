@@ -1,27 +1,23 @@
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLVAO.hpp"
 #include <glad/glad.h>
 
-
-
 namespace MHelmet
 {
-	//using namespace BUFFER;
-
-	static GLenum ToOpenGLBaseType(DataType type)
+	static GLenum ToOpenGLBaseType(BUFFER::DataType type)
 	{
 		switch (type)
 		{
-			case MHelmet::DataType::Float:  return GL_FLOAT;
-			case MHelmet::DataType::Float2: return GL_FLOAT;
-			case MHelmet::DataType::Float3:	return GL_FLOAT;
-			case MHelmet::DataType::Float4:	return GL_FLOAT;
-			case MHelmet::DataType::Int:	return GL_INT;
-			case MHelmet::DataType::Int2:	return GL_INT;
-			case MHelmet::DataType::Int3:	return GL_INT;
-			case MHelmet::DataType::Int4:	return GL_INT;
-			case MHelmet::DataType::Mat3:	return GL_FLOAT;
-			case MHelmet::DataType::Mat4:	return GL_FLOAT;
-			case MHelmet::DataType::Bool:	return GL_BOOL;
+			case MHelmet::BUFFER::DataType::Float:  return GL_FLOAT;
+			case MHelmet::BUFFER::DataType::Float2: return GL_FLOAT;
+			case MHelmet::BUFFER::DataType::Float3:	return GL_FLOAT;
+			case MHelmet::BUFFER::DataType::Float4:	return GL_FLOAT;
+			case MHelmet::BUFFER::DataType::Int:	return GL_INT;
+			case MHelmet::BUFFER::DataType::Int2:	return GL_INT;
+			case MHelmet::BUFFER::DataType::Int3:	return GL_INT;
+			case MHelmet::BUFFER::DataType::Int4:	return GL_INT;
+			case MHelmet::BUFFER::DataType::Mat3:	return GL_FLOAT;
+			case MHelmet::BUFFER::DataType::Mat4:	return GL_FLOAT;
+			case MHelmet::BUFFER::DataType::Bool:	return GL_BOOL;
 		}
 		return 0;
 	}
@@ -29,6 +25,10 @@ namespace MHelmet
 	OpenGLVAO::OpenGLVAO()
 	{
 		glDeleteVertexArrays(1, &m_ID_VAO);
+	}
+	OpenGLVAO::~OpenGLVAO()
+	{
+		glBindVertexArray(0);
 	}
 	void OpenGLVAO::Bind() const
 	{
@@ -57,7 +57,7 @@ namespace MHelmet
 
 		for (int i = 0; i < elements.size(); i++)
 		{
-			MH_CORE_INFO("THIS IS WORKING!! {0} ", i);
+			MH_CORE_INFO("BUFFER LAYOUT IS WORKING!! {0} ", i);
 			glEnableVertexAttribArray(idx);
 
 			glVertexAttribPointer
