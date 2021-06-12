@@ -4,27 +4,27 @@
 
 namespace MHelmet
 {
-	//class OpenGLVAO : public VAO 
-	//{
-	//public:
+	class OpenGLVAO : public VAO 
+	{
+	public:
 
-	//	OpenGLVAO();
-	//	virtual ~OpenGLVAO() = default;
+		OpenGLVAO();
+		virtual ~OpenGLVAO() = default;
 
-	//	virtual void Bind() const override;
-	//	virtual void Unbind() const override;
+		virtual void Bind() const override;
+		virtual void Unbind() const override;
 
-	//	// conteo de referencias
-	//	virtual void Add__VBO(PtrVBO& _vbo) override;
-	//	virtual void Add__EBO(const PtrEBO& _ebo) override;
+		// conteo de referencias
+		virtual void Add__VBO(const PtrVBO& _vbo) override;
+		virtual void Add__EBO(const PtrEBO& _ebo) override;
 
-	//private:
+	private:
 
-	//	// using std::shared_ptr<Type>
-	//	uint32_t m_ID_VAO;
-	//	std::vector<PtrVBO> m_VBOs;
-	//	PtrVBO m_EBO;
+		// using std::shared_ptr<Type>
+		uint32_t m_ID_VAO;
+		std::vector<PtrVBO> m_VBOs;
+		PtrEBO m_EBO;
 
-	//};
+	};
 
 }

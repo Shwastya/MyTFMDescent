@@ -7,7 +7,7 @@ namespace MHelmet
 {
 	//using namespace BUFFER;
 
-	/*static GLenum ToOpenGLBaseType(DataType type)
+	static GLenum ToOpenGLBaseType(DataType type)
 	{
 		switch (type)
 		{
@@ -38,26 +38,38 @@ namespace MHelmet
 	{
 		glBindVertexArray(0);
 	}
-	void OpenGLVAO::Add__VBO(PtrVBO& _vbo)
+	void OpenGLVAO::Add__VBO(const PtrVBO& _vbo)
 	{
+		// CAMBIAR POR ASSERT CON MACRO Y LOG 
+		if (_vbo->GetLayout().GetElements().size() < 1)
+		{
+			MH_CORE_ERROR("VBO layout not found");
+			__debugbreak;
+		}
+
 		glBindVertexArray(m_ID_VAO);
 		_vbo->Bind();
-		
-		uint32_t idx = 0;
-		auto& layout = _vbo->GetLayout();
 
-		for (const auto& e : layout)
+		uint32_t idx = 0;
+
+		const auto& layout   = _vbo->GetLayout();		
+		const auto& elements = layout.GetElements();
+
+		for (int i = 0; i < elements.size(); i++)
 		{
+			MH_CORE_INFO("THIS IS WORKING!! {0} ", i);
 			glEnableVertexAttribArray(idx);
+
 			glVertexAttribPointer
-			(
+			(				
 				idx,
-				e.ComponentCount(),
-				ToOpenGLBaseType(e.Type),
-				e.Normalized ? GL_TRUE : GL_FALSE,
+				elements[i].ComponentCount(),
+				ToOpenGLBaseType(elements[i].Type),
+				elements[i].Normalized ? GL_TRUE : GL_FALSE,
 				layout.Stride(),
-				(const void*)e.Offset
+				(const void*)elements[i].Offset
 			);
+
 			++idx;
 		}
 
@@ -71,5 +83,5 @@ namespace MHelmet
 		_ebo->Bind();
 
 		m_EBO = _ebo;
-	}	*/
+	}	
 }

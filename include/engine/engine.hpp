@@ -8,7 +8,8 @@
 
 #include "engine/system/shader.hpp" // temporal
 #include "engine/system/renderer/VBO.hpp"
-#include <engine/system/renderer/EBO.hpp>
+#include "engine/system/renderer/EBO.hpp"
+#include "engine/system/renderer/VAO.hpp"
 
 namespace MHelmet 
 {
@@ -43,15 +44,14 @@ namespace MHelmet
 		LayerManager  m_Layers;
 		ImGuiLayer* m_ImGuiLayers;
 
-		std::unique_ptr<Shader> m_Shader;
-
-		uint32_t m_VAO;
-		std::unique_ptr<VBO> m_VBO;		
-		std::unique_ptr<VBO> m_VBO2;
-
 		
 
-		std::unique_ptr<EBO> m_EBO;
+		//uint32_t m_VAO;
+		std::shared_ptr<Shader> m_Shader;
+		std::shared_ptr<VAO> m_VAO;
+		std::shared_ptr<VBO> m_VBO;		
+		std::shared_ptr<EBO> m_EBO;
+		
 
 
 	private:

@@ -17,7 +17,7 @@ namespace MHelmet
 		
 
 
-		static std::unique_ptr<VBO> Create(float* vertices, uint32_t size);
+		static std::shared_ptr<VBO> Create(float* vertices, uint32_t size);
 
 
 	};

@@ -88,9 +88,7 @@ namespace MHelmet
 			inline uint32_t Stride() const { return m_Stride; }
 			inline const std::vector<Element>& GetElements() const { return m_Elements; }
 			
-			inline const size_t GetNumberOfElements() const { return m_Elements.size(); }
-
-
+		
 			std::vector<Element>::iterator begin() { return m_Elements.begin(); }
 			std::vector<Element>::iterator end()   { return m_Elements.end();   }
 			

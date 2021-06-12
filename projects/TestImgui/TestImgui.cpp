@@ -45,7 +45,7 @@ public:
 
 			if (e.GetKeyCode() == MH_KEY_SPACE)
 			{
-				MH_TRACE("COMEME LOS GUEVOS");
+				
 			}
 		
 			MH_ERROR(static_cast<char>(e.GetKeyCode()));

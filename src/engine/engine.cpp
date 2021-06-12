@@ -10,26 +10,6 @@ namespace MHelmet
 {
 	Engine* Engine::s_Instance = nullptr;
 
-	/* pasado a VAO Opengl*/
-	static GLenum ToOpenGLBaseType(DataType type)
-	{
-		switch (type)
-		{		  
-		case MHelmet::DataType::Float:  return GL_FLOAT;
-		case MHelmet::DataType::Float2: return GL_FLOAT;
-		case MHelmet::DataType::Float3:	return GL_FLOAT;
-		case MHelmet::DataType::Float4:	return GL_FLOAT;
-		case MHelmet::DataType::Int:	return GL_INT;
-		case MHelmet::DataType::Int2:	return GL_INT;
-		case MHelmet::DataType::Int3:	return GL_INT;
-		case MHelmet::DataType::Int4:	return GL_INT;
-		case MHelmet::DataType::Mat3:	return GL_FLOAT;
-		case MHelmet::DataType::Mat4:	return GL_FLOAT;
-		case MHelmet::DataType::Bool:	return GL_BOOL;
-		}
-		return 0;
-	}
-	/**********************/
 	Engine::Engine()
 	{
 		s_Instance = this;
@@ -39,12 +19,13 @@ namespace MHelmet
 		m_ImGuiLayers = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayers);			
 
-		glGenVertexArrays(1, &m_VAO);
-		glBindVertexArray(m_VAO);
+		
 
 		Triangle T;
 
 		//m_VBO = VBO::Create(T.Positions(), T.Size());
+
+		m_VAO = VAO::Create();
 
 		float vertices[3 * 7] =
 		{
@@ -53,42 +34,19 @@ namespace MHelmet
 		 	 0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f
 		};
 		
-		m_VBO2 = VBO::Create(vertices, sizeof(vertices));
-
+		m_VBO = VBO::Create(vertices, sizeof(vertices));
 		Layout layout =
 		{
 			{ DataType::Float3, "aPos"},
-			{ DataType::Float4, "aColor"},
-			{ DataType::Float4, "aColor"}
+			{ DataType::Float4, "aColor"}			
 		};
-
-		std::cout 
-			<<
-			"Numero de elementos: " <<
-			layout.GetNumberOfElements() 
-			<< std::endl;
-
-		/* pasado a VAO Opengl*/
-		uint32_t idx = 0;
-		for (const auto& e : layout)
-		{
-			glEnableVertexAttribArray(idx);
-			glVertexAttribPointer
-			(
-				idx, 
-				e.ComponentCount(), 
-				ToOpenGLBaseType(e.Type), 
-				e.Normalized ? GL_TRUE : GL_FALSE, 
-				layout.Stride(),
-				(const void*)e.Offset
-			);
-			++idx;
-		}
-		/************************/
+		m_VBO->SetLayout(layout);
+		m_VAO->Add__VBO(m_VBO);
 
 		uint32_t indices[3] = { 0, 1, 2 };
 
 		m_EBO = EBO::Create(indices, sizeof(indices) / sizeof(uint32_t));
+		m_VAO->Add__EBO(m_EBO);
 
 		m_Shader.reset(new Shader(
 			"../assets/shaders/basic/vertex.vs", 
@@ -117,8 +75,8 @@ namespace MHelmet
 			glClear(GL_COLOR_BUFFER_BIT);	
 			
 			m_Shader->Use();
-
-			glBindVertexArray(m_VAO);
+			m_VAO->Bind();
+			//glBindVertexArray(m_VAO);
 			glDrawElements(GL_TRIANGLES, m_EBO->Count(), GL_UNSIGNED_INT, nullptr);
 
 			for (NodeLayer* layer : m_Layers) layer->Update();
