@@ -72,7 +72,8 @@ set(ENGINE_SRC_FILES
 
 
     # Render System
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/OrthoCamera.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/OrthographicCamera.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/PerspectiveCamera.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/RendererContext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/Renderer.cpp
@@ -163,7 +164,8 @@ set(ENGINE_HEADER_FILES
 
 
     # Render System
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/OrthoCamera.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/OrthographicCamera.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/PerspectiveCamera.hpp
 
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/RendererContext.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/Renderer.hpp
