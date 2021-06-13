@@ -1,7 +1,9 @@
+//#include "engine/system/renderer/RendererAPI.hpp"
+#include "engine/system/renderer/Renderer.hpp"
 #include "engine/system/renderer/VAO.hpp"
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLVAO.hpp"
 
-#include "engine/system/renderer/Renderer.hpp"
+
 
 namespace MHelmet
 {
@@ -10,17 +12,18 @@ namespace MHelmet
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::None:
+		case RendererAPI::API::None:
 			// PONER MENSAJE DE ERROR (NOT SUPPORTED)
 			break;
-		case RendererAPI::OpenGL:
+		case RendererAPI::API::OpenGL:
+
 			return new OpenGLVAO();
-		//	return std::make_shared<OpenGLVAO>();
-			break;
-		case RendererAPI::DirectX:
+			//return std::make_shared<OpenGLVAO>();
+			
+		case RendererAPI::API::DirectX:
 			// NADA DE MOMENTO
 			break;
-		case RendererAPI::Vulkan:
+		case RendererAPI::API::Vulkan:
 			// JUAS
 			break;
 		default:

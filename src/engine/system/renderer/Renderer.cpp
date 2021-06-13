@@ -2,11 +2,18 @@
 
 
 namespace MHelmet
-{
-	RendererAPI Renderer::s_API = RendererAPI::OpenGL;
-
-	RendererAPI Renderer::GetAPI() 
+{	
+	void Renderer::BeginScene()
 	{
-		return s_API;
+
+	}
+	void Renderer::EndEscene()
+	{
+
+	}
+	void Renderer::Submit(const std::shared_ptr<VAO>& _VAO)
+	{
+		_VAO->Bind();
+		RenderCommand::DrawIndexed(_VAO);
 	}
 }

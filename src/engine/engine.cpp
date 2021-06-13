@@ -1,10 +1,15 @@
 #include "engine/Engine.hpp"
-#include <glad/glad.h>
+//#include <glad/glad.h>
+//#include "engine/system/renderer/Renderer.hpp"
 #include <GLFW/glfw3.h>
 //#include "glm/glm.hpp"
+
+
 #include "engine/system/Input.hpp"
-#include "engine/system/geometry/triangle.hpp"
+//#include "engine/system/geometry/triangle.hpp"
 #include "engine/system/renderer/BufferLayout.hpp"
+
+#include "engine/system/renderer/Renderer.hpp"
 
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLVBO.hpp";
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLEBO.hpp";
@@ -87,7 +92,7 @@ namespace MHelmet
 			"../assets/shaders/basic/fragment-2.fs"
 		);
 
-		//m_Shader->Use();
+		
 	}
 
 	Engine::~Engine() {}	
@@ -102,13 +107,26 @@ namespace MHelmet
 									
 		//Input::IsKeyPressed(GLFW_KEY_TAB);
 
+		using R = Renderer;
+		using RC = RenderCommand;
+
 		while (m_Alive)								 
 		{											 
-			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);	 
-			glClear(GL_COLOR_BUFFER_BIT);	
+				
+			//glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+			//glClear(GL_COLOR_BUFFER_BIT);
+			RC::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+			RC::clear();
 			
-			m_Shader_Test->Bind();			
-			m_VAO_Test->Bind();
+			R::BeginScene();
+			{
+
+			}
+			
+						
+			//m_VAO_Test->Bind();
+			m_Shader_Test->Bind();
+			Renderer::Submit(m_VAO_Test);
 			glDrawElements(GL_TRIANGLES, m_VAO_Test->GetEBO()->Count(), GL_UNSIGNED_INT, nullptr);
 
 

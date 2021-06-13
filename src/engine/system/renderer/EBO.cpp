@@ -1,26 +1,28 @@
+#include "engine/system/renderer/Renderer.hpp"
 #include "engine/system/renderer/EBO.hpp"
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLEBO.hpp"
 
-#include "engine/system/renderer/Renderer.hpp"
+
 
 namespace MHelmet
 {
 	EBO* EBO::Create(uint32_t* indices, uint32_t size)
 	{
+		//return new OpenGLEBO(indices, size);
+
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::None:
+		case RendererAPI::API::None:
 			// PONER MENSAJE DE ERROR (NOT SUPPORTED)
 			break;
-		case RendererAPI::OpenGL:
+		case RendererAPI::API::OpenGL:
 			
 			return new OpenGLEBO(indices, size);
 
-			break;
-		case RendererAPI::DirectX:
+		case RendererAPI::API::DirectX:
 			// NADA DE MOMENTO
 			break;
-		case RendererAPI::Vulkan:
+		case RendererAPI::API::Vulkan:
 			// CON Vulkan PODEMOS FLIPAR
 			break;
 		default:
