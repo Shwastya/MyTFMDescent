@@ -24,7 +24,7 @@ namespace MHelmet
 
 		inline static API GetAPI() { return s_API; }
 
-		static void SetAPI(RendererAPI::API rendererAPI = RendererAPI::API::OpenGL);
+		//static void SetAPI(RendererAPI::API rendererAPI = RendererAPI::API::OpenGL);
 
 	private:
 		const static API s_API{ API::OpenGL };

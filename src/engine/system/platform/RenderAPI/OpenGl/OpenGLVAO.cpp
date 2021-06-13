@@ -38,8 +38,10 @@ namespace MHelmet
 	{
 		glBindVertexArray(0);
 	}
-	void OpenGLVAO::Add__VBO(const PtrVBO& _vbo)
+	void OpenGLVAO::Add__VBO(const std::shared_ptr<VBO>& _vbo)
 	{
+		MH_CORE_ERROR("Entra aqui??");
+
 		// CAMBIAR POR ASSERT CON MACRO Y LOG 
 		if (_vbo->GetLayout().GetElements().size() < 1)
 		{
@@ -77,7 +79,7 @@ namespace MHelmet
 	}
 
 
-	void OpenGLVAO::Add__EBO(const PtrEBO& _ebo)
+	void OpenGLVAO::Add__EBO(const std::shared_ptr<EBO>& _ebo)
 	{
 		glBindVertexArray(m_ID_VAO);
 		_ebo->Bind();

@@ -16,7 +16,8 @@ namespace MHelmet
 			break;
 		case RendererAPI::API::OpenGL:
 
-			return new OpenGLVBO(vertices, size);		
+			return new OpenGLVBO(vertices, size);
+		
 	
 		case RendererAPI::API::DirectX:
 			// NADA DE MOMENTO

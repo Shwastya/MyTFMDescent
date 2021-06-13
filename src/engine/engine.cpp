@@ -113,26 +113,20 @@ namespace MHelmet
 		while (m_Alive)								 
 		{											 
 				
-			//glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-			//glClear(GL_COLOR_BUFFER_BIT);
+			
 			RC::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 			RC::clear();
 			
 			R::BeginScene();
 			{
+				m_Shader_Test->Bind();
+				R::Submit(m_VAO_Test); // to draw calls
 
+				m_Shader->Bind();
+				R::Submit(m_VAO);
 			}
+
 			
-						
-			//m_VAO_Test->Bind();
-			m_Shader_Test->Bind();
-			Renderer::Submit(m_VAO_Test);
-			glDrawElements(GL_TRIANGLES, m_VAO_Test->GetEBO()->Count(), GL_UNSIGNED_INT, nullptr);
-
-
-			m_VAO->Bind();
-			m_Shader->Bind();			
-			glDrawElements(GL_TRIANGLES, m_VAO->GetEBO()->Count(), GL_UNSIGNED_INT, nullptr);
 
 			for (NodeLayer* layer : m_Layers) layer->Update();
 

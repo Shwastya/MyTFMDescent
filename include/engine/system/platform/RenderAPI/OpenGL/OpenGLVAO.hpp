@@ -15,20 +15,19 @@ namespace MHelmet
 		virtual void Unbind() const override;
 
 		// conteo de referencias
-		virtual void Add__VBO(const PtrVBO& _vbo) override;
-		virtual void Add__EBO(const PtrEBO& _ebo) override;
+		virtual void Add__VBO(const std::shared_ptr<VBO>& _vbo) override;
+		virtual void Add__EBO(const std::shared_ptr<EBO>& _ebo) override;
 
+		virtual const std::vector<std::shared_ptr<VBO>>& GetVBO() const override { return  m_VBOs; }
 		inline
-			virtual const std::vector<PtrVBO>& GetVBO() const override { return  m_VBOs; }
-		inline
-			virtual const PtrEBO& GetEBO() const override { return m_EBO; }
+			virtual const std::shared_ptr<EBO>& GetEBO() const override { return m_EBO; }
 
 	private:
 
 		// using std::shared_ptr<Type>
 		uint32_t m_ID_VAO;
-		std::vector<PtrVBO> m_VBOs;
-		PtrEBO m_EBO;
+		std::vector<std::shared_ptr<VBO>> m_VBOs;
+		std::shared_ptr<EBO> m_EBO;
 
 	};
 
