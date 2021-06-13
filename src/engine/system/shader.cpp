@@ -7,178 +7,6 @@
 
 #include <sstream>
 
-//namespace MHelmet
-//{
-//	Shader::Shader(const std::string& vertexSource, const std::string& fragmentSource) //: m_ShaderID(0)
-//	{
-//		// Read our shaders into the appropriate buffers
-//		//std::string vertexSource = // Get source code for vertex shader.
-//			//std::string fragmentSource = // Get source code for fragment shader.
-//
-//			// Create an empty vertex shader handle
-//			GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-//
-//		// Send the vertex shader source code to GL
-//		// Note that std::string's .c_str is NULL character terminated.
-//		const GLchar* source = vertexSource.c_str();
-//		glShaderSource(vertexShader, 1, &source, 0);
-//
-//		// Compile the vertex shader
-//		glCompileShader(vertexShader);
-//
-//		GLint isCompiled = 0;
-//		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &isCompiled);
-//		if (isCompiled == GL_FALSE)
-//		{
-//			GLint maxLength = 0;
-//			glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &maxLength);
-//
-//			// The maxLength includes the NULL character
-//			std::vector<GLchar> infoLog(maxLength);
-//			glGetShaderInfoLog(vertexShader, maxLength, &maxLength, &infoLog[0]);
-//
-//			// We don't need the shader anymore.
-//			glDeleteShader(vertexShader);
-//
-//			// Use the infoLog as you see fit.
-//
-//			// In this simple m_ShaderID, we'll just leave
-//			return;
-//		}
-//
-//		// Create an empty fragment shader handle
-//		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-//
-//		// Send the fragment shader source code to GL
-//		// Note that std::string's .c_str is NULL character terminated.
-//		source = fragmentSource.c_str();
-//		glShaderSource(fragmentShader, 1, &source, 0);
-//
-//		// Compile the fragment shader
-//		glCompileShader(fragmentShader);
-//
-//		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &isCompiled);
-//		if (isCompiled == GL_FALSE)
-//		{
-//			GLint maxLength = 0;
-//			glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &maxLength);
-//
-//			// The maxLength includes the NULL character
-//			std::vector<GLchar> infoLog(maxLength);
-//			glGetShaderInfoLog(fragmentShader, maxLength, &maxLength, &infoLog[0]);
-//
-//			// We don't need the shader anymore.
-//			glDeleteShader(fragmentShader);
-//			// Either of them. Don't leak shaders.
-//			glDeleteShader(vertexShader);
-//
-//			// Use the infoLog as you see fit.
-//
-//			// In this simple m_ShaderID, we'll just leave
-//			return;
-//		}
-//
-//		// Vertex and fragment shaders are successfully compiled.
-//		// Now time to link them together into a m_ShaderID.
-//		// Get a m_ShaderID object
-//		m_ShaderID = glCreateProgram();;
-//		//GLuint m_ShaderID = m_ShaderID;
-//
-//		// Attach our shaders to our m_ShaderID
-//		glAttachShader(m_ShaderID, vertexShader);
-//		glAttachShader(m_ShaderID, fragmentShader);
-//
-//		// Link our m_ShaderID
-//		glLinkProgram(m_ShaderID);
-//
-//		// Note the different functions here: glGetProgram* instead of glGetShader*.
-//		GLint isLinked = 0;
-//		glGetProgramiv(m_ShaderID, GL_LINK_STATUS, (int*)&isLinked);
-//		if (isLinked == GL_FALSE)
-//		{
-//			GLint maxLength = 0;
-//			glGetProgramiv(m_ShaderID, GL_INFO_LOG_LENGTH, &maxLength);
-//
-//			// The maxLength includes the NULL character
-//			std::vector<GLchar> infoLog(maxLength);
-//			glGetProgramInfoLog(m_ShaderID, maxLength, &maxLength, &infoLog[0]);
-//
-//			// We don't need the m_ShaderID anymore.
-//			glDeleteProgram(m_ShaderID);
-//			// Don't leak shaders either.
-//			glDeleteShader(vertexShader);
-//			glDeleteShader(fragmentShader);
-//
-//			// Use the infoLog as you see fit.
-//
-//			// In this simple m_ShaderID, we'll just leave
-//			return;
-//		}
-//
-//		// Always detach shaders after a successful link.
-//		glDetachShader(m_ShaderID, vertexShader);
-//		glDetachShader(m_ShaderID, fragmentShader);
-//		
-//	}
-//	Shader::~Shader()
-//	{
-//		glDeleteProgram(m_ShaderID);
-//	}
-//	void Shader::Bind()
-//	{
-//		glUseProgram(m_ShaderID);
-//	}
-//	void Shader::Unbind()
-//	{
-//		glUseProgram(0);
-//	}
-//
-//	void Shader::loadShader(const std::string* path, std::string* code)
-//	{
-//		std::ifstream File;
-//		
-//		MH_INFO("ENTRA?");
-//
-//
-//		File.open(path->c_str(), std::ios_base::in);
-//		if (File) 
-//		{
-//
-//		    std::stringstream stream;
-//		    stream << File.rdbuf();
-//		    *code = stream.str();
-//		    File.close();
-//
-//			MH_WARN(code);
-//		}
-//		else 
-//		{
-//		    MH_CORE_ERROR("Error in load shader {0}", path);
-//		    // std::cout << "Error in load shader " << path << std::endl;
-//		}
-//
-//	}
-	//void Shader::loadShader(const char* path, std::string* code)
-		//    {
-		//        std::ifstream file;
-		//
-		//        file.open(path, std::ios_base::in);
-		//        if (file) 
-		//        {
-		//            std::stringstream stream;
-		//            stream << file.rdbuf();
-		//            *code = stream.str();
-		//            file.close();
-		//        }
-		//        else 
-		//        {
-		//            MH_CORE_ERROR("Error in load shader {0}", path);
-		//            // std::cout << "Error in load shader " << path << std::endl;
-		//        }
-		//    }
-//}
-
-
 namespace MHelmet
 {
     Shader::Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath) {
@@ -274,51 +102,63 @@ namespace MHelmet
         }
     }
 
-    void Shader::Set(const char* name, int value) const {
+    void Shader::SetUniform(const char* name, int value) const {
+    //    MH_CORE_INFO("Uniform used: Int1");
         glUniform1i(glGetUniformLocation(id_, name), value);
     }
 
-    void Shader::Set(const char* name, bool value) const {
+    void Shader::SetUniform(const char* name, bool value) const {
+    //    MH_CORE_INFO("Uniform used: Bool");
         glUniform1i(glGetUniformLocation(id_, name), static_cast<int>(value));
     }
 
-    void Shader::Set(const char* name, float value) const {
+    void Shader::SetUniform(const char* name, float value) const {
+    //    MH_CORE_INFO("Uniform used: Float1");
         glUniform1f(glGetUniformLocation(id_, name), value);
     }
 
-    void Shader::Set(const char* name, float value1, float value2) const {
+    void Shader::SetUniform(const char* name, float value1, float value2) const {
+    //    MH_CORE_INFO("Uniform used: Float2");
         glUniform2f(glGetUniformLocation(id_, name), value1, value2);
     }
 
-    void Shader::Set(const char* name, float value1, float value2, float value3) const {
+    void Shader::SetUniform(const char* name, float value1, float value2, float value3) const {
+    //    MH_CORE_INFO("Uniform used: Float3");
         glUniform3f(glGetUniformLocation(id_, name), value1, value2, value3);
     }
 
-    void Shader::Set(const char* name, float value1, float value2, float value3, float value4) const {
+    void Shader::SetUniform(const char* name, float value1, float value2, float value3, float value4) const {
+    //    MH_CORE_INFO("Uniform used: Float4");
         glUniform4f(glGetUniformLocation(id_, name), value1, value2, value3, value4);
     }
 
-    void Shader::Set(const char* name, const glm::vec2& value) const {
+    void Shader::SetUniform(const char* name, const glm::vec2& value) const {
+    //    MH_CORE_INFO("Uniform used: VectorFloat2");
         glUniform2fv(glGetUniformLocation(id_, name), 1, glm::value_ptr(value));
     }
 
-    void Shader::Set(const char* name, const glm::vec3& value) const {
+    void Shader::SetUniform(const char* name, const glm::vec3& value) const {
+    //    MH_CORE_INFO("Uniform used: VectorFloat3");
         glUniform3fv(glGetUniformLocation(id_, name), 1, glm::value_ptr(value));
     }
 
-    void Shader::Set(const char* name, const glm::vec4& value) const {
+    void Shader::SetUniform(const char* name, const glm::vec4& value) const {
+    //    MH_CORE_INFO("Uniform used: VectorFloat4");
         glUniform4fv(glGetUniformLocation(id_, name), 1, glm::value_ptr(value));
     }
 
-    void Shader::Set(const char* name, const glm::mat2& value) const {
+    void Shader::SetUniform(const char* name, const glm::mat2& value) const {
+    //    MH_CORE_INFO("Uniform used: MatrixFloatVector2");
         glUniformMatrix2fv(glGetUniformLocation(id_, name), 1, GL_FALSE, glm::value_ptr(value));
     }
 
-    void Shader::Set(const char* name, const glm::mat3& value) const {
+    void Shader::SetUniform(const char* name, const glm::mat3& value) const {
+    //    MH_CORE_INFO("Uniform used: MatrixFloatVector3");
         glUniformMatrix3fv(glGetUniformLocation(id_, name), 1, GL_FALSE, glm::value_ptr(value));
     }
 
-    void Shader::Set(const char* name, const glm::mat4& value) const {
+    void Shader::SetUniform(const char* name, const glm::mat4& value) const {
+    //    MH_CORE_INFO("Uniform used: MatrixFloatVector4");
         glUniformMatrix4fv(glGetUniformLocation(id_, name), 1, GL_FALSE, glm::value_ptr(value));
     }
 

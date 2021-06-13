@@ -3,10 +3,10 @@
 
 namespace MHelmet
 {
-	class OrthoCamera
+	class OrthograpicCamera
 	{
 	public:
-		OrthoCamera(float left, float right, float bottom, float top);
+		OrthograpicCamera(float left, float right, float bottom, float top);
 
 		
 
@@ -15,6 +15,10 @@ namespace MHelmet
 
 		const glm::vec3& GetPosition() { return m_Position; }
 		float GetRotation() { return m_Rotation; }
+
+		const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
+		const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
+		const glm::mat4& GetViewProjectionMatrix() const { return m_ViewProjectionMatrix; }
 
 	private:
 		void RecalculateViewMatrix();

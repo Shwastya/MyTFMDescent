@@ -14,8 +14,13 @@
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLVBO.hpp";
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLEBO.hpp";
 
+
+#include "engine/system/renderer/OrthoCamera.hpp"
+
 namespace MHelmet 
 {
+	OrthograpicCamera camera(-2.0f, 2.0f, -2.0f, 2.0f);
+
 	Engine* Engine::s_Instance = nullptr;
 
 	Engine::Engine()
@@ -59,7 +64,10 @@ namespace MHelmet
 
 		m_VAO->Add__EBO(EBO_T);		
 
-		m_Shader = std::make_shared<Shader>("../assets/shaders/basic/vertex.vs", "../assets/shaders/basic/fragment.fs");
+		m_Shader = std::make_shared<Shader>
+			(
+				"../assets/shaders/orthographicShaders/vertex.vs",
+				"../assets/shaders/orthographicShaders/fragment.fs");
 		
 		
 
@@ -88,8 +96,8 @@ namespace MHelmet
 
 		m_VAO_Test->Add__EBO(EBO_Test);
 		m_Shader_Test = std::make_shared<Shader>(
-			"../assets/shaders/basic/vertex-2.vs",
-			"../assets/shaders/basic/fragment-2.fs"
+			"../assets/shaders/orthographicShaders/vertex-2.vs",
+			"../assets/shaders/orthographicShaders/fragment-2.fs"
 		);
 
 		
@@ -112,19 +120,22 @@ namespace MHelmet
 
 		while (m_Alive)								 
 		{											 
-				
+		
 			
 			RC::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 			RC::clear();
 			
 			R::BeginScene();
-			{
+			
 				m_Shader_Test->Bind();
+				m_Shader_Test->SetUniform("u_View", camera.GetViewProjectionMatrix());
+				
 				R::Submit(m_VAO_Test); // to draw calls
 
 				m_Shader->Bind();
+				m_Shader->SetUniform("u_View", camera.GetViewProjectionMatrix());
 				R::Submit(m_VAO);
-			}
+			
 
 			
 
