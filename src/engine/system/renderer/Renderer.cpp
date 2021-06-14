@@ -7,6 +7,12 @@ namespace MHelmet
 {	
 	Renderer::DataScene* Renderer::Scene = new Renderer::DataScene;
 
+
+	void Renderer::SetCameraScene(std::shared_ptr<PerspectiveCamera>& camera)
+	{
+		Scene->camera = camera;
+	}	
+
 	void Renderer::BeginScene()
 	{	
 		Scene->Model = glm::mat4(1.0f);
@@ -17,7 +23,7 @@ namespace MHelmet
 		const float w = static_cast<float>(Engine::p().GetWindow().GetWidth());
 		const float h = static_cast<float>(Engine::p().GetWindow().GetHeight());
 		
-		Scene->Projection = glm::perspective(glm::radians(Engine::p().GetCamera()->getFOV()), w / h, 0.1f, 100.0f);
+		Scene->Projection = glm::perspective(glm::radians(Scene->camera->getFOV()), w / h, 0.1f, 100.0f);
 	}
 	void Renderer::EndEscene()
 	{
@@ -29,7 +35,7 @@ namespace MHelmet
 
 		
 		_Shader->SetUniform("u_Model", Scene->Model);
-		_Shader->SetUniform("u_View", Engine::p().GetCamera()->getViewMatrix());
+		_Shader->SetUniform("u_View", Scene->camera->getViewMatrix());
 		_Shader->SetUniform("u_Proj", Scene->Projection);
 
 		_VAO->Bind();

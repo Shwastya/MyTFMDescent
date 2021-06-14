@@ -9,6 +9,7 @@ namespace MHelmet
 	{
 	public:
 
+		static void SetCameraScene(std::shared_ptr<PerspectiveCamera>& camera);
 		static void BeginScene();
 		static void EndEscene();
 
@@ -22,6 +23,8 @@ namespace MHelmet
 			glm::mat4 Projection;
 			glm::mat4 Model;
 			glm::mat4 View;
+
+			std::shared_ptr<PerspectiveCamera> camera;
 		};
 
 		static DataScene* Scene;
