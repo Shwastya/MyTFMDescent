@@ -12,6 +12,9 @@
 #include "engine/system/renderer/EBO.hpp"
 #include "engine/system/renderer/VAO.hpp"
 
+#include "engine/system/renderer/OrthographicCamera.hpp"
+#include "engine/system/renderer/PerspectiveCamera.hpp"
+
 namespace MHelmet 
 {
 
@@ -52,10 +55,14 @@ namespace MHelmet
 		std::shared_ptr<VAO> m_VAO;
 
 
-		std::shared_ptr<Shader> m_Shader_Test;
-		std::shared_ptr<VAO> m_VAO_Test;
+		/*std::shared_ptr<Shader> m_Shader_Test;
+		std::shared_ptr<VAO> m_VAO_Test;*/
 		
+		std::unique_ptr<PerspectiveCamera> m_Camera;
 
+		/* TEMPORAL ????? */
+		glm::mat4 m_Model = glm::mat4(1.0f);
+		glm::mat4 m_View = glm::mat4(1.0f);
 
 	private:
 		// necesito pasar el window al ImgUI Layer

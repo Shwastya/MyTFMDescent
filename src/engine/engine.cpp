@@ -15,8 +15,7 @@
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLEBO.hpp";
 
 
-#include "engine/system/renderer/OrthographicCamera.hpp"
-#include "engine/system/renderer/PerspectiveCamera.hpp"
+
 
 /*TEMPORAL*/
 #include <glm/gtc/matrix_transform.hpp>
@@ -25,7 +24,7 @@
 
 namespace MHelmet 
 {
-	OrthograpicCamera camera(-2.0f, 2.0f, -2.0f, 2.0f);
+	//OrthograpicCamera camera(-2.0f, 2.0f, -2.0f, 2.0f);
 	//PerspectiveCamera camera2();
 
 	
@@ -42,8 +41,8 @@ namespace MHelmet
 		PushOverlay(m_ImGuiLayers);			
 
 		
-
-		//Triangle T;
+		m_Camera = std::make_unique<PerspectiveCamera>(glm::vec3(0.0f, 0.0f, 3.0f));
+ 		//Triangle T;
 
 		//m_VBO = VBO::Create(T.Positions(), T.Size());
 		/*
@@ -83,7 +82,8 @@ namespace MHelmet
 	/******************************************/
 	// testing new layout
 		
-		m_VAO_Test.reset(VAO::Create());
+		m_VAO.reset(VAO::Create());
+
 		const float half = 1 / 2.0f;
 		float positions[] = { -half, -half, half,    //front
 						  half, -half, half,
@@ -137,7 +137,7 @@ namespace MHelmet
 		VBO_->Create(positions, sizeof(positions));
 
 		VBO_->SetLayout({ {BUFFER::DataType::Float3, "a_Pos"} });
-		m_VAO_Test->Add__VBO(VBO_);
+		m_VAO->Add__VBO(VBO_);
 			
 		uint32_t indices[] = 
 		{ 
@@ -152,14 +152,14 @@ namespace MHelmet
 
 		std::shared_ptr<EBO> EBO_ = std::make_shared<OpenGLEBO>(indices, sizeof(indices) / sizeof(uint32_t));
 
-		m_VAO_Test->Add__EBO(EBO_);
-		m_Shader_Test = std::make_shared<Shader>(
+		m_VAO->Add__EBO(EBO_);
+		m_Shader = std::make_shared<Shader>(
 			"../assets/shaders/perspectiveShaders/vertex.vs",
 			"../assets/shaders/perspectiveShaders/fragment.fs"
 		);
 
 		// AQUI EL DELTA TIME TEMPORAL
-		Engine::p().GetWindow().GetDeltaTime();
+		
 		
 	}
 
@@ -180,26 +180,27 @@ namespace MHelmet
 
 		while (m_Alive)								 
 		{											 
-			glm::mat4 model = glm::mat4(1.0f);
-			glm::mat4 view  = glm::mat4(1.0f);
-			view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+			m_Model = glm::mat4(1.0f);
+			m_Model = glm::rotate(m_Model, static_cast<float>(glfwGetTime()) * glm::radians(20.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+			m_View  = glm::mat4(1.0f);
+			m_View = glm::translate(m_View, glm::vec3(0.0f, 0.0f, -3.0f));
 
 			const float w = static_cast<float>(Engine::p().GetWindow().GetWidth());
 			const float h = static_cast<float>(Engine::p().GetWindow().GetHeight());
 
-			const glm::mat4 proj = glm::perspective(glm::radians(45.0f), w / h, 0.1f, 100.0f);
+			const glm::mat4 proj = glm::perspective(glm::radians(m_Camera->getFOV()), w / h, 0.1f, 100.0f);
 			
 			RC::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 			RC::clear();
 			
 			R::BeginScene();
 			
-				m_Shader_Test->Bind();
-				m_Shader_Test->SetUniform("u_Model", model);
-				m_Shader_Test->SetUniform("u_View",  view);
-				m_Shader_Test->SetUniform("u_Proj",  proj);
+				m_Shader->Bind();
+				m_Shader->SetUniform("u_Model", m_Model);
+				m_Shader->SetUniform("u_View", m_Camera->getViewMatrix());
+				m_Shader->SetUniform("u_Proj",  proj);
 				
-				R::Submit(m_VAO_Test); // to draw calls
+				R::Submit(m_VAO); // to draw calls
 
 				/*m_Shader->Bind();
 				m_Shader->SetUniform("u_View", camera.GetViewProjectionMatrix());
@@ -228,6 +229,7 @@ namespace MHelmet
 		perform.DoTask<OnWindowClose>(BINDAPPEVENT(WindowCloseTask));
 		//MH_CORE_TRACE("{0}", e);
 		
+		
 
 		for (auto it = m_Layers.end(); it != m_Layers.begin();)
 		{
@@ -235,7 +237,81 @@ namespace MHelmet
 			(*--it)->OnEvent(e);
 			if (e.Handled) break;
 		}
+		if (e.GetEventType() == EventType::E_KEY_TYPED)
+		{
+			OnKeyTyped& event = (OnKeyTyped&)e;
 
+			if (event.GetKeyCode() == MH_KEY_A)
+			{
+				m_Camera->handleKeyboard(PerspectiveCamera::Movement::Left, Engine::p().GetWindow().GetDeltaTime());
+			}
+		}
+
+		/* TESTEANDO BORRAR DESPUES  */
+		if (e.GetEventType() == EventType::E_KEY_PRESSED)
+		{
+
+
+			OnKeyPressed& event = (OnKeyPressed&)e;
+
+			if (event.GetKeyCode() == MH_KEY_W)
+			{
+				m_Camera->handleKeyboard(PerspectiveCamera::Movement::Forward, Engine::p().GetWindow().GetDeltaTime());
+			}
+			if (event.GetKeyCode() == MH_KEY_S)
+			{
+				m_Camera->handleKeyboard(PerspectiveCamera::Movement::Backward, Engine::p().GetWindow().GetDeltaTime());
+			}
+			/*if (event.GetKeyCode() == MH_KEY_A)
+			{
+				m_Camera->handleKeyboard(PerspectiveCamera::Movement::Left, Engine::p().GetWindow().GetDeltaTime());
+			}*/
+			if (event.GetKeyCode() == MH_KEY_D)
+			{
+				m_Camera->handleKeyboard(PerspectiveCamera::Movement::Right, Engine::p().GetWindow().GetDeltaTime());
+			}
+
+			if (event.GetKeyCode() == MH_KEY_Q)
+			{
+				Engine::p().GetWindow().SetCaptureMode(true);
+			}
+			if (event.GetKeyCode() == MH_KEY_E)
+			{
+				Engine::p().GetWindow().SetCaptureMode(false);
+			}
+		}
+		if (e.GetEventType() == EventType::E_MOUSE_MOVED)
+		{
+			OnMouseMoved& event = (OnMouseMoved&)e;
+
+			static float lastX, lastY;
+			static bool firstMouse = true;
+
+			if (firstMouse)
+			{
+				firstMouse = false;
+				lastX = event.GetX();
+				lastY = event.GetY();
+			}
+
+			const float Xoffset = event.GetX() - lastX;
+			const float Yoffset = lastY - event.GetY();
+
+			lastX = event.GetX();
+			lastY = event.GetY();
+
+			m_Camera->handleMouseMovement(Xoffset, Yoffset);
+
+		}
+		if (e.GetEventType() == EventType::E_MOUSE_SCROLLED)
+		{
+			OnMouseScrolled& event = (OnMouseScrolled&)e;
+			m_Camera->handleMouseScroll(event.GetYOffset());
+
+		}
+		/* TESTEANDO BORRAR DESPUES  */
+
+		
 	}
 
 	void Engine::PushLayer(NodeLayer* layer)

@@ -61,8 +61,6 @@ namespace MHelmet
 		virtual std::string GetName()  const = 0;
 	};	
 
-	
-
 
 	inline std::ostream& operator<<(std::ostream& os, const Event& event)
 	{		

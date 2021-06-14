@@ -50,6 +50,9 @@ namespace MHelmet {
 		virtual float GetDeltaTime() const = 0;
 		/************************/
 
+		/******* TEMPORAL *******/
+		virtual void SetCaptureMode(bool toggle) const = 0;
+
 		// NOTA
 		// Aqui para que fuera independientemente de la plataforma
 		// haria falta un tipo de declaracion switch (podria ser a nivel de pre-proceso)

@@ -219,8 +219,12 @@ namespace MHelmet
 
 		//
 
-		float time = glfwGetTime();
+		/*float time = glfwGetTime();
 		float delta = time - m_LastFrame;
+		m_LastFrame = time;*/
+
+		float time = glfwGetTime();
+		m_DeltaTime = time - m_LastFrame;
 		m_LastFrame = time;
 	}
 
@@ -243,6 +247,18 @@ namespace MHelmet
 		else glfwSwapInterval(0);
 
 		m_Data.VSync = toggle;
+	}
+
+	void WindowWin::SetCaptureMode(bool toggle) const
+	{
+		if (toggle)
+		{
+			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
+		else
+		{
+			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
 	}
 
 	void WindowWin::ShutDown()

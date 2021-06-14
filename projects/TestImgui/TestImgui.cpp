@@ -35,21 +35,21 @@ public:
 	void OnEvent(MHelmet::Event& event) override
 	{
 		// FILTRADO DE EVENTOS
-		if (event.GetEventType() == MHelmet::EventType::E_KEY_PRESSED)
-		{
-			// sabiendo que es KEY_PRESSED 
-			// guardamos como tal usando un alias
-			// ya que el event pasado como paramentro
-			// no tiene esa informacion
-			MHelmet::OnKeyPressed& e = (MHelmet::OnKeyPressed&)event;
+		//if (event.GetEventType() == MHelmet::EventType::E_KEY_PRESSED)
+		//{
+		//	// sabiendo que es KEY_PRESSED 
+		//	// guardamos como tal usando un alias
+		//	// ya que el event pasado como paramentro
+		//	// no tiene esa informacion
+		//	MHelmet::OnKeyPressed& e = (MHelmet::OnKeyPressed&)event;
 
-			if (e.GetKeyCode() == MH_KEY_SPACE)
-			{
-				
-			}
-		
-			MH_ERROR(static_cast<char>(e.GetKeyCode()));
-		}
+		//	if (e.GetKeyCode() == MH_KEY_SPACE)
+		//	{
+		//		
+		//	}
+		//
+		//	MH_ERROR(static_cast<char>(e.GetKeyCode()));
+		//}
 	}
 };
 /**************************************

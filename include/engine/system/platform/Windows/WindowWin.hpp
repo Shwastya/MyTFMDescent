@@ -52,6 +52,9 @@ namespace MHelmet {
 		virtual float GetDeltaTime() const override { return m_DeltaTime;  }
 		/************************/
 
+		/******* TEMPORAL *******/
+		virtual void SetCaptureMode(bool toggle) const override;
+
 	private:
 		void ShutDown();
 
@@ -63,7 +66,7 @@ namespace MHelmet {
 		float m_LastFrame = 0.0f;	
 
 		/******* TEMPORAL *******/
-		float m_DeltaTime = 18.0f;
+		float m_DeltaTime = 0.0f;
 		/************************/
 
 		
