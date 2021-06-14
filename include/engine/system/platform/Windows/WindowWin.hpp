@@ -48,6 +48,10 @@ namespace MHelmet {
 		virtual void SetVSync(bool toggle) override;
 		inline virtual bool IsVSync() const override { return m_Data.VSync; };
 
+		/******* TEMPORAL *******/
+		virtual float GetDeltaTime() const override { return m_DeltaTime;  }
+		/************************/
+
 	private:
 		void ShutDown();
 
@@ -57,6 +61,10 @@ namespace MHelmet {
 		
 		WindowData m_Data;
 		float m_LastFrame = 0.0f;	
+
+		/******* TEMPORAL *******/
+		float m_DeltaTime = 18.0f;
+		/************************/
 
 		
 		RendererContext* m_Context;

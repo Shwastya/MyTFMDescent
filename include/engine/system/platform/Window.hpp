@@ -46,6 +46,10 @@ namespace MHelmet {
 		virtual void SetVSync(bool toggle) = 0;
 		virtual bool IsVSync() const = 0;		
 
+		/******* TEMPORAL *******/
+		virtual float GetDeltaTime() const = 0;
+		/************************/
+
 		// NOTA
 		// Aqui para que fuera independientemente de la plataforma
 		// haria falta un tipo de declaracion switch (podria ser a nivel de pre-proceso)
