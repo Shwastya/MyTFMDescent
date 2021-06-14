@@ -33,9 +33,10 @@ namespace MHelmet
 		void PushLayer(NodeLayer* layer);
 		void PushOverlay(NodeLayer* layer);
 
-
-		inline static Engine& p() { return *s_Instance; }
-		inline Window& GetWindow() { return *m_Window; }
+		/* para esto es singleton Engine */
+		static Engine& p() { return *s_Instance; }
+		Window& GetWindow() { return *m_Window; }
+		std::shared_ptr<PerspectiveCamera>& GetCamera(){ return m_Camera; }
 
 		
 	private: 
@@ -58,7 +59,7 @@ namespace MHelmet
 		/*std::shared_ptr<Shader> m_Shader_Test;
 		std::shared_ptr<VAO> m_VAO_Test;*/
 		
-		std::unique_ptr<PerspectiveCamera> m_Camera;
+		std::shared_ptr<PerspectiveCamera> m_Camera;
 
 		/* TEMPORAL ????? */
 		glm::mat4 m_Model = glm::mat4(1.0f);

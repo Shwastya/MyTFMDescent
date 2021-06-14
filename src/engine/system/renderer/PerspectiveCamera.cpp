@@ -69,3 +69,27 @@ void PerspectiveCamera::handleMouseScroll(float yoffset) {
     if (_fov >= 45.0f) _fov = 45.0f;
 }
 
+void PerspectiveCamera::Forward(float dt)
+{
+    const float velocity = k_Speed * dt;
+    _position += _front * velocity;
+}
+
+void PerspectiveCamera::Backward(float dt)
+{
+    const float velocity = k_Speed * dt;
+    _position -= _front * velocity;
+}
+
+void PerspectiveCamera::Left(float dt)
+{
+    const float velocity = k_Speed * dt;
+    _position -= _right * velocity;
+}
+
+void PerspectiveCamera::Right(float dt)
+{
+    const float velocity = k_Speed * dt;
+    _position += _right * velocity;
+}
+

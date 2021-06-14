@@ -41,7 +41,7 @@ namespace MHelmet
 		PushOverlay(m_ImGuiLayers);			
 
 		
-		m_Camera = std::make_unique<PerspectiveCamera>(glm::vec3(0.0f, 0.0f, 3.0f));
+		m_Camera = std::make_shared<PerspectiveCamera>(glm::vec3(0.0f, 0.0f, 3.0f));
  		//Triangle T;
 
 		//m_VBO = VBO::Create(T.Positions(), T.Size());
@@ -195,19 +195,16 @@ namespace MHelmet
 			
 			R::BeginScene();
 			
-				m_Shader->Bind();
-				m_Shader->SetUniform("u_Model", m_Model);
-				m_Shader->SetUniform("u_View", m_Camera->getViewMatrix());
-				m_Shader->SetUniform("u_Proj",  proj);
+			/*m_Shader->Bind();
+			m_Shader->SetUniform("u_Model", m_Model);
+			m_Shader->SetUniform("u_View", m_Camera->getViewMatrix());
+			m_Shader->SetUniform("u_Proj",  proj);*/
 				
-				R::Submit(m_VAO); // to draw calls
+			R::Submit(m_Shader, m_VAO); // to draw calls
 
-				/*m_Shader->Bind();
-				m_Shader->SetUniform("u_View", camera.GetViewProjectionMatrix());
-				R::Submit(m_VAO);*/
-			
-
-			
+			/*m_Shader->Bind();
+			m_Shader->SetUniform("u_View", camera.GetViewProjectionMatrix());
+			R::Submit(m_VAO);*/			
 
 			for (NodeLayer* layer : m_Layers) layer->Update();
 
@@ -237,38 +234,30 @@ namespace MHelmet
 			(*--it)->OnEvent(e);
 			if (e.Handled) break;
 		}
-		if (e.GetEventType() == EventType::E_KEY_TYPED)
-		{
-			OnKeyTyped& event = (OnKeyTyped&)e;
 
-			if (event.GetKeyCode() == MH_KEY_A)
-			{
-				m_Camera->handleKeyboard(PerspectiveCamera::Movement::Left, Engine::p().GetWindow().GetDeltaTime());
-			}
-		}
 
 		/* TESTEANDO BORRAR DESPUES  */
-		if (e.GetEventType() == EventType::E_KEY_PRESSED)
+		/*if (e.GetEventType() == EventType::E_KEY_PRESSED)
 		{
-
+			float dt = Engine::p().GetWindow().GetDeltaTime();
 
 			OnKeyPressed& event = (OnKeyPressed&)e;
 
 			if (event.GetKeyCode() == MH_KEY_W)
 			{
-				m_Camera->handleKeyboard(PerspectiveCamera::Movement::Forward, Engine::p().GetWindow().GetDeltaTime());
+				m_Camera->Forward(dt);
 			}
 			if (event.GetKeyCode() == MH_KEY_S)
 			{
-				m_Camera->handleKeyboard(PerspectiveCamera::Movement::Backward, Engine::p().GetWindow().GetDeltaTime());
+				m_Camera->Backward(dt);
 			}
-			/*if (event.GetKeyCode() == MH_KEY_A)
+			if (event.GetKeyCode() == MH_KEY_A)
 			{
-				m_Camera->handleKeyboard(PerspectiveCamera::Movement::Left, Engine::p().GetWindow().GetDeltaTime());
-			}*/
+				m_Camera->Left(dt);				
+			}
 			if (event.GetKeyCode() == MH_KEY_D)
 			{
-				m_Camera->handleKeyboard(PerspectiveCamera::Movement::Right, Engine::p().GetWindow().GetDeltaTime());
+				m_Camera->Right(dt);
 			}
 
 			if (event.GetKeyCode() == MH_KEY_Q)
@@ -308,7 +297,7 @@ namespace MHelmet
 			OnMouseScrolled& event = (OnMouseScrolled&)e;
 			m_Camera->handleMouseScroll(event.GetYOffset());
 
-		}
+		}*/
 		/* TESTEANDO BORRAR DESPUES  */
 
 		

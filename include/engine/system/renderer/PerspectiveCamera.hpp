@@ -28,6 +28,12 @@ class PerspectiveCamera {
         void handleMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
         void handleMouseScroll(float yoffset);
 
+
+        void Forward(float dt);
+        void Backward(float dt);
+        void Left(float dt);
+        void Right(float dt);
+
     private:
         void updateCameraVectors();
     private:
