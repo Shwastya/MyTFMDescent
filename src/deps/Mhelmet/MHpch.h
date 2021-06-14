@@ -20,9 +20,15 @@
 #include "engine/system/events/EventSender.hpp"
 
 /* ImGui System */
+
+// las cabeceras imgui estan ahora mismo mal distribuidas
+// demasiado redundantes en principio deberia dejar solo #include <imgui.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
+
+/* Delta Time */
+#include "engine/system/utils/DeltaTime.hpp"
 
 
 

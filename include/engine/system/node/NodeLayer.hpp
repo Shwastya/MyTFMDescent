@@ -1,6 +1,6 @@
 #pragma once
 #include "engine/system/node/Node.hpp"
-#include "engine/system/MHCore.hpp"
+
 
 namespace MHelmet
 {	
@@ -15,7 +15,7 @@ namespace MHelmet
 		virtual void Join() override {};	// Node base
 		virtual void Free() override {};	// Node base
 
-		virtual void Update() override {};	// Node base
+		virtual void Update(DeltaTime dt) override {};	// Node base
 
 		virtual void ImGuiRender() {};		// propio
 

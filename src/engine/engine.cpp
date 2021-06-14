@@ -1,5 +1,5 @@
 #include "engine/Engine.hpp"
-#include <GLFW/glfw3.h>
+
 #include "engine/system/renderer/BufferLayout.hpp"
 #include "engine/system/renderer/Renderer.hpp"
 
@@ -28,18 +28,30 @@ namespace MHelmet
 	///////////////////////////////////////////////////
 	void Engine::run()								 
 	{												 
-		MH_CORE_INFO("Engine is running!");	
+		MH_CORE_INFO("Mhelmet Engine running!");	
+
+	
 
 		while (m_Alive)								 
 		{
-			for (NodeLayer* layer : m_Layers) layer->Update();
+			
+
+			for (NodeLayer* layer : m_Layers) layer->Update(m_DeltaTime);
 
 			m_ImGuiLayers->Begin();
 			for (NodeLayer* layer : m_Layers) layer->ImGuiRender();
 			m_ImGuiLayers->End();
 
 
-			m_Window->Update();				 
+			m_Window->SwapBuffers();		
+
+			float time = GetTime();
+			m_DeltaTime = time - m_LastFrame;
+			m_LastFrame = time;
+
+			MH_CORE_INFO("LastFrame {0}", m_DeltaTime.MilliSeconds());
+
+			
 		}											 
 	}												 
 	///////////////////////////////////////////////////
@@ -68,6 +80,11 @@ namespace MHelmet
 	{
 		m_Layers.PushOverlay(layer);
 		layer->Join();
+	}
+
+	inline float Engine::GetTime() const
+	{
+		 return (float)glfwGetTime(); 
 	}
 
 	bool Engine::WindowCloseTask(OnWindowClose& e)

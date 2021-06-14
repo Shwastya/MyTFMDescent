@@ -10,7 +10,7 @@ public:
 
 	}
 
-	void Update() override
+	void Update(MHelmet::DeltaTime dt) override
 	{
 #if 0
 		MH_INFO("EditorLayer::{0}", "Update");

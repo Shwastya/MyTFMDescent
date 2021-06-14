@@ -27,7 +27,7 @@ namespace MHelmet {
 		virtual ~WindowWin();
 
 		virtual void Init() override;		
-		virtual void Update() override; // updating
+		virtual void SwapBuffers() override; // updating
 
 		virtual void Maximize() override;
 
@@ -46,11 +46,7 @@ namespace MHelmet {
 		}
 
 		virtual void SetVSync(bool toggle) override;
-		inline virtual bool IsVSync() const override { return m_Data.VSync; };
-
-		/******* TEMPORAL *******/
-		virtual float GetDeltaTime() const override { return m_DeltaTime;  }
-		/************************/
+		inline virtual bool IsVSync() const override { return m_Data.VSync; };	
 
 		/******* TEMPORAL *******/
 		virtual void SetCaptureMode(bool toggle) const override;
@@ -63,12 +59,6 @@ namespace MHelmet {
 		WindowSpec  m_Spec;
 		
 		WindowData m_Data;
-		float m_LastFrame = 0.0f;	
-
-		/******* TEMPORAL *******/
-		float m_DeltaTime = 0.0f;
-		/************************/
-
 		
 		RendererContext* m_Context;
 	};

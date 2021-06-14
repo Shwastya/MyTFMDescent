@@ -211,21 +211,15 @@ namespace MHelmet
 	}
 
 	//void WindowWin::SwapBuffers() 
-	void WindowWin::Update()
+	void WindowWin::SwapBuffers()
 	{
 		glfwPollEvents();
-		//glfwSwapBuffers(m_Window);
-		m_Context->SwapBuffers();
 
-		//
-
-		/*float time = glfwGetTime();
-		float delta = time - m_LastFrame;
-		m_LastFrame = time;*/
-
-		float time = glfwGetTime();
-		m_DeltaTime = time - m_LastFrame;
-		m_LastFrame = time;
+		glfwSwapBuffers(m_Window);
+		
+		// cambio de contexto de render sin implementar nada
+		// solo puntero
+		//m_Context->SwapBuffers(); 
 	}
 
 	Pos_Vec WindowWin::GetPos() const

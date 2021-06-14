@@ -1,16 +1,20 @@
 #pragma once
-
 #include <glm/glm.hpp>
+#include "engine/system/MHCore.hpp"
 
-const float k_Yaw = -90.0f;
-const float k_Pitch = 0.0f;
-const float k_Speed = 1.5f;
-const float k_Sensitivity = 0.1f;
-const float k_FOV = 45.0f;
+namespace MHelmet
+{
+    const float k_Yaw = -90.0f;
+    const float k_Pitch = 0.0f;
+    const float k_Speed = 1.5f;
+    const float k_Sensitivity = 0.1f;
+    const float k_FOV = 45.0f;
 
-class PerspectiveCamera {
+    class PerspectiveCamera 
+    {
     public:
-        enum class Movement {
+        enum class Movement 
+        {
             Forward = 0,
             Backward = 1,
             Left = 2,
@@ -24,15 +28,15 @@ class PerspectiveCamera {
         float GetFOV() const;
         glm::vec3 GetPosition() const;
 
-        void HandleKeyboard(Movement direction, float dt);
+        void HandleKeyboard(Movement direction, DeltaTime dt);
         void HandleMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
         void HandleMouseScroll(float yoffset);
 
 
-        void Forward(float dt);
-        void Backward(float dt);
-        void Left(float dt);
-        void Right(float dt);
+        void Forward(DeltaTime dt);
+        void Backward(DeltaTime dt);
+        void Left(DeltaTime dt);
+        void Right(DeltaTime dt);
 
     private:
         void UpdateCameraVectors();
@@ -40,6 +44,9 @@ class PerspectiveCamera {
         glm::vec3 m_Position, m_Front, m_Up, m_Right, m_WorldUp;
         float m_Yaw, m_Pitch;
         float m_Fov;
-};
+    };
+}
+
+
 
 

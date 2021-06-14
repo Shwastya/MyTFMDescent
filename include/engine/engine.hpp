@@ -2,6 +2,7 @@
 #include "engine/system/MHCore.hpp"
 #include "engine/system/platform/Window.hpp"
 
+#include <GLFW/glfw3.h>
 #include "engine/system/ImGui/ImGuiLayer.hpp"
 
 #include "engine/system/events/AppEvents/OnAppEvents.hpp"
@@ -28,6 +29,8 @@ namespace MHelmet
 		static Engine& p() { return *s_Instance; }
 		Window& GetWindow() { return *m_Window; }
 
+		inline float GetTime() const;
+
 		
 	private: 
 		bool WindowCloseTask(OnWindowClose& e); // perform event
@@ -38,7 +41,10 @@ namespace MHelmet
 		bool m_Alive = true;
 		LayerManager  m_Layers;
 		ImGuiLayer* m_ImGuiLayers;
-		
+
+		float m_LastFrame = 0.0f;
+		DeltaTime m_DeltaTime;
+
 	private:
 		// necesito pasar el window al ImgUI Layer
 		static Engine* s_Instance;

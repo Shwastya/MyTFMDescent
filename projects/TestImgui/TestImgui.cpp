@@ -12,7 +12,7 @@ public:
 	{
 	}
 
-	void Update() override 
+	void Update(MHelmet::DeltaTime dt) override 
 	{
 #if 0
 			static int s_UpdateCount = 0;

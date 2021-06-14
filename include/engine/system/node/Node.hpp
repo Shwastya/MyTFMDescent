@@ -1,14 +1,18 @@
 #pragma once
+#include "engine/system/MHCore.hpp"
 
-struct Node
+namespace MHelmet
 {
-	Node() {};
+	struct Node
+	{
+		Node() {};
 
-	virtual ~Node() = default;
+		virtual ~Node() = default;
 
-	virtual void Join() = 0;
-	virtual void Free() = 0;
+		virtual void Join() = 0;
+		virtual void Free() = 0;
 
 
-	virtual void Update() = 0;
-};
+		virtual void Update(DeltaTime dt) = 0;
+	};
+}

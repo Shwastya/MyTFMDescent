@@ -28,7 +28,7 @@ namespace MHelmet {
 		virtual ~Window() {}
 
 		virtual void Init() = 0;
-		virtual void Update() = 0; // updating
+		virtual void SwapBuffers() = 0; // updating
 
 		virtual void Maximize() = 0;
 
@@ -45,10 +45,6 @@ namespace MHelmet {
 
 		virtual void SetVSync(bool toggle) = 0;
 		virtual bool IsVSync() const = 0;		
-
-		/******* TEMPORAL *******/
-		virtual float GetDeltaTime() const = 0;
-		/************************/
 
 		/******* TEMPORAL *******/
 		virtual void SetCaptureMode(bool toggle) const = 0;

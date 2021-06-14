@@ -12,8 +12,7 @@ public:
 
 	TestingLayer() : MHelmet::NodeLayer("TestingLayer")
 	{
-		m_Camera = std::make_shared<PerspectiveCamera>(glm::vec3(0.0f, 0.0f, 3.0f));
-		//R::InitCameraScene(glm::vec3(0.0f, 0.0f, 3.0f));
+		m_Camera = std::make_shared<MHelmet::PerspectiveCamera>(glm::vec3(0.0f, 0.0f, 3.0f));
 
 
 		m_VAO.reset(MHelmet::VAO::Create());
@@ -94,10 +93,10 @@ public:
 
 	}
 
-	void Update() override
+	void Update(MHelmet::DeltaTime dt) override
 	{
 
-		HandleInput();
+		HandleInput(dt);
 
 		RC::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RC::clear();
@@ -142,9 +141,9 @@ public:
 
 private:
 
-	void HandleInput()
+	void HandleInput(MHelmet::DeltaTime dt)
 	{
-		const float dt = MHelmet::Engine::p().GetWindow().GetDeltaTime();
+		//const float dt = MHelmet::Engine::p().GetWindow().GetDeltaTime();
 
 		if (MHelmet::Input::IsKeyPressed(MH_KEY_S))
 		{
@@ -191,7 +190,7 @@ private:
 	std::shared_ptr<MHelmet::Shader>   m_Shader;
 	std::shared_ptr<MHelmet::VAO>      m_VAO;
 
-	std::shared_ptr<PerspectiveCamera> m_Camera;
+	std::shared_ptr<MHelmet::PerspectiveCamera> m_Camera;
 
 	/* atributos para el mouse e interfaz */
 	bool m_FirstMouse = true;
