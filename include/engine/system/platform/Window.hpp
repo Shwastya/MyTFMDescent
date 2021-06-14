@@ -4,21 +4,30 @@
 
 //#define CALLBACK std::function<void(Event&)>
 
-namespace MHelmet {
-	
-	/**************************** NOTA: *****************************/
-	// glfwCreateWindow -> he visto casos que castean a (int)
-	// y yo estoy usando uint32_t. De momento no he tenido problema
-	// pero lo dejo como NOTA por si en el futuro tuviera problemas
-	// poder disponer de todas las pistas posibles
-	/****************************************************************/
-	struct Size_Vec { uint32_t Width = 0, Height = 0;    };
-	struct Pos_Vec { float X = 0.0f, Y = 0.0f; };
+namespace MHelmet 
+{	
+	struct Size 
+	{ 
+		uint32_t Width = 0;
+		uint32_t Height = 0; 
+	};
 
-	struct WindowSpec /* Window Specification */
+	struct Position 
+	{ 
+		float X = 0.0f;
+		float Y = 0.0f;
+	};
+
+	// Window Specification 
+	struct WindowSpec 
 	{
+		// Default definitions in MHSetup.hpp 
 		std::string Title = MH_TITLE;
-		Size_Vec  Size	  = { MH_WIDTH, MH_HEIGHT };
+		Size  Size = 
+		{ 
+			MH_WIDTH, 
+			MH_HEIGHT 
+		};
 		bool FullScreen	  = MH_FULL_SRC;
 		bool VSync		  = MH_VSYNC;
 	};	
@@ -32,16 +41,16 @@ namespace MHelmet {
 
 		virtual void Maximize() = 0;
 
-		virtual uint32_t GetWidth()  const = 0;
-		virtual uint32_t GetHeight() const = 0;
+		virtual uint32_t  GetWidth()  const = 0;
+		virtual uint32_t  GetHeight() const = 0;
 
-		virtual Size_Vec GetSize()   const = 0;
-		virtual Pos_Vec  GetPos()    const = 0;
+		virtual Size      GetSize()   const = 0;
+		virtual Position  GetPos()    const = 0;
 
 		virtual void* GetOriginalWindow()	 const = 0;
 
 		
-		virtual void SetCallBack(const CALLBACK& cb) = 0;
+		virtual void SetCallBack(const std::function<void(Event&)>& cb) = 0;
 
 		virtual void SetVSync(bool toggle) = 0;
 		virtual bool IsVSync() const = 0;		

@@ -222,11 +222,11 @@ namespace MHelmet
 		//m_Context->SwapBuffers(); 
 	}
 
-	Pos_Vec WindowWin::GetPos() const
+	Position WindowWin::GetPos() const
 	{
 		int x, y;
 		glfwGetWindowPos(m_Window, &x, &y);
-		const Pos_Vec position = {x, y};
+		const Position position = {x, y};
 		return position; // copy ellision
 	}
 

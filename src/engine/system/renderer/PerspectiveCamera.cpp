@@ -50,11 +50,10 @@ namespace MHelmet
         // SEGURAMENTE NO LO VOLVERE A USAR (BORRAR?)
         switch (direction)
         {
-        case Movement::Forward: m_Position += m_Front * velocity; break;
-        case Movement::Backward: m_Position -= m_Front * velocity; break;
-        case Movement::Left: m_Position -= m_Right * velocity; break;
-        case Movement::Right: m_Position += m_Right * velocity; break;
-        default:;
+            case Movement::Forward:  m_Position += m_Front * velocity; break;
+            case Movement::Backward: m_Position -= m_Front * velocity; break;
+            case Movement::Left:     m_Position -= m_Right * velocity; break;
+            case Movement::Right:    m_Position += m_Right * velocity; break;
         }
     }
 
@@ -97,7 +96,8 @@ namespace MHelmet
     void PerspectiveCamera::Left(DeltaTime dt)
     {
         const float velocity = k_Speed * dt.Seconds();
-        m_Position -= m_Right * velocity;
+         m_Position -= m_Right * velocity;
+    
     }
 
     void PerspectiveCamera::Right(DeltaTime dt)

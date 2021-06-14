@@ -35,7 +35,7 @@ namespace MHelmet
 		//using PrtLayer   = std::shared_ptr<NodeLayer>;
 		//using LayerGrp = std::vector<std::shared_ptr<NodeLayer>>;
 
-		LayerManager(size_t reserve = 300);
+		LayerManager(size_t reserve = 10);
 		~LayerManager();
 
 		void PushLayer(NodeLayer* layer); //AddLayer		

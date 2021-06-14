@@ -22,18 +22,18 @@ namespace MHelmet
 		m_IdxLast++;
 
 
-		MH_CORE_WARN("Added Layer:   {0}. ", layer->GetName());
+		/*MH_CORE_WARN("Added Layer:   {0}. ", layer->GetName());
 
-		MH_CORE_TRACE("Total Layers {0}", ++m_TotalLayers);
+		MH_CORE_TRACE("Total Layers {0}", ++m_TotalLayers);*/
 	}
 	// Push en la segunda MITAD de la lista
 	void LayerManager::PushOverlay(NodeLayer* overlay)
 	{
 		m_Layers.emplace_back(overlay);
 
-		MH_CORE_WARN("Added OverLay: {0}. ", overlay->GetName());
+		/*MH_CORE_WARN("Added OverLay: {0}. ", overlay->GetName());
 
-		MH_CORE_TRACE("Total Layers {0}", ++m_TotalLayers);
+		MH_CORE_TRACE("Total Layers {0}", ++m_TotalLayers);*/
 	}
 	void LayerManager::PopLayer(NodeLayer* layer)
 	{

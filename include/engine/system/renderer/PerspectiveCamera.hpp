@@ -4,9 +4,11 @@
 
 namespace MHelmet
 {
+    // probable quiera mas adelante poder modificar estos 
+    // valores desde la interfaz de ImGui
     const float k_Yaw = -90.0f;
     const float k_Pitch = 0.0f;
-    const float k_Speed = 1.5f;
+    const float k_Speed = 3.5f;
     const float k_Sensitivity = 0.1f;
     const float k_FOV = 45.0f;
 
@@ -39,10 +41,20 @@ namespace MHelmet
         void Right(DeltaTime dt);
 
     private:
+
         void UpdateCameraVectors();
+
     private:
-        glm::vec3 m_Position, m_Front, m_Up, m_Right, m_WorldUp;
-        float m_Yaw, m_Pitch;
+
+        glm::vec3 m_Position;  
+        glm::vec3 m_Front;
+        glm::vec3 m_Up;
+        glm::vec3 m_Right;
+        glm::vec3 m_WorldUp;
+
+        float m_Yaw;
+        float m_Pitch;
+
         float m_Fov;
     };
 }

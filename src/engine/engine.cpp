@@ -13,7 +13,13 @@ namespace MHelmet
 	Engine::Engine()
 	{
 		s_Instance = this;
-		m_Window = std::unique_ptr<Window>(Window::Create());		
+		m_Window = std::unique_ptr<Window>(Window::Create());	
+
+		// La sincronización vertical (VSync) ayuda a dar estabilidad al sincronizar la velocidad de los fotogramas
+		// con la velocidad de actualización del monitor.
+		// DeltaTime pasa de unos 0.xxx segundos a aproximadamente 6s
+		m_Window->SetVSync(true);
+
 		m_Window->SetCallBack(BindEventFunction(Engine::OnEvent));
 
 		m_ImGuiLayers = new ImGuiLayer();
@@ -34,7 +40,10 @@ namespace MHelmet
 
 		while (m_Alive)								 
 		{
-			
+			float time = GetTime();
+			m_DeltaTime = time - m_LastFrame;
+			m_LastFrame = time;
+
 
 			for (NodeLayer* layer : m_Layers) layer->Update(m_DeltaTime);
 
@@ -45,11 +54,8 @@ namespace MHelmet
 
 			m_Window->SwapBuffers();		
 
-			float time = GetTime();
-			m_DeltaTime = time - m_LastFrame;
-			m_LastFrame = time;
-
-			MH_CORE_INFO("LastFrame {0}", m_DeltaTime.MilliSeconds());
+			
+		
 
 			
 		}											 

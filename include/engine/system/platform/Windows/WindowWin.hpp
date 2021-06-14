@@ -15,11 +15,11 @@ namespace MHelmet {
 		struct WindowData
 		{
 			std::string Title;
-			Size_Vec	Size;
+			Size	    Size;
 			bool        VSync;
 
-			// Event System CallBacks
-			CALLBACK CallBack;
+			// Event System CallBacks from GLFWwindow* callbacks lambda functions
+			std::function<void(Event&)> CallBack;
 		};
 
 	public:
@@ -34,13 +34,13 @@ namespace MHelmet {
 		inline uint32_t GetWidth()  const override { return m_Data.Size.Width; }
 		inline uint32_t GetHeight() const override { return m_Data.Size.Height; }
 
-		inline virtual Size_Vec GetSize()  const override { return  m_Data.Size; }
-		virtual Pos_Vec GetPos() const override;
+		inline virtual Size GetSize()  const override { return  m_Data.Size; }
+		virtual Position GetPos() const override;
 
 		inline virtual void* GetOriginalWindow() const override { return m_Window;  };
 
 
-		inline virtual void SetCallBack(const CALLBACK& cb) override
+		inline virtual void SetCallBack(const std::function<void(Event&)>& cb) override
 		{
 			m_Data.CallBack = cb;
 		}
@@ -56,9 +56,9 @@ namespace MHelmet {
 
 	private:
 		GLFWwindow* m_Window;
-		WindowSpec  m_Spec;
-		
-		WindowData m_Data;
+
+		WindowSpec  m_Spec;		
+		WindowData  m_Data;
 		
 		RendererContext* m_Context;
 	};

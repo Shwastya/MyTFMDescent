@@ -8,7 +8,7 @@ namespace MHelmet
 		{}
 
 		float Seconds() const { return m_Time;  }
-		float MilliSeconds() const { return m_Time * 100.0f; }
+		float MilliSeconds() const { return m_Time * 1000.0f; }
 	private:
 		float m_Time;
 	};

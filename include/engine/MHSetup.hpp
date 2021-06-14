@@ -13,7 +13,7 @@
 #define MH_WIDTH	1920
 #define MH_HEIGHT	1080
 #define MH_FULL_SRC	false
-#define MH_VSYNC	true
+#define MH_VSYNC	false
 
 #if MH_LOG_SYSTEM	
 	#define MH_ENABLE_VERIFY
