@@ -70,6 +70,8 @@ namespace MHelmet
 		static float GetMouseY();
 		static MousePosition GetMousePos();
 
+	
+		
 	private:
 		//static Input* s_Inst;
 	};

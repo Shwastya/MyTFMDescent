@@ -37,16 +37,16 @@ namespace MHelmet
 	bool Input::IsMouseButtonPressed(MouseButton button)
 	{
 		WindowWin& w = ENGINE_WIN;
-
+		
 		int b = glfwGetMouseButton // get button mouse state
 		(
 			NATIVE_WIN(w.GetOriginalWindow()), 
 			static_cast<int32_t>(button)
 		);
-
+	
 		return (b == GLFW_PRESS);
 	}
-	
+
 	float Input::GetMouseX()
 	{
 		WindowWin& w = ENGINE_WIN;
@@ -63,6 +63,7 @@ namespace MHelmet
 
 	float Input::GetMouseY()
 	{
+		
 		WindowWin& w = ENGINE_WIN;
 		double x, y;
 		glfwGetCursorPos // get mouse cursor position

@@ -9,8 +9,7 @@ namespace MHelmet
 	{
 	public:
 
-		static void SetCameraScene(std::shared_ptr<PerspectiveCamera>& camera);
-		static void BeginScene();
+		static void BeginScene(std::shared_ptr<PerspectiveCamera>& camera);
 		static void EndEscene();
 
 		static void Submit(const std::shared_ptr<Shader>& _Shader, const std::shared_ptr<VAO>& _VAO);
@@ -24,10 +23,11 @@ namespace MHelmet
 			glm::mat4 Model;
 			glm::mat4 View;
 
-			std::shared_ptr<PerspectiveCamera> camera;
+			glm::mat4 ViewMatrixRefresh;
 		};
 
 		static DataScene* Scene;
+		static PerspectiveCamera* camera;
 	};
 
 	

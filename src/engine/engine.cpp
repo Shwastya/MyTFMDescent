@@ -1,9 +1,6 @@
 #include "engine/Engine.hpp"
 #include <GLFW/glfw3.h>
-
-#include "engine/system/Input.hpp"
 #include "engine/system/renderer/BufferLayout.hpp"
-
 #include "engine/system/renderer/Renderer.hpp"
 
 
@@ -17,7 +14,7 @@ namespace MHelmet
 	{
 		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());		
-		m_Window->SetCallBack(BINDAPPEVENT(OnEvent));
+		m_Window->SetCallBack(BindEventFunction(Engine::OnEvent));
 
 		m_ImGuiLayers = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayers);				
@@ -51,7 +48,7 @@ namespace MHelmet
 	void Engine::OnEvent(Event& e)
 	{
 		PerformEvent perform(e);
-		perform.DoTask<OnWindowClose>(BINDAPPEVENT(WindowCloseTask));		
+		perform.DoTask<OnWindowClose>(BindEventFunction(Engine::WindowCloseTask));
 
 		for (auto it = m_Layers.end(); it != m_Layers.begin();)
 		{

@@ -87,7 +87,7 @@ namespace CORE
 // Function Pointer to Event base class
 #define CALLBACK std::function<void(Event&)>
 // Perform Event Tasks
-#define BINDAPPEVENT(x)   std::bind(&Engine::x, this, std::placeholders::_1)
+#define BindEventFunction(E)   std::bind(&##E, this, std::placeholders::_1)
 #define BINDIMGUIEVENT(x) std::bind(&ImGuiLayer::x, this, std::placeholders::_1)
 
 

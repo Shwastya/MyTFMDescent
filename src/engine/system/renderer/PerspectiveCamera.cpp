@@ -1,95 +1,106 @@
 #include "engine/system/renderer/PerspectiveCamera.hpp"
-
 #include <glm/gtc/matrix_transform.hpp>
 
 PerspectiveCamera::PerspectiveCamera(const glm::vec3& position, const glm::vec3& up, float yaw, float pitch)
- : _position(position), _worldUp(up), _yaw(yaw), _pitch(pitch), _fov(k_FOV) {
-    updateCameraVectors();
+ : m_Position(position), m_WorldUp(up), m_Yaw(yaw), m_Pitch(pitch), m_Fov(k_FOV) 
+{
+    UpdateCameraVectors();
 }
 
 PerspectiveCamera::PerspectiveCamera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
-    : _position(glm::vec3(posX, posY, posZ)), _worldUp(glm::vec3(upX, upY, upZ)), _yaw(yaw), _pitch(pitch), _fov(k_FOV) {
-    updateCameraVectors();
+    : m_Position(glm::vec3(posX, posY, posZ)), m_WorldUp(glm::vec3(upX, upY, upZ)), m_Yaw(yaw), m_Pitch(pitch), m_Fov(k_FOV) 
+{
+    UpdateCameraVectors();
 }
 
 
-glm::mat4 PerspectiveCamera::getViewMatrix() const {
-    return glm::lookAt(_position, _position + _front, _up);
+glm::mat4 PerspectiveCamera::GetViewMatrix() const 
+{
+    return glm::lookAt(m_Position, m_Position + m_Front, m_Up);
 }
 
-float PerspectiveCamera::getFOV() const {
-    return _fov;
+float PerspectiveCamera::GetFOV() const 
+{
+    return m_Fov;
 }
 
-glm::vec3 PerspectiveCamera::getPosition() const {
-    return _position;
+glm::vec3 PerspectiveCamera::GetPosition() const 
+{
+    return m_Position;
 }
 
-void PerspectiveCamera::updateCameraVectors() {
+void PerspectiveCamera::UpdateCameraVectors() 
+{
     glm::vec3 front;
-    front.x = cos(glm::radians(_yaw)) * cos(glm::radians(_pitch));
-    front.y = sin(glm::radians(_pitch));
-    front.z = sin(glm::radians(_yaw)) * cos(glm::radians(_pitch));
-    _front = glm::normalize(front);
+    front.x = cos(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch));
+    front.y = sin(glm::radians(m_Pitch));
+    front.z = sin(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch));
+    m_Front = glm::normalize(front);
 
-    _right = glm::normalize(glm::cross(_front, _worldUp));
-    _up = glm::normalize(glm::cross(_right, _front));
+    m_Right = glm::normalize(glm::cross(m_Front, m_WorldUp));
+    m_Up = glm::normalize(glm::cross(m_Right, m_Front));
 }
 
-void PerspectiveCamera::handleKeyboard(Movement direction, float dt) {
+void PerspectiveCamera::HandleKeyboard(Movement direction, float dt) 
+{
     const float velocity = k_Speed * dt;
 
-    switch (direction) {
-        case Movement::Forward: _position += _front * velocity; break;
-        case Movement::Backward: _position -= _front * velocity; break;
-        case Movement::Left: _position -= _right * velocity; break;
-        case Movement::Right: _position += _right * velocity; break;
+    // SEGURAMENTE NO LO VOLVERE A USAR (BORRAR?)
+    switch (direction) 
+    {
+        case Movement::Forward: m_Position += m_Front * velocity; break;
+        case Movement::Backward: m_Position -= m_Front * velocity; break;
+        case Movement::Left: m_Position -= m_Right * velocity; break;
+        case Movement::Right: m_Position += m_Right * velocity; break;
         default:;
     }
 }
 
-void PerspectiveCamera::handleMouseMovement(float xoffset, float yoffset, bool constrainPitch) {
+void PerspectiveCamera::HandleMouseMovement(float xoffset, float yoffset, bool constrainPitch) 
+{
     const float xoff = xoffset * k_Sensitivity;
     const float yoff = yoffset * k_Sensitivity;
 
-    _yaw += xoff;
-    _pitch += yoff;
+    m_Yaw += xoff;
+    m_Pitch += yoff;
 
-    if (constrainPitch) {
-        if (_pitch > 89.0f) _pitch = 89.0f;
-        if (_pitch < -89.0f) _pitch = -89.0f;
+    if (constrainPitch) 
+    {
+        if (m_Pitch > 89.0f) m_Pitch = 89.0f;
+        if (m_Pitch < -89.0f) m_Pitch = -89.0f;
     }
 
-    updateCameraVectors();
+    UpdateCameraVectors();
 }
 
-void PerspectiveCamera::handleMouseScroll(float yoffset) {
-    if (_fov >= 1.0f && _fov <= 45.0f) _fov -= yoffset;
-    if (_fov <= 1.0f) _fov = 1.0f;
-    if (_fov >= 45.0f) _fov = 45.0f;
+void PerspectiveCamera::HandleMouseScroll(float yoffset) 
+{
+    if (m_Fov >= 1.0f && m_Fov <= 45.0f) m_Fov -= yoffset;
+    if (m_Fov <= 1.0f) m_Fov = 1.0f;
+    if (m_Fov >= 45.0f) m_Fov = 45.0f;
 }
 
 void PerspectiveCamera::Forward(float dt)
 {
     const float velocity = k_Speed * dt;
-    _position += _front * velocity;
+    m_Position += m_Front * velocity;
 }
 
 void PerspectiveCamera::Backward(float dt)
 {
     const float velocity = k_Speed * dt;
-    _position -= _front * velocity;
+    m_Position -= m_Front * velocity;
 }
 
 void PerspectiveCamera::Left(float dt)
 {
     const float velocity = k_Speed * dt;
-    _position -= _right * velocity;
+    m_Position -= m_Right * velocity;
 }
 
 void PerspectiveCamera::Right(float dt)
 {
     const float velocity = k_Speed * dt;
-    _position += _right * velocity;
+    m_Position += m_Right * velocity;
 }
 

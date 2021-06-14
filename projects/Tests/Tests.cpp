@@ -13,7 +13,7 @@ public:
 	TestingLayer() : MHelmet::NodeLayer("TestingLayer")
 	{
 		m_Camera = std::make_shared<PerspectiveCamera>(glm::vec3(0.0f, 0.0f, 3.0f));
-		R::SetCameraScene(m_Camera);
+		//R::InitCameraScene(glm::vec3(0.0f, 0.0f, 3.0f));
 
 
 		m_VAO.reset(MHelmet::VAO::Create());
@@ -96,10 +96,13 @@ public:
 
 	void Update() override
 	{
+
+		HandleInput();
+
 		RC::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RC::clear();
 
-		R::BeginScene();
+		R::BeginScene(m_Camera);
 		R::Submit(m_Shader, m_VAO); 
 	}
 
@@ -112,14 +115,91 @@ public:
 
 	void OnEvent(MHelmet::Event& event) override
 	{
-		
+		if (event.GetEventType() == MHelmet::EventType::E_MOUSE_MOVED)
+		{			
+			
+			HandleMouse((MHelmet::OnMouseMoved&)event);			
+		}
+		if (event.GetEventType() == MHelmet::EventType::E_KEY_PRESSED)
+		{			
+			MHelmet::OnKeyPressed& e = (MHelmet::OnKeyPressed&)event;
+
+			if (e.GetKeyCode() == MH_KEY_F11)
+			{				
+				MHelmet::Engine::p().GetWindow().SetCaptureMode(true);				
+			}
+			if (e.GetKeyCode() == MH_KEY_F10)
+			{
+				MHelmet::Engine::p().GetWindow().SetCaptureMode(false);
+			}
+		}
+		if (event.GetEventType() == MHelmet::EventType::E_MOUSE_SCROLLED)
+		{
+			MHelmet::OnMouseScrolled& e = (MHelmet::OnMouseScrolled&)event;
+			m_Camera->HandleMouseScroll(e.GetYOffset());
+		}
 	}
+
+private:
+
+	void HandleInput()
+	{
+		const float dt = MHelmet::Engine::p().GetWindow().GetDeltaTime();
+
+		if (MHelmet::Input::IsKeyPressed(MH_KEY_S))
+		{
+			m_Camera->Backward(dt);
+		}
+		if (MHelmet::Input::IsKeyPressed(MH_KEY_W))
+		{
+			m_Camera->Forward(dt);
+		}
+		if (MHelmet::Input::IsKeyPressed(MH_KEY_A))
+		{
+			m_Camera->Left(dt);
+		}
+		if (MHelmet::Input::IsKeyPressed(MH_KEY_D))
+		{
+			m_Camera->Right(dt);
+		}
+	}
+
+	void HandleMouse(MHelmet::OnMouseMoved& e)
+	{		
+		if (m_FirstMouse)
+		{
+			m_FirstMouse = false;
+			m_LastX = e.GetX();
+			m_LastY = e.GetY();
+		}
+
+		const float Xoffset = e.GetX() - m_LastX;
+		const float Yoffset = m_LastY - e.GetY();
+		m_LastX = e.GetX();
+		m_LastY = e.GetY();
+
+		m_Camera->HandleMouseMovement(Xoffset, Yoffset);
+	}
+
+	void handleScroll(float dt)
+	{
+
+	}
+
 
 private:
 	std::shared_ptr<MHelmet::Shader>   m_Shader;
 	std::shared_ptr<MHelmet::VAO>      m_VAO;
 
 	std::shared_ptr<PerspectiveCamera> m_Camera;
+
+	/* atributos para el mouse e interfaz */
+	bool m_FirstMouse = true;
+	float m_LastX = 0.0f;
+	float m_LastY = 0.0f;
+	bool toggle = true;
+
+
 };
 /**************************************
 *           Proyecto Cliente          *
