@@ -1,9 +1,13 @@
+//#include "engine/system/renderer/RendererAPI.hpp"
 #include "engine/system/renderer/Renderer.hpp"
 #include "engine/system/renderer/VAO.hpp"
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLVAO.hpp"
 
+
+
 namespace MHelmet
-{	
+{
+	
 	VAO* VAO::Create()
 	{
 		switch (Renderer::GetAPI())
@@ -27,5 +31,6 @@ namespace MHelmet
 			return nullptr;
 			break;
 		}
-	}	
+	}
+	
 }

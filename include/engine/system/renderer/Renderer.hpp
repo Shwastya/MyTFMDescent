@@ -9,7 +9,7 @@ namespace MHelmet
 	{
 	public:
 
-		static void BeginModel(const glm::vec3& translate, const glm::vec3& const rotate, const glm::vec3& scale, float& degrees);
+		static void BeginModel(glm::vec3 translate, glm::vec3 rotate, glm::vec3 scale, float degrees);
 		static void BeginScene(std::shared_ptr<PerspectiveCamera>& camera);
 		static void EndEscene();
 

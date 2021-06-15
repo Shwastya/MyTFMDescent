@@ -31,11 +31,6 @@ namespace MHelmet
         return m_Position;
     }
 
-    void PerspectiveCamera::setNewPosition(const glm::vec3& stride)
-    {
-        m_Position *= stride;
-    }
-
     void PerspectiveCamera::UpdateCameraVectors()
     {
         glm::vec3 front;

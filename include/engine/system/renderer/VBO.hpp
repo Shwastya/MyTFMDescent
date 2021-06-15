@@ -7,7 +7,7 @@ namespace MHelmet
 	class VBO // virtual table of dispatchs clases de puraS funciones
 	{
 	public:
-		virtual ~VBO() = default;
+		virtual ~VBO() {}
 
 		virtual void Bind() const   = 0;
 		virtual void Unbind() const = 0;

@@ -3,15 +3,14 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 
-#include "engine/system/platform/RenderAPI/OpenGL/OpenGLShader.hpp"
-
 namespace MHelmet
 {	
 	Renderer::DataScene* Renderer::Scene = new Renderer::DataScene;
 	//PerspectiveCamera* camera = new PerspectiveCamera(glm::vec3(0.0f, 0.0f, 3.0f));
 		
-	void Renderer::BeginModel(const glm::vec3& translate, const glm::vec3& const rotate, const glm::vec3& scale, float& degrees)
-	{		
+	void Renderer::BeginModel(glm::vec3 translate, glm::vec3 rotate, glm::vec3 scale, float degrees)
+	{
+		
 		Scene->Model = glm::mat4(1.0f);
 		Scene->Model = glm::translate(Scene->Model, translate); 	
 		Scene->Model = glm::rotate(Scene->Model, degrees, rotate);
@@ -40,12 +39,12 @@ namespace MHelmet
 	}
 	void Renderer::Submit(const std::shared_ptr<Shader>& _Shader, const std::shared_ptr<VAO>& _VAO)
 	{
-		std::dynamic_pointer_cast<OpenGLShader>(_Shader)->Bind();
+		_Shader->Bind();
 
 		
-		std::dynamic_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_Model", Scene->Model);
-		std::dynamic_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_View", Scene->View);
-		std::dynamic_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_Proj", Scene->Projection);
+		_Shader->SetUniform("u_Model", Scene->Model);
+		_Shader->SetUniform("u_View", Scene->View);
+		_Shader->SetUniform("u_Proj", Scene->Projection);
 
 		_VAO->Bind();
 		RenderCommand::DrawIndexed(_VAO);

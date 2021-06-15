@@ -26,7 +26,11 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/quad.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/cube.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/sphere.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/teapot.cpp   
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/teapot.cpp
+
+    
+    
+
 
    
     # MartianHelmet Application (main program) #
@@ -34,17 +38,22 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/Engine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/MHpch.cpp
 
-    # Node System # layer system
+
+    # Node System
+    # layer system
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/node/nodeLayer.cpp
 
     # log classes
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/log/LogManager.cpp
         # Log strategies
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/log/strategies/SimpleLog.cpp    
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/log/strategies/SimpleLog.cpp
+
+    
 
     # ImGUI 
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/imgui-docking/examples/imgui_impl_opengl3.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/imgui-docking/examples/imgui_impl_glfw.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/src/engine/system/imgui-docking/examples/imgui_impl_sdl.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/imgui-docking/imgui.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/imgui-docking/imgui_demo.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/imgui-docking/imgui_draw.cpp
@@ -59,18 +68,18 @@ set(ENGINE_SRC_FILES
 
     
     # window context on window S.O platform
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/Windows/WindowWin.cpp        
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/Windows/WindowInput.cpp # INPUT S.O Windows
-    
-    # UNIX   context on window # EMPTY
-    # MACOS  context on window # EMPTY
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/Windows/WindowWin.cpp
+        # INPUT for WINDOW
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/Windows/WindowInput.cpp
     
 
 
     # Render System
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/OrthographicCamera.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/PerspectiveCamera.cpp
-    
+
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/shader.cpp
+
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/RendererContext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/Renderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/VAO.cpp
@@ -78,15 +87,12 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/EBO.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/RendererAPI.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/RenderCommand.cpp
-
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/shader.cpp
         # OpenGL API Abstraction
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLContext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLRendererAPI.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLEBO.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLVAO.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLVBO.cpp 
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLShader.cpp 
 
 
 
@@ -191,7 +197,7 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLEBO.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLVAO.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLVBO.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLShader.hpp
+
 
    
   

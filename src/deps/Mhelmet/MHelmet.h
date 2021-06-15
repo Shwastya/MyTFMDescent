@@ -16,7 +16,7 @@
 #include "engine/system/renderer/EBO.hpp"
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLVBO.hpp";
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLEBO.hpp";
-#include "engine/system/platform/RenderAPI/OpenGL/OpenGLShader.hpp";
+#include "engine/system/renderer/shader.hpp" 
 #include "engine/system/renderer/VAO.hpp"
 #include "engine/system/renderer/PerspectiveCamera.hpp"
 #include <glm/glm.hpp>
