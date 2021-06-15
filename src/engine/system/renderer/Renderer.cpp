@@ -8,14 +8,21 @@ namespace MHelmet
 	Renderer::DataScene* Renderer::Scene = new Renderer::DataScene;
 	//PerspectiveCamera* camera = new PerspectiveCamera(glm::vec3(0.0f, 0.0f, 3.0f));
 		
+	void Renderer::BeginModel(glm::vec3 translate, glm::vec3 rotate, glm::vec3 scale, float degrees)
+	{
+		
+		Scene->Model = glm::mat4(1.0f);
+		Scene->Model = glm::translate(Scene->Model, translate); 	
+		Scene->Model = glm::rotate(Scene->Model, degrees, rotate);
+		Scene->Model = glm::scale(Scene->Model, scale);
+	}
+
 	void Renderer::BeginScene(std::shared_ptr<PerspectiveCamera>& camera)
 	{	
-		Scene->Model = glm::mat4(1.0f);
-		Scene->Model = glm::rotate(Scene->Model, static_cast<float>(glfwGetTime()) * glm::radians(20.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-		Scene->View  = glm::mat4(1.0f);
-		Scene->View  = glm::translate(Scene->View, glm::vec3(0.0f, 0.0f, -3.0f));
-
 		
+		Scene->View  = glm::mat4(1.0f);		
+		Scene->View = camera->GetViewMatrix();
+
 		Scene->Projection = glm::perspective
 		(
 			glm::radians(camera->GetFOV()), 
@@ -24,7 +31,7 @@ namespace MHelmet
 			0.1f, 100.0f
 		);
 
-		Scene->ViewMatrixRefresh = camera->GetViewMatrix();
+		//Scene->ViewMatrixRefresh = camera->GetViewMatrix();
 	}
 	void Renderer::EndEscene()
 	{
@@ -36,7 +43,7 @@ namespace MHelmet
 
 		
 		_Shader->SetUniform("u_Model", Scene->Model);
-		_Shader->SetUniform("u_View", Scene->ViewMatrixRefresh);
+		_Shader->SetUniform("u_View", Scene->View);
 		_Shader->SetUniform("u_Proj", Scene->Projection);
 
 		_VAO->Bind();

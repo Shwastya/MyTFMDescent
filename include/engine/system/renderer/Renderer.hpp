@@ -1,7 +1,7 @@
 #pragma once
 #include "engine/system/renderer/RenderCommand.hpp"
 #include "PerspectiveCamera.hpp"
-#include "engine/system/shader.hpp"
+#include "engine/system/renderer/shader.hpp"
 
 namespace MHelmet
 {	
@@ -9,6 +9,7 @@ namespace MHelmet
 	{
 	public:
 
+		static void BeginModel(glm::vec3 translate, glm::vec3 rotate, glm::vec3 scale, float degrees);
 		static void BeginScene(std::shared_ptr<PerspectiveCamera>& camera);
 		static void EndEscene();
 
@@ -23,7 +24,7 @@ namespace MHelmet
 			glm::mat4 Model;
 			glm::mat4 View;
 
-			glm::mat4 ViewMatrixRefresh;
+			//glm::mat4 ViewMatrixRefresh;
 		};
 
 		static DataScene* Scene;

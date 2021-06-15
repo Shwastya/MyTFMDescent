@@ -1,10 +1,10 @@
-#ifndef __SPHERE_H__
-#define __SPHERE_H__ 1
+#pragma once
 
 #include "geometry.hpp"
 #include <vector>
-
-class Sphere final : public Geometry {
+namespace MHelmet
+{
+    class Sphere final : public Geometry {
     public:
         Sphere() = delete;
         Sphere(float radius, uint32_t stacks, uint32_t slices);
@@ -15,6 +15,8 @@ class Sphere final : public Geometry {
     private:
         float _radius;
         uint32_t _stacks, _slices;
-};
+    };
 
-#endif
+}
+
+

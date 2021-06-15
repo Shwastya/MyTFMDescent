@@ -86,23 +86,32 @@ public:
 		std::shared_ptr<MHelmet::EBO> EBO_ = std::make_shared<MHelmet::OpenGLEBO>(indices, sizeof(indices) / sizeof(uint32_t));
 
 		m_VAO->Add__EBO(EBO_);
-		m_Shader = std::make_shared<MHelmet::Shader>(
+		m_Shader = std::make_shared<MHelmet::Shader>
+		(
 			"../assets/shaders/perspectiveShaders/vertex.vs",
 			"../assets/shaders/perspectiveShaders/fragment.fs"
-			);
+		);
 
 	}
 
 	void Update(MHelmet::DeltaTime dt) override
 	{
-
 		HandleInput(dt);
+		
 
 		RC::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RC::clear();
-
+		 
 		R::BeginScene(m_Camera);
-		R::Submit(m_Shader, m_VAO); 
+		{
+			m_Cubo.Translate = glm::vec3(0.0f, 0.0f, 0.0f);
+			m_Cubo.Rotate = glm::vec3(1.0f, 0.5f, 0.0f);
+			m_Cubo.Scale = glm::vec3(1.0f, 1.0f, 1.0f);
+			m_Cubo.Degrees = static_cast<float>(glfwGetTime()) * glm::radians(20.0f);
+
+			R::BeginModel(m_Cubo.Translate, m_Cubo.Rotate, m_Cubo.Scale, m_Cubo.Degrees);
+			R::Submit(m_Shader, m_VAO);
+		}	
 	}
 
 	void ImGuiRender()
@@ -180,17 +189,23 @@ private:
 		m_Camera->HandleMouseMovement(Xoffset, Yoffset);
 	}
 
-	void handleScroll(float dt)
+	void handleScroll(MHelmet::DeltaTime dt)
 	{
 
 	}
 
+	
 
 private:
 	std::shared_ptr<MHelmet::Shader>   m_Shader;
 	std::shared_ptr<MHelmet::VAO>      m_VAO;
 
 	std::shared_ptr<MHelmet::PerspectiveCamera> m_Camera;
+
+	/* atributos para los modelos */
+
+	ModelTransform m_Cubo;
+
 
 	/* atributos para el mouse e interfaz */
 	bool m_FirstMouse = true;
@@ -200,9 +215,13 @@ private:
 
 
 };
-/**************************************
-*           Proyecto Cliente          *
-* *************************************/
+/*****************************************************************************
+/*****************************************************************************
+/*****************************************************************************
+*							    Proyecto Cliente					         /
+* ***************************************************************************/
+/****************************************************************************/
+
 class ProjectTesting : public MHelmet::Engine {
 
 public:

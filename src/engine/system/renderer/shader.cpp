@@ -1,5 +1,5 @@
 #include "engine/system/MHCore.hpp"
-#include "engine/system/shader.hpp"
+#include "engine/system/renderer/shader.hpp"
 
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>

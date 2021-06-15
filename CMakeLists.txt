@@ -24,9 +24,12 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/geometry.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/triangle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/quad.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/cube.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/sphere.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/teapot.cpp
 
     
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/shader.cpp
+    
 
 
    
@@ -75,6 +78,8 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/OrthographicCamera.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/PerspectiveCamera.cpp
 
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/shader.cpp
+
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/RendererContext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/Renderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/VAO.cpp
@@ -89,6 +94,11 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLVAO.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLVBO.cpp 
 
+
+
+    # Utils
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/utils/utils.cpp
+
     # Projectes dependency
     )
 
@@ -101,8 +111,13 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/geometry/geometry.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/geometry/triangle.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/geometry/quad.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/geometry/cube.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/geometry/sphere.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/geometry/teapot.hpp
+
     
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/shader.hpp
+    
+    
 
 
     #####################
@@ -167,6 +182,8 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/OrthographicCamera.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/PerspectiveCamera.hpp
 
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/shader.hpp
+
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/RendererContext.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/Renderer.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/VAO.hpp
@@ -180,10 +197,12 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLEBO.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLVAO.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLVBO.hpp
+
+
    
   
     # Utils
-      ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/utils/DeltaTime.hpp
+      ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/utils/utils.hpp
 
     # ECS 
 

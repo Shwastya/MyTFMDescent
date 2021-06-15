@@ -40,9 +40,7 @@ namespace MHelmet
 
 		while (m_Alive)								 
 		{
-			float time = GetTime();
-			m_DeltaTime = time - m_LastFrame;
-			m_LastFrame = time;
+			
 
 
 			for (NodeLayer* layer : m_Layers) layer->Update(m_DeltaTime);
@@ -56,7 +54,9 @@ namespace MHelmet
 
 			
 		
-
+			float time = GetTime();
+			m_DeltaTime = time - m_LastFrame;
+			m_LastFrame = time;
 			
 		}											 
 	}												 

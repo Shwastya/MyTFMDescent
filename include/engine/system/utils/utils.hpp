@@ -12,4 +12,18 @@ namespace MHelmet
 	private:
 		float m_Time;
 	};
+
+
+	
 }
+
+/* MUUUUUUY TEMPORAL */
+#include <glm/glm.hpp>
+struct ModelTransform
+{
+	glm::vec3 Translate = glm::vec3(1.0f);
+	glm::vec3 Rotate    = glm::vec3(1.0f);
+	float Degrees		= 0.0f;	
+	glm::vec3 Scale     = glm::vec3(1.0f);
+		
+};
