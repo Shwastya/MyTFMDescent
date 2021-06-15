@@ -24,3 +24,15 @@
 #include <glm/gtc/type_ptr.hpp>
 
 
+/* No muy seguro sw queseal el mejor lugar */
+
+struct ModelTransform
+{
+	glm::vec3 Translate = glm::vec3(1.0f);
+	glm::vec3 Rotate = glm::vec3(1.0f);
+	float Degrees = 0.0f;
+	glm::vec3 Scale = glm::vec3(1.0f);
+
+};
+
+

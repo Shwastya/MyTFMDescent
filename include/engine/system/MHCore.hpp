@@ -1,6 +1,6 @@
 #pragma once
 #include "../MHSetup.hpp"
-#include "MHpch.h"
+
 
 namespace CORE 
 {
@@ -84,8 +84,8 @@ namespace CORE
 	#define MH_VERIFY(...)
 	#define MH_CORE_VERIFY(...)
 #endif
-// Function Pointer to Event base class
-#define CALLBACK std::function<void(Event&)>
+
+
 // Perform Event Tasks
 #define BindEventFunction(E)   std::bind(&##E, this, std::placeholders::_1)
 #define BINDIMGUIEVENT(x) std::bind(&ImGuiLayer::x, this, std::placeholders::_1)

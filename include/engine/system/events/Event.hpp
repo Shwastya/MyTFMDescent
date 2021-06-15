@@ -1,6 +1,5 @@
 #pragma once
-
-#include <MHpch.h>
+#include "../src/engine/mhpch.cpp"
 
 namespace MHelmet 
 {

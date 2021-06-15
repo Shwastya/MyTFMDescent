@@ -1,12 +1,13 @@
 #include "engine/system/MHCore.hpp"
 #include "engine/system/ImGui/ImGuiLayer.hpp"
-
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
 
 
 #include "engine/Engine.hpp"
 
 // temporal
-#include <GLFW/glfw3.h>
+//#include <GLFW/glfw3.h>
 //#include <glad/glad.h>
 
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "engine/system/MHCore.hpp"
+#include "../src/engine/mhpch.cpp"
 #include "engine/system/platform/Window.hpp"
 
 #include <GLFW/glfw3.h>

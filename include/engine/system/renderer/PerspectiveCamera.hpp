@@ -1,6 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
-#include "engine/system/MHCore.hpp"
+#include "engine/system/utils/utils.hpp"
+
 
 namespace MHelmet
 {

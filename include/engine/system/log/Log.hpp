@@ -3,7 +3,7 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h> // for custom types log
 
-#include <iostream> // borrar
+
 
 namespace MHelmet {
 

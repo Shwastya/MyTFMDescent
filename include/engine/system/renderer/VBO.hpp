@@ -1,5 +1,5 @@
 #pragma once
-#include "engine/system/MHCore.hpp"
+
 #include "engine/system/renderer/BufferLayout.hpp"
 
 namespace MHelmet

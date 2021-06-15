@@ -1,14 +1,12 @@
 #pragma once
-#include "engine/system/MHCore.hpp"
+
 #include "engine/system/renderer/BufferLayout.hpp"
 
 #include "engine/system/renderer/VBO.hpp"
 #include "engine/system/renderer/EBO.hpp"
 
 namespace MHelmet
-{	
-	//using PtrVBO = std::shared_ptr<VBO>;
-	//using PtrEBO = std::shared_ptr<EBO>;
+{
 
 	class VAO // virtual table of dispatchs 
 	{
@@ -26,10 +24,9 @@ namespace MHelmet
 		virtual const std::vector<std::shared_ptr<VBO>>& GetVBO() const = 0;
 		virtual const std::shared_ptr<EBO>& GetEBO() const = 0;
 
-		// FABRICA
+
+
 		static VAO* Create();
 
-	protected:
-		//uint32_t m_ID_VAO[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	};
 }

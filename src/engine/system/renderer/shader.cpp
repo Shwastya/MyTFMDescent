@@ -1,4 +1,5 @@
 #include "engine/system/MHCore.hpp"
+#include "../src/engine/mhpch.cpp"
 #include "engine/system/renderer/shader.hpp"
 
 #include <glad/glad.h>

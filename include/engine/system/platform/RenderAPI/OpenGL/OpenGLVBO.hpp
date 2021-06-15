@@ -7,6 +7,7 @@ namespace MHelmet
 	class OpenGLVBO : public VBO
 	{
 	public:
+
 		OpenGLVBO(float* vertices, uint32_t size);
 		virtual ~OpenGLVBO();
 
@@ -20,13 +21,10 @@ namespace MHelmet
 		virtual void SetLayout(const BUFFER::Layout& layout) override
 		{
 			m_Layout = layout;
-		}
-
-	
-		
+		}		
 
 	private:
-		//uint32_t m_ID_VAO;
+
 		uint32_t m_ID_VBO;	
 		BUFFER::Layout m_Layout;
 	};

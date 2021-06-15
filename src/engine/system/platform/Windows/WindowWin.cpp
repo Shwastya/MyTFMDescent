@@ -1,7 +1,7 @@
-#include <MHpch.h>
+#include "../src/engine/mhpch.cpp"
 
 //#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+//#include <GLFW/glfw3.h>
 
 #include "engine/system/platform/windows/WindowWin.hpp"
 #include "engine/system/events/AppEvents/OnAppEvents.hpp"

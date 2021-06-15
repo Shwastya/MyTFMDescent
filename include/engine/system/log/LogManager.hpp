@@ -1,6 +1,6 @@
 #pragma once
 #include "engine/system/log/Log.hpp"
-;
+
 
 namespace MHelmet {
 

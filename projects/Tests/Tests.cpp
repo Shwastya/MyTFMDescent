@@ -215,7 +215,7 @@ private:
 	std::shared_ptr<MHelmet::PerspectiveCamera> m_Camera;
 
 	/* atributos para los modelos */
-
+	
 	ModelTransform m_Cubo;
 
 

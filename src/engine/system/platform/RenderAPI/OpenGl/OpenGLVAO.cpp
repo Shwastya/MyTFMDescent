@@ -1,5 +1,6 @@
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLVAO.hpp"
 #include <glad/glad.h>
+#include "engine/system/MHCore.hpp"
 
 namespace MHelmet
 {
@@ -40,7 +41,6 @@ namespace MHelmet
 	}
 	void OpenGLVAO::Add__VBO(const std::shared_ptr<VBO>& _vbo)
 	{
-		MH_CORE_ERROR("Entra aqui??");
 
 		// CAMBIAR POR ASSERT CON MACRO Y LOG 
 		if (_vbo->GetLayout().GetElements().size() < 1)

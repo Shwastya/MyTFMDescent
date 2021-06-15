@@ -1,6 +1,8 @@
 #pragma once
 #include "engine/system/MHCore.hpp"
+#include "../src/engine/mhpch.cpp"
 #include <functional>
+
 
 //#define CALLBACK std::function<void(Event&)>
 

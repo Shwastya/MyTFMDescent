@@ -1,5 +1,7 @@
 #pragma once
-#include "engine/system/MHCore.hpp"
+
+#include "../src/engine/mhpch.cpp"
+	
 
 namespace MHelmet
 {

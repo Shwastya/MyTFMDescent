@@ -1,7 +1,6 @@
 #pragma once
 #include "engine/system/node/Node.hpp"
 
-
 namespace MHelmet
 {	
 	struct NodeLayer : public Node
