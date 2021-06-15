@@ -37,6 +37,7 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/MHCore.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/Engine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/MHpch.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/MHelmetPch.cpp
 
 
     # Node System
@@ -193,6 +194,7 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/RendererAPI.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/RenderCommand.hpp
         # OpenGL API Abstraction   
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLContext.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLRendererAPI.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLEBO.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLVAO.hpp
@@ -212,6 +214,7 @@ set(ENGINE_HEADER_FILES
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/engine/ PREFIX "Source Files" FILES ${ENGINE_SRC_FILES})
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/include/engine PREFIX "Header Files" FILES ${ENGINE_HEADER_FILES})
+
 
 add_library(EngineLib STATIC ${ENGINE_SRC_FILES} ${ENGINE_HEADER_FILES} ${DEPS_SRC_FILES_COMMON})
 
