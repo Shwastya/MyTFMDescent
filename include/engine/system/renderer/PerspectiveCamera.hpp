@@ -30,6 +30,8 @@ namespace MHelmet
         float GetFOV() const;
         glm::vec3 GetPosition() const;
 
+        void setNewPosition(const glm::vec3& position);
+
         void HandleKeyboard(Movement direction, DeltaTime dt);
         void HandleMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
         void HandleMouseScroll(float yoffset);

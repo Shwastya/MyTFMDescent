@@ -5,35 +5,25 @@ namespace MHelmet
 
 	LayerManager::LayerManager(size_t reserve)
 	{
-		// 1.
-		// se calcula una reserva, tambien se puede escoger pasarlo por parametro
 		m_Layers.reserve(reserve);
-		//m_Layers.reserve(300);
 	}
+
 	LayerManager::~LayerManager()
 	{
-		
+		// La responsabilidad de hacer delete de allocations deberia ser del Engine
+		// que es el poseedor del LayerManager como 
 	}
-	// Push en la primera MITAD de la lista
-	// begin mas last index
+
+	// Push en la primera MITAD de la lista	// begin mas last index
 	void LayerManager::PushLayer(NodeLayer* layer) // AddLayer
 	{
 		m_Layers.emplace(m_Layers.begin() + m_IdxLast, layer);
 		m_IdxLast++;
-
-
-		/*MH_CORE_WARN("Added Layer:   {0}. ", layer->GetName());
-
-		MH_CORE_TRACE("Total Layers {0}", ++m_TotalLayers);*/
 	}
 	// Push en la segunda MITAD de la lista
 	void LayerManager::PushOverlay(NodeLayer* overlay)
 	{
 		m_Layers.emplace_back(overlay);
-
-		/*MH_CORE_WARN("Added OverLay: {0}. ", overlay->GetName());
-
-		MH_CORE_TRACE("Total Layers {0}", ++m_TotalLayers);*/
 	}
 	void LayerManager::PopLayer(NodeLayer* layer)
 	{

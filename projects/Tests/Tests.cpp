@@ -12,7 +12,7 @@ public:
 
 	TestingLayer() : MHelmet::NodeLayer("TestingLayer")
 	{
-		m_Camera = std::make_shared<MHelmet::PerspectiveCamera>(glm::vec3(0.0f, 0.0f, 3.0f));
+		m_Camera = std::make_shared<MHelmet::PerspectiveCamera>(glm::vec3(18.0f, 18.0f, 30.0f));
 
 
 		m_VAO.reset(MHelmet::VAO::Create());
@@ -86,12 +86,12 @@ public:
 		std::shared_ptr<MHelmet::EBO> EBO_ = std::make_shared<MHelmet::OpenGLEBO>(indices, sizeof(indices) / sizeof(uint32_t));
 
 		m_VAO->Add__EBO(EBO_);
-		m_Shader = std::make_shared<MHelmet::Shader>
-		(
-			"../assets/shaders/perspectiveShaders/vertex.vs",
-			"../assets/shaders/perspectiveShaders/fragment.fs"
-		);
 
+		m_Shader.reset(MHelmet::Shader::Create
+		(
+			"../assets/shaders/perspectiveShaders/basic/vertex.vs",
+			"../assets/shaders/perspectiveShaders/basic/fragment.fs"
+		));
 	}
 
 	void Update(MHelmet::DeltaTime dt) override
@@ -104,13 +104,30 @@ public:
 		 
 		R::BeginScene(m_Camera);
 		{
-			m_Cubo.Translate = glm::vec3(0.0f, 0.0f, 0.0f);
-			m_Cubo.Rotate = glm::vec3(1.0f, 0.5f, 0.0f);
-			m_Cubo.Scale = glm::vec3(1.0f, 1.0f, 1.0f);
-			m_Cubo.Degrees = static_cast<float>(glfwGetTime()) * glm::radians(20.0f);
 
-			R::BeginModel(m_Cubo.Translate, m_Cubo.Rotate, m_Cubo.Scale, m_Cubo.Degrees);
-			R::Submit(m_Shader, m_VAO);
+			glm::vec4 red(0.8f, 0.2f, 0.3f, 1.0f);
+			glm::vec4 blue(0.2f, 0.3f, 0.8f, 1.0f);
+
+
+			for (int i = 0; i < 20; ++i)
+			{
+				
+
+				for (int j = 0; j < 20; ++j)
+				{
+					m_Cubo.Translate = glm::vec3((i * 2) * 1.0f, (j * 2) * 1.0f, 0.0f);
+					m_Cubo.Rotate = glm::vec3(1.0f, 1.0f, 1.0f);
+					m_Cubo.Scale = glm::vec3(1.0f, 1.0f, 1.0f);
+					m_Cubo.Degrees = static_cast<float>(glfwGetTime()) * glm::radians(20.0f);
+					
+					//m_Cubo.Degrees = 0.0f;
+					//m_Camera->setNewPosition(glm::vec3((i * -10) * 1.0f, 0.0f, 1.0f));
+
+					R::BeginModel(m_Cubo.Translate, m_Cubo.Rotate, m_Cubo.Scale, m_Cubo.Degrees);
+					R::Submit(m_Shader, m_VAO);
+				}
+
+			}			
 		}	
 	}
 
@@ -132,13 +149,21 @@ public:
 		{			
 			MHelmet::OnKeyPressed& e = (MHelmet::OnKeyPressed&)event;
 
-			if (e.GetKeyCode() == MH_KEY_F11)
+			if (e.GetKeyCode() == MH_KEY_F11) // mouse capture mode true
 			{				
 				MHelmet::Engine::p().GetWindow().SetCaptureMode(true);				
 			}
-			if (e.GetKeyCode() == MH_KEY_F10)
+			if (e.GetKeyCode() == MH_KEY_F10)  // mouse capture mode false
 			{
 				MHelmet::Engine::p().GetWindow().SetCaptureMode(false);
+			}
+			if (e.GetKeyCode() == MH_KEY_Y) // toggle input
+			{
+				toggleInput = true;
+			}
+			if (e.GetKeyCode() == MH_KEY_N) // toggle input
+			{
+				toggleInput = false;
 			}
 		}
 		if (event.GetEventType() == MHelmet::EventType::E_MOUSE_SCROLLED)
@@ -157,18 +182,22 @@ private:
 		if (MHelmet::Input::IsKeyPressed(MH_KEY_S))
 		{
 			m_Camera->Backward(dt);
+			 //m_Cubo.Translate.y += k_Speed * dt.Seconds();
 		}
 		if (MHelmet::Input::IsKeyPressed(MH_KEY_W))
 		{
 			m_Camera->Forward(dt);
+			//m_Cubo.Translate.y -= k_Speed * dt.Seconds();
 		}
 		if (MHelmet::Input::IsKeyPressed(MH_KEY_A))
 		{
 			m_Camera->Left(dt);
+			// m_Cubo.Translate.x += k_Speed * dt.Seconds();
 		}
 		if (MHelmet::Input::IsKeyPressed(MH_KEY_D))
 		{
 			m_Camera->Right(dt);
+			//m_Cubo.Translate.x -= k_Speed * dt.Seconds();
 		}
 	}
 
@@ -189,10 +218,7 @@ private:
 		m_Camera->HandleMouseMovement(Xoffset, Yoffset);
 	}
 
-	void handleScroll(MHelmet::DeltaTime dt)
-	{
 
-	}
 
 	
 
@@ -205,13 +231,15 @@ private:
 	/* atributos para los modelos */
 
 	ModelTransform m_Cubo;
-
+	const float k_Speed = 3.5f;
 
 	/* atributos para el mouse e interfaz */
 	bool m_FirstMouse = true;
 	float m_LastX = 0.0f;
 	float m_LastY = 0.0f;
 	bool toggle = true;
+
+	bool toggleInput = true;
 
 
 };

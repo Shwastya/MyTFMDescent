@@ -12,14 +12,16 @@ namespace MHelmet
 //#endif
 		virtual ~NodeLayer() {};
 
-		virtual void Join() override {};	// Node base
-		virtual void Free() override {};	// Node base
+		// Node base
+		virtual void Join() override { MH_CORE_INFO("Joined layer: {0}", m_Name); };
+		// Node base
+		virtual void Free() override { MH_CORE_INFO("Freed  layer: {0}", m_Name); };
 
 		virtual void Update(DeltaTime dt) override {};	// Node base
 
 		virtual void ImGuiRender() {};		// propio
 
-		virtual void OnEvent(Event& e) {}	// propio
+		virtual void OnEvent(Event& e) {};// propio
 
 //#if MH_DEBUG
 		inline const std::string& GetName() const { return m_Name; }
