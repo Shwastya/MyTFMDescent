@@ -86,7 +86,7 @@ public:
 		std::shared_ptr<MHelmet::EBO> EBO_ = std::make_shared<MHelmet::OpenGLEBO>(indices, sizeof(indices) / sizeof(uint32_t));
 
 		m_VAO->Add__EBO(EBO_);
-		m_Shader = std::make_shared<MHelmet::Shader>
+		m_Shader = MHelmet::Shader::create
 		(
 			"../assets/shaders/perspectiveShaders/vertex.vs",
 			"../assets/shaders/perspectiveShaders/fragment.fs"

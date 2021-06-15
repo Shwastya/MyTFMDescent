@@ -6,7 +6,7 @@ namespace MHelmet
 	class EBO
 	{
 	public:
-		virtual ~EBO() {}
+		virtual ~EBO() = default;
 
 		virtual void Bind() const   = 0;
 		virtual void Unbind() const = 0;

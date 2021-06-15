@@ -2,28 +2,36 @@
 #include "../src/engine/mhpch.cpp"
 #include <glm/glm.hpp>
 
+#include "engine/system/renderer/Renderer.hpp"
 
-namespace MHelmet 
+
+
+namespace MHelmet
 {
-    class Shader
-    {        
+    class OpenGLShader : public Shader
+    {
+        enum class Type
+        {
+            Vertex,
+            Fragment,
+            Geometry,
+            Program
+        };
+
     public:
-       // Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr);
-        Shader() = default;
-        virtual ~Shader() = default;
+        OpenGLShader(const char* vertexPath, const char* fragmentPath, const char* geometryPath);
+        OpenGLShader() = default;
+        virtual ~OpenGLShader();
 
-        Shader(const Shader&) = default;
-        Shader(Shader&&) = default;
-        Shader& operator=(const Shader&) = default;
-        Shader& operator=(Shader&&) = default;
+        OpenGLShader(const OpenGLShader&) = default;
+        OpenGLShader(OpenGLShader&&) = default;
+        OpenGLShader& operator=(const OpenGLShader&) = default;
+        OpenGLShader& operator=(OpenGLShader&&) = default;
 
-        virtual void Bind() const   = 0;
-        virtual void Unbind() const = 0;
+        virtual void Bind()   const override;
+        virtual void Unbind() const override;
 
-        static 
-        std::shared_ptr<Shader>
-        create(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr);
-      /*  void SetUniform(const char* name, int value) const;
+        void SetUniform(const char* name, int value) const;
         void SetUniform(const char* name, float value) const;
         void SetUniform(const char* name, bool value) const;
         void SetUniform(const char* name, float value1, float value2) const;
@@ -38,8 +46,8 @@ namespace MHelmet
 
     private:
         static void loadShader(const char* path, std::string* code);
-        static void checkErrors(uint32_t shader, Type type);
-        uint32_t id_;*/
+        static void checkErrors(uint32_t OpenGLShader, Type type);
+        uint32_t id_;
     };
 }
 

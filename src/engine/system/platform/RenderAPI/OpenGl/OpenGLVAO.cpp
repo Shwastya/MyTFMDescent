@@ -59,7 +59,6 @@ namespace MHelmet
 
 		for (int i = 0; i < elements.size(); i++)
 		{
-			MH_CORE_INFO("BUFFER LAYOUT IS WORKING!! {0} ", i);
 			glEnableVertexAttribArray(idx);
 
 			glVertexAttribPointer

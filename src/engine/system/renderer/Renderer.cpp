@@ -3,6 +3,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 
+#include "engine/system/platform/RenderAPI/OpenGL/OpenGLShader.hpp"
+
 namespace MHelmet
 {	
 	Renderer::DataScene* Renderer::Scene = new Renderer::DataScene;
@@ -39,12 +41,13 @@ namespace MHelmet
 	}
 	void Renderer::Submit(const std::shared_ptr<Shader>& _Shader, const std::shared_ptr<VAO>& _VAO)
 	{
-		_Shader->Bind();
+		// std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->Bind();
 
-		
-		_Shader->SetUniform("u_Model", Scene->Model);
-		_Shader->SetUniform("u_View", Scene->View);
-		_Shader->SetUniform("u_Proj", Scene->Projection);
+		 _Shader->Bind();
+
+		 std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_Model", Scene->Model);
+		 std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_View", Scene->View);
+		 std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_Proj", Scene->Projection);
 
 		_VAO->Bind();
 		RenderCommand::DrawIndexed(_VAO);

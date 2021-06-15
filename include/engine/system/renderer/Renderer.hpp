@@ -1,7 +1,6 @@
 #pragma once
 #include "engine/system/renderer/RenderCommand.hpp"
 #include "PerspectiveCamera.hpp"
-#include "engine/system/renderer/shader.hpp"
 
 namespace MHelmet
 {	

@@ -1,5 +1,5 @@
+#include "engine/system/MHCore.hpp"
 #include "engine/Engine.hpp"
-
 #include "engine/system/renderer/BufferLayout.hpp"
 #include "engine/system/renderer/Renderer.hpp"
 
@@ -23,7 +23,8 @@ namespace MHelmet
 		m_Window->SetCallBack(BindEventFunction(Engine::OnEvent));
 
 		m_ImGuiLayers = new ImGuiLayer();
-		PushOverlay(m_ImGuiLayers);				
+		PushOverlay(m_ImGuiLayers);	
+		
 	}
 
 	Engine::~Engine() {}	
@@ -43,10 +44,16 @@ namespace MHelmet
 			
 
 
-			for (NodeLayer* layer : m_Layers) layer->Update(m_DeltaTime);
+			for (NodeLayer* layer : m_Layers)
+			{
+				layer->Update(m_DeltaTime);
+			}
 
 			m_ImGuiLayers->Begin();
-			for (NodeLayer* layer : m_Layers) layer->ImGuiRender();
+			for (NodeLayer* layer : m_Layers)
+			{
+				layer->ImGuiRender();
+			}
 			m_ImGuiLayers->End();
 
 

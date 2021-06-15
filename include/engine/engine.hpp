@@ -1,12 +1,10 @@
 #pragma once
-#include "engine/system/MHCore.hpp"
 #include "../src/engine/mhpch.cpp"
 #include "engine/system/platform/Window.hpp"
+#include "engine/system/ImGui/ImGuiLayer.hpp"
+#include "engine/system/events/AppEvents/OnAppEvents.hpp"
 
 #include <GLFW/glfw3.h>
-#include "engine/system/ImGui/ImGuiLayer.hpp"
-
-#include "engine/system/events/AppEvents/OnAppEvents.hpp"
 
 namespace MHelmet 
 {

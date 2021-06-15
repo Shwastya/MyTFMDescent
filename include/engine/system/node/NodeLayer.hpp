@@ -1,4 +1,5 @@
 #pragma once
+#include "engine/system/MHCore.hpp"
 #include "engine/system/node/Node.hpp"
 
 namespace MHelmet
@@ -11,8 +12,9 @@ namespace MHelmet
 //#endif
 		virtual ~NodeLayer() {};
 
-		virtual void Join() override {};	// Node base
-		virtual void Free() override {};	// Node base
+		// Node base
+		virtual void Join() override { MH_CORE_TRACE("Joined Layer: {0}", m_Name); };	
+		virtual void Free() override { MH_CORE_TRACE("Freed  Layer: {0}", m_Name); };
 
 		virtual void Update(DeltaTime dt) override {};	// Node base
 
