@@ -3,9 +3,6 @@
 #include "engine/system/renderer/BufferLayout.hpp"
 #include "engine/system/renderer/Renderer.hpp"
 
-
-
-
 namespace MHelmet 
 {
 	Engine* Engine::s_Instance = nullptr;
@@ -17,7 +14,7 @@ namespace MHelmet
 
 		// La sincronización vertical (VSync) ayuda a dar estabilidad al sincronizar la velocidad de los fotogramas
 		// con la velocidad de actualización del monitor.
-		// DeltaTime pasa de unos 0.xxx segundos a aproximadamente 6s
+		// Activado, DeltaTime pasa de unos 0.xxx segundos a aproximadamente 6s en mi monitor
 		m_Window->SetVSync(true);
 
 		m_Window->SetCallBack(BindEventFunction(Engine::OnEvent));

@@ -1,103 +1,56 @@
 #include <MHelmet.h>
+#include "engine/system/geometry/quad.hpp"
+#include "engine/system/geometry/triangle.hpp"
+#include "engine/system/geometry/cube.hpp"
 
-/**************************************
-*       Proyecto Cliente Layer        *
-* *************************************/
+
+/*****************************************************************************
+*							Layer Proyecto Cliente 					         /
+* ***************************************************************************/
 class TestingLayer : public MHelmet::NodeLayer
 {
 public:
 
 	using R  =  MHelmet::Renderer;
-	using RC =  MHelmet::RenderCommand;	
+	using RC =  MHelmet::RenderDrawCall;	
 
 	TestingLayer() : MHelmet::NodeLayer("TestingLayer")
 	{
-		m_Camera = std::make_shared<MHelmet::PerspectiveCamera>(glm::vec3(18.0f, 15.0f, 45.0f));
+		m_Camera = std::make_shared<MHelmet::PerspectiveCamera>(glm::vec3(11.6f, 9.0f, 23.5f));
 
+		MHelmet::Quad Q(1.0f);
+		MHelmet::Triangle T;
+		MHelmet::Cube C(0.8F);
 
 		m_VAO.reset(MHelmet::VAO::Create());
 
-		const float half = 1 / 2.0f;
-		float positions[] = { -half, -half, half,    //front
-						  half, -half, half,
-						  half, half, half,
+		MHelmet::RefCount<MHelmet::VBO> VBO_			;
+		VBO_ = MHelmet::VBO::Create(C.GetModel(), C.Size());		
 
-						  -half, -half, half,
-						  half, half, half,
-						  -half, half, half,
+		VBO_->SetLayout
+		({ 
+			{MHelmet::BUFFER::DataType::Float3, "a_Pos"     },
+			{MHelmet::BUFFER::DataType::Float2, "a_UVS"     },
+			{MHelmet::BUFFER::DataType::Float3, "a_Normals" }			
+		});
 
-						  half, -half, half,    //right
-						  half, -half, -half,
-						  half, half, -half,
+		m_VAO->Add__VBO(VBO_);	
 
-						  half, -half, half,
-						  half, half, -half,
-						  half, half, half,
-
-						  half, -half, -half,    //back
-						  -half, -half, -half,
-						  -half, half, -half,
-
-						  half, -half, -half,
-						  -half, half, -half,
-						  half, half, -half,
-
-						  -half, -half, -half,    //left
-						  -half, -half, half,
-						  -half, half, half,
-
-						  -half, -half, -half,
-						  -half, half, half,
-						  -half, half, -half,
-
-						  -half, -half, -half,    //bottom
-						  half, -half, -half,
-						  half, -half, half,
-
-						  -half, -half, -half,
-						  half, -half, half,
-						  -half, -half, half,
-
-						  -half, half, half,    //top
-						  half, half, half,
-						  half, half, -half,
-
-						  -half, half, half,
-						  half, half, -half,
-						  -half, half, -half };
-
-		MHelmet::RefCount<MHelmet::VBO> VBO_ = std::make_shared<MHelmet::OpenGLVBO>(positions, sizeof(positions));
-		VBO_->Create(positions, sizeof(positions));
-
-		VBO_->SetLayout({ {MHelmet::BUFFER::DataType::Float3, "a_Pos"} });
-		m_VAO->Add__VBO(VBO_);
-
-		uint32_t indices[] =
-		{
-			0, 1, 2, 3 ,4,  5,		//front
-			6, 7, 8, 9, 10, 11,		//right
-			12, 13, 14, 15, 16, 17, //back
-			18, 19, 20, 21, 22, 23, //left
-			24, 25, 26, 27, 28, 29, //bottom
-			30, 31, 32, 33, 34, 35  //top
-		};
-
-
-		MHelmet::RefCount<MHelmet::EBO> EBO_ = std::make_shared<MHelmet::OpenGLEBO>(indices, sizeof(indices) / sizeof(uint32_t));
+		MHelmet::RefCount<MHelmet::EBO> EBO_;
+		EBO_ = std::make_shared<MHelmet::OpenGLEBO>(C.Indices(), C.Count());
 
 		m_VAO->Add__EBO(EBO_);
+
 		m_Shader = MHelmet::Shader::create
 		(
 			"../assets/shaders/perspectiveShaders/vertex.vs",
 			"../assets/shaders/perspectiveShaders/fragment.fs"
 		);
-
 	}
 
 	void Update(MHelmet::DeltaTime dt) override
 	{
-		HandleInput(dt);
-		
+		HandleInput(dt);		
 
 		RC::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RC::clear();
@@ -108,18 +61,16 @@ public:
 			{
 				for (int j = 0; j < 16; ++j)
 				{
-					m_Cubo.Translate = glm::vec3((i * 2) * 1.0f, (j * 2) * 1.0f, 0.0f);
+					m_Cubo.Translate = glm::vec3((i * 1.5) * 1.0f, (j * 1.5) * 1.0f, 0.0f);
 					m_Cubo.Rotate = glm::vec3(1.0f, 1.0f, 1.0f);
 					m_Cubo.Scale = glm::vec3(1.0f, 1.0f, 1.0f);
 					m_Cubo.Degrees = static_cast<float>(glfwGetTime()) * glm::radians(20.0f);
-
+					
 					//m_Cubo.Degrees = 0.0f;
-					//m_Camera->setNewPosition(glm::vec3((i * -10) * 1.0f, 0.0f, 1.0f));
-				
+
 					R::BeginModel(m_Cubo.Translate, m_Cubo.Rotate, m_Cubo.Scale, m_Cubo.Degrees);
 					R::Submit(m_Shader, m_VAO, m_ModelColor);
 				}
-
 			}
 		}	
 	}  
@@ -128,21 +79,16 @@ public:
 	{
 		ImGui::Begin("Settings"); // Inicia una ventana nueva 
 
-
 		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_ModelColor));
 
-
-		ImGui::End();
-		
+		ImGui::End();		
 	}
-
-
 
 	void OnEvent(MHelmet::Event& event) override
 	{
 		if (event.GetEventType() == MHelmet::EventType::E_MOUSE_MOVED)
 		{			
-			
+			if (false)
 			HandleMouse((MHelmet::OnMouseMoved&)event);			
 		}
 		if (event.GetEventType() == MHelmet::EventType::E_KEY_PRESSED)
@@ -169,8 +115,6 @@ private:
 
 	void HandleInput(MHelmet::DeltaTime dt)
 	{
-		//const float dt = MHelmet::Engine::p().GetWindow().GetDeltaTime();
-
 		if (MHelmet::Input::IsKeyPressed(MH_KEY_S))
 		{
 			m_Camera->Backward(dt);
@@ -233,13 +177,11 @@ private:
 
 
 };
-/*****************************************************************************
-/*****************************************************************************
+
+
 /*****************************************************************************
 *							    Proyecto Cliente					         /
 * ***************************************************************************/
-/****************************************************************************/
-
 class ProjectTesting : public MHelmet::Engine {
 
 public:
@@ -258,18 +200,18 @@ extern MHelmet::Unique<MHelmet::Engine> MHelmet::createApp()
 	return std::make_unique<ProjectTesting>();
 }
 
+
+/*****************************************************************************
+*							      main program		   			             /
+* ***************************************************************************/
 int main(int argc, char** argv)
 {
-
-
 	CORE::Init();
 
 	auto project = MHelmet::createApp();
 	project->run();
 
 	CORE::Stop();
-
-
 
 	return 0;
 }

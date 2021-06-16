@@ -17,7 +17,7 @@ namespace MHelmet
 		
 
 
-		static VBO* Create(float* vertices, uint32_t size);
+		static RefCount<VBO> Create(float* vertices, uint32_t size);
 
 
 	};

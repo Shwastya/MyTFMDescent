@@ -5,7 +5,7 @@
 namespace MHelmet
 {
 	// RenderCommand tiene un puntero al rendererAPI
-	class RenderCommand
+	class RenderDrawCall
 	{
 	public:
 

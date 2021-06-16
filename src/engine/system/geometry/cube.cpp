@@ -1,173 +1,107 @@
 #include "engine/system/geometry/cube.hpp"
+#include <vcruntime_string.h>
 
 namespace MHelmet
 {
-    Cube::Cube(float size) : _size(size) {
+    Cube::Cube(float size) : m_Size(size) 
+    {
         m_Vertices = 6 * 2 * 3;   //6 faces * 2 triangles * 3 vertices;
         m_Elements = m_Vertices;
 
         const float half = size / 2.0f;
 
-        float positions[] = { -half, -half, half,    //front
-                              half, -half, half,
-                              half, half, half,
+        float cube[288] = 
+       { 
+            //front
+            
+            // Positions            // UVS          // Normals
+            -half, -half, half,     0.0f, 0.0f,     0.0f, 0.0f, 1.0f,
+             half, -half, half,     1.0f, 0.0f,     0.0f, 0.0f, 1.0f,
+             half,  half, half,     1.0f, 1.0f,     0.0f, 0.0f, 1.0f,
 
-                              -half, -half, half,
-                              half, half, half,
-                              -half, half, half,
+            -half, -half, half,     0.0f, 0.0f,     0.0f, 0.0f, 1.0f,
+             half,  half, half,     1.0f, 1.0f,     0.0f, 0.0f, 1.0f,
+            -half,  half, half,     0.0f, 1.0f,     0.0f, 0.0f, 1.0f,
 
-                              half, -half, half,    //right
-                              half, -half, -half,
-                              half, half, -half,
+             //right
 
-                              half, -half, half,
-                              half, half, -half,
-                              half, half, half,
+             half, -half, half,     0.0f, 0.0f,     1.0f, 0.0f, 0.0f,
+             half, -half,-half,     1.0f, 0.0f,     1.0f, 0.0f, 0.0f,
+             half,  half,-half,     1.0f, 1.0f,     1.0f, 0.0f, 0.0f,
 
-                              half, -half, -half,    //back
-                              -half, -half, -half,
-                              -half, half, -half,
+             half, -half, half,     0.0f, 0.0f,     1.0f, 0.0f, 0.0f,
+             half,  half,-half,     1.0f, 1.0f,     1.0f, 0.0f, 0.0f,
+             half,  half, half,     0.0f, 1.0f,     1.0f, 0.0f, 0.0f,
 
-                              half, -half, -half,
-                              -half, half, -half,
-                              half, half, -half,
+             //back
 
-                              -half, -half, -half,    //left
-                              -half, -half, half,
-                              -half, half, half,
+             half, -half, -half,    0.0f, 0.0f,     0.0f, 0.0f, -1.0f,
+            -half, -half, -half,    1.0f, 0.0f,     0.0f, 0.0f, -1.0f,
+            -half,  half, -half,    1.0f, 1.0f,     0.0f, 0.0f, -1.0f,
 
-                              -half, -half, -half,
-                              -half, half, half,
-                              -half, half, -half,
+             half, -half, -half,    0.0f, 0.0f,     0.0f, 0.0f, -1.0f,
+             -half, half, -half,    1.0f, 1.0f,     0.0f, 0.0f, -1.0f,
+             half,  half, -half,    0.0f, 1.0f,     0.0f, 0.0f, -1.0f,
 
-                              -half, -half, -half,    //bottom
-                              half, -half, -half,
-                              half, -half, half,
+             //left
 
-                              -half, -half, -half,
-                              half, -half, half,
-                              -half, -half, half,
+             -half, -half, -half,   0.0f, 0.0f,     -1.0f, 0.0f, 0.0f,
+             -half, -half,  half,   1.0f, 0.0f,     -1.0f, 0.0f, 0.0f,
+             -half,  half,  half,   1.0f, 1.0f,     -1.0f, 0.0f, 0.0f,
 
-                              -half, half, half,    //top
-                              half, half, half,
-                              half, half, -half,
+             -half, -half, -half,   0.0f, 0.0f,     -1.0f, 0.0f, 0.0f,
+             -half,  half,  half,   1.0f, 1.0f,     -1.0f, 0.0f, 0.0f,
+             -half,  half, -half,   0.0f, 1.0f,     -1.0f, 0.0f, 0.0f,
 
-                              -half, half, half,
-                              half, half, -half,
-                              -half, half, -half };
+             //bottom
 
-        float uvs[] = { 0.0f, 0.0f,   //front
-                        1.0f, 0.0f,
-                        1.0f, 1.0f,
+             -half, -half, -half,   0.0f, 0.0f,     0.0f, -1.0f, 0.0f,
+              half, -half, -half,   1.0f, 0.0f,     0.0f, -1.0f, 0.0f,
+              half, -half,  half,   1.0f, 1.0f,     0.0f, -1.0f, 0.0f,
 
-                        0.0f, 0.0f,
-                        1.0f, 1.0f,
-                        0.0f, 1.0f,
+             -half, -half, -half,   0.0f, 0.0f,     0.0f, -1.0f, 0.0f,
+              half, -half,  half,   1.0f, 1.0f,     0.0f, -1.0f, 0.0f,
+             -half, -half,  half,   0.0f, 1.0f,     0.0f, -1.0f, 0.0f,
 
-                        0.0f, 0.0f,   //right
-                        1.0f, 0.0f,
-                        1.0f, 1.0f,
+             //top
 
-                        0.0f, 0.0f,
-                        1.0f, 1.0f,
-                        0.0f, 1.0f,
+             -half, half,   half,   0.0f, 0.0f,     0.0f, 1.0f, 0.0f,
+              half, half,   half,   1.0f, 0.0f,     0.0f, 1.0f, 0.0f,
+              half, half,  -half,   1.0f, 1.0f,     0.0f, 1.0f, 0.0f,
 
-                        0.0f, 0.0f,   //back
-                        1.0f, 0.0f,
-                        1.0f, 1.0f,
+             -half, half,   half,   0.0f, 0.0f,     0.0f, 1.0f, 0.0f,
+              half, half,  -half,   1.0f, 1.0f,     0.0f, 1.0f, 0.0f,
+             -half, half,  -half,   0.0f, 1.0f,     0.0f, 1.0f, 0.0f,
+        };
 
-                        0.0f, 0.0f,
-                        1.0f, 1.0f,
-                        0.0f, 1.0f,
+        memcpy(m_Cube, cube, sizeof(cube));
 
-                        0.0f, 0.0f,   //left
-                        1.0f, 0.0f,
-                        1.0f, 1.0f,
+        uint32_t indices[36] = 
+        { 
+            0,  1,  2,      3,  4,  5,  // front
+            6,  7,  8,      9,  10, 11, // right
+            12, 13, 14,     15, 16, 17, // back
+            18, 19, 20,     21, 22, 23, // left
+            24, 25, 26,     27, 28, 29, // bottom
+            30, 31, 32,     33, 34, 35  // top
+        }; 
 
-                        0.0f, 0.0f,
-                        1.0f, 1.0f,
-                        0.0f, 1.0f,
-
-                        0.0f, 0.0f,   //bottom
-                        1.0f, 0.0f,
-                        1.0f, 1.0f,
-
-                        0.0f, 0.0f,
-                        1.0f, 1.0f,
-                        0.0f, 1.0f,
-
-                        0.0f, 0.0f,   //top
-                        1.0f, 0.0f,
-                        1.0f, 1.0f,
-
-                        0.0f, 0.0f,
-                        1.0f, 1.0f,
-                        0.0f, 1.0f };
-
-        float normals[] = { 0.0f, 0.0f, 1.0f,  //front
-                            0.0f, 0.0f, 1.0f,
-                            0.0f, 0.0f, 1.0f,
-
-                            0.0f, 0.0f, 1.0f,
-                            0.0f, 0.0f, 1.0f,
-                            0.0f, 0.0f, 1.0f,
-
-                            1.0f, 0.0f, 0.0f,  //right
-                            1.0f, 0.0f, 0.0f,
-                            1.0f, 0.0f, 0.0f,
-
-                            1.0f, 0.0f, 0.0f,
-                            1.0f, 0.0f, 0.0f,
-                            1.0f, 0.0f, 0.0f,
-
-                            0.0f, 0.0f, -1.0f,  //back
-                            0.0f, 0.0f, -1.0f,
-                            0.0f, 0.0f, -1.0f,
-
-                            0.0f, 0.0f, -1.0f,
-                            0.0f, 0.0f, -1.0f,
-                            0.0f, 0.0f, -1.0f,
-
-                            -1.0f, 0.0f, 0.0f,  //left
-                            -1.0f, 0.0f, 0.0f,
-                            -1.0f, 0.0f, 0.0f,
-
-                            -1.0f, 0.0f, 0.0f,
-                            -1.0f, 0.0f, 0.0f,
-                            -1.0f, 0.0f, 0.0f,
-
-                            0.0f, -1.0f, 0.0f,  //bottom
-                            0.0f, -1.0f, 0.0f,
-                            0.0f, -1.0f, 0.0f,
-
-                            0.0f, -1.0f, 0.0f,
-                            0.0f, -1.0f, 0.0f,
-                            0.0f, -1.0f, 0.0f,
-
-                            0.0f, 1.0f, 0.0f,  //top
-                            0.0f, 1.0f, 0.0f,
-                            0.0f, 1.0f, 0.0f,
-
-                            0.0f, 1.0f, 0.0f,
-                            0.0f, 1.0f, 0.0f,
-                            0.0f, 1.0f, 0.0f };
-
-        uint32_t indices[] = { 0, 1, 2,       3 , 4, 5,  //front
-                                6,7,8, 9,10, 11, //right
-                                12, 13, 14, 15, 16, 17, //back
-                                18, 19, 20, 21, 22, 23, //left
-                                24, 25, 26, 27, 28, 29, //bottom
-                                30, 31, 32, 33, 34, 35 }; //top
-
-       
+        memcpy(m_Indices, indices, sizeof(indices));       
     }
-    float* Cube::Positions()
+
+    float* Cube::GetModel()
     {
-        return nullptr;
+        return m_Cube;
     }
-    uint32_t* Cube::Indices()
+
+    uint32_t* Cube::Indices() { return m_Indices; }
+
+    size_t Cube::Size() const { return sizeof(m_Cube); }
+
+
+    uint32_t Cube::Count() const
     {
-        return nullptr;
+        return sizeof(m_Indices) / sizeof(uint32_t);
     }
 }
 

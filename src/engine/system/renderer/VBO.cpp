@@ -4,7 +4,7 @@
 
 namespace MHelmet
 {
-	VBO* VBO::Create(float* vertices, uint32_t size)
+	RefCount<VBO> VBO::Create(float* vertices, uint32_t size)
 	{
 
 		//return new OpenGLVBO(vertices, size);
@@ -16,7 +16,8 @@ namespace MHelmet
 			break;
 		case RendererAPI::API::OpenGL:
 
-			return new OpenGLVBO(vertices, size);
+			//return new OpenGLVBO(vertices, size);
+			return std::make_shared<OpenGLVBO>(vertices, size);
 		
 	
 		case RendererAPI::API::DirectX:

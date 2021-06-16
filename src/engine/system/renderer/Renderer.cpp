@@ -52,6 +52,6 @@ namespace MHelmet
 		 std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_Proj", Scene->Projection);
 
 		_VAO->Bind();
-		RenderCommand::DrawIndexed(_VAO);
+		RenderDrawCall::DrawIndexed(_VAO);
 	}
 }

@@ -1,90 +1,47 @@
 #include "engine/system/geometry/quad.hpp"
+#include <vcruntime_string.h>
 
 namespace MHelmet
 {
     Quad::Quad(float size)
-        : _size(size)
+        : m_Size(size)
     {
         m_Vertices = 1 * 2 * 3;  // 1 face * 2 triangles * 3 vertices
         m_Elements = m_Vertices;
 
-        const float half = _size / 2.0f;
+        const float half = m_Size / 2.0f;        
 
-        float positions[18] =
+        float quad[32] =
         {
-            half, half, 0.0f,    //upper right triangle
-            half, -half, 0.0f,
-            -half, half, 0.0f,
+            // Positions          // UVS        // Normals
+            -half, -half, 0.0f,   0.0f, 0.0f,   0.0f, 0.0f, 1.0f,
+             half, -half, 0.0f,   1.0f, 0.0f,   0.0f, 0.0f, 1.0f,
 
-            half, -half, 0.0f,   //lower left triangle
-            -half, half, 0.0f,
-            -half, -half, 0.0f
+            // Positions          // UVS        // Normals
+             half,  half, 0.0f,   1.0f, 1.0f,   0.0f, 0.0f, 1.0f,
+            -half,  half, 0.0f,   0.0f, 1.0f,   0.0f, 0.0f, 1.0f,
+            
         };
 
-        // memcpy(m_p)
+        memcpy(m_Quad, quad, sizeof(quad));
 
-        float uvs[] =
-        {
-            1.0f, 1.0f,
-            1.0f, 0.0f,
-            0.0f, 1.0f,
+        uint32_t indices[6] = { 0, 1, 2,    2, 3, 0 };
 
-            1.0f, 0.0f,
-            0.0f, 1.0f,
-            0.0f, 0.0f
-        };
-
-        float normals[] =
-        {
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f
-        };
-
-        uint32_t indices[] =
-        {
-            0, 2, 1,
-            3 , 4, 5
-        };
+        memcpy(m_Indices, indices, sizeof(indices));       
     }
 
-    float* Quad::Positions()
+    float* Quad::GetModel()
     {
-        const float half = _size / 2.0f;
-
-        float positions[18] =
-        {
-            half, half, 0.0f,    //upper right triangle
-            half, -half, 0.0f,
-            -half, half, 0.0f,
-
-            half, -half, 0.0f,   //lower left triangle
-            -half, half, 0.0f,
-            -half, -half, 0.0f
-        };
-
-
-
-        return positions;
+        return m_Quad;
     }
 
-    uint32_t* Quad::Indices()
-    {
-        return uint32_t();
-    }
+    uint32_t* Quad::Indices() { return m_Indices; }
 
-    size_t Quad::Size() const
-    {
-        return 0;
-    }
+    size_t Quad::Size() const { return sizeof(m_Quad); }
 
     uint32_t Quad::Count() const
     {
-        return uint32_t();
+        return sizeof(m_Indices) / sizeof(uint32_t);
     }
 }
 
