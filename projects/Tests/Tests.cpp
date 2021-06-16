@@ -12,7 +12,7 @@ class TestingLayer : public MHelmet::NodeLayer
 public:
 
 	using R  =  MHelmet::Renderer;
-	using RC =  MHelmet::RenderDrawCall;	
+	using RDC =  MHelmet::RenderDrawCall;	
 
 	TestingLayer() : MHelmet::NodeLayer("TestingLayer")
 	{
@@ -25,7 +25,7 @@ public:
 		m_VAO.reset(MHelmet::VAO::Create());
 
 		MHelmet::RefCount<MHelmet::VBO> VBO_			;
-		VBO_ = MHelmet::VBO::Create(C.GetModel(), C.Size());		
+		VBO_ = MHelmet::VBO::Create(Q.GetModel(), Q.Size());		
 
 		VBO_->SetLayout
 		({ 
@@ -37,7 +37,7 @@ public:
 		m_VAO->Add__VBO(VBO_);	
 
 		MHelmet::RefCount<MHelmet::EBO> EBO_;
-		EBO_ = std::make_shared<MHelmet::OpenGLEBO>(C.Indices(), C.Count());
+		EBO_ = std::make_shared<MHelmet::OpenGLEBO>(Q.Indices(), Q.Count());
 
 		m_VAO->Add__EBO(EBO_);
 
@@ -52,8 +52,8 @@ public:
 	{
 		HandleInput(dt);		
 
-		RC::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-		RC::clear();
+		RDC::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+		RDC::clear();
 		 
 		R::BeginScene(m_Camera);
 		{
@@ -63,10 +63,11 @@ public:
 				{
 					m_Cubo.Translate = glm::vec3((i * 1.5) * 1.0f, (j * 1.5) * 1.0f, 0.0f);
 					m_Cubo.Rotate = glm::vec3(1.0f, 1.0f, 1.0f);
-					m_Cubo.Scale = glm::vec3(1.0f, 1.0f, 1.0f);
+					m_Cubo.Scale = glm::vec3(0.8f, 1.0f, 1.0f);
+			
 					m_Cubo.Degrees = static_cast<float>(glfwGetTime()) * glm::radians(20.0f);
 					
-					//m_Cubo.Degrees = 0.0f;
+					m_Cubo.Degrees = 0.0f;
 
 					R::BeginModel(m_Cubo.Translate, m_Cubo.Rotate, m_Cubo.Scale, m_Cubo.Degrees);
 					R::Submit(m_Shader, m_VAO, m_ModelColor);
@@ -88,7 +89,7 @@ public:
 	{
 		if (event.GetEventType() == MHelmet::EventType::E_MOUSE_MOVED)
 		{			
-			if (false)
+		//	if (false)
 			HandleMouse((MHelmet::OnMouseMoved&)event);			
 		}
 		if (event.GetEventType() == MHelmet::EventType::E_KEY_PRESSED)

@@ -18,6 +18,7 @@ namespace MHelmet
         virtual uint32_t Count() const override;
 
     private:
+
         float    m_Size;
         float    m_Cube[288];
         uint32_t m_Indices[36];

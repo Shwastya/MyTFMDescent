@@ -16,6 +16,7 @@ namespace MHelmet
 		Scene->Model = glm::mat4(1.0f);
 		Scene->Model = glm::translate(Scene->Model, translate); 	
 		Scene->Model = glm::rotate(Scene->Model, degrees, rotate);
+		//Scene->Model = glm::scale(Scene->Model, scale);
 		Scene->Model = glm::scale(Scene->Model, scale);
 	}
 
