@@ -6,18 +6,18 @@ namespace MHelmet {
 
 	struct SimpleLog : public Log
 	{
-		inline SimpleLog()
+		SimpleLog()
 		{ 
 			Init();
 		}
 
 		void Init() override;
 
-		inline std::shared_ptr<spdlog::logger>& EngineLogger() override
+		RefCount<spdlog::logger>& EngineLogger() override
 		{
 			return m_EngineLogger;
 		}
-		inline std::shared_ptr<spdlog::logger>& ClientLogger() override
+		RefCount<spdlog::logger>& ClientLogger() override
 		{
 			return m_ClientLogger;
 		}
@@ -28,8 +28,8 @@ namespace MHelmet {
 
 	private:
 		bool m_Alive = false;
-		std::shared_ptr<spdlog::logger> m_EngineLogger;
-		std::shared_ptr<spdlog::logger> m_ClientLogger;
+		RefCount<spdlog::logger> m_EngineLogger;
+		RefCount<spdlog::logger> m_ClientLogger;
 	};
 
 

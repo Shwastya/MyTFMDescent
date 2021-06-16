@@ -44,7 +44,7 @@ public:
 };
 
 
-extern std::unique_ptr<MHelmet::Engine> MHelmet::createApp()
+extern MHelmet::Unique<MHelmet::Engine> MHelmet::createApp()
 {
 	MH_INFO("Created Application: {}", "ProjectExample!");
 	return std::make_unique<ProjectExample>();

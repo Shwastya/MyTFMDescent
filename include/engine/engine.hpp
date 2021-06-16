@@ -35,7 +35,7 @@ namespace MHelmet
 		bool WindowCloseTask(OnWindowClose& e); // perform event
 
 	private:
-		std::unique_ptr<Window>	m_Window;
+		Unique<Window>	m_Window;
 		
 		bool m_Alive = true;
 		LayerManager  m_Layers;
@@ -49,7 +49,7 @@ namespace MHelmet
 		static Engine* s_Instance;
 	};
 	
-	std::unique_ptr<Engine> createApp(); // definido en cliente
+	Unique<Engine> createApp(); // definido en cliente
 }
 
 

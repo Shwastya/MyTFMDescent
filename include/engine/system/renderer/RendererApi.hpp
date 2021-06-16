@@ -21,7 +21,7 @@ namespace MHelmet
 		virtual void SetClearColor(const glm::vec4& color) = 0;
 		virtual void clear() = 0;
 
-		virtual void DrawIndexed(const std::shared_ptr<VAO>& _VAO) = 0;
+		virtual void DrawIndexed(const RefCount<VAO>& _VAO) = 0;
 
 		inline static API GetAPI() { return s_API; }
 

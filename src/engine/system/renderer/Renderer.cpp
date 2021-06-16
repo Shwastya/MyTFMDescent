@@ -19,7 +19,7 @@ namespace MHelmet
 		Scene->Model = glm::scale(Scene->Model, scale);
 	}
 
-	void Renderer::BeginScene(std::shared_ptr<PerspectiveCamera>& camera)
+	void Renderer::BeginScene(RefCount<PerspectiveCamera>& camera)
 	{	
 		
 		Scene->View  = glm::mat4(1.0f);		
@@ -39,11 +39,13 @@ namespace MHelmet
 	{
 
 	}
-	void Renderer::Submit(const std::shared_ptr<Shader>& _Shader, const std::shared_ptr<VAO>& _VAO)
+	void Renderer::Submit(const RefCount<Shader>& _Shader, const RefCount<VAO>& _VAO, const glm::vec3& material)
 	{
 		// std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->Bind();
 
 		 _Shader->Bind();
+
+		 std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_Color", material);
 
 		 std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_Model", Scene->Model);
 		 std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_View", Scene->View);

@@ -10,7 +10,7 @@ namespace MHelmet
 		virtual void SetClearColor(const glm::vec4& color) override;
 		virtual void clear() override;
 
-		virtual void DrawIndexed(const std::shared_ptr<VAO>& _VAO) override;
+		virtual void DrawIndexed(const RefCount<VAO>& _VAO) override;
 
 	
 

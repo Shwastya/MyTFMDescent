@@ -69,7 +69,7 @@ public:
 	}
 };
 
-extern std::unique_ptr<MHelmet::Engine> MHelmet::createApp()
+extern MHelmet::Unique<MHelmet::Engine> MHelmet::createApp()
 {
 	return std::make_unique<ProjectTesting>();
 }

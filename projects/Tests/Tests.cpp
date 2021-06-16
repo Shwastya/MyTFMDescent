@@ -7,12 +7,12 @@ class TestingLayer : public MHelmet::NodeLayer
 {
 public:
 
-	using R =  MHelmet::Renderer;
-	using RC = MHelmet::RenderCommand;
+	using R  =  MHelmet::Renderer;
+	using RC =  MHelmet::RenderCommand;	
 
 	TestingLayer() : MHelmet::NodeLayer("TestingLayer")
 	{
-		m_Camera = std::make_shared<MHelmet::PerspectiveCamera>(glm::vec3(18.0f, 18.0f, 30.0f));
+		m_Camera = std::make_shared<MHelmet::PerspectiveCamera>(glm::vec3(18.0f, 15.0f, 45.0f));
 
 
 		m_VAO.reset(MHelmet::VAO::Create());
@@ -66,7 +66,7 @@ public:
 						  half, half, -half,
 						  -half, half, -half };
 
-		std::shared_ptr<MHelmet::VBO> VBO_ = std::make_shared<MHelmet::OpenGLVBO>(positions, sizeof(positions));
+		MHelmet::RefCount<MHelmet::VBO> VBO_ = std::make_shared<MHelmet::OpenGLVBO>(positions, sizeof(positions));
 		VBO_->Create(positions, sizeof(positions));
 
 		VBO_->SetLayout({ {MHelmet::BUFFER::DataType::Float3, "a_Pos"} });
@@ -83,7 +83,7 @@ public:
 		};
 
 
-		std::shared_ptr<MHelmet::EBO> EBO_ = std::make_shared<MHelmet::OpenGLEBO>(indices, sizeof(indices) / sizeof(uint32_t));
+		MHelmet::RefCount<MHelmet::EBO> EBO_ = std::make_shared<MHelmet::OpenGLEBO>(indices, sizeof(indices) / sizeof(uint32_t));
 
 		m_VAO->Add__EBO(EBO_);
 		m_Shader = MHelmet::Shader::create
@@ -106,9 +106,7 @@ public:
 		{
 			for (int i = 0; i < 20; ++i)
 			{
-
-
-				for (int j = 0; j < 20; ++j)
+				for (int j = 0; j < 16; ++j)
 				{
 					m_Cubo.Translate = glm::vec3((i * 2) * 1.0f, (j * 2) * 1.0f, 0.0f);
 					m_Cubo.Rotate = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -117,17 +115,24 @@ public:
 
 					//m_Cubo.Degrees = 0.0f;
 					//m_Camera->setNewPosition(glm::vec3((i * -10) * 1.0f, 0.0f, 1.0f));
-
+				
 					R::BeginModel(m_Cubo.Translate, m_Cubo.Rotate, m_Cubo.Scale, m_Cubo.Degrees);
-					R::Submit(m_Shader, m_VAO);
+					R::Submit(m_Shader, m_VAO, m_ModelColor);
 				}
 
 			}
 		}	
-	}
+	}  
 
 	void ImGuiRender()
 	{
+		ImGui::Begin("Settings"); // Inicia una ventana nueva 
+
+
+		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_ModelColor));
+
+
+		ImGui::End();
 		
 	}
 
@@ -209,14 +214,15 @@ private:
 	
 
 private:
-	std::shared_ptr<MHelmet::Shader>   m_Shader;
-	std::shared_ptr<MHelmet::VAO>      m_VAO;
+	MHelmet::RefCount<MHelmet::Shader>   m_Shader;
+	MHelmet::RefCount<MHelmet::VAO>      m_VAO;
 
-	std::shared_ptr<MHelmet::PerspectiveCamera> m_Camera;
+	MHelmet::RefCount<MHelmet::PerspectiveCamera> m_Camera;
 
 	/* atributos para los modelos */
 	
 	ModelTransform m_Cubo;
+	glm::vec3 m_ModelColor{ 1.0f, 0.0f, 0.5f };
 
 
 	/* atributos para el mouse e interfaz */
@@ -247,7 +253,7 @@ public:
 	}
 };
 
-extern std::unique_ptr<MHelmet::Engine> MHelmet::createApp()
+extern MHelmet::Unique<MHelmet::Engine> MHelmet::createApp()
 {
 	return std::make_unique<ProjectTesting>();
 }

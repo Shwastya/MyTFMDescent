@@ -9,10 +9,16 @@ namespace MHelmet
 	public:
 
 		static void BeginModel(glm::vec3 translate, glm::vec3 rotate, glm::vec3 scale, float degrees);
-		static void BeginScene(std::shared_ptr<PerspectiveCamera>& camera);
+		static void BeginScene(RefCount<PerspectiveCamera>& camera);
 		static void EndEscene();
 
-		static void Submit(const std::shared_ptr<Shader>& _Shader, const std::shared_ptr<VAO>& _VAO);
+		// se anyade material pero solo es un vec4 que pasa el color
+		// la idea es de momento hacerlo simple pero en el futuro 
+		// lo que se le deberia pasar es un tipo de clase material 
+		// que pueda englobar tanto colores como texturas 
+		// haciendo las abstracciones necesarias con factory method 
+		// y switch hacia distintos contextos de render 
+		static void Submit(const RefCount<Shader>& _Shader, const RefCount<VAO>& _VAO, const glm::vec3& material);
 
 		static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 

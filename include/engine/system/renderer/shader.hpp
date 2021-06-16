@@ -20,8 +20,7 @@ namespace MHelmet
         virtual void Bind() const   = 0;
         virtual void Unbind() const = 0;
 
-        static 
-        std::shared_ptr<Shader>
+        static RefCount<Shader>
         create(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr);
       /*  void SetUniform(const char* name, int value) const;
         void SetUniform(const char* name, float value) const;

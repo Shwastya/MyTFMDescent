@@ -12,7 +12,7 @@ namespace MHelmet
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
-	void OpenGlRendererAPI::DrawIndexed(const std::shared_ptr<VAO>& _VAO)
+	void OpenGlRendererAPI::DrawIndexed(const RefCount<VAO>& _VAO)
 	{
 		glDrawElements(GL_TRIANGLES, _VAO->GetEBO()->Count(), GL_UNSIGNED_INT, nullptr);
 	}

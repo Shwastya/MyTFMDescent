@@ -11,7 +11,7 @@
 
 namespace MHelmet
 {
-	std::shared_ptr<Shader> Shader::create(const char* vertexPath, const char* fragmentPath, const char* geometryPath)
+	RefPtr<Shader> Shader::create(const char* vertexPath, const char* fragmentPath, const char* geometryPath)
 	{
 
 		//return new OpenGLVBO(vertices, size);
@@ -23,7 +23,7 @@ namespace MHelmet
 			break;
 		case RendererAPI::API::OpenGL:
 
-			return std::make_shared<OpenGLShader>(vertexPath, fragmentPath, geometryPath);
+			return std::make_unique<OpenGLShader>(vertexPath, fragmentPath, geometryPath);
 
 
 		case RendererAPI::API::DirectX:

@@ -39,7 +39,7 @@ namespace MHelmet
 	{
 		glBindVertexArray(0);
 	}
-	void OpenGLVAO::Add__VBO(const std::shared_ptr<VBO>& _vbo)
+	void OpenGLVAO::Add__VBO(const RefCount<VBO>& _vbo)
 	{
 
 		// CAMBIAR POR ASSERT CON MACRO Y LOG 
@@ -78,7 +78,7 @@ namespace MHelmet
 	}
 
 
-	void OpenGLVAO::Add__EBO(const std::shared_ptr<EBO>& _ebo)
+	void OpenGLVAO::Add__EBO(const RefCount<EBO>& _ebo)
 	{
 		glBindVertexArray(m_ID_VAO);
 		_ebo->Bind();

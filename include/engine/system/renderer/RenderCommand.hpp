@@ -22,7 +22,7 @@ namespace MHelmet
 		}
 
 		inline static
-		void DrawIndexed(const std::shared_ptr<VAO>& _VAO)
+		void DrawIndexed(const RefCount<VAO>& _VAO)
 		{
 			s_RenderererAPI->DrawIndexed(_VAO);
 		}

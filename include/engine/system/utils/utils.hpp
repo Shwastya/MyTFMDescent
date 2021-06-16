@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 
 namespace MHelmet
 {
@@ -12,5 +13,17 @@ namespace MHelmet
 	private:
 		float m_Time;
 	};	
+
+	
+	// Unique Pointer - Scope for control lifetime and other things
+	template<typename T>
+	using Unique = std::unique_ptr<T>;
+
+
+	// Shared pointer - sistema de conteo de referencia -
+	template<typename T>	
+	using RefCount = std::shared_ptr<T>;
+
+	
 }
 
