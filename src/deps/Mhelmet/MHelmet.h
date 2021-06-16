@@ -23,8 +23,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-
-/* No muy seguro sw queseal el mejor lugar */
+#include "engine/system/renderer/Texture.hpp"
+/* No muy seguro de que sea el mejor lugar */
 
 struct ModelTransform
 {

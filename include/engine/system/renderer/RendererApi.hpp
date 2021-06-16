@@ -1,5 +1,8 @@
 #pragma once
-//#include "engine/system/renderer/RenderCommand.hpp"
+#ifndef STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_IMPLEMENTATION 
+#endif
+
 #include <glm/glm.hpp>
 #include "engine/system/renderer/shader.hpp" 
 #include "engine/system/renderer/VAO.hpp"
@@ -22,6 +25,7 @@ namespace MHelmet
 		virtual void clear() = 0;
 
 		virtual void DrawIndexed(const RefCount<VAO>& _VAO) = 0;
+//		virtual void DrawCall();
 
 		inline static API GetAPI() { return s_API; }
 

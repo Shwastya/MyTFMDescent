@@ -1,57 +1,124 @@
-#ifndef __TEXTURE_H__
-#define __TEXTURE_H__
+#pragma once
+#include "engine/system/renderer/Texture.hpp"
 
-#include <cstdint>
-#include <string>
+namespace MHelmet
+{
+	class Shader;
 
-class Shader;
+	struct OpenGLTexture2D : public Texture2D
+	{
+		enum class Wrap 
+		{
+			Repeat,
+			Mirrored_Repeat,
+			Clamp_To_Border,
+			Clamp_To_Edge
+		};
+			
+		enum class Filter 
+		{
+			None,
+			Nearest,
+			Linear
+		};			
 
-class Texture {
-    public:
-        enum class Wrap {
-            Repeat,
-            Mirrored_Repeat,
-            Clamp_To_Border,
-            Clamp_To_Edge
-        };
+		OpenGLTexture2D(const char* path, Format format);
+		virtual ~OpenGLTexture2D();
 
-        enum class Filter {
-            None,
-            Nearest,
-            Linear
-        };
+		virtual uint32_t GetWidth()  const override { return m_Width;  };
+		virtual uint32_t GetHeight() const override { return m_Height; };
 
-        enum class Format {
-            RGB,
-            RGBA
-        };
+		virtual void Bind(uint32_t unit) const override;
 
-        Texture(const char* path, Format format);
-        Texture() = delete;
-        ~Texture();
+		void setWrap(Wrap s, Wrap t);
+		void setFilter(Filter mag, Filter min, Filter mipMapMag = Filter::None, Filter mipMapMin = Filter::None);
 
-        Texture(const Texture&) = default;
-        Texture(Texture&&) = default;
-        Texture& operator=(const Texture&) = default;
-        Texture& operator=(Texture&&) = default;
+	private:
+		void applyWrapping() const;
+		void applyFilter() const;
+	private:
 
-        void use(const Shader& shader, const char* name, uint32_t unit = 0) const;
+		char* m_Path;
 
-        void setWrap(Wrap s, Wrap t);
-        void setFilter(Filter mag, Filter min, Filter mipMapMag = Filter::None, Filter mipMapMin = Filter::None);
+		Format m_Format = Format::RGB;
 
-    private:
-        void applyWrapping() const;
-        void applyFilter() const;
+		uint32_t m_Width;
+		uint32_t m_Height;
+		uint32_t m_Depth; // channels
 
-    private:
-        uint32_t _id = 0;
-        Format _format = Format::RGB;
-        int32_t _width = 0, _height = 0;
-        int32_t _depth = 0;
-        std::pair<Wrap, Wrap>_wrap{ Wrap::Repeat, Wrap::Repeat };
-        std::pair<Filter, Filter>_filter{ Filter::Linear, Filter::Linear };
-        std::pair<Filter, Filter>_filterMipMap{ Filter::None, Filter::None };
-};
+		uint32_t m_TextID;
 
-#endif
+		std::pair<Wrap, Wrap> m_Wrap
+		{ 
+			Wrap::Repeat, 
+			Wrap::Repeat 
+		};
+		std::pair<Filter, Filter> m_Filter
+		{ 
+			Filter::Linear, 
+			Filter::Linear 
+		};
+		std::pair<Filter, Filter> m_FilterMipMap
+		{ 
+			Filter::None, 
+			Filter::None 
+		};
+	};
+}
+
+
+
+
+//#include <cstdint>
+//#include <string>
+
+//class Shader;
+//
+//class Texture {
+//    public:
+//        enum class Wrap {
+//            Repeat,
+//            Mirrored_Repeat,
+//            Clamp_To_Border,
+//            Clamp_To_Edge
+//        };
+//
+//        enum class Filter {
+//            None,
+//            Nearest,
+//            Linear
+//        };
+//
+//        enum class Format {
+//            RGB,   
+//            RGBA
+//        };
+//
+//        Texture(const char* path, Format format);
+//        Texture() = delete;
+//        ~Texture();
+//
+//        Texture(const Texture&) = default;
+//        Texture(Texture&&) = default;
+//        Texture& operator=(const Texture&) = default;
+//        Texture& operator=(Texture&&) = default;
+//
+//        void use(const Shader& shader, const char* name, uint32_t unit = 0) const;
+//
+//        void setWrap(Wrap s, Wrap t);
+//        void setFilter(Filter mag, Filter min, Filter mipMapMag = Filter::None, Filter mipMapMin = Filter::None);
+//
+//    private:
+//        void applyWrapping() const;
+//        void applyFilter() const;
+//
+//    private:
+//        uint32_t _id = 0;
+//        Format _format = Format::RGB;
+//        int32_t _width = 0, _height = 0;
+//        int32_t _depth = 0;
+//        std::pair<Wrap, Wrap>_wrap{ Wrap::Repeat, Wrap::Repeat };
+//        std::pair<Filter, Filter>_filter{ Filter::Linear, Filter::Linear };
+//        std::pair<Filter, Filter>_filterMipMap{ Filter::None, Filter::None };
+//};
+

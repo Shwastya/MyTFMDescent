@@ -1,57 +1,77 @@
-#ifndef __TEXTURE_H__
-#define __TEXTURE_H__
+#pragma once
+#include "engine/system/MHCore.hpp"
 
-#include <cstdint>
-#include <string>
+namespace MHelmet
+{
+	// pura clase interfaz virtual sin necesidad de instanciarse
+	struct Texture
+	{
+		virtual ~Texture() = default;
 
-class Shader;
+		virtual uint32_t GetWidth()  const = 0;
+		virtual uint32_t GetHeight() const = 0;
 
-class Texture {
-    public:
-        enum class Wrap {
-            Repeat,
-            Mirrored_Repeat,
-            Clamp_To_Border,
-            Clamp_To_Edge
-        };
+		virtual void Bind(uint32_t unit = 0) const = 0;
+	};
 
-        enum class Filter {
-            None,
-            Nearest,
-            Linear
-        };
+	enum class Format
+	{
+		RGB, RGBA
+	};
 
-        enum class Format {
-            RGB,
-            RGBA
-        };
+	struct Texture2D : public Texture
+	{
+		static RefCount<Texture2D> Create(const char* path, Format format);
+	};
+}
 
-        Texture(const char* path, Format format);
-        Texture() = delete;
-        ~Texture();
 
-        Texture(const Texture&) = default;
-        Texture(Texture&&) = default;
-        Texture& operator=(const Texture&) = default;
-        Texture& operator=(Texture&&) = default;
-
-        void use(const Shader& shader, const char* name, uint32_t unit = 0) const;
-
-        void setWrap(Wrap s, Wrap t);
-        void setFilter(Filter mag, Filter min, Filter mipMapMag = Filter::None, Filter mipMapMin = Filter::None);
-
-    private:
-        void applyWrapping() const;
-        void applyFilter() const;
-
-    private:
-        uint32_t _id = 0;
-        Format _format = Format::RGB;
-        int32_t _width = 0, _height = 0;
-        int32_t _depth = 0;
-        std::pair<Wrap, Wrap>_wrap{ Wrap::Repeat, Wrap::Repeat };
-        std::pair<Filter, Filter>_filter{ Filter::Linear, Filter::Linear };
-        std::pair<Filter, Filter>_filterMipMap{ Filter::None, Filter::None };
-};
-
-#endif
+//class Shader;
+//
+//class Texture {
+//    public:
+//        enum class Wrap {
+//            Repeat,
+//            Mirrored_Repeat,
+//            Clamp_To_Border,
+//            Clamp_To_Edge
+//        };
+//
+//        enum class Filter {
+//            None,
+//            Nearest,
+//            Linear
+//        };
+//
+//        enum class Format {
+//            RGB,
+//            RGBA
+//        };
+//
+//        Texture(const char* path, Format format);
+//        Texture() = delete;
+//        ~Texture();
+//
+//        Texture(const Texture&) = default;
+//        Texture(Texture&&) = default;
+//        Texture& operator=(const Texture&) = default;
+//        Texture& operator=(Texture&&) = default;
+//
+//        void use(const Shader& shader, const char* name, uint32_t unit = 0) const;
+//
+//        void setWrap(Wrap s, Wrap t);
+//        void setFilter(Filter mag, Filter min, Filter mipMapMag = Filter::None, Filter mipMapMin = Filter::None);
+//
+//    private:
+//        void applyWrapping() const;
+//        void applyFilter() const;
+//
+//    private:
+//        uint32_t _id = 0;
+//        Format _format = Format::RGB;
+//        int32_t _width = 0, _height = 0;
+//        int32_t _depth = 0;
+//        std::pair<Wrap, Wrap>_wrap{ Wrap::Repeat, Wrap::Repeat };
+//        std::pair<Filter, Filter>_filter{ Filter::Linear, Filter::Linear };
+//        std::pair<Filter, Filter>_filterMipMap{ Filter::None, Filter::None };
+//};

@@ -40,13 +40,18 @@ namespace MHelmet
 	{
 
 	}
-	void Renderer::Submit(const RefCount<Shader>& _Shader, const RefCount<VAO>& _VAO, const glm::vec3& material)
+	void Renderer::Material(const RefCount<Shader>& _Shader, const glm::vec3& material)
+	{
+		std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->Bind();
+		std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_Color", material);
+	}
+	void Renderer::Submit(const RefCount<Shader>& _Shader, const RefCount<VAO>& _VAO)
 	{
 		// std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->Bind();
 
-		 _Shader->Bind();
-
-		 std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_Color", material);
+		
+		
+		 //std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_Color", material);
 
 		 std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_Model", Scene->Model);
 		 std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_View", Scene->View);

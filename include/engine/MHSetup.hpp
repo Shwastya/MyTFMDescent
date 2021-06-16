@@ -1,7 +1,7 @@
 #pragma once
 /* Enable Platform, Debub and Log System */
 #define MH_ENGINE  "MHelmet Engine {}"
-#define MH_VERSION "Alpha Version 0.1"
+#define MH_VERSION "Alpha Version 0.5"
 
 
 #define MH_PLATFORM_WIN 1
@@ -22,5 +22,3 @@
 	#endif
 #endif
 
-/* some necessary things, for now I leave here */
-#define STB_IMAGE_IMPLEMENTATION /* stbi.h image implementation */

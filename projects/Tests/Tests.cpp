@@ -16,6 +16,12 @@ public:
 
 	TestingLayer() : MHelmet::NodeLayer("TestingLayer")
 	{
+		/*const char* vertSrc  = "../assets/shaders/perspectiveShaders/vertex.vs";
+		const char* fragSrc  = "../assets/shaders/perspectiveShaders/fragment.fs";
+
+		const char* textBricks = "../assets/textures/bricks_albedo.png";
+		const char* textBlueBlocks = "../assets/textures/blue_blocks.jpg";*/
+
 		m_Camera = std::make_shared<MHelmet::PerspectiveCamera>(glm::vec3(11.6f, 9.0f, 23.5f));
 
 		MHelmet::Quad Q(1.0f);
@@ -46,6 +52,8 @@ public:
 			"../assets/shaders/perspectiveShaders/vertex.vs",
 			"../assets/shaders/perspectiveShaders/fragment.fs"
 		);
+
+	//	m_Texture = MHelmet::Texture2D::Create(textBricks, MHelmet::Format::RGB);
 	}
 
 	void Update(MHelmet::DeltaTime dt) override
@@ -69,8 +77,10 @@ public:
 					
 					m_Cubo.Degrees = 0.0f;
 
+				//	m_Texture->Bind(0);
 					R::BeginModel(m_Cubo.Translate, m_Cubo.Rotate, m_Cubo.Scale, m_Cubo.Degrees);
-					R::Submit(m_Shader, m_VAO, m_ModelColor);
+					R::Material(m_Shader, m_ModelColor);
+					R::Submit(m_Shader, m_VAO);
 				}
 			}
 		}	
@@ -163,6 +173,8 @@ private:
 	MHelmet::RefCount<MHelmet::VAO>      m_VAO;
 
 	MHelmet::RefCount<MHelmet::PerspectiveCamera> m_Camera;
+
+	MHelmet::RefCount<MHelmet::Texture2D> m_Texture;
 
 	/* atributos para los modelos */
 	

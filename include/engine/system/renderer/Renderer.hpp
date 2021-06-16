@@ -1,6 +1,7 @@
 #pragma once
 #include "engine/system/renderer/RenderDrawCall.hpp"
 #include "PerspectiveCamera.hpp"
+//#define SHADER std::reinterpret_pointer_cast<OpenGLShader>(_Shader)
 
 namespace MHelmet
 {	
@@ -18,7 +19,9 @@ namespace MHelmet
 		// que pueda englobar tanto colores como texturas 
 		// haciendo las abstracciones necesarias con factory method 
 		// y switch hacia distintos contextos de render 
-		static void Submit(const RefCount<Shader>& _Shader, const RefCount<VAO>& _VAO, const glm::vec3& material);
+		static void Material(const RefCount<Shader>& _Shader, const glm::vec3& material);
+		//	static void SetTexture();
+		static void Submit(const RefCount<Shader>& _Shader, const RefCount<VAO>& _VAO);
 
 		static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 
