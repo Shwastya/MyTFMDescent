@@ -17,14 +17,14 @@ namespace MHelmet
 	}
 
 	OpenGLTexture2D::OpenGLTexture2D(const char* path, Texture2D::Format format) 
-		: m_Format(format), m_Width(0), m_Height(0), m_Depth(0)
+		: m_Format(format)
 	{
 
 		// guardo el path por si necesitara recargar la textura
-		/*const size_t size = strlen(path);
+		const size_t size = strlen(path);
 		m_Path = new char[size + 1];
 		memcpy(m_Path, path, size);
-		m_Path[size] = 0;*/
+		m_Path[size] = 0;
 
 
 		stbi_set_flip_vertically_on_load(true);

@@ -26,6 +26,7 @@ public:
 		/* TEXTURES */
 		const char* textBricks = "../assets/textures/bricks_albedo.png";
 		const char* textBlueBlocks = "../assets/textures/blue_blocks.jpg";
+		const char* textAlphaTree = "../assets/textures/tree.png";
 
 		m_Camera = std::make_shared<MHelmet::PerspectiveCamera>(glm::vec3(11.6f, 9.0f, 23.5f));
 
@@ -33,37 +34,22 @@ public:
 		MHelmet::Triangle T;
 		MHelmet::Cube C(0.8F);
 
-		const float half = 1 / 2.0f;
-		float quad[] = 
-		{ 
-			//upper right triangle
-			half, half, 0.0f,   1.0f, 1.0f,
-			half, -half, 0.0f,  1.0f, 0.0f,
-			-half, half, 0.0f,  0.0f, 1.0f,
-
-			//lower left triangle
-			half, -half, 0.0f,   1.0f, 0.0f,
-			-half, half, 0.0f,		0.0f, 1.0f,
-			-half, -half, 0.0f,     0.0f, 0.0f
-		};
-
-		uint32_t indices[] = { 0, 2, 1,
-						   3 , 4, 5 };
 		m_VAO.reset(MHelmet::VAO::Create());
 
 		MHelmet::RefCount<MHelmet::VBO> VBO_			;
-		VBO_ = MHelmet::VBO::Create(quad, sizeof(quad));
+		VBO_ = MHelmet::VBO::Create(C.GetModel(), C.Size());
 
 		VBO_->SetLayout
 		({ 
 			{MHelmet::BUFFER::DataType::Float3, "a_Pos"     },
-			{MHelmet::BUFFER::DataType::Float2, "a_UVS"     }			
+			{MHelmet::BUFFER::DataType::Float2, "a_UVS"     },
+			{MHelmet::BUFFER::DataType::Float3, "a_Normals"     }
 		});
 
 		m_VAO->Add__VBO(VBO_);	
 
 		MHelmet::RefCount<MHelmet::EBO> EBO_;
-		EBO_ = std::make_shared<MHelmet::OpenGLEBO>(indices, sizeof(indices) / sizeof(uint32_t));
+		EBO_ = std::make_shared<MHelmet::OpenGLEBO>(C.Indices(), C.Count());
 
 		m_VAO->Add__EBO(EBO_);
 
@@ -79,14 +65,15 @@ public:
 			fragTexture
 		);
 
-		m_Texture = MHelmet::Texture2D::Create("../assets/textures/blue_blocks.jpg", MHelmet::Texture2D::Format::RGB);
+		m_Texture = MHelmet::Texture2D::Create(textBricks, MHelmet::Texture2D::Format::RGB);
+		m_AlphaTree = MHelmet::Texture2D::Create(textAlphaTree, MHelmet::Texture2D::Format::RGBA);
 	}
 
 	void Update(MHelmet::DeltaTime dt) override
 	{
 		HandleInput(dt);		
 
-		RDC::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+		RDC::ClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RDC::clear();
 		 
 		R::BeginScene(m_Camera);
@@ -95,29 +82,41 @@ public:
 			{
 				for (int j = 0; j < 16; ++j)
 				{
-					m_Cubo.Translate = glm::vec3((i * 1.5) * 1.0f, (j * 1.5) * 1.0f, 0.0f);
-					m_Cubo.Rotate = glm::vec3(1.0f, 1.0f, 1.0f);
-					m_Cubo.Scale = glm::vec3(1.0f, 1.0f, 1.0f);
+					m_Model.Translate = glm::vec3((i * 1.5) * 1.0f, (j * 1.5) * 1.0f, 0.0f);
+					m_Model.Rotate = glm::vec3(1.0f, 1.0f, 1.0f);
+					m_Model.Scale = glm::vec3(1.0f, 1.0f, 1.0f);
 			
-					m_Cubo.Degrees = static_cast<float>(glfwGetTime()) * glm::radians(20.0f);
+					m_Model.Degrees = static_cast<float>(glfwGetTime()) * glm::radians(20.0f);
 					
-					m_Cubo.Degrees = 0.0f;
+					m_Model.Degrees = 0.0f;
 
 				//	m_Texture->Bind(0);
-					R::Model(m_Cubo.Translate, m_Cubo.Rotate, m_Cubo.Scale, m_Cubo.Degrees);
+					R::Model(m_Model.Translate, m_Model.Rotate, m_Model.Scale, m_Model.Degrees);
 					R::Material(m_ShaderMaterial, m_ModelColor);
 					R::Submit(m_ShaderMaterial, m_VAO);
 				}
 			}
 
-			m_Cubo.Translate = glm::vec3(10.0f, 9.0f, 0.0f);
-			m_Cubo.Rotate = glm::vec3(1.0f, 1.0f, 1.0f);
-			m_Cubo.Scale = glm::vec3(10.0f, 10.0f, 10.0f);
+			m_Model.Translate = glm::vec3(10.0f, 9.0f, 0.0f);
+			m_Model.Rotate = glm::vec3(1.0f, 1.0f, 1.0f);
+			m_Model.Scale = glm::vec3(10.0f, 10.0f, 10.0f);
+			m_Model.Degrees = static_cast<float>(glfwGetTime()) * glm::radians(20.0f);
+			//m_Model.Degrees = static_cast<float>(glfwGetTime()) * glm::radians(20.0f);
 
-			m_Cubo.Degrees = static_cast<float>(glfwGetTime()) * glm::radians(20.0f);
-
-			R::Model(m_Cubo.Translate, m_Cubo.Rotate, m_Cubo.Scale, m_Cubo.Degrees);
+			R::Model(m_Model.Translate, m_Model.Rotate, m_Model.Scale, m_Model.Degrees);
 			R::Texture(m_ShaderTexture, m_Texture, 0);
+			R::Submit(m_ShaderTexture, m_VAO);
+
+
+
+			m_Model.Translate = glm::vec3(10.0f, 9.0f, 5.0f);
+			m_Model.Rotate = glm::vec3(1.0f, 1.0f, 1.0f);
+			m_Model.Scale = glm::vec3(10.0f, 10.0f, 10.0f);
+			m_Model.Degrees = 0.0f;
+			//m_Model.Degrees = static_cast<float>(glfwGetTime()) * glm::radians(20.0f);
+
+			R::Model(m_Model.Translate, m_Model.Rotate, m_Model.Scale, m_Model.Degrees);
+			R::Texture(m_ShaderTexture, m_AlphaTree, 0);
 			R::Submit(m_ShaderTexture, m_VAO);
 		}	
 	}  
@@ -211,11 +210,11 @@ private:
 
 	MHelmet::RefCount<MHelmet::PerspectiveCamera> m_Camera;
 
-	MHelmet::RefCount<MHelmet::Texture2D> m_Texture;
+	MHelmet::RefCount<MHelmet::Texture2D> m_Texture, m_AlphaTree;
 
 	/* atributos para los modelos */
 	
-	ModelTransform m_Cubo;
+	ModelTransform m_Model;
 	glm::vec3 m_ModelColor{ 1.0f, 0.0f, 0.5f };
 
 

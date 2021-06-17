@@ -10,6 +10,8 @@ namespace MHelmet
 	{
 	public:
 
+		static void Init();
+
 		static void Model(glm::vec3 translate, glm::vec3 rotate, glm::vec3 scale, float degrees);
 		static void BeginScene(RefCount<PerspectiveCamera>& camera);
 		static void EndEscene();

@@ -12,6 +12,11 @@ namespace MHelmet
 	Renderer::DataScene* Renderer::Scene = new Renderer::DataScene;
 	//PerspectiveCamera* camera = new PerspectiveCamera(glm::vec3(0.0f, 0.0f, 3.0f));
 		
+	void Renderer::Init()
+	{
+		RenderDrawCall::Init();
+	}
+
 	void Renderer::Model(glm::vec3 translate, glm::vec3 rotate, glm::vec3 scale, float degrees)
 	{
 		
@@ -67,6 +72,6 @@ namespace MHelmet
 		SHADER(_Shader)->SetUniform("u_Proj", Scene->Projection);
 
 		_VAO->Bind();
-		RenderDrawCall::DrawIndexed(_VAO);
+		RenderDrawCall::Draw(_VAO);
 	}
 }

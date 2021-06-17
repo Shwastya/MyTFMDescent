@@ -42,13 +42,13 @@ namespace MHelmet
 		void applyFilter() const;
 	private:
 
-		//char* m_Path;
+		char* m_Path;
 
 		MHelmet::OpenGLTexture2D::Format m_Format = MHelmet::OpenGLTexture2D::Format::RGB;
 
-		uint32_t m_Width;
-		uint32_t m_Height;
-		uint32_t m_Depth; // channels
+		uint32_t m_Width = 0;
+		uint32_t m_Height = 0;
+		uint32_t m_Depth = 0; // channels
 
 		uint32_t m_TextID;
 

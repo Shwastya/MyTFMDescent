@@ -10,23 +10,16 @@ namespace MHelmet
 	{
 	public:
 
-		inline static 
-		void SetClearColor(const glm::vec4& color) 
+		inline static void Init()
 		{
-			s_RenderererAPI->SetClearColor(color);
-		}
-		
-		inline static 
-		void clear()
-		{
-			s_RenderererAPI->clear();
+			s_RenderererAPI->Init();
 		}
 
-		inline static
-		void DrawIndexed(const RefCount<VAO>& _VAO)
-		{
-			s_RenderererAPI->DrawIndexed(_VAO);
-		}
+		static void ClearColor(const glm::vec4& color) { s_RenderererAPI->ClearColor(color); }
+		
+		static void clear()	{ s_RenderererAPI->clear();	}
+
+		static void Draw(const RefCount<VAO>& _VAO) { s_RenderererAPI->Draw(_VAO); }
 
 	private:
 

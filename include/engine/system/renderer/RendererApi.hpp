@@ -19,12 +19,12 @@ namespace MHelmet
 
 	public:
 
-		
+		virtual void Init() = 0;
 
-		virtual void SetClearColor(const glm::vec4& color) = 0;
+		virtual void ClearColor(const glm::vec4& color) = 0;
 		virtual void clear() = 0;
 
-		virtual void DrawIndexed(const RefCount<VAO>& _VAO) = 0;
+		virtual void Draw(const RefCount<VAO>& _VAO) = 0;
 //		virtual void DrawCall();
 
 		inline static API GetAPI() { return s_API; }
