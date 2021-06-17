@@ -22,17 +22,22 @@ namespace MHelmet
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4.6);
 			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-			MH_CORE_WARN("OpenGL CORE profile enabled!!");
+			CORE_WARN("OpenGL CORE profile enabled!!");
 		}
 
 		glfwMakeContextCurrent(m_GLFWwindow);
 		int result = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
-		MH_CORE_ASSERT(result, "Error initializing GLAD!");
+		if (!result)
+		{
+			CORE_ERROR("Error initializing GLAD! {0}:", result);
+		}
 
 	
-		MH_CORE_INFO("GPU {}", glGetString(GL_RENDERER));
-		MH_CORE_INFO("OpenGL v.{}", glGetString(GL_VERSION));
+
+	
+		CORE_INFO("GPU {}", glGetString(GL_RENDERER));
+		CORE_INFO("OpenGL v.{}", glGetString(GL_VERSION));
 		
 		////////////// OpenGL Contex - END -   //////////////
 	}

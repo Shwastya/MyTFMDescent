@@ -45,7 +45,7 @@ namespace MHelmet
 		// CAMBIAR POR ASSERT CON MACRO Y LOG 
 		if (_vbo->GetLayout().GetElements().size() < 1)
 		{
-			MH_CORE_ERROR("VBO layout not found");
+			CORE_ERROR("VBO layout not found");
 			__debugbreak;
 		}
 

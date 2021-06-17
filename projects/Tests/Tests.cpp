@@ -53,13 +53,13 @@ public:
 
 		m_VAO->Add__EBO(EBO_);
 
-		m_ShaderMaterial = MHelmet::Shader::create
+		m_ShaderMaterial = MHelmet::Shader::Create
 		(
 			vertMaterial,
 			fragMaterial
 		);
 
-		m_ShaderTexture = MHelmet::Shader::create
+		m_ShaderTexture = MHelmet::Shader::Create
 		(
 			vertTexture,
 			fragTexture

@@ -12,18 +12,22 @@
 
 namespace MHelmet 
 {
-	static bool s_GLFWInitialized = false;
+	static bool s_GLFW_ON = false;
 	static void GLFWErrorCallback(int error, const char* description)
 	{	
-		MH_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
+		CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}	
 
 	/************************************************/
-	Window* Window::Create(const WindowSpec& spec) {
+	Window* Window::Create(const WindowSpec& spec) 
+	{
 		return new WindowWin(spec);
 	}
 	WindowWin::WindowWin(const WindowSpec& spec)
-		: m_Spec(spec)	{ Init(); }
+		: m_Spec(spec)	
+	{ 
+		Init(); 
+	}
 	/************************************************/
 
 	WindowWin::~WindowWin() { ShutDown(); }
@@ -31,20 +35,19 @@ namespace MHelmet
 	void WindowWin::Init()
 	{
 		m_Data.Title = m_Spec.Title;
-		m_Data.Size  = m_Spec.Size;
+		m_Data.Size  = m_Spec.Size;		
 
-		
+		CORE_INFO("CREATED WINDOW {0} {1} {2}: ", m_Spec.Title, m_Spec.Size.Width, m_Spec.Size.Height);
 
-		MH_CORE_INFO("Created window {0} {1} {2}", m_Spec.Title, m_Spec.Size.Width, m_Spec.Size.Height);
-
-		if (!s_GLFWInitialized) // window context render initialized
+		if (!s_GLFW_ON) // window context render initialized
 		{
 			int success = glfwInit();
 
-			MH_CORE_ASSERT(success, "Error initializing GLFW!");
+			if (!success) CORE_ERROR("Error initializing GLFW! {0}: ", success);			
 
 			glfwSetErrorCallback(GLFWErrorCallback);
-			s_GLFWInitialized = true;			
+
+			s_GLFW_ON = true;
 		}
 
 		if (m_Spec.FullScreen)
@@ -73,23 +76,16 @@ namespace MHelmet
 		m_Context = new OpenGLContext(m_Window);
 		m_Context->Init();
 
-		/*
-		////////////// OpenGL Contex - BEGIN - //////////////
-		if (MH_ENABLE_CORE) // temporal 
-		{
-			MH_CORE_WARN("OpenGL CORE profile enabled:");
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4.1);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4.1);
-			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);			
-		}		
+		
+			
+		/*glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4.1);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4.1);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);			
 	
 		glfwMakeContextCurrent(m_Window);    
-		int result = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		int result = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);*/
 		////////////// OpenGL Contex - END -   //////////////	
-		MH_CORE_ASSERT(result, "Error initializing GLAD!");		
-		MH_CORE_INFO("OpenGL v.{}", glGetString(GL_VERSION));
-		*/
-
+		
 
 		// Puntero a la instancia actual del window
 		glfwSetWindowUserPointer(m_Window, &m_Data);
@@ -245,19 +241,14 @@ namespace MHelmet
 
 	void WindowWin::SetCaptureMode(bool toggle) const
 	{
-		if (toggle)
-		{
-			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		}
-		else
-		{
-			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		}
+		if (toggle)	glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		
+		else glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);		
 	}
 
 	void WindowWin::ShutDown()
 	{
-		s_GLFWInitialized = false;
+		s_GLFW_ON = false;
 		glfwTerminate();					
 	}
 }

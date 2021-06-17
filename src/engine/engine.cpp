@@ -33,15 +33,10 @@ namespace MHelmet
 	///////////////////////////////////////////////////
 	void Engine::run()								 
 	{												 
-		MH_CORE_INFO("Mhelmet Engine running!");	
-
-	
+		CORE_INFO("Mhelmet Engine running!");		
 
 		while (m_Alive)								 
 		{
-			
-
-
 			for (NodeLayer* layer : m_Layers)
 			{
 				layer->Update(m_DeltaTime);
@@ -70,8 +65,8 @@ namespace MHelmet
 
 	void Engine::OnEvent(Event& e)
 	{
-		PerformEvent perform(e);
-		perform.DoTask<OnWindowClose>(BindEventFunction(Engine::WindowCloseTask));
+		EventHandler handle(e);
+		handle.DoTask<OnWindowClose>(BindEventFunction(Engine::WindowCloseTask));
 
 		for (auto it = m_Layers.end(); it != m_Layers.begin();)
 		{

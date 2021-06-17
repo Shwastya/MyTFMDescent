@@ -4,11 +4,11 @@
 
 namespace MHelmet
 {
-    struct PerformEvent
+    struct EventHandler
 	{
 		template<typename T>
 		using EventFn = std::function<bool(T&)>;
-		PerformEvent(Event& event)
+		EventHandler(Event& event)
 			: m_Event(event) {}
 
 		template<typename T>

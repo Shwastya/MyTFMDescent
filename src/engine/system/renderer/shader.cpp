@@ -1,21 +1,11 @@
 #include "../src/engine/mhpch.cpp"
-//#include "engine/system/renderer/shader.hpp"
-
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLShader.hpp"
-
-//#include <glad/glad.h>
-//#include <glm/gtc/type_ptr.hpp>
-
-
 #include <sstream>
 
 namespace MHelmet
 {
-	RefPtr<Shader> Shader::create(const char* vertexPath, const char* fragmentPath, const char* geometryPath)
+	RefCount<Shader>Shader::Create(const char* vertexPath, const char* fragmentPath, const char* geometryPath)
 	{
-
-		//return new OpenGLVBO(vertices, size);
-
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:
@@ -23,8 +13,7 @@ namespace MHelmet
 			break;
 		case RendererAPI::API::OpenGL:
 
-			return std::make_unique<OpenGLShader>(vertexPath, fragmentPath, geometryPath);
-
+			return std::make_shared<OpenGLShader>(vertexPath, fragmentPath, geometryPath);
 
 		case RendererAPI::API::DirectX:
 			// NADA DE MOMENTO

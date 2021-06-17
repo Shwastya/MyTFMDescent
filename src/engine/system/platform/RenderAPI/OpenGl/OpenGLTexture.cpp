@@ -50,7 +50,7 @@ namespace MHelmet
 		}
 		else
 		{
-			MH_CORE_ERROR("Failed to Load Texture {0}", path);
+			CORE_ERROR("Failed to Load Texture {0}", path);
 		}
 
 		glBindTexture(GL_TEXTURE_2D, 0);
