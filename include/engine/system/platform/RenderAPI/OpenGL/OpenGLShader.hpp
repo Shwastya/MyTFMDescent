@@ -4,19 +4,27 @@
 
 #include "engine/system/renderer/Renderer.hpp"
 
-
+#include <unordered_map>
 
 namespace MHelmet
 {
-    class OpenGLShader : public Shader
+    enum class Type
     {
-        enum class Type
-        {
-            Vertex,
-            Fragment,
-            Geometry, // de momento es experimental y no se implementa
-            Program
-        };
+        Vertex,
+        Fragment,
+        Geometry, // de momento es experimental y no se implementa
+        Program
+    };
+
+    struct ShaderTypesMap
+    {
+        Type type;
+        std::string code;
+    };
+
+
+    class OpenGLShader : public Shader
+    {      
 
     public:
         OpenGLShader(const std::string& vertexPath, const std::string& fragmentPath);
@@ -33,7 +41,7 @@ namespace MHelmet
         virtual void Bind()   const override;
         virtual void Unbind() const override;
 
-        void CompileShader(const std::string& vertexCode, const std::string& fragmentCode);
+        
 
         // Overload set uniforms functions
         void Uniform(const char* name, int value) const;
@@ -50,19 +58,18 @@ namespace MHelmet
         void Uniform(const char* name, const glm::mat4& value) const;
 
     private:
-        static void LoadShader(const char* path, std::string* code);      
-        
-        static void CheckErrors(uint32_t OpenGLShader, Type type);
-        
+        std::string LoadShaderFromString(const std::string& GLSLFilePath);
+        static void LoadShaderFromChar(const char* path, std::string* code);    
 
-        std::string FileToString(const std::string& GLSLFilePath);
+        ShaderTypesMap SplitGlslSource(const std::string& GLSLSource);
+        void Compile(const ShaderTypesMap& ShaderSrc);
+
+
+        void CompileShader(const std::string& vertexCode, const std::string& fragmentCode);
+        static void CheckErrors(uint32_t OpenGLShader, Type type);        
 
     private:  
        // const std::string m_GLSL_Path;
         uint32_t id_;
     };
 }
-
-
-
-

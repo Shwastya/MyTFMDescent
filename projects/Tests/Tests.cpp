@@ -2,7 +2,7 @@
 #include "engine/system/geometry/quad.hpp"
 #include "engine/system/geometry/triangle.hpp"
 #include "engine/system/geometry/cube.hpp"
-
+#define MH MHelmet
 
 /*****************************************************************************
 *							Layer Proyecto Cliente 					         /
@@ -11,14 +11,18 @@ class TestingLayer : public MHelmet::NodeLayer
 {
 public:
 
-	using R  =  MHelmet::Renderer;
-	using RDC =  MHelmet::RenderDrawCall;	
 
-	TestingLayer() : MHelmet::NodeLayer("TestingLayer")
+
+
+	using R   = MH::Renderer;
+	using RDC = MH::RenderDrawCall;
+	
+
+	TestingLayer() : MH::NodeLayer("TestingLayer")
 	{
 		/* MATERIALS */
-		std::string MaterialShader = "../assets/shaders/perspectiveShaders/materialShader.vs";
-		std::string TextureShader = "../assets/shaders/perspectiveShaders/textureShader.vs";
+		std::string MaterialShader = "../assets/shaders/perspectiveShaders/materialShader.glsl";
+		std::string TextureShader = "../assets/shaders/perspectiveShaders/textureShader.glsl";
 		
 ;
 
@@ -27,38 +31,38 @@ public:
 		std::string  textBlueBlocks = "../assets/textures/blue_blocks.jpg";
 		std::string  textAlphaTree = "../assets/textures/tree.png";
 
-		m_Camera = std::make_shared<MHelmet::PerspectiveCamera>(glm::vec3(11.6f, 9.0f, 23.5f));
+		m_Camera = std::make_shared<MH::PerspectiveCamera>(glm::vec3(11.6f, 9.0f, 23.5f));
 
-		MHelmet::Quad Q(1.0f);
-		MHelmet::Triangle T;
-		MHelmet::Cube C(0.8F);
+		MH::Quad Q(1.0f);
+		MH::Triangle T;
+		MH::Cube C(0.8F);
 
-		m_VAO.reset(MHelmet::VAO::Create());
+		m_VAO.reset(MH::VAO::Create());
 
-		MHelmet::RefCount<MHelmet::VBO> VBO_			;
-		VBO_ = MHelmet::VBO::Create(C.GetModel(), C.Size());
+		MH::RefCount<MH::VBO> VBO_;
+		VBO_ = MH::VBO::Create(C.GetModel(), C.Size());
 
 		VBO_->SetLayout
 		({ 
-			{MHelmet::BUFFER::DataType::Float3, "a_Pos"     },
-			{MHelmet::BUFFER::DataType::Float2, "a_UVS"     },
-			{MHelmet::BUFFER::DataType::Float3, "a_Normals"     }
+			{MH::BUFFER::DataType::Float3, "a_Pos"     },
+			{MH::BUFFER::DataType::Float2, "a_UVS"     },
+			{MH::BUFFER::DataType::Float3, "a_Normals"     }
 		});
 
 		m_VAO->Add__VBO(VBO_);	
 
-		MHelmet::RefCount<MHelmet::EBO> EBO_;
-		EBO_ = std::make_shared<MHelmet::OpenGLEBO>(C.Indices(), C.Count());
+		MH::RefCount<MH::EBO> EBO_;
+		EBO_ = std::make_shared<MH::OpenGLEBO>(C.Indices(), C.Count());
 
 		m_VAO->Add__EBO(EBO_);
 
 		
-		m_ShaderMaterial = MHelmet::Shader::Create(MaterialShader);
+		m_ShaderMaterial = MH::Shader::Create(MaterialShader);
 
-		m_ShaderTexture = MHelmet::Shader::Create(TextureShader);
+		m_ShaderTexture  = MH::Shader::Create(TextureShader);
 
-		m_Texture = MHelmet::Texture2D::Create(textBricks, MHelmet::Texture2D::Format::RGB);
-		m_AlphaTree = MHelmet::Texture2D::Create(textAlphaTree, MHelmet::Texture2D::Format::RGBA);
+		m_Texture   = MH::Texture2D::Create(textBricks, MH::Texture2D::Format::RGB);
+		m_AlphaTree = MH::Texture2D::Create(textAlphaTree, MH::Texture2D::Format::RGBA);
 
 
 		
@@ -66,7 +70,7 @@ public:
 		
 	}
 
-	void Update(MHelmet::DeltaTime dt) override
+	void Update(MH::DeltaTime dt) override
 	{
 		HandleInput(dt);		
 
@@ -127,56 +131,56 @@ public:
 		ImGui::End();		
 	}
 
-	void OnEvent(MHelmet::Event& event) override
+	void OnEvent(MH::Event& event) override
 	{
-		if (event.GetEventType() == MHelmet::EventType::E_MOUSE_MOVED)
+		if (event.GetEventType() == MH::EventType::E_MOUSE_MOVED)
 		{			
 		//	if (false)
-			HandleMouse((MHelmet::OnMouseMoved&)event);			
+			HandleMouse((MH::OnMouseMoved&)event);			
 		}
-		if (event.GetEventType() == MHelmet::EventType::E_KEY_PRESSED)
+		if (event.GetEventType() == MH::EventType::E_KEY_PRESSED)
 		{			
-			MHelmet::OnKeyPressed& e = (MHelmet::OnKeyPressed&)event;
+			MH::OnKeyPressed& e = (MH::OnKeyPressed&)event;
 
 			if (e.GetKeyCode() == MH_KEY_F11)
 			{				
-				MHelmet::Engine::p().GetWindow().SetCaptureMode(true);				
+				MH::Engine::p().GetWindow().SetCaptureMode(true);				
 			}
 			if (e.GetKeyCode() == MH_KEY_F10)
 			{
-				MHelmet::Engine::p().GetWindow().SetCaptureMode(false);
+				MH::Engine::p().GetWindow().SetCaptureMode(false);
 			}
 		}
-		if (event.GetEventType() == MHelmet::EventType::E_MOUSE_SCROLLED)
+		if (event.GetEventType() == MH::EventType::E_MOUSE_SCROLLED)
 		{
-			MHelmet::OnMouseScrolled& e = (MHelmet::OnMouseScrolled&)event;
+			MH::OnMouseScrolled& e = (MH::OnMouseScrolled&)event;
 			m_Camera->HandleMouseScroll(e.GetYOffset());
 		}
 	}
 
 private:
 
-	void HandleInput(MHelmet::DeltaTime dt)
+	void HandleInput(MH::DeltaTime dt)
 	{
-		if (MHelmet::Input::IsKeyPressed(MH_KEY_S))
+		if (MH::Input::IsKeyPressed(MH_KEY_S))
 		{
 			m_Camera->Backward(dt);
 		}
-		if (MHelmet::Input::IsKeyPressed(MH_KEY_W))
+		if (MH::Input::IsKeyPressed(MH_KEY_W))
 		{
 			m_Camera->Forward(dt);
 		}
-		if (MHelmet::Input::IsKeyPressed(MH_KEY_A))
+		if (MH::Input::IsKeyPressed(MH_KEY_A))
 		{
 			m_Camera->Left(dt);
 		}
-		if (MHelmet::Input::IsKeyPressed(MH_KEY_D))
+		if (MH::Input::IsKeyPressed(MH_KEY_D))
 		{
 			m_Camera->Right(dt);
 		}
 	}
 
-	void HandleMouse(MHelmet::OnMouseMoved& e)
+	void HandleMouse(MH::OnMouseMoved& e)
 	{		
 		if (m_FirstMouse)
 		{
@@ -193,7 +197,7 @@ private:
 		m_Camera->HandleMouseMovement(Xoffset, Yoffset);
 	}
 
-	void handleScroll(MHelmet::DeltaTime dt)
+	void handleScroll(MH::DeltaTime dt)
 	{
 
 	}
@@ -201,19 +205,15 @@ private:
 	
 
 private:
-	MHelmet::RefCount<MHelmet::Shader>   m_ShaderMaterial;
-	MHelmet::RefCount<MHelmet::Shader>   m_ShaderTexture;
 
-	MHelmet::RefCount<MHelmet::Shader>   m_TESTINGGLSL;
+	MH::RefCount<MH::Shader>   m_ShaderMaterial;
+	MH::RefCount<MH::Shader>   m_ShaderTexture;
+	MH::RefCount<MH::Shader>   m_TESTINGGLSL;
+	MH::RefCount<MH::VAO>      m_VAO;
+	MH::RefCount<MH::PerspectiveCamera> m_Camera;
+	MH::RefCount<MH::Texture2D> m_Texture, m_AlphaTree;
 
-	MHelmet::RefCount<MHelmet::VAO>      m_VAO;
-
-	MHelmet::RefCount<MHelmet::PerspectiveCamera> m_Camera;
-
-	MHelmet::RefCount<MHelmet::Texture2D> m_Texture, m_AlphaTree;
-
-	/* atributos para los modelos */
-	
+	/* atributos para los modelos */	
 	ModelTransform m_Model;
 	glm::vec3 m_ModelColor{ 1.0f, 0.0f, 0.5f };
 
