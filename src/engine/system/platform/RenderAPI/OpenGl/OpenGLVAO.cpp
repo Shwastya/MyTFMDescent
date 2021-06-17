@@ -59,6 +59,7 @@ namespace MHelmet
 
 		for (int i = 0; i < elements.size(); i++)
 		{
+			
 			glEnableVertexAttribArray(idx);
 
 			glVertexAttribPointer

@@ -1,9 +1,13 @@
 #pragma once
 #include "engine/system/MHCore.hpp"
+#include "engine/system/renderer/shader.hpp" 
 
 namespace MHelmet
 {
 	// pura clase interfaz virtual sin necesidad de instanciarse
+
+	
+
 	struct Texture
 	{
 		virtual ~Texture() = default;
@@ -11,17 +15,19 @@ namespace MHelmet
 		virtual uint32_t GetWidth()  const = 0;
 		virtual uint32_t GetHeight() const = 0;
 
-		virtual void Bind(uint32_t unit = 0) const = 0;
+		virtual void Bind(const RefCount<Shader>& shader, const char* name, uint32_t unit = 0) const = 0;
 	};
 
-	enum class Format
-	{
-		RGB, RGBA
-	};
+	
 
 	struct Texture2D : public Texture
 	{
-		static RefCount<Texture2D> Create(const char* path, Format format);
+		enum class Format
+		{
+			RGB, RGBA
+		};
+
+		static RefCount<Texture2D> Create(const char* path, Texture2D::Format format);
 	};
 }
 

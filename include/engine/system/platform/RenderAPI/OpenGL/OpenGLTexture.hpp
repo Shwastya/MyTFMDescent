@@ -1,12 +1,16 @@
 #pragma once
+#include <stb_image.h>
 #include "engine/system/renderer/Texture.hpp"
+#include "engine/system/platform/RenderAPI/OpenGL/OpenGLShader.hpp"
 
 namespace MHelmet
 {
-	class Shader;
+	
 
 	struct OpenGLTexture2D : public Texture2D
-	{
+	{	
+		
+
 		enum class Wrap 
 		{
 			Repeat,
@@ -21,14 +25,14 @@ namespace MHelmet
 			Nearest,
 			Linear
 		};			
-
-		OpenGLTexture2D(const char* path, Format format);
+		// MHelmet::OpenGLTexture2D::Format format
+		OpenGLTexture2D(const char* path, Texture2D::Format format);
 		virtual ~OpenGLTexture2D();
 
 		virtual uint32_t GetWidth()  const override { return m_Width;  };
 		virtual uint32_t GetHeight() const override { return m_Height; };
 
-		virtual void Bind(uint32_t unit) const override;
+		virtual void Bind(const RefCount<Shader>& shader, const char* name, uint32_t unit) const override;
 
 		void setWrap(Wrap s, Wrap t);
 		void setFilter(Filter mag, Filter min, Filter mipMapMag = Filter::None, Filter mipMapMin = Filter::None);
@@ -38,9 +42,9 @@ namespace MHelmet
 		void applyFilter() const;
 	private:
 
-		char* m_Path;
+		//char* m_Path;
 
-		Format m_Format = Format::RGB;
+		MHelmet::OpenGLTexture2D::Format m_Format = MHelmet::OpenGLTexture2D::Format::RGB;
 
 		uint32_t m_Width;
 		uint32_t m_Height;

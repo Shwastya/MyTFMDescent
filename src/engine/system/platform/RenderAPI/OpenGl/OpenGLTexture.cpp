@@ -1,28 +1,31 @@
 #include "../src/engine/mhpch.cpp"
 #include <glad/glad.h>
-#include <stb_image.h>
+
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLTexture.hpp"
+#include "engine/system/platform/RenderAPI/OpenGL/OpenGLShader.hpp"
 
 namespace MHelmet
 {
-	static uint32_t format2GL(Format format)
+	static uint32_t format2GL(MHelmet::OpenGLTexture2D::Format format)
 	{
 		switch (format)
 		{
-			case Format::RGB: return GL_RGB;
-			case Format::RGBA: return GL_RGBA;
+		case MHelmet::OpenGLTexture2D::Format::RGB: return GL_RGB;
+		case MHelmet::OpenGLTexture2D::Format::RGBA: return GL_RGBA;
 			default:return GL_RGB;
 		};
 	}
 
-	OpenGLTexture2D::OpenGLTexture2D(const char* path, Format format)
-		: m_Width(0), m_Height(0), m_Depth(0)
+	OpenGLTexture2D::OpenGLTexture2D(const char* path, Texture2D::Format format) 
+		: m_Format(format), m_Width(0), m_Height(0), m_Depth(0)
 	{
+
 		// guardo el path por si necesitara recargar la textura
-		const size_t size = strlen(path);
+		/*const size_t size = strlen(path);
 		m_Path = new char[size + 1];
 		memcpy(m_Path, path, size);
-		m_Path[size] = 0;
+		m_Path[size] = 0;*/
+
 
 		stbi_set_flip_vertically_on_load(true);
 
@@ -33,7 +36,7 @@ namespace MHelmet
 		applyFilter();
 
 		int32_t width = 0, height = 0, depth = 0;
-		unsigned char* data = stbi_load(path, &width, &depth, &depth, 0);
+		unsigned char* data = stbi_load(path, &width, &height, &depth, 0);
 
 		m_Width  = static_cast<uint32_t>(width);
 		m_Height = static_cast<uint32_t>(height);
@@ -54,13 +57,15 @@ namespace MHelmet
 	}
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
-		delete[] m_Path;
+		//delete[] m_Path;
 		glDeleteTextures(1, &m_TextID);		
 	}
-	void OpenGLTexture2D::Bind(uint32_t unit) const
+	void OpenGLTexture2D::Bind(const RefCount<Shader>& shader, const char* name, uint32_t unit) const
 	{
 		glActiveTexture(GL_TEXTURE0 + unit);
 		glBindTexture(GL_TEXTURE_2D, m_TextID);
+		
+		std::reinterpret_pointer_cast<OpenGLShader>(shader)->SetUniform(name, static_cast<int32_t>(unit));
 	}
 	void OpenGLTexture2D::setWrap(Wrap s, Wrap t)
 	{

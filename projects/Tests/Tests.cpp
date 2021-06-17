@@ -16,11 +16,16 @@ public:
 
 	TestingLayer() : MHelmet::NodeLayer("TestingLayer")
 	{
-		/*const char* vertSrc  = "../assets/shaders/perspectiveShaders/vertex.vs";
-		const char* fragSrc  = "../assets/shaders/perspectiveShaders/fragment.fs";
+		/* MATERIALS */
+		const char* vertMaterial  = "../assets/shaders/perspectiveShaders/MaterialShader/vertex.vs";
+		const char* fragMaterial  = "../assets/shaders/perspectiveShaders/MaterialShader/fragment.fs";
 
+		const char* vertTexture = "../assets/shaders/perspectiveShaders/TextureShader/vertex.vs";
+		const char* fragTexture = "../assets/shaders/perspectiveShaders/TextureShader/fragment.fs";
+
+		/* TEXTURES */
 		const char* textBricks = "../assets/textures/bricks_albedo.png";
-		const char* textBlueBlocks = "../assets/textures/blue_blocks.jpg";*/
+		const char* textBlueBlocks = "../assets/textures/blue_blocks.jpg";
 
 		m_Camera = std::make_shared<MHelmet::PerspectiveCamera>(glm::vec3(11.6f, 9.0f, 23.5f));
 
@@ -28,32 +33,53 @@ public:
 		MHelmet::Triangle T;
 		MHelmet::Cube C(0.8F);
 
+		const float half = 1 / 2.0f;
+		float quad[] = 
+		{ 
+			//upper right triangle
+			half, half, 0.0f,   1.0f, 1.0f,
+			half, -half, 0.0f,  1.0f, 0.0f,
+			-half, half, 0.0f,  0.0f, 1.0f,
+
+			//lower left triangle
+			half, -half, 0.0f,   1.0f, 0.0f,
+			-half, half, 0.0f,		0.0f, 1.0f,
+			-half, -half, 0.0f,     0.0f, 0.0f
+		};
+
+		uint32_t indices[] = { 0, 2, 1,
+						   3 , 4, 5 };
 		m_VAO.reset(MHelmet::VAO::Create());
 
 		MHelmet::RefCount<MHelmet::VBO> VBO_			;
-		VBO_ = MHelmet::VBO::Create(Q.GetModel(), Q.Size());		
+		VBO_ = MHelmet::VBO::Create(quad, sizeof(quad));
 
 		VBO_->SetLayout
 		({ 
 			{MHelmet::BUFFER::DataType::Float3, "a_Pos"     },
-			{MHelmet::BUFFER::DataType::Float2, "a_UVS"     },
-			{MHelmet::BUFFER::DataType::Float3, "a_Normals" }			
+			{MHelmet::BUFFER::DataType::Float2, "a_UVS"     }			
 		});
 
 		m_VAO->Add__VBO(VBO_);	
 
 		MHelmet::RefCount<MHelmet::EBO> EBO_;
-		EBO_ = std::make_shared<MHelmet::OpenGLEBO>(Q.Indices(), Q.Count());
+		EBO_ = std::make_shared<MHelmet::OpenGLEBO>(indices, sizeof(indices) / sizeof(uint32_t));
 
 		m_VAO->Add__EBO(EBO_);
 
-		m_Shader = MHelmet::Shader::create
+		m_ShaderMaterial = MHelmet::Shader::create
 		(
-			"../assets/shaders/perspectiveShaders/vertex.vs",
-			"../assets/shaders/perspectiveShaders/fragment.fs"
+			vertMaterial,
+			fragMaterial
 		);
 
-	//	m_Texture = MHelmet::Texture2D::Create(textBricks, MHelmet::Format::RGB);
+		m_ShaderTexture = MHelmet::Shader::create
+		(
+			vertTexture,
+			fragTexture
+		);
+
+		m_Texture = MHelmet::Texture2D::Create("../assets/textures/blue_blocks.jpg", MHelmet::Texture2D::Format::RGB);
 	}
 
 	void Update(MHelmet::DeltaTime dt) override
@@ -71,18 +97,28 @@ public:
 				{
 					m_Cubo.Translate = glm::vec3((i * 1.5) * 1.0f, (j * 1.5) * 1.0f, 0.0f);
 					m_Cubo.Rotate = glm::vec3(1.0f, 1.0f, 1.0f);
-					m_Cubo.Scale = glm::vec3(0.8f, 1.0f, 1.0f);
+					m_Cubo.Scale = glm::vec3(1.0f, 1.0f, 1.0f);
 			
 					m_Cubo.Degrees = static_cast<float>(glfwGetTime()) * glm::radians(20.0f);
 					
 					m_Cubo.Degrees = 0.0f;
 
 				//	m_Texture->Bind(0);
-					R::BeginModel(m_Cubo.Translate, m_Cubo.Rotate, m_Cubo.Scale, m_Cubo.Degrees);
-					R::Material(m_Shader, m_ModelColor);
-					R::Submit(m_Shader, m_VAO);
+					R::Model(m_Cubo.Translate, m_Cubo.Rotate, m_Cubo.Scale, m_Cubo.Degrees);
+					R::Material(m_ShaderMaterial, m_ModelColor);
+					R::Submit(m_ShaderMaterial, m_VAO);
 				}
 			}
+
+			m_Cubo.Translate = glm::vec3(10.0f, 9.0f, 0.0f);
+			m_Cubo.Rotate = glm::vec3(1.0f, 1.0f, 1.0f);
+			m_Cubo.Scale = glm::vec3(10.0f, 10.0f, 10.0f);
+
+			m_Cubo.Degrees = static_cast<float>(glfwGetTime()) * glm::radians(20.0f);
+
+			R::Model(m_Cubo.Translate, m_Cubo.Rotate, m_Cubo.Scale, m_Cubo.Degrees);
+			R::Texture(m_ShaderTexture, m_Texture, 0);
+			R::Submit(m_ShaderTexture, m_VAO);
 		}	
 	}  
 
@@ -169,7 +205,8 @@ private:
 	
 
 private:
-	MHelmet::RefCount<MHelmet::Shader>   m_Shader;
+	MHelmet::RefCount<MHelmet::Shader>   m_ShaderMaterial;
+	MHelmet::RefCount<MHelmet::Shader>   m_ShaderTexture;
 	MHelmet::RefCount<MHelmet::VAO>      m_VAO;
 
 	MHelmet::RefCount<MHelmet::PerspectiveCamera> m_Camera;

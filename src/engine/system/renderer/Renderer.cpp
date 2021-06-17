@@ -5,12 +5,14 @@
 
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLShader.hpp"
 
+
+
 namespace MHelmet
 {	
 	Renderer::DataScene* Renderer::Scene = new Renderer::DataScene;
 	//PerspectiveCamera* camera = new PerspectiveCamera(glm::vec3(0.0f, 0.0f, 3.0f));
 		
-	void Renderer::BeginModel(glm::vec3 translate, glm::vec3 rotate, glm::vec3 scale, float degrees)
+	void Renderer::Model(glm::vec3 translate, glm::vec3 rotate, glm::vec3 scale, float degrees)
 	{
 		
 		Scene->Model = glm::mat4(1.0f);
@@ -38,12 +40,19 @@ namespace MHelmet
 	}
 	void Renderer::EndEscene()
 	{
-
+		delete Renderer::Scene;
 	}
 	void Renderer::Material(const RefCount<Shader>& _Shader, const glm::vec3& material)
 	{
-		std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->Bind();
-		std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_Color", material);
+		SHADER(_Shader)->Bind();
+		SHADER(_Shader)->SetUniform("u_Color", material);
+	}
+	void Renderer::Texture(const RefCount<Shader>& _Shader, const RefCount<Texture2D>& texture, uint32_t unit)
+	{
+		
+		SHADER(_Shader)->Bind();
+		texture->Bind(_Shader, "u_Texture", unit);
+		
 	}
 	void Renderer::Submit(const RefCount<Shader>& _Shader, const RefCount<VAO>& _VAO)
 	{
@@ -53,9 +62,9 @@ namespace MHelmet
 		
 		 //std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_Color", material);
 
-		 std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_Model", Scene->Model);
-		 std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_View", Scene->View);
-		 std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_Proj", Scene->Projection);
+		SHADER(_Shader)->SetUniform("u_Model", Scene->Model);
+		SHADER(_Shader)->SetUniform("u_View", Scene->View);
+		SHADER(_Shader)->SetUniform("u_Proj", Scene->Projection);
 
 		_VAO->Bind();
 		RenderDrawCall::DrawIndexed(_VAO);

@@ -11,8 +11,9 @@
 
 namespace MHelmet
 {
-	RefCount<Texture2D> Texture2D::Create(const char* path, Format format)
+	RefCount<Texture2D> Texture2D::Create(const char* path, Texture2D::Format format)
 	{
+		return std::make_shared<OpenGLTexture2D>(path, format);
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:
@@ -20,7 +21,7 @@ namespace MHelmet
 			break;
 		case RendererAPI::API::OpenGL:
 
-			return std::make_shared<OpenGLTexture2D>(path, format);
+		//	return std::make_shared<OpenGLTexture2D>(path, format);
 			//return std::make_shared<OpenGLVAO>();
 
 		case RendererAPI::API::DirectX:
