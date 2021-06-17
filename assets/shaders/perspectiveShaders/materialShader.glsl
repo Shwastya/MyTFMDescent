@@ -1,4 +1,4 @@
-#TYPE VERTEX
+#TYPE V
 #version 330 core
 
 layout (location=0) in vec3 a_Pos;
@@ -14,7 +14,7 @@ void main()
 
 
 
-#TYPE FRAGMENT
+#TYPE F
 #version 330 core
 
 out vec4 FragColor;
@@ -27,9 +27,4 @@ void main()
 	FragColor = vec4(u_Color, 1.0);	    
 }
 
-#TYPE OTHER_TEST_TYPE
-#version 330 core
 
-Hola esto es una comprobacion del fileRead del sistema shader
-
-// Nada de aqui deberia salir al menos que se especifique en el shader

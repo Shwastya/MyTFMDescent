@@ -1,38 +1,29 @@
 #include "engine/system/MHCore.hpp"
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLShader.hpp"
-#include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <sstream>
 
 namespace MHelmet
 {
-    static GLenum FormatType(const Type& type)
-    {        
-        switch (type)
-        {
-            case Type::Vertex:   return GL_VERTEX_SHADER;
-            case Type::Fragment: return GL_FRAGMENT_SHADER;
-            case Type::Geometry: return GL_GEOMETRY_SHADER; 
-            case Type::Program:  
-            {
-                CORE_ERROR("Not Shader");
-                break;
-            }
-            default: CORE_ERROR("Unknown shader Format!");
-        }
+    static GLenum TypeFormat(const std::string& T)
+    {
+        if (T == "V") return GL_VERTEX_SHADER;
+        if (T == "F") return GL_FRAGMENT_SHADER;
+        if (T == "G") return GL_GEOMETRY_SHADER;
+
+        CORE_ERROR("Unknow shader format!");
 
         return 0;
     }
-
     OpenGLShader::OpenGLShader(const std::string& vertexPath, const std::string& fragmentPath)
     {
-        std::string vertexCode   = LoadShaderFromString(vertexPath);
-        std::string fragmentCode = LoadShaderFromString(vertexPath);
+        std::string vertexCode   = LoadShader(vertexPath);
+        std::string fragmentCode = LoadShader(fragmentPath);;
 
         CompileShader(vertexCode, fragmentCode);
     }
 
-    OpenGLShader::OpenGLShader(const std::string& GLSLFile) //: m_GLSL_Path(GLSLFile)
+    OpenGLShader::OpenGLShader(const std::string& GLSLFile) 
     {
         // file system es muy complejo entre plataformas
         // en este punto pongo un recordatorio:
@@ -41,40 +32,10 @@ namespace MHelmet
         // de abstraccion del file system para que funcionara 
         // correctamente en multiplataforma      
 
-        std::string ShaderSrc = LoadShaderFromString(GLSLFile);
-        SplitGlslSource(ShaderSrc);        
+        std::string ShaderSrc = LoadShader(GLSLFile);
+        SplitGLSLFile(ShaderSrc);
     }
 
-    ShaderTypesMap OpenGLShader::SplitGlslSource(const std::string& GLSLSource)
-    {
-        std::string vertexCode, fragmentCode;  
-
-
-
-        const char* token = "#TYPE";
-        size_t tokenLenght = strlen(token);
-        size_t pos = GLSLSource.find(token, 0);
-
-        while (pos != std::string::npos)
-        {
-            size_t eol = GLSLSource.find_first_of("\r\n", pos);
-
-            size_t begin = pos + tokenLenght + 1;
-            std::string type = GLSLSource.substr(begin, eol - begin);
-
-            size_t nextLinePos = GLSLSource.find_first_not_of("\r\n", eol);
-            pos = GLSLSource.find(token, nextLinePos);
-
-            if (type == "VERTEX")
-                vertexCode = GLSLSource.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? GLSLSource.size() - 1 : nextLinePos));
-
-            if (type == "FRAGMENT")
-                fragmentCode = GLSLSource.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? GLSLSource.size() - 1 : nextLinePos));
-        }
-        CompileShader(vertexCode, fragmentCode);
-
-        return ShaderTypesMap();
-    }
 
     OpenGLShader::~OpenGLShader()
     {
@@ -91,51 +52,73 @@ namespace MHelmet
         glUseProgram(0);
     }
 
+    
+    std::unordered_map<GLenum, std::string> OpenGLShader::SplitGLSLFile(const std::string& GLSLSource)
+    {
+        std::string vertexCode, fragmentCode;
 
-    std::string OpenGLShader::LoadShaderFromString(const std::string& GLSLFilePath)
+        std::unordered_map<GLenum, std::string> shaderSrc;
+
+        const char* token = "#TYPE";
+        size_t tokenLenght = strlen(token);
+        size_t pos = GLSLSource.find(token, 0);
+
+        // La siguiente seccion de codigo habria que mejorar mucho la abstraccion
+        // De momento, por las prisas, siendo funcional, lo dejo asi
+
+        while (pos != std::string::npos)
+        {
+            size_t eol = GLSLSource.find_first_of("\r\n", pos);
+            if (!(eol != std::string::npos)) CORE_ERROR("Shader syntax error!");
+
+            size_t begin = pos + tokenLenght + 1;
+            std::string T = GLSLSource.substr(begin, eol - begin);
+
+            size_t nextLinePos = GLSLSource.find_first_not_of("\r\n", eol);
+            pos = GLSLSource.find(token, nextLinePos);
+
+           
+
+            shaderSrc[TypeFormat(T)] = GLSLSource.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? GLSLSource.size() - 1 : nextLinePos));
+
+            if (T == "V")
+            {
+                vertexCode = GLSLSource.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? GLSLSource.size() - 1 : nextLinePos));
+            }
+
+
+            if (T == "F")
+            {
+                fragmentCode = GLSLSource.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? GLSLSource.size() - 1 : nextLinePos));
+            }
+
+        }
+        CompileShader(vertexCode, fragmentCode);
+
+        return shaderSrc;
+    }
+    void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& GLSLSource)
+    {
+    }
+    std::string OpenGLShader::LoadShader(const std::string& GLSLFilePath)
     {
         std::ifstream in(GLSLFilePath, std::ios::in, std::ios::binary);
-        std::string source;
+        std::string result;
 
         if (in)
         {
             in.seekg(0, std::ios::end);
-            source.resize(in.tellg());
+            result.resize(in.tellg());
             in.seekg(0, std::ios::beg);
-            in.read(&source[0], source.size());
+            in.read(&result[0], result.size());
             in.close();
         }
         else CORE_ERROR("Error in load GLSL File: {0}", GLSLFilePath);
-
-        return source;
-    }
-
-    void OpenGLShader::LoadShaderFromChar(const char* path, std::string* code)
-    {
-        std::ifstream file;
-
-        file.open(path, std::ios_base::in);
-        if (file)
-        {
-            std::stringstream stream;
-            stream << file.rdbuf();
-            *code = stream.str();
-            file.close();
-        }
-        else CORE_ERROR("Error in load shader: {0}", path);
-    }
-
-   
-    
-
-    void OpenGLShader::Compile(const ShaderTypesMap& ShaderSrc)
-    {
-
+       
+        return result;
     }
     
- 
-   
-
+    
     void OpenGLShader::CompileShader(const std::string& vertexCode, const std::string& fragmentCode)
     {
         const char* vertexStr = vertexCode.c_str();
@@ -160,7 +143,6 @@ namespace MHelmet
         glDeleteShader(vertex);
         glDeleteShader(fragment);
     }
-  
 
     void OpenGLShader::CheckErrors(uint32_t shader, Type type)
     {
@@ -183,29 +165,14 @@ namespace MHelmet
                 glGetProgramInfoLog(shader, 512, nullptr, infoLog);
                 CORE_ERROR("Error Linking Program: {0}", infoLog);
             }
-        }        
+        }
+
+
     }
 
     
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 
     void OpenGLShader::Uniform(const char* name, int value) const
     {

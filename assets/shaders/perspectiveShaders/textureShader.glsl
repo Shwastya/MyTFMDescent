@@ -1,4 +1,4 @@
-#TYPE VERTEX
+#TYPE V
 #version 330 core
 
 layout (location=0) in vec3 a_Pos;
@@ -16,7 +16,7 @@ void main()
 	gl_Position = u_Proj * u_View * u_Model * vec4(a_Pos, 1.0);
 }
 
-#TYPE FRAGMENT
+#TYPE F
 #version 330 core
 
 out vec4 FragColor;
