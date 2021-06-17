@@ -26,6 +26,10 @@
 #include "engine/system/renderer/Texture.hpp"
 
 
+/* DE momento super cutrisiiiimo para facilitar un poco el tema */
+#include "engine/system/utils/Library.hpp"
+
+
 /* No muy seguro de que sea el mejor lugar */
 
 struct ModelTransform

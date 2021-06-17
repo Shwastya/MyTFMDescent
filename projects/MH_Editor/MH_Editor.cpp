@@ -13,12 +13,12 @@ public:
 	void Update(MHelmet::DeltaTime dt) override
 	{
 #if 0
-		MH_INFO("EditorLayer::{0}", "Update");
+		INFO("EditorLayer::{0}", "Update");
 #endif
 	}
 	void OnEvent(MHelmet::Event& event) override
 	{
-		MH_TRACE("{0}", event);
+		TRACE("{0}", event);
 	}
 
 };
@@ -44,7 +44,7 @@ public:
 
 extern MHelmet::Unique<MHelmet::Engine> MHelmet::createApp() 
 {	
-	MH_INFO("Created Application: {}", "Engine!");
+	INFO("Created Application: {}", "Engine!");
 
 	return std::make_unique<Editor>();
 }

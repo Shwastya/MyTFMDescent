@@ -17,16 +17,15 @@ public:
 	TestingLayer() : MHelmet::NodeLayer("TestingLayer")
 	{
 		/* MATERIALS */
-		const char* vertMaterial  = "../assets/shaders/perspectiveShaders/MaterialShader/vertex.vs";
-		const char* fragMaterial  = "../assets/shaders/perspectiveShaders/MaterialShader/fragment.fs";
-
-		const char* vertTexture = "../assets/shaders/perspectiveShaders/TextureShader/vertex.vs";
-		const char* fragTexture = "../assets/shaders/perspectiveShaders/TextureShader/fragment.fs";
+		std::string MaterialShader = "../assets/shaders/perspectiveShaders/materialShader.vs";
+		std::string TextureShader = "../assets/shaders/perspectiveShaders/textureShader.vs";
+		
+;
 
 		/* TEXTURES */
-		const char* textBricks = "../assets/textures/bricks_albedo.png";
-		const char* textBlueBlocks = "../assets/textures/blue_blocks.jpg";
-		const char* textAlphaTree = "../assets/textures/tree.png";
+		std::string  textBricks = "../assets/textures/bricks_albedo.png";
+		std::string  textBlueBlocks = "../assets/textures/blue_blocks.jpg";
+		std::string  textAlphaTree = "../assets/textures/tree.png";
 
 		m_Camera = std::make_shared<MHelmet::PerspectiveCamera>(glm::vec3(11.6f, 9.0f, 23.5f));
 
@@ -53,20 +52,18 @@ public:
 
 		m_VAO->Add__EBO(EBO_);
 
-		m_ShaderMaterial = MHelmet::Shader::Create
-		(
-			vertMaterial,
-			fragMaterial
-		);
+		
+		m_ShaderMaterial = MHelmet::Shader::Create(MaterialShader);
 
-		m_ShaderTexture = MHelmet::Shader::Create
-		(
-			vertTexture,
-			fragTexture
-		);
+		m_ShaderTexture = MHelmet::Shader::Create(TextureShader);
 
 		m_Texture = MHelmet::Texture2D::Create(textBricks, MHelmet::Texture2D::Format::RGB);
 		m_AlphaTree = MHelmet::Texture2D::Create(textAlphaTree, MHelmet::Texture2D::Format::RGBA);
+
+
+		
+
+		
 	}
 
 	void Update(MHelmet::DeltaTime dt) override
@@ -206,6 +203,9 @@ private:
 private:
 	MHelmet::RefCount<MHelmet::Shader>   m_ShaderMaterial;
 	MHelmet::RefCount<MHelmet::Shader>   m_ShaderTexture;
+
+	MHelmet::RefCount<MHelmet::Shader>   m_TESTINGGLSL;
+
 	MHelmet::RefCount<MHelmet::VAO>      m_VAO;
 
 	MHelmet::RefCount<MHelmet::PerspectiveCamera> m_Camera;
@@ -223,8 +223,6 @@ private:
 	float m_LastX = 0.0f;
 	float m_LastY = 0.0f;
 	bool toggle = true;
-
-
 };
 
 

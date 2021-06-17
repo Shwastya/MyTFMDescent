@@ -188,6 +188,8 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/PerspectiveCamera.hpp
 
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/shader.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/utils/Library.hpp
+
 
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/RendererContext.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/Renderer.hpp

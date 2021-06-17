@@ -50,7 +50,7 @@ namespace MHelmet
 	void Renderer::Material(const RefCount<Shader>& _Shader, const glm::vec3& material)
 	{
 		SHADER(_Shader)->Bind();
-		SHADER(_Shader)->SetUniform("u_Color", material);
+		SHADER(_Shader)->Uniform("u_Color", material);
 	}
 	void Renderer::Texture(const RefCount<Shader>& _Shader, const RefCount<Texture2D>& texture, uint32_t unit)
 	{
@@ -67,9 +67,9 @@ namespace MHelmet
 		
 		 //std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_Color", material);
 
-		SHADER(_Shader)->SetUniform("u_Model", Scene->Model);
-		SHADER(_Shader)->SetUniform("u_View", Scene->View);
-		SHADER(_Shader)->SetUniform("u_Proj", Scene->Projection);
+		SHADER(_Shader)->Uniform("u_Model", Scene->Model);
+		SHADER(_Shader)->Uniform("u_View", Scene->View);
+		SHADER(_Shader)->Uniform("u_Proj", Scene->Projection);
 
 		_VAO->Bind();
 		RenderDrawCall::Draw(_VAO);

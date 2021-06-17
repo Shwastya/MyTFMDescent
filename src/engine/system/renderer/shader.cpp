@@ -4,7 +4,7 @@
 
 namespace MHelmet
 {
-	RefCount<Shader>Shader::Create(const char* vertexPath, const char* fragmentPath, const char* geometryPath)
+	RefCount<Shader>Shader::Create(const std::string& vertexPath, const std::string& fragmentPath)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -13,7 +13,31 @@ namespace MHelmet
 			break;
 		case RendererAPI::API::OpenGL:
 
-			return std::make_shared<OpenGLShader>(vertexPath, fragmentPath, geometryPath);
+			return std::make_shared<OpenGLShader>(vertexPath, fragmentPath);
+
+		case RendererAPI::API::DirectX:
+			// NADA DE MOMENTO
+			break;
+		case RendererAPI::API::Vulkan:
+			// CON Vulkan PODEMOS FLIPAR
+			break;
+		default:
+			// MENSAJE DE ERROR (API desconocida)
+			return nullptr;
+			break;
+		}
+	}
+
+	RefCount<Shader>Shader::Create(const std::string& GLSLFilePath)
+	{
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::None:
+			// PONER MENSAJE DE ERROR (NOT SUPPORTED)
+			break;
+		case RendererAPI::API::OpenGL:
+
+			return std::make_shared<OpenGLShader>(GLSLFilePath);
 
 		case RendererAPI::API::DirectX:
 			// NADA DE MOMENTO

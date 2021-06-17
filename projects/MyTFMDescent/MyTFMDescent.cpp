@@ -19,12 +19,12 @@ public:
 	{
 #if 1
 		static int s_UpdateCount = 0;
-		MH_INFO("ExampleLayer::{0}", ++s_UpdateCount);
+		INFO("ExampleLayer::{0}", ++s_UpdateCount);
 #endif
 	}
 	void OnEvent(MHelmet::Event& event) override
 	{
-		MH_INFO("{0}", event);
+		INFO("{0}", event);
 	}
 };
 /**************************************
@@ -46,7 +46,7 @@ public:
 
 extern MHelmet::Unique<MHelmet::Engine> MHelmet::createApp()
 {
-	MH_INFO("Created Application: {}", "ProjectExample!");
+	INFO("Created Application: {}", "ProjectExample!");
 	return std::make_unique<ProjectExample>();
 }
 //extern std::unique_ptr<MHelmet::Engine> MHelmet::createApp();
