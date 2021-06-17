@@ -25,15 +25,14 @@ namespace MHelmet
 
     OpenGLShader::OpenGLShader(const std::string& GLSLFile) 
     {
-        // file system es muy complejo entre plataformas
-        // en este punto pongo un recordatorio:
         // si se quiere extender el modelo e implementar 
         // en otras plataformas, habria que aumentar el nivel
         // de abstraccion del file system para que funcionara 
         // correctamente en multiplataforma      
 
-        std::string ShaderSrc = LoadShader(GLSLFile);
-        SplitGLSLFile(ShaderSrc);
+        std::string fileSrc = LoadShader(GLSLFile);
+        std::unordered_map<GLenum, std::string> shaderSrcs = SplitGLSLFile(fileSrc);
+        Compile(shaderSrcs);
     }
 
 
@@ -97,8 +96,30 @@ namespace MHelmet
 
         return shaderSrc;
     }
-    void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& GLSLSource)
+    void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& ShaderSources)
     {
+        for (auto& value : ShaderSources)
+        const char* vertexStr = vertexCode.c_str();
+        const uint32_t vertex = glCreateShader(GL_VERTEX_SHADER);
+        glShaderSource(vertex, 1, &vertexStr, nullptr);
+        glCompileShader(vertex);
+        CheckErrors(vertex, Type::Vertex);
+
+        const char* fragmentStr = fragmentCode.c_str();
+        const uint32_t fragment = glCreateShader(GL_FRAGMENT_SHADER);
+        glShaderSource(fragment, 1, &fragmentStr, nullptr);
+        glCompileShader(fragment);
+        CheckErrors(fragment, Type::Fragment);
+
+        id_ = glCreateProgram();
+        glAttachShader(id_, vertex);
+        glAttachShader(id_, fragment);
+
+        glLinkProgram(id_);
+        CheckErrors(id_, Type::Program);
+
+        glDeleteShader(vertex);
+        glDeleteShader(fragment);
     }
     std::string OpenGLShader::LoadShader(const std::string& GLSLFilePath)
     {
