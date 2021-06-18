@@ -4,7 +4,7 @@
 
 namespace MHelmet
 {
-	RefCount<Shader>Shader::Create(const std::string& vertexPath, const std::string& fragmentPath, const std::string& geometryPath)
+	RefCount<Shader>Shader::Create(const std::string& name, const std::string& vertexPath, const std::string& fragmentPath, const std::string& geometryPath)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -13,7 +13,7 @@ namespace MHelmet
 			break;
 		case RendererAPI::API::OpenGL:
 
-			return std::make_shared<OpenGLShader>(vertexPath, fragmentPath, geometryPath);
+			return std::make_shared<OpenGLShader>(name, vertexPath, fragmentPath, geometryPath);
 
 		case RendererAPI::API::DirectX:
 			// NADA DE MOMENTO
@@ -28,7 +28,7 @@ namespace MHelmet
 		}
 	}
 
-	RefCount<Shader>Shader::Create(const std::string& GLSLFilePath)
+	RefCount<Shader>Shader::Create(const std::string& name, const std::string& GLSLFilePath)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -37,7 +37,7 @@ namespace MHelmet
 			break;
 		case RendererAPI::API::OpenGL:
 
-			return std::make_shared<OpenGLShader>(GLSLFilePath);
+			return std::make_shared<OpenGLShader>(name, GLSLFilePath);
 
 		case RendererAPI::API::DirectX:
 			// NADA DE MOMENTO

@@ -29,6 +29,10 @@
 /* DE momento super cutrisiiiimo para facilitar un poco el tema */
 #include "engine/system/utils/Library.hpp"
 
+/* Geomtries */
+#include "engine/system/geometry/quad.hpp"
+#include "engine/system/geometry/triangle.hpp"
+#include "engine/system/geometry/cube.hpp"
 
 /* No muy seguro de que sea el mejor lugar */
 

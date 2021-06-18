@@ -1,7 +1,8 @@
 #pragma once
-#define GLFW_INCLUDE_NONE
-#include <glad/glad.h>
 #include "engine/system/renderer/Renderer.hpp"
+
+
+typedef unsigned int GLenum;
 
 namespace MHelmet
 {
@@ -14,8 +15,8 @@ namespace MHelmet
         };
     
     public:
-        OpenGLShader(const std::string& vertexPath, const std::string& fragmentPath, const std::string& geometryPath);
-        OpenGLShader(const std::string& GLSLFilePath);
+        OpenGLShader(const std::string& name, const std::string& vertexPath, const std::string& fragmentPath, const std::string& geometryPath);
+        OpenGLShader(const std::string& name, const std::string& GLSLFilePath);
 
         OpenGLShader() = default;
         virtual ~OpenGLShader();
@@ -26,9 +27,9 @@ namespace MHelmet
         OpenGLShader& operator=(OpenGLShader&&) = default;
 
         virtual void Bind()   const override;
-        virtual void Unbind() const override;
+        virtual void Unbind() const override;        
 
-        
+        virtual const std::string& GetName() const override;
 
         // Overload set uniforms functions
         void Uniform(const char* name, int value) const;
@@ -45,24 +46,17 @@ namespace MHelmet
         void Uniform(const char* name, const glm::mat4& value) const;
 
     private:
+
         std::string LoadShader(const std::string& GLSLFilePath);
         std::unordered_map<GLenum, std::string> SplitGLSLFile(const std::string& GLSLSource);
-        void Compile(const std::unordered_map<GLenum, std::string>& ShaderSources);
-
-     //   void SplitGLSLFile(const std::string& GLSLFilePath);
-        
-
-
-        void CompileShader(const std::string& vertexCode, const std::string& fragmentCode);
+        void CompileShader(const std::unordered_map<GLenum, std::string>& ShaderSources);
 
         static void CheckErrors(uint32_t OpenGLShader, Type type);
 
-        
-
     private:
+        uint32_t id_; 
+        std::string m_Name;
+        int m_Nshaders = 0;
 
-       
-        uint32_t id_;
-        
     };
 }

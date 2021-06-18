@@ -1,7 +1,6 @@
 #include <MHelmet.h>
-#include "engine/system/geometry/quad.hpp"
-#include "engine/system/geometry/triangle.hpp"
-#include "engine/system/geometry/cube.hpp"
+
+
 #define MH MHelmet
 
 /*****************************************************************************
@@ -20,12 +19,6 @@ public:
 
 	TestingLayer() : MH::NodeLayer("TestingLayer")
 	{
-		/* MATERIALS */
-		std::string MaterialShader = "../assets/shaders/perspectiveShaders/materialShader.glsl";
-		std::string TextureShader = "../assets/shaders/perspectiveShaders/textureShader.glsl";
-		
-;
-
 		/* TEXTURES */
 		std::string  textBricks = "../assets/textures/bricks_albedo.png";
 		std::string  textBlueBlocks = "../assets/textures/blue_blocks.jpg";
@@ -56,10 +49,12 @@ public:
 
 		m_VAO->Add__EBO(EBO_);
 
-		
-		m_ShaderMaterial = MH::Shader::Create(MaterialShader);
+		m_S.Load("OnlyColor", "../shaders/persp/colorShader.glsl");
+		m_S.Load("OnlyTextU", "../shaders/persp/textuShader.glsl");
 
-		m_ShaderTexture  = MH::Shader::Create(TextureShader);
+		//m_ShaderMaterial = MH::Shader::Create("OnlyOneColor", MaterialShader);
+
+	//	m_ShaderTexture  = MH::Shader::Create("OnlyOneTexture", TextureShader);
 
 		m_Texture   = MH::Texture2D::Create(textBricks, MH::Texture2D::Format::RGB);
 		m_AlphaTree = MH::Texture2D::Create(textAlphaTree, MH::Texture2D::Format::RGBA);
@@ -93,8 +88,8 @@ public:
 
 				//	m_Texture->Bind(0);
 					R::Model(m_Model.Translate, m_Model.Rotate, m_Model.Scale, m_Model.Degrees);
-					R::Material(m_ShaderMaterial, m_ModelColor);
-					R::Submit(m_ShaderMaterial, m_VAO);
+					R::Material(m_S.Get("OnlyColor"), m_ModelColor);
+					R::Submit(m_S.Get("OnlyColor"), m_VAO);
 				}
 			}
 
@@ -105,8 +100,8 @@ public:
 			//m_Model.Degrees = static_cast<float>(glfwGetTime()) * glm::radians(20.0f);
 
 			R::Model(m_Model.Translate, m_Model.Rotate, m_Model.Scale, m_Model.Degrees);
-			R::Texture(m_ShaderTexture, m_Texture, 0);
-			R::Submit(m_ShaderTexture, m_VAO);
+			R::Texture(m_S.Get("OnlyTextU"), m_Texture, 0);
+			R::Submit(m_S.Get("OnlyTextU"), m_VAO);
 
 
 
@@ -117,8 +112,8 @@ public:
 			//m_Model.Degrees = static_cast<float>(glfwGetTime()) * glm::radians(20.0f);
 
 			R::Model(m_Model.Translate, m_Model.Rotate, m_Model.Scale, m_Model.Degrees);
-			R::Texture(m_ShaderTexture, m_AlphaTree, 0);
-			R::Submit(m_ShaderTexture, m_VAO);
+			R::Texture(m_S.Get("OnlyTextU"), m_AlphaTree, 0);
+			R::Submit(m_S.Get("OnlyTextU"), m_VAO);
 		}	
 	}  
 
@@ -195,20 +190,14 @@ private:
 		m_LastY = e.GetY();
 
 		m_Camera->HandleMouseMovement(Xoffset, Yoffset);
-	}
-
-	void handleScroll(MH::DeltaTime dt)
-	{
-
-	}
-
-	
+	}	
 
 private:
 
-	MH::RefCount<MH::Shader>   m_ShaderMaterial;
-	MH::RefCount<MH::Shader>   m_ShaderTexture;
-	MH::RefCount<MH::Shader>   m_TESTINGGLSL;
+	MH::ShaderLib m_S;
+
+//	MH::RefCount<MH::Shader>   m_ShaderMaterial;
+
 	MH::RefCount<MH::VAO>      m_VAO;
 	MH::RefCount<MH::PerspectiveCamera> m_Camera;
 	MH::RefCount<MH::Texture2D> m_Texture, m_AlphaTree;

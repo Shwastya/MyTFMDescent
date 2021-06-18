@@ -1,8 +1,8 @@
 #include "engine/system/MHCore.hpp"
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLContext.hpp"
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+//#include <glad/glad.h>
+//#include <GLFW/glfw3.h>
 
 #define MH_ENABLE_CORE false
 

@@ -1,8 +1,9 @@
 #include "engine/system/MHCore.hpp"
+#include "../src/engine/mhpch.cpp"
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLShader.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <sstream>
-
+#include <glad/glad.h>
 
 namespace MHelmet
 {
@@ -16,7 +17,8 @@ namespace MHelmet
 
         return 0;
     }
-    OpenGLShader::OpenGLShader(const std::string& vertexPath, const std::string& fragmentPath, const std::string& geometryPath)
+    OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexPath, const std::string& fragmentPath, const std::string& geometryPath)
+        : m_Name(name)
     {
 
         std::unordered_map<GLenum, std::string> src;
@@ -25,19 +27,20 @@ namespace MHelmet
 
         if (geometryPath != "0") src[GL_GEOMETRY_SHADER] = geometryPath;
 
-        Compile(src);
+        CompileShader(src);
     }
 
-    OpenGLShader::OpenGLShader(const std::string& GLSLFile) 
+    OpenGLShader::OpenGLShader(const std::string& name, const std::string& GLSLFile)
+        : m_Name(name)
     {
         // si se quiere extender el modelo e implementar 
         // en otras plataformas, habria que aumentar el nivel
         // de abstraccion del file system para que funcionara 
         // correctamente en multiplataforma      
-        WARN("HHOLA? 1");
+   
         std::string fileSrc = LoadShader(GLSLFile);
         std::unordered_map<GLenum, std::string> shaderSrcs = SplitGLSLFile(fileSrc);
-        Compile(shaderSrcs);
+        CompileShader(shaderSrcs);
     }
 
 
@@ -56,10 +59,14 @@ namespace MHelmet
         glUseProgram(0);
     }
 
+    const std::string& OpenGLShader::GetName() const
+    {
+        return m_Name;
+    }
+
     
     std::unordered_map<GLenum, std::string> OpenGLShader::SplitGLSLFile(const std::string& GLSLSource)
     {
-        WARN("HHOLA?");
         std::string vertexCode, fragmentCode;
 
         std::unordered_map<GLenum, std::string> shaderSrc;
@@ -82,26 +89,21 @@ namespace MHelmet
             size_t nextLinePos = GLSLSource.find_first_not_of("\r\n", eol);
             pos = GLSLSource.find(token, nextLinePos);
 
-            WARN(T);
-
             shaderSrc[TypeFormat(T)] = GLSLSource.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? GLSLSource.size() - 1 : nextLinePos));
-
-           
-            
-
         }
-       // CompileShader(vertexCode, fragmentCode);
-
         return shaderSrc;
     }
-    void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& ShaderSources)
-    {
 
-        
+    void OpenGLShader::CompileShader(const std::unordered_map<GLenum, std::string>& srcs)
+    {        
         uint32_t program = glCreateProgram();
-        std::vector<GLenum> IDShaders(ShaderSources.size());
 
-        for (auto& value : ShaderSources)
+        // standar array de 3 por si usaramos SHADER de GEOMETRIA
+        std::array<GLenum, 3> IDShaders;       
+
+        m_Nshaders = 0;
+
+        for (auto& value : srcs)
         {
             GLenum type = value.first;
             const std::string& src = value.second;
@@ -114,20 +116,21 @@ namespace MHelmet
             CheckErrors(shader, Type::Shader);
          
             glAttachShader(program, shader);
-            IDShaders.push_back(shader);
+            IDShaders[m_Nshaders] = (shader);
+            ++m_Nshaders;
         }
 
         id_ = program;
         glLinkProgram(id_);
         CheckErrors(id_, Type::Program);
 
-        for (int id = 0; id < ShaderSources.size(); ++id) glDeleteShader(id);
-
-        
+        for (int id = 0; id < m_Nshaders; ++id) glDeleteShader(id);
     }
+
+
     std::string OpenGLShader::LoadShader(const std::string& GLSLFilePath)
     {
-        std::ifstream in(GLSLFilePath, std::ios::in, std::ios::binary);
+        std::ifstream in(GLSLFilePath, std::ios::in | std::ios::binary);
         std::string result;
 
         if (in)
@@ -141,33 +144,7 @@ namespace MHelmet
         else CORE_ERROR("Error in load GLSL File: {0}", GLSLFilePath);
        
         return result;
-    }
-    
-    
-    void OpenGLShader::CompileShader(const std::string& vertexCode, const std::string& fragmentCode)
-    {
-        /*const char* vertexStr = vertexCode.c_str();
-        const uint32_t vertex = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertex, 1, &vertexStr, nullptr);
-        glCompileShader(vertex);
-        CheckErrors(vertex, Type::Shader);
-
-        const char* fragmentStr = fragmentCode.c_str();
-        const uint32_t fragment = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragment, 1, &fragmentStr, nullptr);
-        glCompileShader(fragment);
-        CheckErrors(fragment, Type::Shader);
-
-        id_ = glCreateProgram();
-        glAttachShader(id_, vertex);
-        glAttachShader(id_, fragment);
-
-        glLinkProgram(id_);
-        CheckErrors(id_, Type::Program);
-
-        glDeleteShader(vertex);
-        glDeleteShader(fragment);*/
-    }
+    }        
 
     void OpenGLShader::CheckErrors(uint32_t checkErrors, Type type)
     {
@@ -193,13 +170,7 @@ namespace MHelmet
                 CORE_ERROR("Error Linking Program: {0}", infoLog);
             }
         }
-
-
-    }
-
-    
-
-    
+    }    
 
     void OpenGLShader::Uniform(const char* name, int value) const
     {

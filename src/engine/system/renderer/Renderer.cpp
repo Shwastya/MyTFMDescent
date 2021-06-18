@@ -1,7 +1,6 @@
 #include "engine/system/renderer/Renderer.hpp"
 #include "engine/Engine.hpp"
 #include <glm/gtc/matrix_transform.hpp>
-#include <GLFW/glfw3.h>
 
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLShader.hpp"
 
@@ -10,7 +9,6 @@
 namespace MHelmet
 {	
 	Renderer::DataScene* Renderer::Scene = new Renderer::DataScene;
-	//PerspectiveCamera* camera = new PerspectiveCamera(glm::vec3(0.0f, 0.0f, 3.0f));
 		
 	void Renderer::Init()
 	{
@@ -23,7 +21,6 @@ namespace MHelmet
 		Scene->Model = glm::mat4(1.0f);
 		Scene->Model = glm::translate(Scene->Model, translate); 	
 		Scene->Model = glm::rotate(Scene->Model, degrees, rotate);
-		//Scene->Model = glm::scale(Scene->Model, scale);
 		Scene->Model = glm::scale(Scene->Model, scale);
 	}
 
@@ -41,7 +38,6 @@ namespace MHelmet
 			0.1f, 100.0f
 		);
 
-		//Scene->ViewMatrixRefresh = camera->GetViewMatrix();
 	}
 	void Renderer::EndEscene()
 	{
@@ -56,16 +52,13 @@ namespace MHelmet
 	{
 		
 		SHADER(_Shader)->Bind();
-		texture->Bind(_Shader, "u_Texture", unit);
+		texture->Bind(unit);
+		SHADER(_Shader)->Uniform("u_Texture", static_cast<int32_t>(unit));
 		
 	}
 	void Renderer::Submit(const RefCount<Shader>& _Shader, const RefCount<VAO>& _VAO)
 	{
-		// std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->Bind();
-
-		
-		
-		 //std::reinterpret_pointer_cast<OpenGLShader>(_Shader)->SetUniform("u_Color", material);
+		// Antes de hacer el submit hay que insertar un material o una textura
 
 		SHADER(_Shader)->Uniform("u_Model", Scene->Model);
 		SHADER(_Shader)->Uniform("u_View", Scene->View);

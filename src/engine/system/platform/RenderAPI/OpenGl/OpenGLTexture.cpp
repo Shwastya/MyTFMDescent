@@ -51,12 +51,12 @@ namespace MHelmet
 	{
 		glDeleteTextures(1, &m_TextID);		
 	}
-	void OpenGLTexture2D::Bind(const RefCount<Shader>& shader, const char* name, uint32_t unit) const
+	void OpenGLTexture2D::Bind(uint32_t unit) const
 	{
 		glActiveTexture(GL_TEXTURE0 + unit);
 		glBindTexture(GL_TEXTURE_2D, m_TextID);
 		
-		std::reinterpret_pointer_cast<OpenGLShader>(shader)->Uniform(name, static_cast<int32_t>(unit));
+		//std::reinterpret_pointer_cast<OpenGLShader>(shader)->Uniform(name, static_cast<int32_t>(unit));
 	}
 	void OpenGLTexture2D::setWrap(Wrap s, Wrap t)
 	{

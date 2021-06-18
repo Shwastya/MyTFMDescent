@@ -103,6 +103,7 @@ set(ENGINE_SRC_FILES
 
     # Utils
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/utils/utils.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/utils/Library.cpp
 
     # Projectes dependency
     )

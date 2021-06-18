@@ -29,7 +29,7 @@ namespace MHelmet
 		virtual uint32_t GetWidth()  const override { return m_Width;  };
 		virtual uint32_t GetHeight() const override { return m_Height; };
 
-		virtual void Bind(const RefCount<Shader>& shader, const char* name, uint32_t unit) const override;
+		virtual void Bind(uint32_t unit) const override;
 
 		void setWrap(Wrap s, Wrap t);
 		void setFilter(Filter mag, Filter min, Filter mipMapMag = Filter::None, Filter mipMapMin = Filter::None);

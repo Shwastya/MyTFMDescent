@@ -3,9 +3,10 @@
 #include "engine/system/platform/Window.hpp"
 #include "engine/system/renderer/RendererContext.hpp"
 
+//#include <glad/glad.h>
+//#include <GLFW/glfw3.h>
 
-
-
+typedef struct GLFWwindow GLFWwindow;
 
 
 namespace MHelmet {

@@ -13,6 +13,7 @@
 #include <unordered_map>
 #include <functional>
 #include <algorithm>
+#include <array>
 
 #include <fstream>
 
