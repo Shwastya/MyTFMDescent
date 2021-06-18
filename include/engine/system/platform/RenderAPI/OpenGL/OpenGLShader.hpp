@@ -1,27 +1,20 @@
 #pragma once
-#include "../src/engine/mhpch.cpp"
-#include <glm/glm.hpp>
-#include "engine/system/renderer/Renderer.hpp"
+#define GLFW_INCLUDE_NONE
 #include <glad/glad.h>
-
+#include "engine/system/renderer/Renderer.hpp"
 
 namespace MHelmet
 {
-    
-
     class OpenGLShader : public Shader
     {
         enum class Type
         {
-            Vertex,
-            Fragment,
-            Geometry, // de momento es experimental y no se implementa
+            Shader,
             Program
         };
-
     
     public:
-        OpenGLShader(const std::string& vertexPath, const std::string& fragmentPath);
+        OpenGLShader(const std::string& vertexPath, const std::string& fragmentPath, const std::string& geometryPath);
         OpenGLShader(const std::string& GLSLFilePath);
 
         OpenGLShader() = default;
@@ -54,7 +47,7 @@ namespace MHelmet
     private:
         std::string LoadShader(const std::string& GLSLFilePath);
         std::unordered_map<GLenum, std::string> SplitGLSLFile(const std::string& GLSLSource);
-        void Compile(const std::unordered_map<GLenum, std::string>& GLSLSource);
+        void Compile(const std::unordered_map<GLenum, std::string>& ShaderSources);
 
      //   void SplitGLSLFile(const std::string& GLSLFilePath);
         

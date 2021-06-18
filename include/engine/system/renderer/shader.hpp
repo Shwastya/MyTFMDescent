@@ -1,7 +1,6 @@
 #pragma once
-#include "../src/engine/mhpch.cpp"
-#include <glm/glm.hpp>
-
+#include "engine/system/utils/utils.hpp"
+#include <string>
 namespace MHelmet 
 {
     class Shader
@@ -19,7 +18,7 @@ namespace MHelmet
         virtual void Bind() const   = 0;
         virtual void Unbind() const = 0;
 
-        static RefCount<Shader> Create(const std::string& vertexPath, const std::string& fragmentPath);
+        static RefCount<Shader> Create(const std::string& vertexPath, const std::string& fragmentPath, const std::string& geometryPath = "0");
         static RefCount<Shader> Create(const std::string& GLSLFilePath);
        
     };

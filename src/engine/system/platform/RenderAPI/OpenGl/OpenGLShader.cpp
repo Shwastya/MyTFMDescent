@@ -3,6 +3,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <sstream>
 
+
 namespace MHelmet
 {
     static GLenum TypeFormat(const std::string& T)
@@ -15,12 +16,16 @@ namespace MHelmet
 
         return 0;
     }
-    OpenGLShader::OpenGLShader(const std::string& vertexPath, const std::string& fragmentPath)
+    OpenGLShader::OpenGLShader(const std::string& vertexPath, const std::string& fragmentPath, const std::string& geometryPath)
     {
-        std::string vertexCode   = LoadShader(vertexPath);
-        std::string fragmentCode = LoadShader(fragmentPath);;
 
-        CompileShader(vertexCode, fragmentCode);
+        std::unordered_map<GLenum, std::string> src;
+        src[GL_VERTEX_SHADER]   = vertexPath;
+        src[GL_FRAGMENT_SHADER] = fragmentPath;
+
+        if (geometryPath != "0") src[GL_GEOMETRY_SHADER] = geometryPath;
+
+        Compile(src);
     }
 
     OpenGLShader::OpenGLShader(const std::string& GLSLFile) 
@@ -29,7 +34,7 @@ namespace MHelmet
         // en otras plataformas, habria que aumentar el nivel
         // de abstraccion del file system para que funcionara 
         // correctamente en multiplataforma      
-
+        WARN("HHOLA? 1");
         std::string fileSrc = LoadShader(GLSLFile);
         std::unordered_map<GLenum, std::string> shaderSrcs = SplitGLSLFile(fileSrc);
         Compile(shaderSrcs);
@@ -54,6 +59,7 @@ namespace MHelmet
     
     std::unordered_map<GLenum, std::string> OpenGLShader::SplitGLSLFile(const std::string& GLSLSource)
     {
+        WARN("HHOLA?");
         std::string vertexCode, fragmentCode;
 
         std::unordered_map<GLenum, std::string> shaderSrc;
@@ -64,7 +70,7 @@ namespace MHelmet
 
         // La siguiente seccion de codigo habria que mejorar mucho la abstraccion
         // De momento, por las prisas, siendo funcional, lo dejo asi
-
+        
         while (pos != std::string::npos)
         {
             size_t eol = GLSLSource.find_first_of("\r\n", pos);
@@ -76,50 +82,48 @@ namespace MHelmet
             size_t nextLinePos = GLSLSource.find_first_not_of("\r\n", eol);
             pos = GLSLSource.find(token, nextLinePos);
 
-           
+            WARN(T);
 
             shaderSrc[TypeFormat(T)] = GLSLSource.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? GLSLSource.size() - 1 : nextLinePos));
 
-            if (T == "V")
-            {
-                vertexCode = GLSLSource.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? GLSLSource.size() - 1 : nextLinePos));
-            }
-
-
-            if (T == "F")
-            {
-                fragmentCode = GLSLSource.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? GLSLSource.size() - 1 : nextLinePos));
-            }
+           
+            
 
         }
-        CompileShader(vertexCode, fragmentCode);
+       // CompileShader(vertexCode, fragmentCode);
 
         return shaderSrc;
     }
     void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& ShaderSources)
     {
+
+        
+        uint32_t program = glCreateProgram();
+        std::vector<GLenum> IDShaders(ShaderSources.size());
+
         for (auto& value : ShaderSources)
-        const char* vertexStr = vertexCode.c_str();
-        const uint32_t vertex = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertex, 1, &vertexStr, nullptr);
-        glCompileShader(vertex);
-        CheckErrors(vertex, Type::Vertex);
+        {
+            GLenum type = value.first;
+            const std::string& src = value.second;
 
-        const char* fragmentStr = fragmentCode.c_str();
-        const uint32_t fragment = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragment, 1, &fragmentStr, nullptr);
-        glCompileShader(fragment);
-        CheckErrors(fragment, Type::Fragment);
+            const uint32_t shader = glCreateShader(type);
+            const char* srcStr = src.c_str();
 
-        id_ = glCreateProgram();
-        glAttachShader(id_, vertex);
-        glAttachShader(id_, fragment);
+            glShaderSource(shader, 1, &srcStr, nullptr);            
+            glCompileShader(shader);
+            CheckErrors(shader, Type::Shader);
+         
+            glAttachShader(program, shader);
+            IDShaders.push_back(shader);
+        }
 
+        id_ = program;
         glLinkProgram(id_);
         CheckErrors(id_, Type::Program);
 
-        glDeleteShader(vertex);
-        glDeleteShader(fragment);
+        for (int id = 0; id < ShaderSources.size(); ++id) glDeleteShader(id);
+
+        
     }
     std::string OpenGLShader::LoadShader(const std::string& GLSLFilePath)
     {
@@ -142,17 +146,17 @@ namespace MHelmet
     
     void OpenGLShader::CompileShader(const std::string& vertexCode, const std::string& fragmentCode)
     {
-        const char* vertexStr = vertexCode.c_str();
+        /*const char* vertexStr = vertexCode.c_str();
         const uint32_t vertex = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(vertex, 1, &vertexStr, nullptr);
         glCompileShader(vertex);
-        CheckErrors(vertex, Type::Vertex);
+        CheckErrors(vertex, Type::Shader);
 
         const char* fragmentStr = fragmentCode.c_str();
         const uint32_t fragment = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(fragment, 1, &fragmentStr, nullptr);
         glCompileShader(fragment);
-        CheckErrors(fragment, Type::Fragment);
+        CheckErrors(fragment, Type::Shader);
 
         id_ = glCreateProgram();
         glAttachShader(id_, vertex);
@@ -162,28 +166,30 @@ namespace MHelmet
         CheckErrors(id_, Type::Program);
 
         glDeleteShader(vertex);
-        glDeleteShader(fragment);
+        glDeleteShader(fragment);*/
     }
 
-    void OpenGLShader::CheckErrors(uint32_t shader, Type type)
+    void OpenGLShader::CheckErrors(uint32_t checkErrors, Type type)
     {
         int success;
         char infoLog[512];
         if (type != Type::Program)
         {
-            glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+            glGetShaderiv(checkErrors, GL_COMPILE_STATUS, &success);
             if (!success)
             {
-                glGetShaderInfoLog(shader, 512, nullptr, infoLog);
+                glGetShaderInfoLog(checkErrors, 512, nullptr, infoLog);
                 CORE_ERROR("Error Compiling Shader: {0}", infoLog);
+                glDeleteShader(checkErrors);
+                return;
             }
         }
         else
         {
-            glGetProgramiv(shader, GL_LINK_STATUS, &success);
+            glGetProgramiv(checkErrors, GL_LINK_STATUS, &success);
             if (!success)
             {
-                glGetProgramInfoLog(shader, 512, nullptr, infoLog);
+                glGetProgramInfoLog(checkErrors, 512, nullptr, infoLog);
                 CORE_ERROR("Error Linking Program: {0}", infoLog);
             }
         }

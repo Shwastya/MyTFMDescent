@@ -1,7 +1,6 @@
 #pragma once
-#ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION 
-#endif
+
 
 #include <glm/glm.hpp>
 #include "engine/system/renderer/shader.hpp" 
