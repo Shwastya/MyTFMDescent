@@ -24,15 +24,15 @@ namespace MHelmet
 		Scene->Model = glm::scale(Scene->Model, scale);
 	}
 
-	void Renderer::BeginScene(RefCount<PerspectiveCamera>& camera)
+	void Renderer::BeginScene(PerspectiveCamera& camera)
 	{	
 		
 		Scene->View  = glm::mat4(1.0f);		
-		Scene->View = camera->GetViewMatrix();
+		Scene->View = camera.GetViewMatrix();
 
 		Scene->Projection = glm::perspective
 		(
-			glm::radians(camera->GetFOV()), 
+			glm::radians(camera.GetFOV()), 
 			static_cast<float>(Engine::p().GetWindow().GetWidth()) / 
 			static_cast<float>(Engine::p().GetWindow().GetHeight()), 
 			0.1f, 100.0f

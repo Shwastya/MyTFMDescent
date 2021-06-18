@@ -8,7 +8,7 @@ namespace MHelmet
 	{
 		if (CheckNameInLibrary(name, Check::Pull))
 		{
-			INFO("Added to Library sadher {0}", name);
+			TRACE("Added '{0}' to Shader Library", name);
 			m_ShadersLib[name] = newShader;
 		}		
 	}

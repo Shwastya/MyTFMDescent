@@ -29,10 +29,10 @@ namespace MHelmet
 		//	off      = SPDLOG_LEVEL_OFF,
 		//	n_levels
 
-		m_EngineLogger = spdlog::stdout_color_mt("MHELMET");
+		m_EngineLogger = spdlog::stdout_color_mt("MHelmet");
 		m_EngineLogger->set_level(spdlog::level::trace);
 
-		m_ClientLogger = spdlog::stdout_color_mt("PROJECT");
+		m_ClientLogger = spdlog::stdout_color_mt("Project");
 		m_ClientLogger->set_level(spdlog::level::trace);	
 
 		m_Alive = true;

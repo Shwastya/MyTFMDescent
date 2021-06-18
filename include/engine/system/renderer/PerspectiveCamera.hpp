@@ -1,16 +1,16 @@
 #pragma once
 #include <glm/glm.hpp>
-#include "engine/system/utils/utils.hpp"
+#include "../src/engine/mhpch.cpp"
 
+#include "engine/system/utils/utils.hpp"
+#include "engine/system/events/AppEvents/OnAppEvents.hpp"
+#include "engine/system/events/KeyEvents/OnKeyEvents.hpp"
+#include "engine/system/events/MouseEvents/OnMouseEvents.hpp"
 
 namespace MHelmet
-{
-    // probable quiera mas adelante poder modificar estos 
-    // valores desde la interfaz de ImGui
+{    
     const float k_Yaw = -90.0f;
-    const float k_Pitch = 0.0f;
-    const float k_Speed = 3.5f;
-    const float k_Sensitivity = 0.1f;
+    const float k_Pitch = 0.0f;    
     const float k_FOV = 45.0f;
 
     class PerspectiveCamera 
@@ -36,10 +36,13 @@ namespace MHelmet
         void HandleMouseScroll(float yoffset);
 
 
-        void Forward(DeltaTime dt);
-        void Backward(DeltaTime dt);
-        void Left(DeltaTime dt);
-        void Right(DeltaTime dt);
+        void Forward(float dt);
+        void Backward(float dt);
+        void Left(float dt);
+        void Right(float dt);
+
+        void SetSpeed(float speed) { m_Speed = speed; };
+        void SetSensitivity(float sens) { m_Sensitivity = sens; };
 
     private:
 
@@ -55,8 +58,50 @@ namespace MHelmet
 
         float m_Yaw;
         float m_Pitch;
-
         float m_Fov;
+
+    private:
+        // Input managemnet in CameraMAN
+        float m_Speed = 3.5f;
+        float m_Sensitivity = 0.1f;
+    };
+
+
+    //////////////////////////////////////////////////////
+    ////                CAMERA MANAGER                 ///
+    //////////////////////////////////////////////////////
+
+    struct CameraMan
+    {
+        CameraMan(glm::vec3 position);
+
+        void Update(DeltaTime dt);
+        void OnEvent(Event& e);
+
+        bool MouseMoved(OnMouseMoved& e);
+
+        PerspectiveCamera& Get() { return m_Cam; };
+        const PerspectiveCamera& Get() const { return m_Cam; };
+
+        void Speed(float speed) { m_Cam.SetSpeed(speed); }
+        void Sensitivity(float Sensitivity) { m_Cam.SetSensitivity(Sensitivity); };
+
+        bool _Input = true;
+        bool _Mouse = true;
+
+    private:
+
+        PerspectiveCamera m_Cam;
+        glm::vec3 m_InitalPosition;
+
+    private: // Mouse attributes
+        
+        bool m_FirstMouse = true;
+        float m_LastX = 0.0f;
+        float m_LastY = 0.0f;
+
+        
+        
     };
 }
 

@@ -1,5 +1,6 @@
 #include "engine/system/renderer/PerspectiveCamera.hpp"
 #include <glm/gtc/matrix_transform.hpp>
+#include "engine/system/Input.hpp"
 
 namespace MHelmet
 {
@@ -45,7 +46,7 @@ namespace MHelmet
 
     void PerspectiveCamera::HandleKeyboard(Movement direction, DeltaTime dt)
     {
-        const float velocity = k_Speed * dt.Seconds();
+        const float velocity = m_Speed * dt.Seconds();
 
         // SEGURAMENTE NO LO VOLVERE A USAR (BORRAR?)
         switch (direction)
@@ -59,8 +60,8 @@ namespace MHelmet
 
     void PerspectiveCamera::HandleMouseMovement(float xoffset, float yoffset, bool constrainPitch)
     {
-        const float xoff = xoffset * k_Sensitivity;
-        const float yoff = yoffset * k_Sensitivity;
+        const float xoff = xoffset * m_Sensitivity;
+        const float yoff = yoffset * m_Sensitivity;
 
         m_Yaw += xoff;
         m_Pitch += yoff;
@@ -81,29 +82,82 @@ namespace MHelmet
         if (m_Fov >= 45.0f) m_Fov = 45.0f;
     }
 
-    void PerspectiveCamera::Forward(DeltaTime dt)
+    void PerspectiveCamera::Forward(float dt)
     {
-        const float velocity = k_Speed * dt.Seconds();
+        const float velocity = m_Speed * dt;
         m_Position += m_Front * velocity;
     }
 
-    void PerspectiveCamera::Backward(DeltaTime dt)
+    void PerspectiveCamera::Backward(float dt)
     {
-        const float velocity = k_Speed * dt.Seconds();
+        const float velocity = m_Speed * dt;
         m_Position -= m_Front * velocity;
     }
 
-    void PerspectiveCamera::Left(DeltaTime dt)
+    void PerspectiveCamera::Left(float dt)
     {
-        const float velocity = k_Speed * dt.Seconds();
+        const float velocity = m_Speed * dt;
          m_Position -= m_Right * velocity;
     
     }
 
-    void PerspectiveCamera::Right(DeltaTime dt)
+    void PerspectiveCamera::Right(float dt)
     {
-        const float velocity = k_Speed * dt.Seconds();
+        const float velocity = m_Speed * dt;
         m_Position += m_Right * velocity;
+    }
+
+
+
+    //////////////////////////////////////////////////////
+    ////                CAMERA MANAGER                 ///
+    //////////////////////////////////////////////////////
+
+    CameraMan::CameraMan(glm::vec3 position)
+        : m_Cam(position), m_InitalPosition(position)
+    {}
+
+    void CameraMan::Update(DeltaTime dt)
+    {
+        if (Input::IsKeyPressed(MH_KEY_S)) m_Cam.Backward(dt.Seconds());
+     
+        if (Input::IsKeyPressed(MH_KEY_W)) m_Cam.Forward(dt.Seconds());
+        
+        if (Input::IsKeyPressed(MH_KEY_A)) m_Cam.Left(dt.Seconds());
+        
+        if (Input::IsKeyPressed(MH_KEY_D)) m_Cam.Right(dt.Seconds());        
+    }
+
+    void CameraMan::OnEvent(Event& e)
+    {
+        if (e.GetEventType() == EventType::E_MOUSE_MOVED && _Mouse)
+        {
+            MouseMoved((OnMouseMoved&)e);
+        }
+
+        if (e.GetEventType() == EventType::E_MOUSE_SCROLLED)
+        {
+            OnMouseScrolled& event = (OnMouseScrolled&)e;
+            m_Cam.HandleMouseScroll(event.GetYOffset());
+        }
+    }
+
+    bool CameraMan::MouseMoved(OnMouseMoved& e)
+    {
+        if (m_FirstMouse)
+        {
+            m_FirstMouse = false;
+            m_LastX = e.GetX();
+            m_LastY = e.GetY();
+        }
+
+        const float Xoffset = e.GetX() - m_LastX;
+        const float Yoffset = m_LastY - e.GetY();
+        m_LastX = e.GetX();
+        m_LastY = e.GetY();
+
+        m_Cam.HandleMouseMovement(Xoffset, Yoffset);
+        return false;
     }
 }
 

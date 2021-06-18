@@ -16,7 +16,7 @@ namespace MHelmet
 		// con la velocidad de actualización del monitor.
 		// Activado, DeltaTime pasa de unos 0.xxx segundos a aproximadamente 6s en mi monitor
 		m_Window->SetVSync(true);
-		m_Window->SetCallBack(BindEventFunction(Engine::OnEvent));
+		m_Window->SetCallBack(BIND_E_FN(Engine::OnEvent));
 
 		Renderer::Init();
 
@@ -66,11 +66,13 @@ namespace MHelmet
 	void Engine::OnEvent(Event& e)
 	{
 		EventHandler handle(e);
-		handle.DoTask<OnWindowClose>(BindEventFunction(Engine::WindowCloseTask));
+
+		handle.CallBack<OnWindowClose>(BIND_E_FN(Engine::WindowCloseCallBack));
+		handle.CallBack<OnWindowResize>(BIND_E_FN(Engine::WindowResizeCallBack));
+
 
 		for (auto it = m_Layers.end(); it != m_Layers.begin();)
-		{
-			
+		{			
 			(*--it)->OnEvent(e);
 			if (e.Handled) break;
 		}		
@@ -93,10 +95,31 @@ namespace MHelmet
 		 return (float)glfwGetTime(); 
 	}
 
-	bool Engine::WindowCloseTask(OnWindowClose& e)
+	bool Engine::WindowCloseCallBack(OnWindowClose& e)
 	{
 		m_Alive = false;
-		return m_Alive;
+		return true;
+	}
+	bool Engine::WindowResizeCallBack(OnWindowResize& e)
+	{
+		/*int width = e.GetWidth(), height = e.GetHeight();
+		if (width == 0 || height == 0)
+		{
+			m_Minimized = true;
+			return false;
+		}
+		m_Minimized = false;
+
+		m_Window ->GetSwapChain().OnResize(width, height);
+
+		auto& fbs = FramebufferPool::GetGlobal()->GetAll();
+		for (auto& fb : fbs)
+		{
+			if (!fb->GetSpecification().NoResize)
+				fb->Resize(width, height);
+		}
+		*/
+		return false;
 	}
 }
 

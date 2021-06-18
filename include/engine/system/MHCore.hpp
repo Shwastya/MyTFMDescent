@@ -49,7 +49,7 @@ namespace CORE
 }
 
 // Perform Event Tasks
-#define BindEventFunction(E)   std::bind(&##E, this, std::placeholders::_1)
+#define BIND_E_FN(E) std::bind(&##E, this, std::placeholders::_1)
 #define BINDIMGUIEVENT(x) std::bind(&ImGuiLayer::x, this, std::placeholders::_1)
 
 

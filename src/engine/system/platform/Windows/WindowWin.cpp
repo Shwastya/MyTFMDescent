@@ -37,7 +37,7 @@ namespace MHelmet
 		m_Data.Title = m_Spec.Title;
 		m_Data.Size  = m_Spec.Size;		
 
-		CORE_INFO("CREATED WINDOW {0} {1} {2}: ", m_Spec.Title, m_Spec.Size.Width, m_Spec.Size.Height);
+		CORE_TRACE("Create Window {0} {1} {2}: ", m_Spec.Title, m_Spec.Size.Width, m_Spec.Size.Height);
 
 		if (!s_GLFW_ON) // window context render initialized
 		{

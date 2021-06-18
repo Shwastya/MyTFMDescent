@@ -33,11 +33,6 @@ namespace MHelmet
     OpenGLShader::OpenGLShader(const std::string& name, const std::string& GLSLFile)
         : m_Name(name)
     {
-        // si se quiere extender el modelo e implementar 
-        // en otras plataformas, habria que aumentar el nivel
-        // de abstraccion del file system para que funcionara 
-        // correctamente en multiplataforma      
-   
         std::string fileSrc = LoadShader(GLSLFile);
         std::unordered_map<GLenum, std::string> shaderSrcs = SplitGLSLFile(fileSrc);
         CompileShader(shaderSrcs);

@@ -1,21 +1,14 @@
 #include <MHelmet.h>
 
+#define MH MHelmet  // CLIENT SIDE
 
-#define MH MHelmet
-
-/*****************************************************************************
-*							Layer Proyecto Cliente 					         /
-* ***************************************************************************/
 class TestingLayer : public MHelmet::NodeLayer
 {
+
 public:
 
-
-
-
 	using R   = MH::Renderer;
-	using RDC = MH::RenderDrawCall;
-	
+	using RDC = MH::RenderDrawCall;	
 
 	TestingLayer() : MH::NodeLayer("TestingLayer")
 	{
@@ -24,7 +17,8 @@ public:
 		std::string  textBlueBlocks = "../assets/textures/blue_blocks.jpg";
 		std::string  textAlphaTree = "../assets/textures/tree.png";
 
-		m_Camera = std::make_shared<MH::PerspectiveCamera>(glm::vec3(11.6f, 9.0f, 23.5f));
+		m_Camera = std::make_shared<MH::CameraMan>(glm::vec3(11.6f, 9.0f, 23.5f));
+		m_Camera->Speed(10.0f);
 
 		MH::Quad Q(1.0f);
 		MH::Triangle T;
@@ -49,30 +43,24 @@ public:
 
 		m_VAO->Add__EBO(EBO_);
 
+		// Added Shader Library
 		m_S.Load("OnlyColor", "../shaders/persp/colorShader.glsl");
 		m_S.Load("OnlyTextU", "../shaders/persp/textuShader.glsl");
 
-		//m_ShaderMaterial = MH::Shader::Create("OnlyOneColor", MaterialShader);
-
-	//	m_ShaderTexture  = MH::Shader::Create("OnlyOneTexture", TextureShader);
-
 		m_Texture   = MH::Texture2D::Create(textBricks, MH::Texture2D::Format::RGB);
-		m_AlphaTree = MH::Texture2D::Create(textAlphaTree, MH::Texture2D::Format::RGBA);
-
-
-		
-
-		
+		m_AlphaTree = MH::Texture2D::Create(textAlphaTree, MH::Texture2D::Format::RGBA);		
 	}
 
 	void Update(MH::DeltaTime dt) override
 	{
-		HandleInput(dt);		
+		// update
+		m_Camera->Update(dt);
 
+		// render
 		RDC::ClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RDC::clear();
 		 
-		R::BeginScene(m_Camera);
+		R::BeginScene(m_Camera->Get());
 		{
 			for (int i = 0; i < 20; ++i)
 			{
@@ -128,90 +116,35 @@ public:
 
 	void OnEvent(MH::Event& event) override
 	{
-		if (event.GetEventType() == MH::EventType::E_MOUSE_MOVED)
-		{			
-		//	if (false)
-			HandleMouse((MH::OnMouseMoved&)event);			
-		}
+		m_Camera->OnEvent(event);
+
 		if (event.GetEventType() == MH::EventType::E_KEY_PRESSED)
-		{			
+		{
 			MH::OnKeyPressed& e = (MH::OnKeyPressed&)event;
 
 			if (e.GetKeyCode() == MH_KEY_F11)
-			{				
-				MH::Engine::p().GetWindow().SetCaptureMode(true);				
+			{
+				MH::Engine::p().GetWindow().SetCaptureMode(true);
 			}
 			if (e.GetKeyCode() == MH_KEY_F10)
 			{
 				MH::Engine::p().GetWindow().SetCaptureMode(false);
 			}
 		}
-		if (event.GetEventType() == MH::EventType::E_MOUSE_SCROLLED)
-		{
-			MH::OnMouseScrolled& e = (MH::OnMouseScrolled&)event;
-			m_Camera->HandleMouseScroll(e.GetYOffset());
-		}
 	}
-
+	
 private:
 
-	void HandleInput(MH::DeltaTime dt)
-	{
-		if (MH::Input::IsKeyPressed(MH_KEY_S))
-		{
-			m_Camera->Backward(dt);
-		}
-		if (MH::Input::IsKeyPressed(MH_KEY_W))
-		{
-			m_Camera->Forward(dt);
-		}
-		if (MH::Input::IsKeyPressed(MH_KEY_A))
-		{
-			m_Camera->Left(dt);
-		}
-		if (MH::Input::IsKeyPressed(MH_KEY_D))
-		{
-			m_Camera->Right(dt);
-		}
-	}
+	MH::ShaderLib m_S; // Shader Library
 
-	void HandleMouse(MH::OnMouseMoved& e)
-	{		
-		if (m_FirstMouse)
-		{
-			m_FirstMouse = false;
-			m_LastX = e.GetX();
-			m_LastY = e.GetY();
-		}
-
-		const float Xoffset = e.GetX() - m_LastX;
-		const float Yoffset = m_LastY - e.GetY();
-		m_LastX = e.GetX();
-		m_LastY = e.GetY();
-
-		m_Camera->HandleMouseMovement(Xoffset, Yoffset);
-	}	
-
-private:
-
-	MH::ShaderLib m_S;
-
-//	MH::RefCount<MH::Shader>   m_ShaderMaterial;
-
-	MH::RefCount<MH::VAO>      m_VAO;
-	MH::RefCount<MH::PerspectiveCamera> m_Camera;
+	MH::RefCount<MH::VAO>       m_VAO;
+	MH::RefCount<MH::CameraMan> m_Camera;
 	MH::RefCount<MH::Texture2D> m_Texture, m_AlphaTree;
 
 	/* atributos para los modelos */	
 	ModelTransform m_Model;
 	glm::vec3 m_ModelColor{ 1.0f, 0.0f, 0.5f };
 
-
-	/* atributos para el mouse e interfaz */
-	bool m_FirstMouse = true;
-	float m_LastX = 0.0f;
-	float m_LastY = 0.0f;
-	bool toggle = true;
 };
 
 

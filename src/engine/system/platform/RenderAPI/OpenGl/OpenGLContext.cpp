@@ -4,7 +4,7 @@
 //#include <glad/glad.h>
 //#include <GLFW/glfw3.h>
 
-#define MH_ENABLE_CORE false
+#define MH_ENABLE_CORE true
 
 namespace MHelmet
 {	OpenGLContext::OpenGLContext(GLFWwindow* _GLFWwindow)
@@ -22,7 +22,7 @@ namespace MHelmet
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4.6);
 			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-			CORE_WARN("OpenGL CORE profile enabled!!");
+			
 		}
 
 		glfwMakeContextCurrent(m_GLFWwindow);
@@ -35,9 +35,11 @@ namespace MHelmet
 
 	
 
-	
-		CORE_INFO("GPU {}", glGetString(GL_RENDERER));
-		CORE_INFO("OpenGL v.{}", glGetString(GL_VERSION));
+		CORE_INFO("-------------System especification--------------");
+		CORE_INFO("GPU:    {}", glGetString(GL_RENDERER));
+		CORE_INFO("OpenGL: {}", glGetString(GL_VERSION));
+		CORE_WARN("OpenGL CORE PROFILE IS ENABLED !!");
+		CORE_INFO("------------------------------------------------");
 		
 		////////////// OpenGL Contex - END -   //////////////
 	}

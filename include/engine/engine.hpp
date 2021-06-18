@@ -2,7 +2,7 @@
 #include "../src/engine/mhpch.cpp"
 #include "engine/system/platform/Window.hpp"
 #include "engine/system/ImGui/ImGuiLayer.hpp"
-#include "engine/system/events/AppEvents/OnAppEvents.hpp"
+//#include "engine/system/events/AppEvents/OnAppEvents.hpp"
 
 #include <GLFW/glfw3.h>
 
@@ -32,12 +32,15 @@ namespace MHelmet
 
 		
 	private: 
-		bool WindowCloseTask(OnWindowClose& e); // perform event
+		bool WindowCloseCallBack(OnWindowClose& event); // perform event
+		bool WindowResizeCallBack(OnWindowResize& event);
 
 	private:
 		Unique<Window>	m_Window;
 		
 		bool m_Alive = true;
+		bool m_Minimized = false;
+
 		LayerManager  m_Layers;
 		ImGuiLayer* m_ImGuiLayers;
 
