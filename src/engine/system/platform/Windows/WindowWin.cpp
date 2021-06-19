@@ -1,8 +1,5 @@
 #include "../src/engine/mhpch.cpp"
 
-//#include <glad/glad.h>
-//#include <GLFW/glfw3.h>
-
 #include "engine/system/platform/windows/WindowWin.hpp"
 #include "engine/system/events/AppEvents/OnAppEvents.hpp"
 #include "engine/system/events/KeyEvents/OnKeyEvents.hpp"
@@ -73,18 +70,20 @@ namespace MHelmet
 				);
 				
 		}		
-		m_Context = new OpenGLContext(m_Window);
-		m_Context->Init();
-
 		
-			
+		////////////// OpenGL Contex - END -   //////////////	
+
 		/*glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4.1);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4.1);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);			
 	
 		glfwMakeContextCurrent(m_Window);    
 		int result = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);*/
-		////////////// OpenGL Contex - END -   //////////////	
+
+		/////////////////////////////////////////////////////	
+
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->Init();
 		
 
 		// Puntero a la instancia actual del window
@@ -211,11 +210,10 @@ namespace MHelmet
 	{
 		glfwPollEvents();
 
-		glfwSwapBuffers(m_Window);
-		
-		// cambio de contexto de render sin implementar nada
-		// solo puntero
-		//m_Context->SwapBuffers(); 
+		//glfwSwapBuffers(m_Window);
+		// SwapBuffers se situa donde se ha creado
+		// el contexto de render
+		m_Context->SwapBuffers(); 
 	}
 
 	Position WindowWin::GetPos() const

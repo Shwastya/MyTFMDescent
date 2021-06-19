@@ -28,7 +28,7 @@ namespace MHelmet
 		static Engine& p() { return *s_Instance; }
 		Window& GetWindow() { return *m_Window; }
 
-		inline float GetTime() const;
+		static float GetTime();
 
 		
 	private: 

@@ -79,9 +79,6 @@ namespace MHelmet
 	{
 		return 
 		{ 
-			// Averiguar si el hecho de si llamar a dos funciones
-			// para resolver este caso es una perdidad de eficacia
-
 			Input::GetMouseX(), // get mouse cursor position X
 			Input::GetMouseY()  // get mouse cursor position Y
 		};

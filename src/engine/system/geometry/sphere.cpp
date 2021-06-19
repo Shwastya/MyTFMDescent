@@ -3,22 +3,23 @@
 #include "engine/system/geometry/sphere.hpp"
 
 #include <cmath>
+
 namespace MHelmet
 {
     Sphere::Sphere(float radius, uint32_t stacks, uint32_t slices)
         : _radius(radius), _stacks(stacks), _slices(slices) {
 
-        m_Vertices = (slices + 1) * (stacks + 1);
-        m_Elements = (slices * 2 * (stacks - 1)) * 3;
+        _nVertices = (slices + 1) * (stacks + 1);
+        _nElements = (slices * 2 * (stacks - 1)) * 3;
 
-        const auto positions = new float[static_cast<size_t>(m_Vertices) * 3];
-        const auto uvs = new float[static_cast<size_t>(m_Vertices) * 2];
-        const auto normals = new float[static_cast<size_t>(m_Vertices) * 3];
+        const auto positions = new float[static_cast<size_t>(_nVertices) * 3];
+        const auto uvs = new float[static_cast<size_t>(_nVertices) * 2];
+        const auto normals = new float[static_cast<size_t>(_nVertices) * 3];
 
-        const auto indices = new uint32_t[m_Elements];
+        const auto indices = new uint32_t[_nElements];
 
         generateVertexData(positions, uvs, normals, indices);
-       // uploadData(positions, uvs, normals, indices);
+        uploadData(positions, uvs, normals, indices);
 
         delete[] positions;
         delete[] uvs;
@@ -79,3 +80,4 @@ namespace MHelmet
         }
     }
 }
+

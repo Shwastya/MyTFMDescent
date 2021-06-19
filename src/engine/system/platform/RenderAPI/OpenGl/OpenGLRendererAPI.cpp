@@ -32,6 +32,10 @@ namespace MHelmet
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
+	void OpenGlRendererAPI::SetViewPort(uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+	{
+		glViewport(x, y, w, h);
+	}
 	void OpenGlRendererAPI::Draw(const RefCount<VAO>& _VAO)
 	{
 

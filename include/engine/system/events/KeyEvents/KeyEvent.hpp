@@ -18,7 +18,7 @@ namespace MHelmet
         }
 		inline virtual int GetCategoryFlags() const override 
         { 
-            return E_CATG_KEYBOARD | E_CATG_INPUT;
+            return MH_CATG_KEYBOARD | MH_CATG_INPUT;
         }
 
 	protected:

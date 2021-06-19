@@ -21,12 +21,18 @@ namespace MHelmet
 		virtual void Init() = 0;
 
 		virtual void ClearColor(const glm::vec4& color) = 0;
+
 		virtual void clear() = 0;
 
-		virtual void Draw(const RefCount<VAO>& _VAO) = 0;
-//		virtual void DrawCall();
+		// No es necesario llamarlo desde ningun otros sitio que no sea
+		// del windows activo en este momento - creo...
+		virtual void SetViewPort(uint32_t x, uint32_t y, uint32_t w, uint32_t h) = 0;
 
-		inline static API GetAPI() { return s_API; }
+
+		virtual void Draw(const RefCount<VAO>& _VAO) = 0;
+
+		
+		static API GetAPI() { return s_API; }
 
 		//static void SetAPI(RendererAPI::API rendererAPI = RendererAPI::API::OpenGL);
 

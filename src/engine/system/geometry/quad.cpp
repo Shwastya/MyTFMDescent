@@ -1,48 +1,42 @@
 #include "engine/system/geometry/quad.hpp"
-#include <vcruntime_string.h>
+
+
 
 namespace MHelmet
 {
-    Quad::Quad(float size)
-        : m_Size(size)
-    {
-        m_Vertices = 1 * 2 * 3;  // 1 face * 2 triangles * 3 vertices
-        m_Elements = m_Vertices;
+    Quad::Quad(float size) : _size(size) {
+        _nVertices = 1 * 2 * 3;  //1 face * 2 triangles * 3 vertices
+        _nElements = _nVertices;
 
-        const float half = m_Size / 2.0f;        
+        const float half = size / 2.0f;
 
-        float quad[32] =
-        {
-            // Positions          // UVS        // Normals
-            -half, -half, 0.0f,   0.0f, 0.0f,   0.0f, 0.0f, 1.0f,
-             half, -half, 0.0f,   1.0f, 0.0f,   0.0f, 0.0f, 1.0f,
+        float positions[] = { half, half, 0.0f,    //upper right triangle
+                              half, -half, 0.0f,
+                              -half, half, 0.0f,
 
-            // Positions          // UVS        // Normals
-             half,  half, 0.0f,   1.0f, 1.0f,   0.0f, 0.0f, 1.0f,
-            -half,  half, 0.0f,   0.0f, 1.0f,   0.0f, 0.0f, 1.0f,
-            
-        };
+                              half, -half, 0.0f,   //lower left triangle
+                              -half, half, 0.0f,
+                              -half, -half, 0.0f };
 
-        memcpy(m_Quad, quad, sizeof(quad));
+        float uvs[] = { 1.0f, 1.0f,
+                        1.0f, 0.0f,
+                        0.0f, 1.0f,
 
-        uint32_t indices[6] = { 0, 1, 2,    2, 3, 0 };
+                        1.0f, 0.0f,
+                        0.0f, 1.0f,
+                        0.0f, 0.0f };
 
-        memcpy(m_Indices, indices, sizeof(indices));       
-    }
+        float normals[] = { 0.0f, 0.0f, 1.0f,
+                            0.0f, 0.0f, 1.0f,
+                            0.0f, 0.0f, 1.0f,
 
-    float* Quad::GetModel()
-    {
-        return m_Quad;
-    }
+                            0.0f, 0.0f, 1.0f,
+                            0.0f, 0.0f, 1.0f,
+                            0.0f, 0.0f, 1.0f };
 
-    uint32_t* Quad::Indices() { return m_Indices; }
+        uint32_t indices[] = { 0, 2, 1,
+                               3 , 4, 5 };
 
-    size_t Quad::Size() const { return sizeof(m_Quad); }
-
-    uint32_t Quad::Count() const
-    {
-        return sizeof(m_Indices) / sizeof(uint32_t);
+        uploadData(positions, uvs, normals, indices);
     }
 }
-
-

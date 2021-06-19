@@ -1,16 +1,16 @@
 #pragma once
+
 #include <cstdint>
+
+//Attributes
+//0 - positions
+//1 - uvs
+//2 - normals
 
 namespace MHelmet
 {
-    //Attributes
-        // 0 - positions
-        // 1 - uvs
-        // 2 - normals
-
-    class Geometry     
+    class Geometry
     {
-
     public:
         Geometry() = default;
         virtual ~Geometry();
@@ -21,18 +21,24 @@ namespace MHelmet
         Geometry(Geometry&&) noexcept = default;
         Geometry& operator=(Geometry&&) noexcept = default;
 
-        virtual float*   GetModel() = 0;
-        virtual uint32_t* Indices() = 0;
+        virtual void render() const;
 
-        virtual size_t   Size()  const = 0;
-        virtual uint32_t Count() const = 0;
+        
 
     protected:
-        uint32_t m_Vertices = 0;
-        uint32_t m_Elements = 0;
+        void uploadData(const float* positions, const float* uvs,
+            const float* normals, const uint32_t* indices);
 
+        void calcTangents(const float* positions, const float* uvs,
+            const float* normals, float* tangents, float* biTangents) const;
+    protected:
+        uint32_t _VAO = 0;
+        uint32_t _VBO[6]{ 0,0,0,0,0,0 };
+        uint32_t _nVertices = 0;
+        uint32_t _nElements = 0;
+
+        float* m_VBO;
 
     };
+
 }
-
-

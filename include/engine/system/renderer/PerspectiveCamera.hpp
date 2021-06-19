@@ -86,8 +86,9 @@ namespace MHelmet
         void Speed(float speed) { m_Cam.SetSpeed(speed); }
         void Sensitivity(float Sensitivity) { m_Cam.SetSensitivity(Sensitivity); };
 
-        bool _Input = true;
-        bool _Mouse = true;
+        bool _Input  = true;
+        bool _Mouse  = true;
+        bool _Scroll = true;
 
     private:
 

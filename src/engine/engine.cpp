@@ -25,50 +25,48 @@ namespace MHelmet
 		
 	}
 
-	Engine::~Engine() {}	
-
+	Engine::~Engine() 
+	{
+		for (NodeLayer* layer : m_Layers)
+		{			
+			layer->Free();
+			delete layer;
+		}
+	}		
 	
-	///////////////////////////////////////////////////
-	//				  ENGINE LOOP					 //
-	///////////////////////////////////////////////////
 	void Engine::run()								 
 	{												 
 		CORE_INFO("Mhelmet Engine running!");		
 
 		while (m_Alive)								 
 		{
-			for (NodeLayer* layer : m_Layers)
+			if (!m_Minimized)
 			{
-				layer->Update(m_DeltaTime);
+				for (NodeLayer* layer : m_Layers) layer->Update(m_DeltaTime);
 			}
+			
 
 			m_ImGuiLayers->Begin();
-			for (NodeLayer* layer : m_Layers)
-			{
-				layer->ImGuiRender();
-			}
+
+			for (NodeLayer* layer : m_Layers) layer->ImGuiRender();
+			
 			m_ImGuiLayers->End();
 
-
-			m_Window->SwapBuffers();		
-
-			
+			m_Window->SwapBuffers();				
 		
-			float time = GetTime();
+			float time = static_cast<float>(glfwGetTime());
 			m_DeltaTime = time - m_LastFrame;
-			m_LastFrame = time;
-			
+			m_LastFrame = time;						
 		}											 
-	}												 
-	///////////////////////////////////////////////////
+	}								
 
 
 	void Engine::OnEvent(Event& e)
 	{
 		EventHandler handle(e);
 
-		handle.CallBack<OnWindowClose>(BIND_E_FN(Engine::WindowCloseCallBack));
-		handle.CallBack<OnWindowResize>(BIND_E_FN(Engine::WindowResizeCallBack));
+		handle.CallBack <OnWindowClose  > (BIND_E_FN( Engine::WindowCloseCallBack  ));
+		handle.CallBack <OnWindowResize > (BIND_E_FN( Engine::WindowResizeCallBack ));
 
 
 		for (auto it = m_Layers.end(); it != m_Layers.begin();)
@@ -90,9 +88,9 @@ namespace MHelmet
 		layer->Join();
 	}
 
-	inline float Engine::GetTime() const
+	float Engine::GetTime() // for only used in main loop
 	{
-		 return (float)glfwGetTime(); 
+		 return static_cast<float>(glfwGetTime()); 
 	}
 
 	bool Engine::WindowCloseCallBack(OnWindowClose& e)
@@ -102,7 +100,8 @@ namespace MHelmet
 	}
 	bool Engine::WindowResizeCallBack(OnWindowResize& e)
 	{
-		/*int width = e.GetWidth(), height = e.GetHeight();
+		int width = e.GetWidth(), height = e.GetHeight();
+	
 		if (width == 0 || height == 0)
 		{
 			m_Minimized = true;
@@ -110,15 +109,8 @@ namespace MHelmet
 		}
 		m_Minimized = false;
 
-		m_Window ->GetSwapChain().OnResize(width, height);
-
-		auto& fbs = FramebufferPool::GetGlobal()->GetAll();
-		for (auto& fb : fbs)
-		{
-			if (!fb->GetSpecification().NoResize)
-				fb->Resize(width, height);
-		}
-		*/
+		RenderDrawCall::SetWiewPort(0, 0, width, height);
+		
 		return false;
 	}
 }

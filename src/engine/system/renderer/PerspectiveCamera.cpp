@@ -1,6 +1,7 @@
 #include "engine/system/renderer/PerspectiveCamera.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include "engine/system/Input.hpp"
+#include <engine/system/MHCore.hpp>
 
 namespace MHelmet
 {
@@ -130,12 +131,12 @@ namespace MHelmet
 
     void CameraMan::OnEvent(Event& e)
     {
-        if (e.GetEventType() == EventType::E_MOUSE_MOVED && _Mouse)
+        if (e.GetEventType() == IsType::MH_MOUSE_MOVED && _Mouse)
         {
             MouseMoved((OnMouseMoved&)e);
         }
 
-        if (e.GetEventType() == EventType::E_MOUSE_SCROLLED)
+        if (e.GetEventType() == IsType::MH_MOUSE_SCROLLED && _Scroll)
         {
             OnMouseScrolled& event = (OnMouseScrolled&)e;
             m_Cam.HandleMouseScroll(event.GetYOffset());

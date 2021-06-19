@@ -11,9 +11,7 @@ namespace MHelmet
 
 		EventHandler(Event& event)
 			: m_Event(event) 
-		{
-
-		}
+		{}
 
 		template<typename T>
 		bool CallBack(EventFn<T> func)

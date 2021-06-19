@@ -7,9 +7,9 @@
 
 
 namespace MHelmet
-{	
+{
 	Renderer::DataScene* Renderer::Scene = new Renderer::DataScene;
-		
+
 	void Renderer::Init()
 	{
 		RenderDrawCall::Init();
@@ -17,24 +17,24 @@ namespace MHelmet
 
 	void Renderer::Model(glm::vec3 translate, glm::vec3 rotate, glm::vec3 scale, float degrees)
 	{
-		
+
 		Scene->Model = glm::mat4(1.0f);
-		Scene->Model = glm::translate(Scene->Model, translate); 	
+		Scene->Model = glm::translate(Scene->Model, translate);
 		Scene->Model = glm::rotate(Scene->Model, degrees, rotate);
 		Scene->Model = glm::scale(Scene->Model, scale);
 	}
 
 	void Renderer::BeginScene(PerspectiveCamera& camera)
-	{	
-		
-		Scene->View  = glm::mat4(1.0f);		
+	{
+
+		Scene->View = glm::mat4(1.0f);
 		Scene->View = camera.GetViewMatrix();
 
 		Scene->Projection = glm::perspective
 		(
-			glm::radians(camera.GetFOV()), 
-			static_cast<float>(Engine::p().GetWindow().GetWidth()) / 
-			static_cast<float>(Engine::p().GetWindow().GetHeight()), 
+			glm::radians(camera.GetFOV()),
+			static_cast<float>(Engine::p().GetWindow().GetWidth()) /
+			static_cast<float>(Engine::p().GetWindow().GetHeight()),
 			0.1f, 100.0f
 		);
 
@@ -50,11 +50,11 @@ namespace MHelmet
 	}
 	void Renderer::Texture(const RefCount<Shader>& _Shader, const RefCount<Texture2D>& texture, uint32_t unit)
 	{
-		
+
 		SHADER(_Shader)->Bind();
 		texture->Bind(unit);
 		SHADER(_Shader)->Uniform("u_Texture", static_cast<int32_t>(unit));
-		
+
 	}
 	void Renderer::Submit(const RefCount<Shader>& _Shader, const RefCount<VAO>& _VAO)
 	{

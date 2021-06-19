@@ -120,6 +120,7 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/geometry/cube.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/geometry/sphere.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/geometry/teapot.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/geometry/teapotdata.hpp
 
     
     
@@ -223,6 +224,8 @@ set(ENGINE_HEADER_FILES
     # Projectes dependency
     )
 
+    
+
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/engine/ PREFIX "Source Files" FILES ${ENGINE_SRC_FILES})
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/include/engine PREFIX "Header Files" FILES ${ENGINE_HEADER_FILES})
 
@@ -257,7 +260,7 @@ endif()
 
 
 # List of projects
-set(PROJECT_LIST Tests TestImgui MyTFMDescent MH_Editor)
+set(PROJECT_LIST MyTFMDescent PojectBaseExample)
 
 
 #Root path of the projects

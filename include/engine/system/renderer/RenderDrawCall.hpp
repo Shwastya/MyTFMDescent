@@ -19,7 +19,14 @@ namespace MHelmet
 		
 		static void clear()	{ s_RenderererAPI->clear();	}
 
+		static void SetWiewPort(uint32_t x, uint32_t y, uint32_t w, uint32_t h) 
+		{
+			s_RenderererAPI->SetViewPort(x, y, w, h);
+		};
+
 		static void Draw(const RefCount<VAO>& _VAO) { s_RenderererAPI->Draw(_VAO); }
+
+		
 
 	private:
 

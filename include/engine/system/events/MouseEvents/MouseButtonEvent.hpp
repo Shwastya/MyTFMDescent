@@ -7,11 +7,11 @@ namespace MHelmet {
 
     struct MouseButtonEvent : public Event
     {
-        inline int GetMouseButton() const { return m_Button; }
+        int GetMouseButton() const { return m_Button; }
 
-        virtual inline int GetCategoryFlags() const override 
+        virtual int GetCategoryFlags() const override 
         { 
-            return E_CATG_MOUSE | E_CATG_INPUT;
+            return MH_CATG_MOUSE | MH_CATG_INPUT;
         }
 
     protected:
