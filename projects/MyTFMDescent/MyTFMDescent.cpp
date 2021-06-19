@@ -1,4 +1,5 @@
 #include <MHelmet.h>
+#include "MyTFMDescentLayer.hpp"
 
 #define MH MHelmet  // CLIENT SIDE
 
@@ -141,6 +142,7 @@ public:
 		// update
 		m_Camera->Update(dt);
 
+		print();
 		// render
 		RDC::ClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RDC::clear();

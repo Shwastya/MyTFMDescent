@@ -223,6 +223,11 @@ set(ENGINE_HEADER_FILES
 
     # Projectes dependency
     )
+   
+
+  
+    
+
 
     
 
@@ -230,20 +235,30 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/engine/ PREFIX "Source Files" 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/include/engine PREFIX "Header Files" FILES ${ENGINE_HEADER_FILES})
 
 
+
+
+
 add_library(EngineLib STATIC ${ENGINE_SRC_FILES} ${ENGINE_HEADER_FILES} ${DEPS_SRC_FILES_COMMON})
+
 
 target_include_directories(EngineLib PRIVATE ${INCLUDE_PATHS})
 
-if (UNIX)  # assimp files in linus   #
-    target_link_libraries(EngineLib PRIVATE
-    ${CMAKE_CURRENT_LIST_DIR}/lib/linux/libassimp.so)
-endif()
+
+# De momento elimino las librerias dinamicas en Linux
+# Paso de tantas de movidas ahora mismo
+
+#if (UNIX)  # assimp files in linus   #
+ #   target_link_libraries(EngineLib PRIVATE
+  #  ${CMAKE_CURRENT_LIST_DIR}/lib/linux/libassimp.so)
+#endif()
 
 if (WIN32) # assimp files in windows #
     target_link_libraries(EngineLib PRIVATE
     debug ${CMAKE_CURRENT_LIST_DIR}/lib/Debug/assimp-vc142-mt.lib
     optimized ${CMAKE_CURRENT_LIST_DIR}/lib/Release/assimp-vc142-mt.lib)
 endif()   
+
+ 
 
 target_compile_definitions(EngineLib PRIVATE -D_GLFW_USE_OPENGL=1)
 target_compile_features(EngineLib PRIVATE cxx_std_14)
@@ -260,25 +275,48 @@ endif()
 
 
 # List of projects
-set(PROJECT_LIST MyTFMDescent PojectBaseExample)
+set
+(   
+    PROJECT_LIST 
+
+        MyTFM 
+        ProjectExample
+)
+
 
 
 #Root path of the projects
 set(PROJECTS_PATH ${CMAKE_CURRENT_LIST_DIR}/projects)
+
 #Configure All Projects
 foreach(PROJECT ${PROJECT_LIST})
-    message("Generating Project " ${PROJECT})
 
+    message("Generating Project " ${PROJECT})
+    
     #Create Directory and main.cpp
-    file(MAKE_DIRECTORY ${PROJECTS_PATH}/${PROJECT})
-    file(TOUCH ${PROJECTS_PATH}/${PROJECT}/${PROJECT}.cpp)
+    file(MAKE_DIRECTORY ${PROJECTS_PATH}/${PROJECT})   
+
+    # List of files in project
+    set(FILESP
+        ${PROJECTS_PATH}/${PROJECT}/${PROJECT}.cpp
+        ${PROJECTS_PATH}/${PROJECT}/${PROJECT}.hpp
+        ${PROJECTS_PATH}/${PROJECT}/${PROJECT}Layer1.cpp
+        ${PROJECTS_PATH}/${PROJECT}/${PROJECT}Layer1.hpp
+    )
+
+    file(TOUCH ${FILESP})
 
     #Create Project and configure
-    add_executable(${PROJECT} ${PROJECTS_PATH}/${PROJECT}/${PROJECT}.cpp ${DEPS_SRC_FILES})
-    target_include_directories(${PROJECT} PRIVATE ${INCLUDE_PATHS})
+    add_executable(${PROJECT} ${FILESP} ${DEPS_SRC_FILES})
+
+    target_include_directories(${PROJECT} PRIVATE ${INCLUDE_PATHS} ${PROJECT_PATHS} ${PROJECT_DEPS_FILES})
     target_compile_definitions(${PROJECT} PRIVATE -D_GLFW_USE_OPENGL=1)
+   
     target_link_libraries(${PROJECT} PRIVATE EngineLib)
     target_compile_features(${PROJECT} PRIVATE cxx_std_14)
     configure_platform(${PROJECT})
     configure_compiler(${PROJECT})
+
+    
+
 endforeach()

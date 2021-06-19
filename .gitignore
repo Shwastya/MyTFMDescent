@@ -1,6 +1,6 @@
 build
-lib
-third_party
+
+#third_party
 .vs
 .vscode
 activities
