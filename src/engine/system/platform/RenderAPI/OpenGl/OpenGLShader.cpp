@@ -22,7 +22,7 @@ namespace MHelmet
     {
 
         std::unordered_map<GLenum, std::string> src;
-        src[GL_VERTEX_SHADER]   = vertexPath;
+        src[GL_VERTEX_SHADER] = vertexPath;
         src[GL_FRAGMENT_SHADER] = fragmentPath;
 
         if (geometryPath != "0") src[GL_GEOMETRY_SHADER] = geometryPath;
@@ -59,7 +59,7 @@ namespace MHelmet
         return m_Name;
     }
 
-    
+
     std::unordered_map<GLenum, std::string> OpenGLShader::SplitGLSLFile(const std::string& GLSLSource)
     {
         std::string vertexCode, fragmentCode;
@@ -72,7 +72,7 @@ namespace MHelmet
 
         // La siguiente seccion de codigo habria que mejorar mucho la abstraccion
         // De momento, por las prisas, siendo funcional, lo dejo asi
-        
+
         while (pos != std::string::npos)
         {
             size_t eol = GLSLSource.find_first_of("\r\n", pos);
@@ -90,11 +90,11 @@ namespace MHelmet
     }
 
     void OpenGLShader::CompileShader(const std::unordered_map<GLenum, std::string>& srcs)
-    {        
+    {
         uint32_t program = glCreateProgram();
 
         // standar array de 3 por si usaramos SHADER de GEOMETRIA
-        std::array<GLenum, 3> IDShaders;       
+        std::array<GLenum, 3> IDShaders;
 
         m_Nshaders = 0;
 
@@ -106,10 +106,10 @@ namespace MHelmet
             const uint32_t shader = glCreateShader(type);
             const char* srcStr = src.c_str();
 
-            glShaderSource(shader, 1, &srcStr, nullptr);            
+            glShaderSource(shader, 1, &srcStr, nullptr);
             glCompileShader(shader);
             CheckErrors(shader, Type::Shader);
-         
+
             glAttachShader(program, shader);
             IDShaders[m_Nshaders] = (shader);
             ++m_Nshaders;
@@ -137,9 +137,9 @@ namespace MHelmet
             in.close();
         }
         else CORE_ERROR("Error in load GLSL File: {0}", GLSLFilePath);
-       
+
         return result;
-    }        
+    }
 
     void OpenGLShader::CheckErrors(uint32_t checkErrors, Type type)
     {
@@ -165,7 +165,7 @@ namespace MHelmet
                 CORE_ERROR("Error Linking Program: {0}", infoLog);
             }
         }
-    }    
+    }
 
     void OpenGLShader::Uniform(const char* name, int value) const
     {

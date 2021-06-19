@@ -17,9 +17,6 @@ include(cmake/compiler.cmake)
 
 set(ENGINE_SRC_FILES
 
-    #####################
-    # old dependences removed # empty at moment 
-    #####################
     # rescued geometry classes and modified
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/geometry.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/triangle.cpp
@@ -27,11 +24,6 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/cube.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/sphere.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/geometry/teapot.cpp
-
-    
-    
-
-
    
     # MartianHelmet Application (main program) #
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/MHCore.cpp
@@ -40,16 +32,13 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/MHelmetPch.cpp
 
 
-    # Node System
-    # layer system
+    # Node System  # layer system
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/node/nodeLayer.cpp
 
     # log classes
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/log/LogManager.cpp
         # Log strategies
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/log/strategies/SimpleLog.cpp
-
-    
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/log/strategies/SimpleLog.cpp    
 
     # ImGUI 
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/imgui-docking/examples/imgui_impl_opengl3.cpp
@@ -71,16 +60,13 @@ set(ENGINE_SRC_FILES
     # window context on window S.O platform
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/Windows/WindowWin.cpp
         # INPUT for WINDOW
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/Windows/WindowInput.cpp
-    
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/Windows/WindowInput.cpp    
 
 
     # Render System
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/OrthographicCamera.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/PerspectiveCamera.cpp
-
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/shader.cpp
-
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/RendererContext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/Renderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/VAO.cpp
@@ -95,24 +81,17 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLEBO.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLVAO.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLVBO.cpp 
-
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLShader.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLTexture.cpp 
-
-
 
     # Utils
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/utils/utils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/utils/Library.cpp
 
-    # Projectes dependency
     )
 
 set(ENGINE_HEADER_FILES
 
-    #####################
-    # old dependences removed # empty at moment 
-    #####################
     # rescued geometry classes and modified
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/geometry/geometry.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/geometry/triangle.hpp
@@ -122,18 +101,8 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/geometry/teapot.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/geometry/teapotdata.hpp
 
-    
-    
-    
-
-
-    #####################
-    # TFM From scratchs #
-    #####################
-
     # MartianHelmet Application (main program) 
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/MHCore.hpp
-    
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/MHCore.hpp    
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/MHSetup.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/Engine.hpp     
 
@@ -155,8 +124,6 @@ set(ENGINE_HEADER_FILES
     #${CMAKE_CURRENT_LIST_DIR}/include/engine/system/ImGui/imgui_hack_glfw.h
     #${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/MODImGui/imgui_impl_opengl3.cpp
     #${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/MODImGui/imgui_impl_glfw.cpp
-    
-
 
     # events & event sender     
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/events/Event.hpp
@@ -174,16 +141,11 @@ set(ENGINE_HEADER_FILES
 
 
     # INPUT
-
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/Input.hpp
 
     # window interface and PLATFORM Layers
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/Window.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/Windows/WindowWin.hpp
-        # INPUT for WINDOW
-    #${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/Windows/WindowInput.hpp
-
-
 
     # Render System
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/OrthographicCamera.hpp
@@ -210,43 +172,24 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLVBO.hpp
 
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLShader.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLTexture.hpp
-
-
-   
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLTexture.hpp   
   
     # Utils
       ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/utils/utils.hpp
 
     # ECS 
-
-
-    # Projectes dependency
-    )
-   
-
-  
     
-
-
-    
+    )    
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/engine/ PREFIX "Source Files" FILES ${ENGINE_SRC_FILES})
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/include/engine PREFIX "Header Files" FILES ${ENGINE_HEADER_FILES})
-
-
-
-
 
 add_library(EngineLib STATIC ${ENGINE_SRC_FILES} ${ENGINE_HEADER_FILES} ${DEPS_SRC_FILES_COMMON})
 
 
 target_include_directories(EngineLib PRIVATE ${INCLUDE_PATHS})
 
-
-# De momento elimino las librerias dinamicas en Linux
-# Paso de tantas de movidas ahora mismo
-
+# De momento elimino las librerias dinamicas en Linux Paso de tantas de movidas ahora mismo
 #if (UNIX)  # assimp files in linus   #
  #   target_link_libraries(EngineLib PRIVATE
   #  ${CMAKE_CURRENT_LIST_DIR}/lib/linux/libassimp.so)
@@ -256,9 +199,7 @@ if (WIN32) # assimp files in windows #
     target_link_libraries(EngineLib PRIVATE
     debug ${CMAKE_CURRENT_LIST_DIR}/lib/Debug/assimp-vc142-mt.lib
     optimized ${CMAKE_CURRENT_LIST_DIR}/lib/Release/assimp-vc142-mt.lib)
-endif()   
-
- 
+endif()  
 
 target_compile_definitions(EngineLib PRIVATE -D_GLFW_USE_OPENGL=1)
 target_compile_features(EngineLib PRIVATE cxx_std_14)
@@ -275,15 +216,7 @@ endif()
 
 
 # List of projects
-set
-(   
-    PROJECT_LIST 
-
-        MyTFM 
-        ProjectExample
-)
-
-
+set(PROJECT_LIST MyTFM ProjectExample)
 
 #Root path of the projects
 set(PROJECTS_PATH ${CMAKE_CURRENT_LIST_DIR}/projects)
@@ -315,8 +248,6 @@ foreach(PROJECT ${PROJECT_LIST})
     target_link_libraries(${PROJECT} PRIVATE EngineLib)
     target_compile_features(${PROJECT} PRIVATE cxx_std_14)
     configure_platform(${PROJECT})
-    configure_compiler(${PROJECT})
-
-    
+    configure_compiler(${PROJECT})    
 
 endforeach()
