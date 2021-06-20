@@ -1,10 +1,22 @@
 #include "engine/system/geometry/cube.hpp"
+#include <iostream>
 
 namespace MHelmet
 {
-    Cube::Cube(float size) : _size(size) {
+    Cube::Cube(float size) 
+    {
         _nVertices = 6 * 2 * 3;   //6 faces * 2 triangles * 3 vertices;
         _nElements = _nVertices;
+
+        m_VBOSize = sizeof(float) * _nVertices * 3 +
+            sizeof(float) * _nVertices * 2 +
+            sizeof(float) * _nVertices * 3 +
+            sizeof(float) * _nVertices * 3 +
+            sizeof(float) * _nVertices * 3;     
+       
+        m_Indices = new uint32_t[sizeof(uint32_t) * _nElements];
+
+        m_VBO = new float[NV * 3 + NV * 2 + NV * 3 + NV * 3 + NV * 3];
 
         const float half = size / 2.0f;
 
@@ -158,8 +170,11 @@ namespace MHelmet
                                 18, 19, 20, 21, 22, 23, //left
                                 24, 25, 26, 27, 28, 29, //bottom
                                 30, 31, 32, 33, 34, 35 }; //top
+        
 
-        uploadData(positions, uvs, normals, indices);
+        setData(positions, uvs, normals, indices, m_VBO, true);
+
+        memcpy(m_Indices, indices, sizeof(indices));
     }
 }
 

@@ -25,7 +25,7 @@ private:
 	MH::RefCount<MH::Shader> Shader;
 
 	MH::RefCount<MH::VAO>       m_VAO;
-	MH::RefCount<MH::CameraMan> m_Camera;
+	MH::RefCount<MH::CameraMan> m_CameraMan;
 	MH::RefCount<MH::Texture2D> m_Texture, m_AlphaTree;
 
 	/* ATRIBUTOS LUZ */

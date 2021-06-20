@@ -1,7 +1,7 @@
 #define _USE_MATH_DEFINES
 
 #include "engine/system/geometry/sphere.hpp"
-
+#include <iostream>
 #include <cmath>
 
 namespace MHelmet
@@ -16,15 +16,23 @@ namespace MHelmet
         const auto uvs = new float[static_cast<size_t>(_nVertices) * 2];
         const auto normals = new float[static_cast<size_t>(_nVertices) * 3];
 
-        const auto indices = new uint32_t[_nElements];
+        m_VBOSize = sizeof(float) * _nVertices * 3 +
+            sizeof(float) * _nVertices * 2 +
+            sizeof(float) * _nVertices * 3 +
+            sizeof(float) * _nVertices * 3 +
+            sizeof(float) * _nVertices * 3;
 
-        generateVertexData(positions, uvs, normals, indices);
-        uploadData(positions, uvs, normals, indices);
+        m_Indices = new uint32_t[sizeof(uint32_t) * _nElements];
+        //m_Indices = new uint32_t[_nElements];
+        m_VBO = new float[NV * 3 + NV * 2 + NV * 3 + NV * 3 + NV * 3];
+
+
+        generateVertexData(positions, uvs, normals, m_Indices);
+        setData(positions, uvs, normals, m_Indices, m_VBO, false);
 
         delete[] positions;
         delete[] uvs;
         delete[] normals;
-        delete[] indices;
     }
 
     void Sphere::generateVertexData(float* positions, float* uvs, float* normals, uint32_t* indices) const {
@@ -40,8 +48,13 @@ namespace MHelmet
                 const float nx = sinf(phi) * cosf(theta);
                 const float ny = sinf(phi) * sinf(theta);
                 const float nz = cosf(phi);
-                positions[idx] = _radius * nx; positions[idx + 1] = _radius * ny; positions[idx + 2] = _radius * nz;
-                normals[idx] = nx; normals[idx + 1] = ny; normals[idx + 2] = nz;
+                positions[idx] = _radius * nx; 
+                positions[idx + 1] = _radius * ny; 
+                positions[idx + 2] = _radius * nz;
+
+                normals[idx] = nx; 
+                normals[idx + 1] = ny;
+                normals[idx + 2] = nz;
                 idx += 3;
 
                 uvs[tIdx] = s;

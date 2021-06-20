@@ -2,43 +2,38 @@
 
 #include <cstdint>
 
-//Attributes
-//0 - positions
-//1 - uvs
-//2 - normals
+#ifndef NV
+
+#define NV static_cast<size_t>(_nVertices)
+#endif // !NV
 
 namespace MHelmet
 {
     class Geometry
     {
+
     public:
         Geometry() = default;
-        virtual ~Geometry();
+        virtual ~Geometry() = default;
 
         Geometry(const Geometry&) = default;
         Geometry& operator=(const Geometry&) = default;
 
         Geometry(Geometry&&) noexcept = default;
         Geometry& operator=(Geometry&&) noexcept = default;
-
-        virtual void render() const;
-
         
+    protected:    
 
-    protected:
-        void uploadData(const float* positions, const float* uvs,
-            const float* normals, const uint32_t* indices);
+        void setData(const float* positions, const float* uvs,
+            const float* normals, const uint32_t* indices, float* Spec_VBO, bool TangBitan = true);
 
         void calcTangents(const float* positions, const float* uvs,
             const float* normals, float* tangents, float* biTangents) const;
+
     protected:
-        uint32_t _VAO = 0;
-        uint32_t _VBO[6]{ 0,0,0,0,0,0 };
+
         uint32_t _nVertices = 0;
         uint32_t _nElements = 0;
-
-        float* m_VBO;
-
     };
 
 }

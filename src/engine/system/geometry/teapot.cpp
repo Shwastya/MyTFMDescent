@@ -10,20 +10,28 @@ namespace MHelmet
         const uint32_t faces = grid * grid * 32;
         _nElements = faces * 6;
 
+        m_VBOSize = sizeof(float) * _nVertices * 3 +
+            sizeof(float) * _nVertices * 2 +
+            sizeof(float) * _nVertices * 3 +
+            sizeof(float) * _nVertices * 3 +
+            sizeof(float) * _nVertices * 3;
+
+        m_VBO = new float[NV * 3 + NV * 2 + NV * 3 + NV * 3 + NV * 3];
+
         const auto positions = new float[static_cast<size_t>(_nVertices) * 3];
         const auto uvs = new float[static_cast<size_t>(_nVertices) * 2];
         const auto normals = new float[static_cast<size_t>(_nVertices) * 3];
 
-        const auto indices = new uint32_t[_nElements];
+        //m_Indices = new uint32_t[_nElements];
+        m_Indices = new uint32_t[sizeof(uint32_t) * _nElements];
 
-        generateVertexData(positions, uvs, normals, indices, grid);
+        generateVertexData(positions, uvs, normals, m_Indices, grid);
         moveLid(grid, positions, lidTransform);
-        uploadData(positions, uvs, normals, indices);
+        setData(positions, uvs, normals, m_Indices, m_VBO, false);
 
         delete[] positions;
         delete[] uvs;
         delete[] normals;
-        delete[] indices;
     }
 
     void Teapot::generateVertexData(float* positions, float* uvs, float* normals, uint32_t* indices, uint32_t grid) const {
