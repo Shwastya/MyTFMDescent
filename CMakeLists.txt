@@ -76,7 +76,7 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/RenderDrawCall.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/Texture.cpp
 
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/Renderer3D.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/RendererGeometry.cpp
         # OpenGL API Abstraction
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLContext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLRendererAPI.cpp
@@ -169,7 +169,7 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/RenderDrawCall.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/Texture.hpp
 
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/Renderer3D.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/RendererGeometry.hpp
 
         # OpenGL API Abstraction   
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLContext.hpp

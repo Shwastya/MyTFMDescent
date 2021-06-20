@@ -12,16 +12,18 @@ MyTFMDescent::MyTFMDescent() : MH::NodeLayer("TestingLayer")
 	m_CameraMan->Speed(10.0f);
 //	m_Camera->_Mouse = false;
 
-	MH::Cube C(1.0f);
+	
 	MH::Quad Q(1.0f);
 	MH::Sphere S(0.5f, 50, 50);
 	MH::Teapot Tea(20);
 	MH::Triangle T;
 
+	MH::Cube C(1.0f);
+
 	m_VAO.reset(MH::VAO::Create());
 
 	MH::RefCount<MH::VBO> VBO_;
-	VBO_ = MH::VBO::Create(T.Get(), T.SizeVBO());
+	VBO_ = MH::VBO::Create(C.Get(), C.SizeVBO());
 	VBO_->SetLayout
 	({
 		{MH::BUFFER::DataType::Float3, "a_Pos"         },
@@ -34,7 +36,7 @@ MyTFMDescent::MyTFMDescent() : MH::NodeLayer("TestingLayer")
 	m_VAO->Add__VBO(VBO_);
 
 	MH::RefCount<MH::EBO> EBO_;
-	EBO_ = std::make_shared<MH::OpenGLEBO>(T.Indices(), T.SizeIndices());
+	EBO_ = std::make_shared<MH::OpenGLEBO>(C.Indices(), C.SizeIndices());
 	
 
 	m_VAO->Add__EBO(EBO_);
@@ -90,6 +92,7 @@ void MyTFMDescent::Update(MH::DeltaTime dt)
 		R::Submit(m_S.Get("PhongTexture"), m_VAO);
 		R::UnBind(m_S.Get("PhongTexture"));
 	}
+	//R::EndEscene();
 }
 
 void MyTFMDescent::ImGuiRender()

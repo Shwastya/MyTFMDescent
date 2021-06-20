@@ -21,7 +21,7 @@ namespace MHelmet
 			glm::mat4 View;
 			// --------------------------			
 
-			glm::vec3 LightColor = glm::vec3{ 1.0f, 1.0f, 1.0f };
+			static glm::vec3 LightColor;// = glm::vec3{ 1.0f, 1.0f, 1.0f };
 			glm::vec3 LightPos   = glm::vec3{ 3.0f, 4.0f, 3.0f };
 
 			float AmbientStrength  = 0.2f;
