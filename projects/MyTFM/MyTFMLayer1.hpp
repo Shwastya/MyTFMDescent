@@ -7,8 +7,9 @@ class MyTFMDescent : public MHelmet::NodeLayer
 
 public:
 
-	using R = MH::Renderer;
-	using RDC = MH::RenderDrawCall;
+	using Render = MH::Renderer;
+	using RenderDrawCall = MH::RenderDrawCall;
+	using GeometryRender = MH::RendererGeometry;
 
 	MyTFMDescent();	
 
@@ -30,7 +31,7 @@ private:
 
 	/* ATRIBUTOS LUZ */
 	
-	glm::vec3 m_LightPos{ 3.0f, 4.0f, 3.0f };
+	glm::vec3 m_LightPos{ 2.0f, 1.0f, 4.0f };
 	glm::vec3 m_LightColor{ 1.0f, 1.0f, 1.0f };
 
 	/* ATRIBUTOS MODELO */

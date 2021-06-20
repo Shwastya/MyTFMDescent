@@ -16,20 +16,20 @@ namespace MHelmet
 		struct DataScene
 		{
 			// Model || View || Projection
-			glm::mat4 Projection;
-			glm::mat4 Model;
-			glm::mat4 View;
-			// --------------------------			
+			//glm::mat4 Projection;
+			//glm::mat4 Model;
+			//glm::mat4 View;
+			//// --------------------------			
 
-			static glm::vec3 LightColor;// = glm::vec3{ 1.0f, 1.0f, 1.0f };
-			glm::vec3 LightPos   = glm::vec3{ 3.0f, 4.0f, 3.0f };
+			//glm::vec3 LightColor = glm::vec3{ 1.0f, 1.0f, 1.0f };
+			//glm::vec3 LightPos   = glm::vec3{ 3.0f, 4.0f, 3.0f };
 
-			float AmbientStrength  = 0.2f;
-			float SpecularStrength = 0.7f;
+			//float AmbientStrength  = 0.2f;
+			//float SpecularStrength = 0.7f;
 
-			int Shininess = 32;
+			//int Shininess = 32;
 
-			glm::vec3 ViewPos; // desde la camara
+			//glm::vec3 ViewPos; // desde la camara
 		};
 
 		static void Init();

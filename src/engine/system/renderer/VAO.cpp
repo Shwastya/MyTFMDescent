@@ -8,7 +8,7 @@
 namespace MHelmet
 {
 	
-	VAO* VAO::Create()
+	RefCount<VAO> VAO::Create()
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -17,8 +17,8 @@ namespace MHelmet
 			break;
 		case RendererAPI::API::OpenGL:
 
-			return new OpenGLVAO();
-			//return std::make_shared<OpenGLVAO>();
+			//return new OpenGLVAO();
+			return std::make_shared<OpenGLVAO>();
 			
 		case RendererAPI::API::DirectX:
 			// NADA DE MOMENTO

@@ -26,7 +26,7 @@ namespace MHelmet
 
 
 
-		static VAO* Create();
+		static RefCount<VAO> Create();
 
 	};
 }
