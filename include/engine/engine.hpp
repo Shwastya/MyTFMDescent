@@ -28,6 +28,9 @@ namespace MHelmet
 		static Engine& p() { return *s_Instance; }
 		Window& GetWindow() { return *m_Window; }
 
+		void Exit() { m_Alive = false; }
+			
+
 		static float GetTime();
 
 		

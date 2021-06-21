@@ -13,6 +13,9 @@ public:
 
 	MyTFMDescent();	
 
+	void Join() override;
+	void Free() override;
+
 	void Update(MH::DeltaTime dt) override;
 
 	void ImGuiRender();
@@ -26,13 +29,15 @@ private:
 	MH::RefCount<MH::Shader> Shader;
 
 	MH::RefCount<MH::VAO>       m_VAO;
-	MH::RefCount<MH::CameraMan> m_CameraMan;
+	
+	MH::CameraMan m_CameraMan;
 	MH::RefCount<MH::Texture2D> m_Texture, m_AlphaTree;
 
+	MH::RefCount<MH::Texture2D> m_BoardTexture;
+	
 	/* ATRIBUTOS LUZ */
 	
-	glm::vec3 m_LightPos{ 2.0f, 1.0f, 4.0f };
-	glm::vec3 m_LightColor{ 1.0f, 1.0f, 1.0f };
+	glm::vec3 m_LightPos{ 5.0f, 5.0f, 14.5f };
 
 	/* ATRIBUTOS MODELO */
 	ModelTransform m_Model;

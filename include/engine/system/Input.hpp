@@ -17,63 +17,19 @@
 
 namespace MHelmet
 {
-	struct MousePosition
-	{
-		float x, y;
-	};
+	struct MousePosition { float x, y;	};
 
-	enum class CursorState 
-	{
-		Visible = 0, Hidden, Locked
-	};
-
+	enum class CursorState { Visible = 0, Hidden, Locked };
 
 	class Input
 	{
-	public:	
-
-		// KeyCode viene de las definiciones propias
-		// creadas a proposito para esta aplicacion
-		// archivo MHKeyCodes en /deps
-		/*static bool  IsKeyPressed(KeyCode keycode) 
-		{ 
-			return s_Inst->IsKeyPressed(keycode);
-		}*/
-
-		// MouseButton tambien en MHKeyCodes
-		// tal vez no es el sitio mas apropiado para ubicarlo
-		/*static bool  IsMouseButtonPressed(MouseButton button) 
-		{
-			return s_Inst->IsMouseButtonPressed(button);
-		}
-
-		static float GetMouseX() 
-		{
-			return s_Inst->GetMouseX();
-		}
-
-		static float getMouseY() 
-		{
-			return s_Inst->GetMouseY();
-		}
-
-		static MousePosition getMousePos() 
-		{
-			return s_Inst->GetMousePos();
-		}*/
-
-//	protected:	
+	public:			
 
 		static bool  IsKeyPressed(KeyCode keycode);
 		static bool  IsMouseButtonPressed(MouseButton button);
 		static float GetMouseX();
 		static float GetMouseY();
-		static MousePosition GetMousePos();
-
-	
-		
-	private:
-		//static Input* s_Inst;
+		static MousePosition GetMousePos();	
 	};
 
 

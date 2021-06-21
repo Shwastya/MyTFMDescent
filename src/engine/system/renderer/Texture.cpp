@@ -13,7 +13,7 @@ namespace MHelmet
 {
 	RefCount<Texture2D> Texture2D::Create(const std::string& path, Texture2D::Format format)
 	{
-		return std::make_shared<OpenGLTexture2D>(path, format);
+		
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:
@@ -21,8 +21,7 @@ namespace MHelmet
 			break;
 		case RendererAPI::API::OpenGL:
 
-		//	return std::make_shared<OpenGLTexture2D>(path, format);
-			//return std::make_shared<OpenGLVAO>();
+			return std::make_shared<OpenGLTexture2D>(path, format);
 
 		case RendererAPI::API::DirectX:
 			// NADA DE MOMENTO
@@ -36,4 +35,29 @@ namespace MHelmet
 			break;
 		}
 	}
+	RefCount<Texture2D> Texture2D::Create(uint32_t width, uint32_t height)
+	{
+	
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::None:
+			// PONER MENSAJE DE ERROR (NOT SUPPORTED)
+			break;
+		case RendererAPI::API::OpenGL:
+
+			return std::make_shared<OpenGLTexture2D>(width, height);
+
+		case RendererAPI::API::DirectX:
+			// NADA DE MOMENTO
+			break;
+		case RendererAPI::API::Vulkan:
+			// JUAS
+			break;
+		default:
+			// MENSAJE DE ERROR (API desconocida)
+			return nullptr;
+			break;
+		}
+	}
+
 }

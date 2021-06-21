@@ -24,7 +24,7 @@ namespace MHelmet
 		void Begin();
 		void End();
 
-		virtual void ImGuiRender() override;
+		//virtual void ImGuiRender() override;
 		
 
 	private:

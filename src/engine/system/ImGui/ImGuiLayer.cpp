@@ -96,9 +96,9 @@ namespace MHelmet
 		}
 	}
 
-	void ImGuiLayer::ImGuiRender()
+	/*void ImGuiLayer::ImGuiRender()
 	{
 		static bool show_demo_window = true;
 		ImGui::ShowDemoWindow(&show_demo_window);
-	}
+	}*/
 }

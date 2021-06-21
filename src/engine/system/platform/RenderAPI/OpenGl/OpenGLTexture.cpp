@@ -47,6 +47,22 @@ namespace MHelmet
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
+	// set data directly to GPU
+	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height)
+		: m_Width(width), m_Height(height)
+	{
+		m_InternalFormat = GL_RGBA8;
+		m_DataFormat = GL_RGBA;
+
+		glGenTextures(1, &m_TextID);
+		glBindTexture(GL_TEXTURE_2D, m_TextID);		
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	}
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
 		glDeleteTextures(1, &m_TextID);		
@@ -57,6 +73,16 @@ namespace MHelmet
 		glBindTexture(GL_TEXTURE_2D, m_TextID);
 		
 		//std::reinterpret_pointer_cast<OpenGLShader>(shader)->Uniform(name, static_cast<int32_t>(unit));
+	}
+	void OpenGLTexture2D::SetData(void* data, uint32_t size)
+	{
+		uint32_t bytesXpixel = m_DataFormat == GL_RGBA ? 4 : 3;
+		if (size == m_Width * m_Height * bytesXpixel)
+		{
+			glTexImage2D(GL_TEXTURE_2D, 0, m_InternalFormat, m_Width, m_Height, 0, m_DataFormat, GL_UNSIGNED_BYTE, data);
+		}
+		else CORE_ERROR("Data must be entire textur");
+		//glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	void OpenGLTexture2D::setWrap(Wrap s, Wrap t)
 	{
@@ -83,7 +109,7 @@ namespace MHelmet
 	void OpenGLTexture2D::applyWrapping() const
 	{
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap2GL(m_Wrap.first));
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap2GL(m_Wrap.second));
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap2GL(m_Wrap.second));
 	}
 	static uint32_t filter2GL(OpenGLTexture2D::Filter filter, OpenGLTexture2D::Filter mipMap)
 	{

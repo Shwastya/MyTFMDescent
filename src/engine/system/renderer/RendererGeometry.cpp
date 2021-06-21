@@ -6,9 +6,16 @@
 #include <engine/system/platform/RenderAPI/OpenGL/OpenGLEBO.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "engine/Engine.hpp"
-#define SHADER   std::reinterpret_pointer_cast<OpenGLShader>
-#define W_WIDTH  static_cast<float>(Engine::p().GetWindow().GetWidth())
-#define W_HEIGHT static_cast<float>(Engine::p().GetWindow().GetHeight())
+
+#define W_WIDTH     static_cast<float>(Engine::p().GetWindow().GetWidth())
+#define W_HEIGHT    static_cast<float>(Engine::p().GetWindow().GetHeight())
+
+#define SHADER_C    std::reinterpret_pointer_cast<OpenGLShader>(s_Data->SLib.Get("PhongC"))
+#define SHADER_T    std::reinterpret_pointer_cast<OpenGLShader>(s_Data->SLib.Get("PhongT"))
+
+#define CT_SINGLE   std::reinterpret_pointer_cast<OpenGLShader>(s_Data->SLib.Get("simpleT"))
+
+
 
 
 namespace MHelmet
@@ -19,10 +26,15 @@ namespace MHelmet
 	{
 		RefCount<VAO> VAO[5];
 
-		ShaderLib SLib; // SHADER LIBRARY // La idea es textura o color
+		ShaderLib SLib; // SHADER_C LIBRARY // La idea es textura o color
+
+		RefCount<Texture2D> WhiteTextu;
 	};
 
+	
+
 	static Unique<RendererGeometryAssets> s_Data;
+
 
 	void RendererGeometry::Init()
 	{
@@ -30,7 +42,22 @@ namespace MHelmet
 		s_Data = std::make_unique<RendererGeometryAssets>();
 
 		// Librerias de shaders
-		s_Data->SLib.Load("PhongC", "../shaders/3D/COLOR/phong1.glsl");
+		s_Data->SLib.Load("PhongC", "../shaders/3D/COLOR/phong2.glsl");
+		s_Data->SLib.Load("PhongT", "../shaders/3D/TEXTU/phong2.glsl");
+		s_Data->SLib.Load("simpleT", "../shaders/texture2D.glsl");
+		
+
+
+		// testeando movidas
+
+		s_Data->WhiteTextu = Texture2D::Create(1, 1);
+		uint32_t whiteTextureData = 0xffffffff;
+		s_Data->WhiteTextu->SetData(&whiteTextureData, sizeof(uint32_t));
+
+
+
+
+
 
 		// TODAS LAS GEOMETRIAS
 		// Triangle
@@ -144,7 +171,7 @@ namespace MHelmet
 			{BUFFER::DataType::Float3, "a_Normals"     },
 			{BUFFER::DataType::Float3, "a_Tangents"    },
 			{BUFFER::DataType::Float3, "a_BiTangents"  }
-			});
+		});
 
 		s_Data->VAO[teapot]->Add__VBO(VBO_TP);
 
@@ -161,39 +188,45 @@ namespace MHelmet
 		//delete s_Data;
 	}
 
-	void RendererGeometry::BeginScene(const PerspectiveCamera& camera, const glm::vec3& LightPos, const glm::vec3& LightColor, const int& Shininess, const float& ambientStrg, const float& SpecularStrg)
+	void RendererGeometry::BeginScene(const PerspectiveCamera& camera, const glm::vec3& LightPos)
 	{
-		SHADER(s_Data->SLib.Get("PhongC"))->Bind();
+		SHADER_C->Bind();
 
 		glm::mat4 view = glm::mat4(1.0f);
 		view = camera.GetViewMatrix();		
 
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_view", view);
+		SHADER_C->Uniform("u_view", view);
 		
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_proj", glm::perspective(glm::radians(camera.GetFOV()), W_WIDTH / W_HEIGHT, 0.1f, 100.0f));
+		SHADER_C->Uniform("u_proj", glm::perspective(glm::radians(camera.GetFOV()), W_WIDTH / W_HEIGHT, 0.1f, 100.0f));
 
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_lightColor", LightColor);
-
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_lightPos", LightPos);
-
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_shininess", Shininess);
-
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_ambientStrength", ambientStrg);
-		
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_specularStrength", SpecularStrg);
-
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_viewPos", camera.GetPosition());
+	
+		SHADER_C->Uniform("u_viewPos", camera.GetPosition());
 
 
+		// LIGHT
+		SHADER_C->Uniform("u_light.position", LightPos);
+		SHADER_C->Uniform("u_light.ambient", 0.8f, 0.1f, 0.1f);
+		SHADER_C->Uniform("u_light.diffuse", 0.5f, 0.5f, 0.5f);
+		SHADER_C->Uniform("u_light.specular", 1.0f, 1.0f, 1.0f);
 	}
 
 	void RendererGeometry::EndScene()
 	{
+		SHADER_C->Unbind();
+		SHADER_T->Unbind();
+
 	}
 
-	void RendererGeometry::DrawTriangle(const glm::vec3 position, const glm::vec3& color, const glm::vec3& size, const glm::vec3& rotate, const float& degrees)
+	void RendererGeometry::DrawTriangle(const glm::vec3 position, const glm::vec3& size, const glm::vec3& rotate, const float& degrees)
 	{
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_objectColor", color);
+		//SHADER_C->Bind();
+		// SHADER_C->Uniform("u_objectColor", color);
+		// 
+		// MATERIAL
+		SHADER_C->Uniform("u_material.ambient", 0.3f, 0.5f, 0.4f);
+		SHADER_C->Uniform("u_material.diffuse", 0.7f, 0.5f, 0.4f);
+		SHADER_C->Uniform("u_material.specular", 0.5f, 0.5f, 0.5f);
+		SHADER_C->Uniform("u_material.shininess", 32); // float?
 
 		glm::mat4 T_model = glm::mat4(1.0f);		 
 
@@ -201,16 +234,23 @@ namespace MHelmet
 		T_model = glm::rotate(T_model, degrees, rotate);
 		T_model = glm::scale(T_model, size);
 
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(T_model))));
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_model", T_model);
+		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(T_model))));
+		SHADER_C->Uniform("u_model", T_model);
 		  
 		s_Data->VAO[triangle]->Bind();
 		RenderDrawCall::Draw(s_Data->VAO[triangle]);
 	}
 
-	void RendererGeometry::DrawQuad(const glm::vec3 position, const glm::vec3& color, const glm::vec3& size, const glm::vec3& rotate, const float& degrees)
+	void RendererGeometry::DrawQuad(const glm::vec3 position, const glm::vec3& size, const glm::vec3& rotate, const float& degrees)
 	{
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_objectColor", color);
+		//SHADER_C->Bind();
+		// SHADER_C->Uniform("u_objectColor", color);
+		// MATERIAL
+		SHADER_C->Uniform("u_material.ambient", 0.7f, 0.5f, 0.4f);
+		SHADER_C->Uniform("u_material.diffuse", 0.7f, 0.5f, 0.4f);
+		SHADER_C->Uniform("u_material.specular", 0.5f, 0.5f, 0.5f);
+		SHADER_C->Uniform("u_material.shininess", 32); // float?
+
 
 		glm::mat4 Q_model = glm::mat4(1.0f);
 
@@ -218,16 +258,82 @@ namespace MHelmet
 		Q_model = glm::rotate(Q_model, degrees, rotate);
 		Q_model = glm::scale(Q_model, size);
 
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(Q_model))));
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_model", Q_model);
+		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(Q_model))));
+		SHADER_C->Uniform("u_model", Q_model);
 
 		s_Data->VAO[quad]->Bind();
 		RenderDrawCall::Draw(s_Data->VAO[quad]);
 	}
 
-	void RendererGeometry::DrawCube(const glm::vec3 position, const glm::vec3& color, const glm::vec3& size, const glm::vec3& rotate, const float& degrees)
+
+
+
+
+
+	/* SIMPLE QUAD Texture */
+
+	void RendererGeometry::DrawSimpleTextureQuad(const PerspectiveCamera& camera, const RefCount<Texture2D>& texture, const glm::vec3& position, const glm::vec3& size)
 	{
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_objectColor", color);
+		CT_SINGLE->Bind();
+
+		
+		// Color or texture
+		CT_SINGLE->Uniform("u_color", glm::vec4(1.0f));
+		texture->Bind(0);		
+		CT_SINGLE->Uniform("u_text", 0);
+
+
+		// model transformations and movidas
+		glm::mat4 view = glm::mat4(1.0f);
+		view = camera.GetViewMatrix();
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::scale(model, size);
+		model = glm::translate(model, position);
+
+		CT_SINGLE->Uniform("u_view", view);
+		CT_SINGLE->Uniform("u_proj", glm::perspective(glm::radians(camera.GetFOV()), W_WIDTH / W_HEIGHT, 0.1f, 100.0f));
+		CT_SINGLE->Uniform("u_model", model);
+		// VAO BIND
+		s_Data->VAO[quad]->Bind();
+		RenderDrawCall::Draw(s_Data->VAO[quad]);
+	}
+
+	/* SIMPLE QUAD color */
+	
+	void RendererGeometry::DrawSimpleColorQuad(const PerspectiveCamera& camera, const glm::vec4& color, const glm::vec3& position)
+	{
+		CT_SINGLE->Bind();
+
+		// Color or texture
+		CT_SINGLE->Uniform("u_color", color);
+		s_Data->WhiteTextu->Bind(0);
+
+
+		// Model transformations
+		glm::mat4 view = glm::mat4(1.0f);
+		view = camera.GetViewMatrix();
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, position);
+
+		CT_SINGLE->Uniform("u_view", view);
+		CT_SINGLE->Uniform("u_proj", glm::perspective(glm::radians(camera.GetFOV()), W_WIDTH / W_HEIGHT, 0.1f, 100.0f));
+		CT_SINGLE->Uniform("u_model", model);
+		// VAO BIND
+		s_Data->VAO[quad]->Bind();
+		RenderDrawCall::Draw(s_Data->VAO[quad]);
+	}
+
+	void RendererGeometry::DrawCube(const glm::vec3 position, const glm::vec3& size, const glm::vec3& rotate, const float& degrees)
+	{
+		//SHADER_C->Bind();
+		// SHADER_C->Uniform("u_objectColor", color);
+		// 
+		// MATERIAL
+		SHADER_C->Uniform("u_material.ambient", 0.7f, 0.5f, 0.4f);
+		SHADER_C->Uniform("u_material.diffuse", 0.7f, 0.5f, 0.4f);
+		SHADER_C->Uniform("u_material.specular", 0.5f, 0.5f, 0.5f);
+		SHADER_C->Uniform("u_material.shininess", 32); // float?
+
 
 		glm::mat4 C_model = glm::mat4(1.0f);
 
@@ -235,16 +341,23 @@ namespace MHelmet
 		C_model = glm::rotate(C_model, degrees, rotate);
 		C_model = glm::scale(C_model, size);
 
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(C_model))));
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_model", C_model);
+		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(C_model))));
+		SHADER_C->Uniform("u_model", C_model);
 
 		s_Data->VAO[cube]->Bind();
 		RenderDrawCall::Draw(s_Data->VAO[cube]);
 	}
 
-	void RendererGeometry::DrawSphere(const glm::vec3 position, const glm::vec3& color, const glm::vec3& size, const glm::vec3& rotate, const float& degrees)
+	void RendererGeometry::DrawSphere(const glm::vec3 position, const glm::vec3& size, const glm::vec3& rotate, const float& degrees)
 	{
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_objectColor", color);
+		//SHADER_C->Bind();
+		// SHADER_C->Uniform("u_objectColor", color);
+		// 
+		// MATERIAL
+		SHADER_C->Uniform("u_material.ambient", 0.7f, 0.5f, 0.4f);
+		SHADER_C->Uniform("u_material.diffuse", 0.7f, 0.5f, 0.4f);
+		SHADER_C->Uniform("u_material.specular", 0.5f, 0.5f, 0.5f);
+		SHADER_C->Uniform("u_material.shininess", 32); // float?
 
 		glm::mat4 S_model = glm::mat4(1.0f);
 
@@ -252,16 +365,22 @@ namespace MHelmet
 		S_model = glm::rotate(S_model, degrees, rotate);
 		S_model = glm::scale(S_model, size);
 
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(S_model))));
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_model", S_model);		
+		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(S_model))));
+		SHADER_C->Uniform("u_model", S_model);		
 
 		s_Data->VAO[sphere]->Bind();
 		RenderDrawCall::Draw(s_Data->VAO[sphere]);
 	}
 
-	void RendererGeometry::DrawTeapot(const glm::vec3 position, const glm::vec3& color, const glm::vec3& size, const glm::vec3& rotate, const float& degrees)
+	void RendererGeometry::DrawTeapot(const glm::vec3 position, const glm::vec3& size, const glm::vec3& rotate, const float& degrees)
 	{
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_objectColor", color);
+		//SHADER_C->Bind();
+		// SHADER_C->Uniform("u_objectColor", color);
+		// MATERIAL
+		SHADER_C->Uniform("u_material.ambient", 0.7f, 0.5f, 0.4f);
+		SHADER_C->Uniform("u_material.diffuse", 0.7f, 0.5f, 0.4f);
+		SHADER_C->Uniform("u_material.specular", 0.5f, 0.5f, 0.5f);
+		SHADER_C->Uniform("u_material.shininess", 32); // float?
 
 		glm::mat4 TP_model = glm::mat4(1.0f);
 
@@ -269,8 +388,8 @@ namespace MHelmet
 		TP_model = glm::rotate(TP_model, degrees, rotate);
 		TP_model = glm::scale(TP_model, size);
 
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(TP_model))));
-		SHADER(s_Data->SLib.Get("PhongC"))->Uniform("u_model", TP_model);
+		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(TP_model))));
+		SHADER_C->Uniform("u_model", TP_model);
 
 		s_Data->VAO[teapot]->Bind();
 		RenderDrawCall::Draw(s_Data->VAO[teapot]);

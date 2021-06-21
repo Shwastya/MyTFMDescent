@@ -13,8 +13,8 @@ namespace MHelmet
 		virtual ~NodeLayer() {};
 
 		// Node base
-		virtual void Join() override { CORE_TRACE("Joined '{0}' to layers", m_Name); };	
-		virtual void Free() override { };
+		virtual void Join() override = 0;	
+		virtual void Free() override = 0;
 
 		virtual void Update(DeltaTime dt) override {};	// Node base
 

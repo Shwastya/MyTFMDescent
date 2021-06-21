@@ -45,6 +45,19 @@ namespace MHelmet
         void Uniform(const char* name, const glm::mat3& value) const;
         void Uniform(const char* name, const glm::mat4& value) const;
 
+        /*virtual void Uniform(const char* name, int value) const override;
+        virtual void Uniform(const char* name, float value) const override;
+        virtual void Uniform(const char* name, bool value) const override;
+        virtual void Uniform(const char* name, float value1, float value2) const override;
+        virtual void Uniform(const char* name, float value1, float value2, float value3) const  override;
+        virtual void Uniform(const char* name, float value1, float value2, float value3, float value4) const  override;
+        virtual void Uniform(const char* name, const glm::vec2& value) const override;
+        virtual void Uniform(const char* name, const glm::vec3& value) const override;
+        virtual void Uniform(const char* name, const glm::vec4& value) const override;
+        virtual void Uniform(const char* name, const glm::mat2& value) const override;
+        virtual void Uniform(const char* name, const glm::mat3& value) const override;
+        virtual void Uniform(const char* name, const glm::mat4& value) const override;*/
+
     private:
 
         std::string LoadShader(const std::string& GLSLFilePath);

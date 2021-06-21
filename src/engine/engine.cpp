@@ -11,10 +11,7 @@ namespace MHelmet
 	{
 		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());	
-
-		// La sincronización vertical (VSync) ayuda a dar estabilidad al sincronizar la velocidad de los fotogramas
-		// con la velocidad de actualización del monitor.
-		// Activado, DeltaTime pasa de unos 0.xxx segundos a aproximadamente 6s en mi monitor
+		
 		m_Window->SetVSync(true);
 		m_Window->SetCallBack(BIND_E_FN(Engine::OnEvent));
 
@@ -47,10 +44,12 @@ namespace MHelmet
 			
 
 			m_ImGuiLayers->Begin();
-
-			for (NodeLayer* layer : m_Layers) layer->ImGuiRender();
-			
+			{
+				for (NodeLayer* layer : m_Layers) layer->ImGuiRender();
+			}			
 			m_ImGuiLayers->End();
+
+
 
 			m_Window->SwapBuffers();				
 		

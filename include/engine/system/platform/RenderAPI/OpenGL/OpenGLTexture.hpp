@@ -24,12 +24,17 @@ namespace MHelmet
 		};			
 	
 		OpenGLTexture2D(const std::string& path, Texture2D::Format format);
+		OpenGLTexture2D(uint32_t width, uint32_t height);
 		virtual ~OpenGLTexture2D();
 
 		virtual uint32_t GetWidth()  const override { return m_Width;  };
 		virtual uint32_t GetHeight() const override { return m_Height; };
 
 		virtual void Bind(uint32_t unit) const override;
+
+		virtual void SetData(void* data, uint32_t size) override;
+		virtual uint32_t GetTextureID() const override { return m_TextID; }
+
 
 		void setWrap(Wrap s, Wrap t);
 		void setFilter(Filter mag, Filter min, Filter mipMapMag = Filter::None, Filter mipMapMin = Filter::None);
@@ -64,5 +69,8 @@ namespace MHelmet
 			Filter::None, 
 			Filter::None 
 		};
+
+		GLenum m_InternalFormat;
+		GLenum m_DataFormat;
 	};
 }
