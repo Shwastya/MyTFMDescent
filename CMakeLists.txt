@@ -100,6 +100,10 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/particlesTesting/ParticlesSystem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/particlesTesting/Random.cpp
 
+    #ECS
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/scene/Scene.cpp
+
+
     )
 
 set(ENGINE_HEADER_FILES
@@ -203,6 +207,7 @@ set(ENGINE_HEADER_FILES
 
 
     # ECS 
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/scene/Scene.hpp
     
     )    
 

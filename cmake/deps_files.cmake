@@ -6,6 +6,8 @@ set(INCLUDE_PATHS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/Mhelmet
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/spdlog/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/spdlog/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/entt
     )
 
 #Common Dependency Files
@@ -38,6 +40,12 @@ set(DEPS_SRC_FILES_COMMON
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/MHelmet/MHelmet.h # headers of engine motor    
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/MHelmet/MHpch.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/MHelmet/MHKeyCodes.h
+
+
+
+    # ECS Library
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/entt/entt.hpp
+
     )
 
 #Windows Dependency Files
