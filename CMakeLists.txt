@@ -276,7 +276,7 @@ foreach(PROJECT ${PROJECT_LIST})
     target_compile_definitions(${PROJECT} PRIVATE -D_GLFW_USE_OPENGL=1)
    
     target_link_libraries(${PROJECT} PRIVATE EngineLib)
-    target_compile_features(${PROJECT} PRIVATE cxx_std_14)
+    target_compile_features(${PROJECT} PRIVATE cxx_std_17)
     configure_platform(${PROJECT})
     configure_compiler(${PROJECT})    
 
