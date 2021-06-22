@@ -18,17 +18,12 @@ namespace MHelmet
 
 		virtual void Join()   override;
 		virtual void Free()   override;
-
-		// darle una personalizacion al comportamiento de las capas de ImGui
-		// encerrar en capas su funcionalidad
-		void Begin();
-		void End();
-
-		//virtual void ImGuiRender() override;
 		
+		void Begin();
+		void End();		
 
 	private:
-
+		
 		float m_Time = 0.0f;
 	};
 	

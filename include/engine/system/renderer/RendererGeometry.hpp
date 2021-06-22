@@ -20,7 +20,7 @@ namespace MHelmet
 		static void Init();
 		static void ShutDown();
 
-		static void BeginScene(const PerspectiveCamera& camera, const glm::vec3& LightPos); // pasar struct de Light
+		static void BeginScene(const PerspectiveCamera& camera, const glm::vec3& LightPos, const glm::vec2& viewport); // pasar struct de Light
 		static void EndScene();
 
 		// primitives

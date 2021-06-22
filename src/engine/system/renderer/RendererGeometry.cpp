@@ -7,8 +7,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "engine/Engine.hpp"
 
-#define W_WIDTH     static_cast<float>(Engine::p().GetWindow().GetWidth())
-#define W_HEIGHT    static_cast<float>(Engine::p().GetWindow().GetHeight())
+#define W_     static_cast<float>(Engine::p().GetWindow().GetWidth())
+#define H_    static_cast<float>(Engine::p().GetWindow().GetHeight())
 
 #define SHADER_C    std::reinterpret_pointer_cast<OpenGLShader>(s_Data->SLib.Get("PhongC"))
 #define SHADER_T    std::reinterpret_pointer_cast<OpenGLShader>(s_Data->SLib.Get("PhongT"))
@@ -36,7 +36,7 @@ namespace MHelmet
 	static Unique<RendererGeometryAssets> s_Data;
 
 
-	void RendererGeometry::Init()
+	void RendererGeometry::Init() // Inicializacion statica (1 instancia)
 	{
 		// Instancia de los recursos para las 
 		s_Data = std::make_unique<RendererGeometryAssets>();
@@ -178,9 +178,7 @@ namespace MHelmet
 		RefCount<EBO> EBO_TP;
 		EBO_TP = std::make_shared<OpenGLEBO>(TP.Indices(), TP.SizeIndices());
 
-		s_Data->VAO[teapot]->Add__EBO(EBO_TP);
-
-		
+		s_Data->VAO[teapot]->Add__EBO(EBO_TP);		
 	}
 
 	void RendererGeometry::ShutDown()
@@ -188,7 +186,7 @@ namespace MHelmet
 		//delete s_Data;
 	}
 
-	void RendererGeometry::BeginScene(const PerspectiveCamera& camera, const glm::vec3& LightPos)
+	void RendererGeometry::BeginScene(const PerspectiveCamera& camera, const glm::vec3& LightPos, const glm::vec2& viewport)
 	{
 		SHADER_C->Bind();
 
@@ -197,11 +195,10 @@ namespace MHelmet
 
 		SHADER_C->Uniform("u_view", view);
 		
-		SHADER_C->Uniform("u_proj", glm::perspective(glm::radians(camera.GetFOV()), W_WIDTH / W_HEIGHT, 0.1f, 100.0f));
-
+		SHADER_C->Uniform("u_proj", glm::perspective(glm::radians(camera.GetFOV()), viewport.x / viewport.y, 0.1f, 100.0f));
+		// SHADER_C->Uniform("u_proj", glm::perspective(glm::radians(camera.GetFOV()), W_ / H_, 0.1f, 100.0f));
 	
 		SHADER_C->Uniform("u_viewPos", camera.GetPosition());
-
 
 		// LIGHT
 		SHADER_C->Uniform("u_light.position", LightPos);
@@ -214,7 +211,7 @@ namespace MHelmet
 	{
 		SHADER_C->Unbind();
 		SHADER_T->Unbind();
-
+		CT_SINGLE->Unbind();
 	}
 
 	void RendererGeometry::DrawTriangle(const glm::vec3 position, const glm::vec3& size, const glm::vec3& rotate, const float& degrees)
@@ -329,7 +326,7 @@ namespace MHelmet
 		// SHADER_C->Uniform("u_objectColor", color);
 		// 
 		// MATERIAL
-		SHADER_C->Uniform("u_material.ambient", 0.7f, 0.5f, 0.4f);
+		SHADER_C->Uniform("u_material.ambient", 0.1f, 0.2f, 0.7f);
 		SHADER_C->Uniform("u_material.diffuse", 0.7f, 0.5f, 0.4f);
 		SHADER_C->Uniform("u_material.specular", 0.5f, 0.5f, 0.5f);
 		SHADER_C->Uniform("u_material.shininess", 32); // float?

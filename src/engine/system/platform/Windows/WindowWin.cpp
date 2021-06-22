@@ -16,9 +16,9 @@ namespace MHelmet
 	}	
 
 	/************************************************/
-	Window* Window::Create(const WindowSpec& spec) 
+	Unique<Window> Window::Create(const WindowSpec& spec)
 	{
-		return new WindowWin(spec);
+		return std::make_unique<WindowWin>(spec);
 	}
 	WindowWin::WindowWin(const WindowSpec& spec)
 		: m_Spec(spec)	

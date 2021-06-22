@@ -9,10 +9,7 @@ namespace MHelmet
     public:
         Quad() = delete;
 
-        ~Quad()
-        {
-            delete[] m_VBO, m_Indices;
-        }
+        virtual ~Quad() { delete[] m_VBO, m_Indices; }
 
         explicit Quad(float size);
 

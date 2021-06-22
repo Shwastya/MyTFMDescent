@@ -9,10 +9,7 @@ namespace MHelmet
     public:
         Cube() = delete;
 
-        ~Cube() 
-        { 
-            delete[] m_VBO, m_Indices; 
-        }
+        virtual ~Cube() { delete[] m_VBO, m_Indices; }
 
         explicit Cube(float size);
 

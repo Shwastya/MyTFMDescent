@@ -75,6 +75,7 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/RendererAPI.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/RenderDrawCall.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/Texture.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/FrameBuffer.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/renderer/RendererGeometry.cpp
         # OpenGL API Abstraction
@@ -85,12 +86,19 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLVBO.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLShader.cpp 
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLTexture.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/platform/RenderAPI/OpenGL/OpenGLFrameBuffer.cpp 
     
    
 
     # Utils
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/utils/utils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/utils/Library.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/utils/MaterialsLibrary.cpp
+
+
+    # TestingparticlesTesting
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/particlesTesting/ParticlesSystem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/particlesTesting/Random.cpp
 
     )
 
@@ -168,6 +176,7 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/RendererAPI.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/RenderDrawCall.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/Texture.hpp
+     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/FrameBuffer.hpp
 
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/renderer/RendererGeometry.hpp
 
@@ -180,11 +189,18 @@ set(ENGINE_HEADER_FILES
 
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLShader.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLTexture.hpp   
-
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/platform/RenderAPI/OpenGL/OpenGLFrameBuffer.hpp 
  
   
     # Utils
       ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/utils/utils.hpp
+      ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/utils/MaterialsLibrary.hpp
+
+
+    # Testing
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/particlesTesting/ParticlesSystem.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/particlesTesting/Random.hpp
+
 
     # ECS 
     

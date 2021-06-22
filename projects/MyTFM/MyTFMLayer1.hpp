@@ -24,16 +24,22 @@ public:
 
 private:
 
+	bool m_IsActivedImGui = true;
+	bool m_IsViewportOnFocus = false;
+	bool m_CameraMouse = true;
+
 	// Shader Library
 	MH::ShaderLib m_S; 
 	MH::RefCount<MH::Shader> Shader;
 
-	MH::RefCount<MH::VAO>       m_VAO;
+	MH::RefCount<MH::VAO> m_VAO;
 	
 	MH::CameraMan m_CameraMan;
 	MH::RefCount<MH::Texture2D> m_Texture, m_AlphaTree;
 
 	MH::RefCount<MH::Texture2D> m_BoardTexture;
+
+	MH::RefCount<MH::FrameBuffer> m_FrameBuffer;
 	
 	/* ATRIBUTOS LUZ */
 	
@@ -42,5 +48,9 @@ private:
 	/* ATRIBUTOS MODELO */
 	ModelTransform m_Model;
 	glm::vec3 m_ModelColor{ 1.0f, 0.0f, 0.5f };		// para shader color solo
+
+
+	// para IMGUI
+	glm::vec2 m_ViewPortSize;
 
 };

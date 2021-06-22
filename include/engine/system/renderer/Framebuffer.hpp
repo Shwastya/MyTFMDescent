@@ -7,11 +7,10 @@ namespace MHelmet
 {
 	struct FBTextureProps
 	{
-		//FBTextureProps() = default;
 		
-		uint32_t Width, Height;
+		uint32_t W, H;
 
-		// Framebuffer
+		
 		uint32_t Samples = 1;
 
 		bool SwapChainTarget = false;
@@ -26,7 +25,10 @@ namespace MHelmet
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
+		virtual void Resize(uint32_t W, uint32_t H) = 0;
 
+		virtual uint32_t GetFBOTexture() const = 0;
+		//virtual uint32_t GetDepthTexture() const = 0;
 		// get image specifications 
 		virtual const FBTextureProps& GetSpecification() const = 0;
 

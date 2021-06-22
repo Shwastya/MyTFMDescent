@@ -12,10 +12,7 @@ namespace MHelmet
 
         Teapot() = delete;
         
-        ~Teapot() 
-        {
-            delete[] m_VBO, m_Indices;
-        }
+        virtual ~Teapot() { delete[] m_VBO, m_Indices; }
 
         explicit Teapot(uint32_t grid, glm::mat4 lidTransform = glm::mat4(1.0f));
         

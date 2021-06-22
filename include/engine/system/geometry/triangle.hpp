@@ -9,10 +9,7 @@ namespace MHelmet
     public:
         Triangle();
 
-        ~Triangle()
-        {
-            delete[] m_VBO, m_Indices;
-        }
+        virtual ~Triangle() { delete[] m_VBO, m_Indices; }
 
         size_t SizeVBO() { return m_VBOSize; }
         size_t SizeIndices() { return _nElements; }

@@ -24,7 +24,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "engine/system/renderer/Texture.hpp"
-
+#include "engine/system/renderer/FrameBuffer.hpp"
 
 /* DE momento super cutrisiiiimo para facilitar un poco el tema */
 #include "engine/system/utils/Library.hpp"

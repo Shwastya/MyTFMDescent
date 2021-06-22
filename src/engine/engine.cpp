@@ -7,18 +7,18 @@ namespace MHelmet
 {
 	Engine* Engine::s_Instance = nullptr;
 
-	Engine::Engine()
+	Engine::Engine(const std::string& name)
 	{
 		s_Instance = this;
-		m_Window = std::unique_ptr<Window>(Window::Create());	
+		m_Window = Window::Create(WindowSpec(name));
 		
 		m_Window->SetVSync(true);
 		m_Window->SetCallBack(BIND_E_FN(Engine::OnEvent));
 
 		Renderer::Init();
 
-		m_ImGuiLayers = new ImGuiLayer();
-		PushOverlay(m_ImGuiLayers);	
+		m_ImGuiLayer = new ImGuiLayer();
+		PushOverlay(m_ImGuiLayer);	
 		
 	}
 
@@ -35,27 +35,29 @@ namespace MHelmet
 	{												 
 		CORE_INFO("Mhelmet Engine running!");		
 
-		while (m_Alive)								 
+	
+
+		while (m_Alive)
 		{
 			if (!m_Minimized)
 			{
 				for (NodeLayer* layer : m_Layers) layer->Update(m_DeltaTime);
 			}
-			
 
-			m_ImGuiLayers->Begin();
+
+			m_ImGuiLayer->Begin();
 			{
 				for (NodeLayer* layer : m_Layers) layer->ImGuiRender();
-			}			
-			m_ImGuiLayers->End();
+			}
+			m_ImGuiLayer->End();
 
 
+			m_Window->SwapBuffers();
 
-			m_Window->SwapBuffers();				
-		
-			float time = static_cast<float>(glfwGetTime());
+
+			float time = GetTime();
 			m_DeltaTime = time - m_LastFrame;
-			m_LastFrame = time;						
+			m_LastFrame = time;
 		}											 
 	}								
 
@@ -70,8 +72,9 @@ namespace MHelmet
 
 		for (auto it = m_Layers.end(); it != m_Layers.begin();)
 		{			
-			(*--it)->OnEvent(e);
 			if (e.Handled) break;
+			(*--it)->OnEvent(e);
+			
 		}		
 	}
 

@@ -35,21 +35,18 @@ namespace MHelmet
         void HandleMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
         void HandleMouseScroll(float yoffset);
 
-
         void Forward(float dt);
         void Backward(float dt);
         void Left(float dt);
         void Right(float dt);
 
         void SetSpeed(float speed) { m_Speed = speed; };
-        void SetSensitivity(float sens) { m_Sensitivity = sens; };
+        void SetSensitivity(float sens) { m_Sensitivity = sens; };       
 
     private:
-
         void UpdateCameraVectors();
 
     private:
-
         glm::vec3 m_Position;  
         glm::vec3 m_Front;
         glm::vec3 m_Up;
@@ -61,7 +58,6 @@ namespace MHelmet
         float m_Fov;
 
     private:
-        // Input managemnet in CameraMAN
         float m_Speed = 3.5f;
         float m_Sensitivity = 0.1f;
     };
@@ -91,18 +87,13 @@ namespace MHelmet
         bool _Scroll = true;
 
     private:
-
         PerspectiveCamera m_Cam;
         glm::vec3 m_InitalPosition;
 
-    private: // Mouse attributes
-        
+    private: // Mouse attributes        
         bool m_FirstMouse = true;
         float m_LastX = 0.0f;
-        float m_LastY = 0.0f;
-
-        
-        
+        float m_LastY = 0.0f;        
     };
 }
 

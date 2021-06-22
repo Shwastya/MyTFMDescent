@@ -9,10 +9,7 @@ namespace MHelmet
     public:
         Sphere() = delete;
 
-        ~Sphere() 
-        {
-            delete[] m_VBO, m_Indices;
-        }
+        virtual ~Sphere() { delete[] m_VBO, m_Indices; }
 
         Sphere(float radius, uint32_t stacks, uint32_t slices);
         

@@ -3,10 +3,6 @@
 #include "../src/engine/mhpch.cpp"
 #include <functional>
 
-//#include <glad/glad.h>
-//#include <GLFW/glfw3.h>
-//#define CALLBACK std::function<void(Event&)>
-
 namespace MHelmet 
 {	
 	struct Size 
@@ -15,24 +11,22 @@ namespace MHelmet
 		uint32_t Height = 0; 
 	};
 
-	struct Position 
-	{ 
-		float X = 0.0f;
-		float Y = 0.0f;
-	};
+	struct Position { float X = 0.0f; float Y = 0.0f; };
 
 	// Window Specification 
 	struct WindowSpec 
 	{
-		// Default definitions in MHSetup.hpp 
-		std::string Title = MH_TITLE;
-		Size  Size = 
-		{ 
-			MH_WIDTH, 
-			MH_HEIGHT 
-		};
-		bool FullScreen	  = MH_FULL_SRC;
-		bool VSync		  = MH_VSYNC;
+		//WindowSpec() = default;
+		WindowSpec(const std::string& title = "Mhelmet window", uint32_t W = 1920, uint32_t H = 1080)
+			: Title(title), 
+			  Size{ W, H },
+			  FullScreen(false),
+			  VSync(true) {}
+
+		std::string Title;
+		Size  Size;
+		bool FullScreen;
+		bool VSync;
 	};	
 
 	struct Window
@@ -51,19 +45,16 @@ namespace MHelmet
 		virtual Position  GetPos()    const = 0;
 
 		virtual void* GetOriginalWindow()	 const = 0;
-
 		
 		virtual void SetCallBack(const std::function<void(Event&)>& cb) = 0;
 
 		virtual void SetVSync(bool toggle) = 0;
-		virtual bool IsVSync() const = 0;		
-
-		/******* TEMPORAL *******/
+		virtual bool IsVSync() const = 0;	
 		virtual void SetCaptureMode(bool toggle) const = 0;
 
 		// NOTA
 		// Aqui para que fuera independientemente de la plataforma
 		// haria falta un tipo de declaracion switch (podria ser a nivel de pre-proceso)
-		static Window* Create(const WindowSpec& spec = WindowSpec());
+		static Unique<Window> Create(const WindowSpec& spec = WindowSpec());
 	};
 }

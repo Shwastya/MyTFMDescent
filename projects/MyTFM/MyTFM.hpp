@@ -1,20 +1,20 @@
 #include "MyTFMLayer1.hpp"
 
-class MyTFM : public MHelmet::Engine 
+class MyTFM : public MH::Engine 
 {
 
 public:
 
-	MyTFM()
+	MyTFM() : MH::Engine("MyTFMDescent")
 	{
 		PushLayer(new MyTFMDescent());
 	}
 
-	~MyTFM() { /* delete de layers responsabiliad del Engine */ }
+	~MyTFM() { /* delete de layers responsabilidad del Engine */ }
 };
 
 
-MH::Unique<MH::Engine> MH::createApp() 
+extern MH::Unique<MH::Engine> MH::createApp() 
 { 
 	return std::make_unique<MyTFM>(); 
 }

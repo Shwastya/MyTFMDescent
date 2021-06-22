@@ -14,7 +14,7 @@ namespace MHelmet
 
 	public:
 
-		Engine();
+		Engine(const std::string& name = "MHelmetProject");
 		virtual ~Engine();
 
 		void run();
@@ -24,12 +24,12 @@ namespace MHelmet
 		void PushLayer(NodeLayer* layer);
 		void PushOverlay(NodeLayer* layer);
 
-		/* para esto es singleton Engine */
 		static Engine& p() { return *s_Instance; }
 		Window& GetWindow() { return *m_Window; }
 
-		void Exit() { m_Alive = false; }
-			
+		void Exit() { m_Alive = false; }	
+
+		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 
 		static float GetTime();
 
@@ -45,7 +45,7 @@ namespace MHelmet
 		bool m_Minimized = false;
 
 		LayerManager  m_Layers;
-		ImGuiLayer* m_ImGuiLayers;
+		ImGuiLayer* m_ImGuiLayer;
 
 		float m_LastFrame = 0.0f;
 		DeltaTime m_DeltaTime;
