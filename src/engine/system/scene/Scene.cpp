@@ -1,6 +1,7 @@
 #include "engine/system/scene/Scene.hpp"
 #include "../src/engine/mhpch.cpp"
-#include <glm/glm.hpp>
+#include "engine/system/scene/Components.hpp"
+#include "engine/system/renderer/RendererGeometry.hpp"
 
 
 namespace MHelmet
@@ -13,26 +14,13 @@ namespace MHelmet
 	Scene::Scene()
 	{
 		// componentes sin ningun tipo de polimorfismo
-		struct MeshComponent
-		{
-
-		};
-		struct TransformComponent
-		{
-			glm::mat4 Transform;
-
-			TransformComponent() = default;
-			TransformComponent(const TransformComponent&) = default;
-			TransformComponent(const glm::mat4& transform)
-				: Transform(transform) {}
-
-			operator glm::mat4& ()      { return Transform; }
-			operator const glm::mat4&() { return Transform; }
-		};
+		
 
 		// se crea el registro
 		entt::entity entity = m_Registry.create();
 		m_Registry.emplace<TransformComponent>(entity, glm::mat4(1.0f));
+
+	//	m_Registry.on_construct<TransformComponent>().connect<&ontransform>();
 
 		// creacion de un componente
 		if (m_Registry.has<TransformComponent>(entity))
@@ -46,11 +34,7 @@ namespace MHelmet
 			TransformComponent& transform = m_Registry.emplace<TransformComponent>(entity, glm::mat4(1.0f));
 		}
 
-	//	auto group = m_Registry.group<MeshComponent>(entt::get<MeshComponent>);
-	//	for (auto entity : group)
-		{
-			//auto& [ransform, mesh]  =  group.get<TransformComponent, MeshComponent>(entity);
-		}
+		
 			
 
 
@@ -60,6 +44,22 @@ namespace MHelmet
 
 	Scene::~Scene()
 	{
+	}
+
+	entt::entity Scene::CreateEntity()
+	{
+		return m_Registry.create();
+	}
+
+	void Scene::Update(DeltaTime dt)
+	{
+		auto group = m_Registry.group<TransformComponent>(entt::get<MaterialComponent>);
+		for (auto entity : group)
+		{
+			auto& [transform, quad] = group.get<TransformComponent, MaterialComponent>(entity);
+			
+			//RendererGeometry::DrawSimpleColorQuad(transform, quad.Material);
+		}
 	}
 
 

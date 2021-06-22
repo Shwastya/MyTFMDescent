@@ -2,13 +2,10 @@
 
 
 MyTFMDescent::MyTFMDescent() 
-	: MH::NodeLayer("TestingLayer"), m_CameraMan(glm::vec3(0.0f, 0.0f, 13.5f))
+	: MH::NodeLayer("TestingLayer"), m_CameraMan(glm::vec3(0.0f, 1.0f, 6.5f))
 {
 	m_CameraMan.Speed(10.0f);	
-
-
-    const std::string texture = "../assets/textures/bricks_albedo.png";
-    m_Texture = MH::Texture2D::Create(texture, MH::Texture2D::Format::RGB);
+    m_ViewPortSize = glm::vec2{ (float)MH::Engine::p().GetWindow().GetWidth(), (float)MH::Engine::p().GetWindow().GetHeight() };    
 }
 
 
@@ -16,86 +13,64 @@ MyTFMDescent::MyTFMDescent()
 
 void MyTFMDescent::Join()
 {
+    // temporal
     m_BoardTexture = MH::Texture2D::Create("../assets/textures/blue_blocks.jpg", MH::Texture2D::Format::RGB);
 
-    MH::FBTextureProps fbspec;
-    fbspec.W = MH::Engine::p().GetWindow().GetWidth();
-    fbspec.H = MH::Engine::p().GetWindow().GetHeight();
-
+    // Framebuffer instancia y texture specs
+    MH::FBTextureProps fbspec{ MH::Engine::p().GetWindow().GetWidth(), MH::Engine::p().GetWindow().GetHeight() };
     m_FrameBuffer = MH::FrameBuffer::Create(fbspec);
+
+    // Scene ECS
+  //  m_Scene = std::make_unique<MH::Scene>();
+
+   // auto quad = m_Scene->CreateEntity();
+    //m_Scene->Reg().emplace<MH::TransformComponent>(quad);
+
+   
 }
 
 void MyTFMDescent::Free() { }
 
 void MyTFMDescent::Update(MH::DeltaTime dt) 
 {
-	//********************
-    //****** UPDATE     **
-    //********************
-    if (m_IsViewportOnFocus)	m_CameraMan.Update(dt);
 
+	////////////////////// UPDATE ///////////////////////////////////  
+
+    // update Camera
+    if (m_IsViewportOnFocus) m_CameraMan.Update(dt);
+
+    // update viewport
     glm::vec2 viewport;
-
     if (m_IsActivedImGui)
     {
-        m_FrameBuffer->Bind();
-        viewport.x = (float)MH::Engine::p().GetWindow().GetWidth();
-        viewport.y = (float)MH::Engine::p().GetWindow().GetHeight();
+        m_FrameBuffer->Bind(); 
+        viewport = glm::vec2{ (float)MH::Engine::p().GetWindow().GetWidth(), (float)MH::Engine::p().GetWindow().GetHeight() };       
     }
     else viewport = m_ViewPortSize;
 	
-    //********************
-	//****** RENDER     **
-    //********************
-	{
-        
+    // update Scene
+  //  m_Scene->Update(dt);
 
+    ////////////////////// RENDER ///////////////////////////////////
+    GeometryRender::BeginScene(m_CameraMan.Get(), m_LightPos, m_ViewPortSize);
+	{
 		RenderDrawCall::ClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RenderDrawCall::clear();
 
-      /*  const glm::vec3 pos1{0.0f, 0.0f, -0.1f};
-        const glm::vec3 size{ 10.0f, 10.0f, 10.0f };
-        GeometryRender::DrawSimpleTextureQuad(m_CameraMan.Get(), m_BoardTexture, pos1, size);
-       
-        const glm::vec3 pos2{1.0f, 0.0f, 0.0f };
-        const glm::vec4 color{ 0.8f, 0.1f, 0.6f, 1.0f };
-        GeometryRender::DrawSimpleColorQuad(m_CameraMan.Get(), color, pos2);
 
-        const glm::vec3 pos3{ -1.0f, 0.0f, 0.0f };
-        GeometryRender::DrawSimpleTextureQuad(m_CameraMan.Get(), m_Texture, pos3);
-
-
-
-        glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
-        glm::vec3 size2 = glm::vec3(0.5f, 0.5f, 0.5f);
         glm::vec3 rotate = glm::vec3(0.f, 0.3f, 0.5f);
         float degrees = MH::Engine::GetTime() * glm::radians(20.0f);
-        GeometryRender::DrawCube(position, size2, rotate, degrees);*/
-		
-		GeometryRender::BeginScene(m_CameraMan.Get(), m_LightPos, m_ViewPortSize);
-		{
-			glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
-			glm::vec3 size = glm::vec3(0.5f, 0.5f, 0.5f);
-			glm::vec3 rotate = glm::vec3(0.f, 0.3f, 0.5f);
-            float degrees = MH::Engine::GetTime() * glm::radians(20.0f);
-			
-			GeometryRender::DrawTeapot(position, size, rotate, degrees);
 
-			for (int i = 0; i < 20; ++i)
-			{
-				for (int j = 0; j < 16; ++j)
-				{
-
-					glm::vec3 position = glm::vec3((i * 1.5) * 1.0f, (j * 1.5) * 1.0f, -7.0f);
-
-					GeometryRender::DrawCube(position, size, rotate, degrees);
-
-				}
-			}
-		}
-		GeometryRender::EndScene();
-        if (m_IsActivedImGui)  m_FrameBuffer->Unbind();
-	}
+       
+        GeometryRender::DrawTeapot(glm::vec3(-2.5f, 1.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), degrees);
+        /*GeometryRender::DrawCube(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), degrees);
+        GeometryRender::DrawTriangle(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f), degrees);
+        GeometryRender::DrawQuad(glm::vec3(2.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f), degrees);        
+        GeometryRender::DrawSphere(glm::vec3(2.5f, 2.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), degrees);*/
+        
+    }
+    GeometryRender::EndScene();
+    if (m_IsActivedImGui)  m_FrameBuffer->Unbind();
 	
 }
 
@@ -249,3 +224,31 @@ void MyTFMDescent::OnEvent(MH::Event& event)
 
 	}
 }
+
+/*glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
+        glm::vec3 size2 = glm::vec3(0.5f, 0.5f, 0.5f);
+        glm::vec3 rotate = glm::vec3(0.f, 0.3f, 0.5f);
+        float degrees = MH::Engine::GetTime() * glm::radians(20.0f);
+        GeometryRender::DrawCube(position, size2, rotate, degrees);*/
+
+        /*
+        {
+            glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
+            glm::vec3 size = glm::vec3(0.5f, 0.5f, 0.5f);
+            glm::vec3 rotate = glm::vec3(0.f, 0.3f, 0.5f);
+            float degrees = MH::Engine::GetTime() * glm::radians(20.0f);
+
+            GeometryRender::DrawTeapot(position, size, rotate, degrees);
+
+            for (int i = 0; i < 20; ++i)
+            {
+                for (int j = 0; j < 16; ++j)
+                {
+
+                    glm::vec3 position = glm::vec3((i * 1.5) * 1.0f, (j * 1.5) * 1.0f, -7.0f);
+
+                    GeometryRender::DrawCube(position, size, rotate, degrees);
+
+                }
+            }
+        }*/

@@ -23,10 +23,23 @@ public:
 	void OnEvent(MH::Event& event) override;
 
 private:
+	MH::CameraMan m_CameraMan;
 
 	bool m_IsActivedImGui = true;
 	bool m_IsViewportOnFocus = false;
 	bool m_CameraMouse = true;
+
+	// FrameBuffer textura en el frame de ImGui
+	MH::RefCount<MH::FrameBuffer> m_FrameBuffer;
+
+	// ECS Scene
+	MH::RefCount<MH::Scene> m_Scene;
+
+
+
+
+
+
 
 	// Shader Library
 	MH::ShaderLib m_S; 
@@ -34,16 +47,16 @@ private:
 
 	MH::RefCount<MH::VAO> m_VAO;
 	
-	MH::CameraMan m_CameraMan;
+	
 	MH::RefCount<MH::Texture2D> m_Texture, m_AlphaTree;
 
 	MH::RefCount<MH::Texture2D> m_BoardTexture;
 
-	MH::RefCount<MH::FrameBuffer> m_FrameBuffer;
+	
 	
 	/* ATRIBUTOS LUZ */
 	
-	glm::vec3 m_LightPos{ 5.0f, 5.0f, 14.5f };
+	glm::vec3 m_LightPos{ 5.0f, 8.0f, 14.5f };
 
 	/* ATRIBUTOS MODELO */
 	ModelTransform m_Model;

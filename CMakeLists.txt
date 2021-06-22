@@ -208,6 +208,7 @@ set(ENGINE_HEADER_FILES
 
     # ECS 
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/scene/Scene.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/scene/Components.hpp
     
     )    
 

@@ -32,5 +32,10 @@
 #include "engine/system/utils/utils.hpp"
 
 
+/*ECS*/
+#include "engine/system/scene/Scene.hpp"
+#include "engine/system/scene/Components.hpp"
+
+
 
 
