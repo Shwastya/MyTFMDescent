@@ -51,11 +51,11 @@ namespace MHelmet
 		DeltaTime m_DeltaTime;
 
 	private:
-		// necesito pasar el window al ImgUI Layer
+		
 		static Engine* s_Instance;
 	};
 	
-	Unique<Engine> createApp(); // definido en cliente
+	//Unique<Engine> createApp(); // definido en cliente
 }
 
 

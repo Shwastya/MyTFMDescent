@@ -100,8 +100,9 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/particlesTesting/ParticlesSystem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/particlesTesting/Random.cpp
 
-    #ECS
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/scene/Scene.cpp
+    #ECS # Component.hpp in headers
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/scene/Scene.cpp 
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/scene/Entity.cpp
 
 
     )
@@ -208,6 +209,7 @@ set(ENGINE_HEADER_FILES
 
     # ECS 
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/scene/Scene.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/scene/Entity.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/scene/Components.hpp
     
     )    
@@ -219,6 +221,8 @@ add_library(EngineLib STATIC ${ENGINE_SRC_FILES} ${ENGINE_HEADER_FILES} ${DEPS_S
 
 
 target_include_directories(EngineLib PRIVATE ${INCLUDE_PATHS})
+
+
 
 # De momento elimino las librerias dinamicas en Linux Paso de tantas de movidas ahora mismo
 #if (UNIX)  # assimp files in linus   #
@@ -233,7 +237,7 @@ if (WIN32) # assimp files in windows #
 endif()  
 
 target_compile_definitions(EngineLib PRIVATE -D_GLFW_USE_OPENGL=1)
-target_compile_features(EngineLib PRIVATE cxx_std_14)
+target_compile_features(EngineLib PRIVATE cxx_std_17)
 
 configure_platform(EngineLib)
 configure_compiler(EngineLib)

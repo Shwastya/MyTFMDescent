@@ -34,7 +34,8 @@
 
 /*ECS*/
 #include "engine/system/scene/Scene.hpp"
-#include "engine/system/scene/Components.hpp"
+//#include "engine/system/scene/Components.hpp"
+#include "engine/system/scene/Entity.hpp"
 
 
 

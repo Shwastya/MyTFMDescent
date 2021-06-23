@@ -1,39 +1,39 @@
 #include <MHelmet.h>
 
-#define MH MHelmet  // CLIENT CALL NAMESPACE ENGINE SIDE
+using namespace MHelmet;
 
 class MyTFMDescent : public MHelmet::NodeLayer
 {
 
 public:
 
-	using Render = MH::Renderer;
-	using RenderDrawCall = MH::RenderDrawCall;
-	using GeometryRender = MH::RendererGeometry;
+	using Render = Renderer;
+	using RenderDrawCall = RenderDrawCall;
+	using GeometryRender = RendererGeometry;
 
 	MyTFMDescent();	
 
 	void Join() override;
 	void Free() override;
 
-	void Update(MH::DeltaTime dt) override;
+	void Update(DeltaTime dt) override;
 
 	void ImGuiRender();
 
-	void OnEvent(MH::Event& event) override;
+	void OnEvent(Event& event) override;
 
 private:
-	MH::CameraMan m_CameraMan;
+	CameraMan m_CameraMan;
 
 	bool m_IsActivedImGui = true;
 	bool m_IsViewportOnFocus = false;
 	bool m_CameraMouse = true;
 
 	// FrameBuffer textura en el frame de ImGui
-	MH::RefCount<MH::FrameBuffer> m_FrameBuffer;
+	RefCount<FrameBuffer> m_FrameBuffer;
 
 	// ECS Scene
-	MH::RefCount<MH::Scene> m_Scene;
+	RefCount<Scene> m_Scene;
 
 
 
@@ -42,15 +42,15 @@ private:
 
 
 	// Shader Library
-	MH::ShaderLib m_S; 
-	MH::RefCount<MH::Shader> Shader;
+	ShaderLib m_S; 
+	RefCount<Shader> Shader;
 
-	MH::RefCount<MH::VAO> m_VAO;
+	RefCount<VAO> m_VAO;
 	
 	
-	MH::RefCount<MH::Texture2D> m_Texture, m_AlphaTree;
+	RefCount<Texture2D> m_Texture, m_AlphaTree;
 
-	MH::RefCount<MH::Texture2D> m_BoardTexture;
+	RefCount<Texture2D> m_BoardTexture;
 
 	
 	

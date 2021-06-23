@@ -4,7 +4,7 @@ int main(int argc, char** argv)
 {
 	CORE::Init();
 
-	auto project = MHelmet::createApp();
+	auto project = createApp();
 	project->run();
 
 	CORE::Stop();

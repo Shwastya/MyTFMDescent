@@ -6,6 +6,7 @@
 #include "engine/system/geometry/sphere.hpp"
 #include "engine/system/geometry/teapot.hpp"
 #include "PerspectiveCamera.hpp"
+#include "engine/system/scene/Components.hpp"
 
 
 
@@ -29,17 +30,32 @@ namespace MHelmet
 		static void DrawQuad(const glm::vec3 position,  const glm::vec3& size = glm::vec3{ 1.0f }, const glm::vec3& rotate = glm::vec3{ 1.0f }, const float& degrees = 0.0f);
 
 	
-		static void DrawSimpleTextureQuad(const PerspectiveCamera& camera, const RefCount<Texture2D>& texture, const glm::vec3& position = glm::vec3{ 0.0f }, const glm::vec3& size = glm::vec3{ 1.0f });
-		
-
-		static void DrawSimpleColorQuad(const PerspectiveCamera& camera, const glm::vec4& color, const glm::vec3& position = glm::vec3{ 0.0f });
-
 
 		static void DrawCube(const glm::vec3 position,  const glm::vec3& size = glm::vec3{ 1.0f }, const glm::vec3& rotate = glm::vec3{ 1.0f }, const float& degrees = 0.0f);
 
 		static void DrawSphere(const glm::vec3 position,  const glm::vec3& size = glm::vec3{ 1.0f }, const glm::vec3& rotate = glm::vec3{ 1.0f }, const float& degrees = 0.0f);
+		
+		static void DrawTeapot(const TransformComponent& transform, const MaterialComponent& material);
 
-		static void DrawTeapot(const glm::vec3 position,  const glm::vec3& size = glm::vec3{ 1.0f }, const glm::vec3& rotate = glm::vec3{ 1.0f }, const float& degrees = 0.0f);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		static void DrawSimpleTextureQuad(const PerspectiveCamera& camera, const RefCount<Texture2D>& texture, const glm::vec3& position = glm::vec3{ 0.0f }, const glm::vec3& size = glm::vec3{ 1.0f });
+
+
+		static void DrawSimpleColorQuad(const PerspectiveCamera& camera, const glm::vec4& color, const glm::vec3& position = glm::vec3{ 0.0f });
 
 	public:
 	};

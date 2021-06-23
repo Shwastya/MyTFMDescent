@@ -45,7 +45,7 @@ namespace MHelmet
 		return layout;
 	}
 
-	static void setMaterialUniforms(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const int& shininess)
+	static void SetMaterial(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const int& shininess)
 	{
 		SHADER_C->Uniform("u_material.ambient", ambient);
 		SHADER_C->Uniform("u_material.diffuse", diffuse);
@@ -181,7 +181,7 @@ namespace MHelmet
 		T_model = glm::scale(T_model, size);
 
 		// ambient  // diffuse  // specular // sininess  
-		setMaterialUniforms({ 0.7f, 0.5f, 0.4f }, { 0.7f, 0.5f, 0.4f }, { 0.5f, 0.5f, 0.5f }, 32);
+		SetMaterial({ 0.7f, 0.5f, 0.4f }, { 0.7f, 0.5f, 0.4f }, { 0.5f, 0.5f, 0.5f }, 32);
 
 		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(T_model))));
 		SHADER_C->Uniform("u_model", T_model);
@@ -200,7 +200,7 @@ namespace MHelmet
 
 
 		// ambient  // diffuse  // specular // sininess  
-		setMaterialUniforms({ 0.7f, 0.5f, 0.4f }, { 0.7f, 0.5f, 0.4f }, { 0.5f, 0.5f, 0.5f }, 32);
+		SetMaterial({ 0.7f, 0.5f, 0.4f }, { 0.7f, 0.5f, 0.4f }, { 0.5f, 0.5f, 0.5f }, 32);
 
 		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(Q_model))));
 		SHADER_C->Uniform("u_model", Q_model);
@@ -219,7 +219,7 @@ namespace MHelmet
 		C_model = glm::scale(C_model, size);
 
 		// ambient  // diffuse  // specular // sininess  
-		setMaterialUniforms({ 0.7f, 0.5f, 0.4f }, { 0.7f, 0.5f, 0.4f }, { 0.5f, 0.5f, 0.5f }, 32);
+		SetMaterial({ 0.7f, 0.5f, 0.4f }, { 0.7f, 0.5f, 0.4f }, { 0.5f, 0.5f, 0.5f }, 32);
 
 		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(C_model))));
 		SHADER_C->Uniform("u_model", C_model);
@@ -237,31 +237,31 @@ namespace MHelmet
 		S_model = glm::scale(S_model, size);
 
 		// ambient  // diffuse  // specular // sininess  
-		setMaterialUniforms({0.7f, 0.5f, 0.4f}, {0.7f, 0.5f, 0.4f}, {0.5f, 0.5f, 0.5f}, 32);
+		SetMaterial({0.7f, 0.5f, 0.4f}, {0.7f, 0.5f, 0.4f}, {0.5f, 0.5f, 0.5f}, 32);
 		
 		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(S_model))));
 		SHADER_C->Uniform("u_model", S_model);		
 
 		s_Data->VAO[sphere]->Bind();
 		RenderDrawCall::Draw(s_Data->VAO[sphere]);
-	}
+	}	
 
-	void RendererGeometry::DrawTeapot(const glm::vec3 position, const glm::vec3& size, const glm::vec3& rotate, const float& degrees)
-	{		
-		glm::mat4 TP_model = glm::mat4(1.0f);
+	void RendererGeometry::DrawTeapot(const TransformComponent& trans, const MaterialComponent& m)
+	{
+		glm::mat4 model = glm::mat4(1.0f);
 
-		TP_model = glm::translate(TP_model, position);
-		TP_model = glm::rotate(TP_model, degrees, rotate);
-		TP_model = glm::scale(TP_model, size);
+		model = glm::translate(model, trans.T);
+		model = glm::rotate(model, trans.Degrees, trans.R);
+		model = glm::scale(model, trans.S);
 
 		// ambient  // diffuse  // specular // sininess  
-		setMaterialUniforms({ 0.7f, 0.5f, 0.4f }, { 0.7f, 0.5f, 0.4f }, { 0.5f, 0.5f, 0.5f }, 32);
+		SetMaterial(m.Ambient, m.Difusse, m.Specular, m.Shininess);
 
-		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(TP_model))));
-		SHADER_C->Uniform("u_model", TP_model);
+		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(model))));
+		SHADER_C->Uniform("u_model", model);
 
 		s_Data->VAO[teapot]->Bind();
-		RenderDrawCall::Draw(s_Data->VAO[teapot]);
+		RenderDrawCall::Draw(s_Data->VAO[teapot]);		
 	}
 
 

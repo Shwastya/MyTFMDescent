@@ -2,10 +2,10 @@
 
 
 MyTFMDescent::MyTFMDescent() 
-	: MH::NodeLayer("TestingLayer"), m_CameraMan(glm::vec3(0.0f, 1.0f, 6.5f))
+	: NodeLayer("TestingLayer"), m_CameraMan(glm::vec3(0.0f, 1.0f, 6.5f))
 {
 	m_CameraMan.Speed(10.0f);	
-    m_ViewPortSize = glm::vec2{ (float)MH::Engine::p().GetWindow().GetWidth(), (float)MH::Engine::p().GetWindow().GetHeight() };    
+    m_ViewPortSize = glm::vec2{ (float)Engine::p().GetWindow().GetWidth(), (float)Engine::p().GetWindow().GetHeight() };    
 }
 
 
@@ -14,24 +14,25 @@ MyTFMDescent::MyTFMDescent()
 void MyTFMDescent::Join()
 {
     // temporal
-    m_BoardTexture = MH::Texture2D::Create("../assets/textures/blue_blocks.jpg", MH::Texture2D::Format::RGB);
+    m_BoardTexture = Texture2D::Create("../assets/textures/blue_blocks.jpg", Texture2D::Format::RGB);
 
     // Framebuffer instancia y texture specs
-    MH::FBTextureProps fbspec{ MH::Engine::p().GetWindow().GetWidth(), MH::Engine::p().GetWindow().GetHeight() };
-    m_FrameBuffer = MH::FrameBuffer::Create(fbspec);
+    FBTextureProps fbspec{ Engine::p().GetWindow().GetWidth(), Engine::p().GetWindow().GetHeight() };
+    m_FrameBuffer = FrameBuffer::Create(fbspec);
 
     // Scene ECS
-  //  m_Scene = std::make_unique<MH::Scene>();
+    m_Scene = std::make_unique<Scene>();
 
-   // auto quad = m_Scene->CreateEntity();
-    //m_Scene->Reg().emplace<MH::TransformComponent>(quad);
+    auto teaPot = m_Scene->CreateEntity();
+    m_Scene->Reg().emplace<TransformComponent>(teaPot);
+    m_Scene->Reg().emplace<MaterialComponent>(teaPot);
 
    
 }
 
 void MyTFMDescent::Free() { }
 
-void MyTFMDescent::Update(MH::DeltaTime dt) 
+void MyTFMDescent::Update(DeltaTime dt) 
 {
 
 	////////////////////// UPDATE ///////////////////////////////////  
@@ -39,182 +40,161 @@ void MyTFMDescent::Update(MH::DeltaTime dt)
     // update Camera
     if (m_IsViewportOnFocus) m_CameraMan.Update(dt);
 
-    // update viewport
-    glm::vec2 viewport;
-    if (m_IsActivedImGui)
-    {
-        m_FrameBuffer->Bind(); 
-        viewport = glm::vec2{ (float)MH::Engine::p().GetWindow().GetWidth(), (float)MH::Engine::p().GetWindow().GetHeight() };       
-    }
-    else viewport = m_ViewPortSize;
-	
-    // update Scene
-  //  m_Scene->Update(dt);
+    // FBO update
+    m_FrameBuffer->Bind();
+    RenderDrawCall::ClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+    RenderDrawCall::clear();    
 
     ////////////////////// RENDER ///////////////////////////////////
     GeometryRender::BeginScene(m_CameraMan.Get(), m_LightPos, m_ViewPortSize);
-	{
-		RenderDrawCall::ClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-		RenderDrawCall::clear();
-
-
-        glm::vec3 rotate = glm::vec3(0.f, 0.3f, 0.5f);
-        float degrees = MH::Engine::GetTime() * glm::radians(20.0f);
-
-       
-        GeometryRender::DrawTeapot(glm::vec3(-2.5f, 1.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), degrees);
-        /*GeometryRender::DrawCube(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), degrees);
-        GeometryRender::DrawTriangle(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f), degrees);
-        GeometryRender::DrawQuad(glm::vec3(2.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f), degrees);        
-        GeometryRender::DrawSphere(glm::vec3(2.5f, 2.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), degrees);*/
-        
+	{		
+        m_Scene->Update(dt);        
     }
     GeometryRender::EndScene();
-    if (m_IsActivedImGui)  m_FrameBuffer->Unbind();
+    m_FrameBuffer->Unbind();
 	
 }
 
 void MyTFMDescent::ImGuiRender()
 {
-    if (m_IsActivedImGui)
+    
+    static bool docksOpen = true;
+    static bool opt_fullscreen = true;
+    static bool opt_padding = false;
+    static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+
+    // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
+    // because it would be confusing to have two docking targets within each others.
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+    if (opt_fullscreen)
     {
-        static bool docksOpen = true;
-        static bool opt_fullscreen = true;
-        static bool opt_padding = false;
-        static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+        ImGuiViewport* viewport = ImGui::GetMainViewport();
+        ImGui::SetNextWindowPos(viewport->GetWorkPos());
+        ImGui::SetNextWindowSize(viewport->GetWorkSize());
+        ImGui::SetNextWindowViewport(viewport->ID);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+        window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+    }
+    else
+    {
+        dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
+    }
 
-        // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
-        // because it would be confusing to have two docking targets within each others.
-        ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-        if (opt_fullscreen)
+    // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
+    // and handle the pass-thru hole, so we ask Begin() to not render a background.
+    if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+        window_flags |= ImGuiWindowFlags_NoBackground;
+
+    // Important: note that we proceed even if Begin() returns false (aka window is collapsed).
+    // This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
+    // all active windows docked into it will lose their parent and become undocked.
+    // We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
+    // any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
+    if (!opt_padding)
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+    ImGui::Begin("DockSpace Demo", &docksOpen, window_flags);
+    if (!opt_padding)
+        ImGui::PopStyleVar();
+
+    if (opt_fullscreen)
+        ImGui::PopStyleVar(2);
+
+    // DockSpace
+    ImGuiIO& io = ImGui::GetIO();
+    if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+    {
+        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+    }
+
+    if (ImGui::BeginMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
         {
-            ImGuiViewport* viewport = ImGui::GetMainViewport();
-            ImGui::SetNextWindowPos(viewport->GetWorkPos());
-            ImGui::SetNextWindowSize(viewport->GetWorkSize());
-            ImGui::SetNextWindowViewport(viewport->ID);
-            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-            ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-            window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-            window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-        }
-        else
-        {
-            dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
-        }
+            // Disabling fullscreen would allow the window to be moved to the front of other windows,
+            // which we can't undo at the moment without finer window depth/z control.
+            //ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
+            //ImGui::MenuItem("Padding", NULL, &opt_padding);
+            //ImGui::Separator();
 
-        // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
-        // and handle the pass-thru hole, so we ask Begin() to not render a background.
-        if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-            window_flags |= ImGuiWindowFlags_NoBackground;
-
-        // Important: note that we proceed even if Begin() returns false (aka window is collapsed).
-        // This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
-        // all active windows docked into it will lose their parent and become undocked.
-        // We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
-        // any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
-        if (!opt_padding)
-            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-        ImGui::Begin("DockSpace Demo", &docksOpen, window_flags);
-        if (!opt_padding)
-            ImGui::PopStyleVar();
-
-        if (opt_fullscreen)
-            ImGui::PopStyleVar(2);
-
-        // DockSpace
-        ImGuiIO& io = ImGui::GetIO();
-        if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-        {
-            ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-            ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-        }
-
-        if (ImGui::BeginMenuBar())
-        {
-            if (ImGui::BeginMenu("File"))
-            {
-                // Disabling fullscreen would allow the window to be moved to the front of other windows,
-                // which we can't undo at the moment without finer window depth/z control.
-                //ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
-                //ImGui::MenuItem("Padding", NULL, &opt_padding);
-                //ImGui::Separator();
-
-                if (ImGui::MenuItem("Exit")) MH::Engine::p().Exit();
+            if (ImGui::MenuItem("Exit")) Engine::p().Exit();
 
 
 
-                ImGui::EndMenu();
-            }
-
-
-            ImGui::EndMenuBar();
+            ImGui::EndMenu();
         }
 
-        /* Mis pruebas */
-        ImGui::Begin("Settings"); // begin 1
-        ImGui::Text("Texto de ejempo: ");
-        ImGui::Text("Frames: ");
-        ImGui::Text("Frames: ");
-        ImGui::Text("Frames: ");
-        ImGui::Text("Frames: ");
-        ImGui::Text("Frames: ");
-        ImGui::Text("Frames: ");
-        ImGui::Text("Frames: ");
-        ImGui::Text("Frames: ");
-        ImGui::Text("Frames: ");
-        ImGui::Text("Frames: ");
-        ImGui::Text("Frames: ");
-        ImGui::Text("Frames: ");
-        ImGui::Text("Frames: ");
-        ImGui::Text("Frames: ");
-        ImGui::Text("Frames: ");
+
+        ImGui::EndMenuBar();
+    }
+
+    /* Mis pruebas */
+    ImGui::Begin("Settings"); // begin 1
+    ImGui::Text("Texto de ejempo: ");
+    ImGui::Text("Frames: ");
+    ImGui::Text("Frames: ");
+    ImGui::Text("Frames: ");
+    ImGui::Text("Frames: ");
+    ImGui::Text("Frames: ");
+    ImGui::Text("Frames: ");
+    ImGui::Text("Frames: ");
+    ImGui::Text("Frames: ");
+    ImGui::Text("Frames: ");
+    ImGui::Text("Frames: ");
+    ImGui::Text("Frames: ");
+    ImGui::Text("Frames: ");
+    ImGui::Text("Frames: ");
+    ImGui::Text("Frames: ");
+    ImGui::Text("Frames: ");
 
 
 
-        ImGui::ColorEdit3("Square Color", glm::value_ptr(m_LightPos)); // begin 2
-       // uint32_t testTextID = m_Texture->GetTextureID();
+    ImGui::ColorEdit3("Square Color", glm::value_ptr(m_LightPos)); // begin 2
+    // uint32_t testTextID = m_Texture->GetTextureID();
 
 
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-        ImGui::Begin("ViewPort");
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+    ImGui::Begin("ViewPort");
 
-        /* FLAG */ // Si hay foco del mouse sobre el frame del window // no bloquees los eventos desde Event System     
-        m_IsViewportOnFocus = ImGui::IsWindowHovered(); // onfocus no pirula, pero hovered si     ;
-        /*-----*/
+    /* FLAG */ // Si hay foco del mouse sobre el frame del window // no bloquees los eventos desde Event System     
+    m_IsViewportOnFocus = ImGui::IsWindowHovered(); // onfocus no pirula, pero hovered si     ;
+    /*-----*/
         
-        /* FLAG */ // Si cambia el ViewPort del frameImGui donde esta la textura de la escena
-        ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+    /* FLAG */ // Si cambia el ViewPort del frameImGui donde esta la textura de la escena
+    ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 
-        if ((m_ViewPortSize.x != viewportPanelSize.x) || (m_ViewPortSize.y != viewportPanelSize.y))
-        {
-            const uint32_t x = static_cast<uint32_t>(viewportPanelSize.x);
-            const uint32_t y = static_cast<uint32_t>(viewportPanelSize.y);
+    if ((m_ViewPortSize.x != viewportPanelSize.x) || (m_ViewPortSize.y != viewportPanelSize.y))
+    {
+        const uint32_t x = static_cast<uint32_t>(viewportPanelSize.x);
+        const uint32_t y = static_cast<uint32_t>(viewportPanelSize.y);
 
-            m_ViewPortSize = { viewportPanelSize.x, viewportPanelSize.y };
-        }
-        /*-----*/
+        m_ViewPortSize = { viewportPanelSize.x, viewportPanelSize.y };
+    }
+    /*-----*/
 
 
-        uint32_t textureID = m_FrameBuffer->GetFBOTexture(); // FBO  
-        ImGui::Image((void*)textureID, ImVec2{ viewportPanelSize.x, viewportPanelSize.y}, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+    uint32_t textureID = m_FrameBuffer->GetFBOTexture(); // FBO  
+    ImGui::Image((void*)textureID, ImVec2{ viewportPanelSize.x, viewportPanelSize.y}, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
-        ImGui::End(); // end 1
-        ImGui::PopStyleVar(); // pop -> PushStyleVar(ImGuiStyleVar_WindowPadding)
-        ImGui::End(); // end 2    
-        ImGui::End(); // end 2   
-    }     
+    ImGui::End(); // end 1
+    ImGui::PopStyleVar(); // pop -> PushStyleVar(ImGuiStyleVar_WindowPadding)
+    ImGui::End(); // end 2    
+    ImGui::End(); // end 2   
+     
 }
 
-void MyTFMDescent::OnEvent(MH::Event& event) 
+void MyTFMDescent::OnEvent(Event& event) 
 {
 	if (m_CameraMouse && m_IsViewportOnFocus) m_CameraMan.OnEvent(event);
 
-	if (event.GetEventType() == MH::IsType::MH_KEY_PRESSED)
+	if (event.GetEventType() == IsType::MH_KEY_PRESSED)
 	{
-		MH::OnKeyPressed& e = (MH::OnKeyPressed&)event;
+		OnKeyPressed& e = (OnKeyPressed&)event;
 
-		if (e.GetKeyCode() == MH_KEY_Q)	MH::Engine::p().GetWindow().SetCaptureMode(true);		
-		if (e.GetKeyCode() == MH_KEY_E)	MH::Engine::p().GetWindow().SetCaptureMode(false);		
+		if (e.GetKeyCode() == MH_KEY_Q)	Engine::p().GetWindow().SetCaptureMode(true);		
+		if (e.GetKeyCode() == MH_KEY_E)	Engine::p().GetWindow().SetCaptureMode(false);		
 
         if (e.GetKeyCode() == MH_KEY_O)	m_IsActivedImGui = false;
         if (e.GetKeyCode() == MH_KEY_P)	m_IsActivedImGui = true;
@@ -228,7 +208,7 @@ void MyTFMDescent::OnEvent(MH::Event& event)
 /*glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
         glm::vec3 size2 = glm::vec3(0.5f, 0.5f, 0.5f);
         glm::vec3 rotate = glm::vec3(0.f, 0.3f, 0.5f);
-        float degrees = MH::Engine::GetTime() * glm::radians(20.0f);
+        float degrees = Engine::GetTime() * glm::radians(20.0f);
         GeometryRender::DrawCube(position, size2, rotate, degrees);*/
 
         /*
@@ -236,7 +216,7 @@ void MyTFMDescent::OnEvent(MH::Event& event)
             glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
             glm::vec3 size = glm::vec3(0.5f, 0.5f, 0.5f);
             glm::vec3 rotate = glm::vec3(0.f, 0.3f, 0.5f);
-            float degrees = MH::Engine::GetTime() * glm::radians(20.0f);
+            float degrees = Engine::GetTime() * glm::radians(20.0f);
 
             GeometryRender::DrawTeapot(position, size, rotate, degrees);
 

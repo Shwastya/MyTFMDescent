@@ -1,11 +1,11 @@
 #include "MyTFMLayer1.hpp"
 
-class MyTFM : public MH::Engine 
+class MyTFM : public MHelmet::Engine 
 {
 
 public:
 
-	MyTFM() : MH::Engine("MyTFMDescent")
+	MyTFM() : MHelmet::Engine("MyTFMDescent")
 	{
 		PushLayer(new MyTFMDescent());
 	}
@@ -14,7 +14,7 @@ public:
 };
 
 
-extern MH::Unique<MH::Engine> MH::createApp() 
+ Unique<Engine> createApp() 
 { 
 	return std::make_unique<MyTFM>(); 
 }

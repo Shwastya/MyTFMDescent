@@ -20,6 +20,8 @@ namespace MHelmet
 	private:
 		entt::registry m_Registry;
 
+		friend class Entity; // le damos acceso amigo a la clase Entity
+
 
 	};
 }
