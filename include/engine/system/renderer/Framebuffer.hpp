@@ -8,12 +8,10 @@ namespace MHelmet
 	struct FBTextureProps
 	{
 		
-		uint32_t W, H;
-
-		
+		uint32_t W, H;		
 		uint32_t Samples = 1;
 
-		bool SwapChainTarget = false;
+		//bool SwapChainTarget = false;
 	};
 
 	class FrameBuffer

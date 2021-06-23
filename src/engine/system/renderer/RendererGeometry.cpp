@@ -53,6 +53,14 @@ namespace MHelmet
 		SHADER_C->Uniform("u_material.shininess", shininess); 
 	}
 
+	static void SettLight(const glm::vec3& position, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
+	{
+		SHADER_C->Uniform("u_light.position", position);
+		SHADER_C->Uniform("u_light.ambient", ambient);
+		SHADER_C->Uniform("u_light.diffuse", diffuse);
+		SHADER_C->Uniform("u_light.specular", specular);
+	}
+
 	void RendererGeometry::Init() // Inicializacion statica (1 instancia)
 	{
 		// Instancia de los recursos para las 
@@ -144,6 +152,30 @@ namespace MHelmet
 		//delete s_Data;
 	}
 
+	void RendererGeometry::BeginScene(const CameraManComponent& C, const LightComponent& L)
+	{
+		SHADER_C->Bind();
+
+		glm::mat4 view = glm::mat4(1.0f);
+		view = C.Cameraman.Get().GetViewMatrix();		
+
+		SHADER_C->Uniform("u_view", view);
+		
+		SHADER_C->Uniform("u_proj", glm::perspective
+		(
+			glm::radians
+			(
+				C.Cameraman.Get().GetFOV()),
+				C.ViewportX / C.ViewportY,
+				C.Near, C.Far
+			)
+		);	
+
+		SHADER_C->Uniform("u_viewPos", C.Cameraman.Get().GetPosition());
+
+		SettLight(L.Position, L.Ambient, L.Difusse, L.Specular);		
+	}
+
 	void RendererGeometry::BeginScene(const PerspectiveCamera& camera, const glm::vec3& LightPos, const glm::vec2& viewport)
 	{
 		SHADER_C->Bind();
@@ -165,13 +197,7 @@ namespace MHelmet
 		SHADER_C->Uniform("u_light.specular", 1.0f, 1.0f, 1.0f);
 	}
 
-	void RendererGeometry::EndScene()
-	{
-		SHADER_C->Unbind();
-		SHADER_T->Unbind();
-		CT_SINGLE->Unbind();
-	}
-
+	
 	void RendererGeometry::DrawTriangle(const glm::vec3 position, const glm::vec3& size, const glm::vec3& rotate, const float& degrees)
 	{
 		glm::mat4 T_model = glm::mat4(1.0f);		 
@@ -262,6 +288,14 @@ namespace MHelmet
 
 		s_Data->VAO[teapot]->Bind();
 		RenderDrawCall::Draw(s_Data->VAO[teapot]);		
+	}
+
+
+	void RendererGeometry::EndScene()
+	{
+		SHADER_C->Unbind();
+		SHADER_T->Unbind();
+		CT_SINGLE->Unbind();
 	}
 
 

@@ -12,6 +12,7 @@ public:
 	using GeometryRender = RendererGeometry;
 
 	MyTFMDescent();	
+	~MyTFMDescent() { delete m_Scene; }
 
 	void Join() override;
 	void Free() override;
@@ -31,10 +32,19 @@ private:
 
 	// FrameBuffer textura en el frame de ImGui
 	RefCount<FrameBuffer> m_FrameBuffer;
-
+	 
 	// ECS Scene
-	RefCount<Scene> m_Scene;
+	Scene* m_Scene = nullptr;
 
+	// cameramans Ents
+	Entity Ent_CameraMan1;
+	Entity Ent_CameraMan2;
+
+	// light
+	Entity Ent_Light;
+
+	// Geometries Ents
+	Entity Ent_TeaPot;
 
 
 
@@ -56,7 +66,7 @@ private:
 	
 	/* ATRIBUTOS LUZ */
 	
-	glm::vec3 m_LightPos{ 5.0f, 8.0f, 14.5f };
+	glm::vec3 m_LightPos{ 0.0f, 8.0f, 14.5f };
 
 	/* ATRIBUTOS MODELO */
 	ModelTransform m_Model;
@@ -64,6 +74,6 @@ private:
 
 
 	// para IMGUI
-	glm::vec2 m_ViewPortSize;
+	//glm::vec2 m_ViewPortSize;
 
 };

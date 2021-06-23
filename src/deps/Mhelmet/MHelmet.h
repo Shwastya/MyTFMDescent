@@ -18,7 +18,7 @@
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLEBO.hpp";
 
 #include "engine/system/renderer/VAO.hpp"
-#include "engine/system/renderer/PerspectiveCamera.hpp"
+//#include "engine/system/renderer/PerspectiveCamera.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -37,6 +37,7 @@
 //#include "engine/system/geometry/sphere.hpp"
 //#include "engine/system/geometry/teapot.hpp"
 
+#include "engine/system/scene/Entity.hpp"
 
 
 /* No muy seguro de que sea el mejor lugar */

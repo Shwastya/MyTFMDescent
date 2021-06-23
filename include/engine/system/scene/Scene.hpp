@@ -5,20 +5,22 @@
 
 namespace MHelmet
 {
+	class Entity;
+
 	class Scene
 	{
 	public:
-		Scene();
+		Scene() = default;
 		~Scene();
 
-		entt::entity CreateEntity();
+		Entity CreateEntity(const std::string& name = "unnamed");
 
-		entt::registry& Reg() { return m_Registry;  }
  
 		void Update(DeltaTime dt);
 
 	private:
-		entt::registry m_Registry;
+
+		 entt::registry m_Registry;
 
 		friend class Entity; // le damos acceso amigo a la clase Entity
 

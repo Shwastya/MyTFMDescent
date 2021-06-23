@@ -3,8 +3,11 @@
 
 namespace MHelmet
 {
-	Entity::Entity(entt::entity manager, RefCount<Scene> scene)
-		: m_EntityManager(manager), m_Scene(scene)
+	Entity::Entity(entt::entity manager, Scene* scene)
+		: m_EntityWrap(manager), m_Scene(scene)
 	{
+	//	m_Scene = std::make_shared<Scene>;
+		//m_Scene = scene;
 	}
+	
 }
