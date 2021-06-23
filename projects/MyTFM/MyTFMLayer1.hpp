@@ -1,4 +1,5 @@
 #include <MHelmet.h>
+#include "SceneHierarchy.hpp"
 
 using namespace MHelmet;
 
@@ -12,7 +13,7 @@ public:
 	using GeometryRender = RendererGeometry;
 
 	MyTFMDescent();	
-	~MyTFMDescent() { delete m_Scene; }
+	~MyTFMDescent() {  }
 
 	void Join() override;
 	void Free() override;
@@ -34,17 +35,22 @@ private:
 	RefCount<FrameBuffer> m_FrameBuffer;
 	 
 	// ECS Scene
-	Scene* m_Scene = nullptr;
+	RefCount<Scene> m_Scene;
 
 	// cameramans Ents
 	Entity Ent_CameraMan1;
 	Entity Ent_CameraMan2;
+
+	bool m_PrimaryCam = true;	
 
 	// light
 	Entity Ent_Light;
 
 	// Geometries Ents
 	Entity Ent_TeaPot;
+
+	// panels
+	SceneHierarchy m_HierarchyPanel;
 
 
 

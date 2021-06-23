@@ -262,7 +262,8 @@ foreach(PROJECT ${PROJECT_LIST})
     message("Generating Project " ${PROJECT})
     
     #Create Directory and main.cpp
-    file(MAKE_DIRECTORY ${PROJECTS_PATH}/${PROJECT})   
+    file(MAKE_DIRECTORY ${PROJECTS_PATH}/${PROJECT}/Editor)
+     
 
     # List of files in project
     set(FILESP
@@ -270,6 +271,8 @@ foreach(PROJECT ${PROJECT_LIST})
         ${PROJECTS_PATH}/${PROJECT}/${PROJECT}.hpp
         ${PROJECTS_PATH}/${PROJECT}/${PROJECT}Layer1.cpp
         ${PROJECTS_PATH}/${PROJECT}/${PROJECT}Layer1.hpp
+        ${PROJECTS_PATH}/${PROJECT}/SceneHierarchy.cpp
+        ${PROJECTS_PATH}/${PROJECT}/SceneHierarchy.hpp
     )
 
     file(TOUCH ${FILESP})

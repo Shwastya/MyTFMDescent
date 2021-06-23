@@ -4,9 +4,7 @@
 #define H static_cast<float>(Engine::p().GetWindow().GetHeight())
 
 MyTFMDescent::MyTFMDescent() 
-    : NodeLayer("TestingLayer"),
-    m_CameraMan(glm::vec3(0.0f, 1.0f, 6.5f)),
-    m_Scene(nullptr)      
+    : NodeLayer("TestingLayer"), m_CameraMan(glm::vec3(0.0f, 1.0f, 6.5f))
 {
 	m_CameraMan.Speed(10.0f);	
    // m_ViewPortSize = glm::vec2{ (float)Engine::p().GetWindow().GetWidth(), (float)Engine::p().GetWindow().GetHeight() };    
@@ -24,7 +22,7 @@ void MyTFMDescent::Join()
 
     // Create scene ECS   
 
-    m_Scene = new Scene();
+    m_Scene = std::make_shared<Scene>();
 
     // ENTITIES
 
@@ -42,18 +40,19 @@ void MyTFMDescent::Join()
 
     
     // teapot
-    Ent_TeaPot = m_Scene->CreateEntity("Tea Pot");
+    Ent_TeaPot = m_Scene->CreateEntity("TeaPot");
     Ent_TeaPot.AddComponent<TransformComponent>();
     Ent_TeaPot.AddComponent<MaterialComponent>();
 
-    
-
+    // le damos el con
+    m_HierarchyPanel.SetContext(m_Scene);
 }
 
 void MyTFMDescent::Free() { }
 
 void MyTFMDescent::Update(DeltaTime dt) 
 {
+    glGetString(GL_RENDERER);
 
 	////////////////////// UPDATE ///////////////////////////////////  
 
@@ -151,21 +150,36 @@ void MyTFMDescent::ImGuiRender()
 
 
 
+    m_HierarchyPanel.OnImGuiRender();
+    
 
-    /* My ImGui Settings */
+
+    /* My ImGui SETTINGS */
     ImGui::Begin("Settings"); // begin 1
 
     if (Ent_TeaPot.HasComponent<MaterialComponent>())
     {
         ImGui::Separator();
-        ImGui::Text("%c", Ent_TeaPot.GetComponent<TagComponent>().Tag.c_str());
+        auto& EntityTag = Ent_TeaPot.GetComponent<TagComponent>().Tag;
+        ImGui::Text("%s", EntityTag.c_str());
 
         auto& teaPot_Ambient = Ent_TeaPot.GetComponent<MaterialComponent>().Ambient;
         ImGui::ColorEdit3("Square Color", glm::value_ptr(teaPot_Ambient)); // begin 2
     }
 
+    ImGui::NewLine();
+    ImGui::Text("Camera Settings");
+    // checkbox
+    if (ImGui::Checkbox("Editor Camera", &m_PrimaryCam))
+    {
+        Ent_CameraMan2.GetComponent<CameraManComponent>().Primary = !m_PrimaryCam;
+        Ent_CameraMan1.GetComponent<CameraManComponent>().Primary =  m_PrimaryCam;
+    }
+    auto& _near = Ent_CameraMan1.GetComponent<CameraManComponent>().Near;
+  
+    /* SCENE FRAME */
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-    ImGui::Begin("ViewPort");
+    ImGui::Begin("Scene Frame");
 
     /* FLAG */ // Si hay foco del mouse sobre el frame del window // no bloquees los eventos desde Event System     
    // m_IsViewportOnFocus = ImGui::IsWindowHovered(); // onfocus no pirula, pero hovered si     ;
@@ -185,14 +199,16 @@ void MyTFMDescent::ImGuiRender()
         Ent_CameraMan1.GetComponent<CameraManComponent>().ViewportY = viewportPanelSize.y;
     }
 
-    //if ((m_ViewPortSize.x != viewportPanelSize.x) || (m_ViewPortSize.y != viewportPanelSize.y))
-    //{
-    //    const uint32_t x = static_cast<uint32_t>(viewportPanelSize.x);
-    //    const uint32_t y = static_cast<uint32_t>(viewportPanelSize.y);
+    const float X2 = Ent_CameraMan2.GetComponent<CameraManComponent>().ViewportX;
+    const float Y2 = Ent_CameraMan2.GetComponent<CameraManComponent>().ViewportY;
 
-    //    m_ViewPortSize = { viewportPanelSize.x, viewportPanelSize.y };
-    //}
+    if ((X2 != viewportPanelSize.x) || (Y2 != viewportPanelSize.y))
+    {
+        Ent_CameraMan2.GetComponent<CameraManComponent>().ViewportX = viewportPanelSize.x;
+        Ent_CameraMan2.GetComponent<CameraManComponent>().ViewportY = viewportPanelSize.y;
+    }
 
+  
 
 
     uint32_t textureID = m_FrameBuffer->GetFBOTexture(); // FBO  

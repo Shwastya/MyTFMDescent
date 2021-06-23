@@ -22,7 +22,8 @@ namespace MHelmet
 
 		 entt::registry m_Registry;
 
-		friend class Entity; // le damos acceso amigo a la clase Entity
+		 friend class Entity;
+		 friend class SceneHierarchy;
 
 
 	};

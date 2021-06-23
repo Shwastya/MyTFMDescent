@@ -18,8 +18,5 @@ namespace MHelmet
 		virtual void SetViewPort(uint32_t x, uint32_t y, uint32_t w, uint32_t h) override;
 
 		virtual void Draw(const RefCount<VAO>& _VAO) override;
-
-	
-
 	};
 }

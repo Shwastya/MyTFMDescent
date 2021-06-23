@@ -26,10 +26,9 @@ namespace MHelmet
 			CORE_ERROR("Error initializing GLAD! {0}:", result);
 		}	
 
-		CORE_INFO("-------------System especification--------------");
+		CORE_INFO("------------------------------------------------");
 		CORE_INFO("GPU:    {}", glGetString(GL_RENDERER));
 		CORE_INFO("OpenGL: {}", glGetString(GL_VERSION));
-		CORE_WARN("OpenGL CORE PROFILE IS ENABLED !!");
 		CORE_INFO("------------------------------------------------");
 	}
 
