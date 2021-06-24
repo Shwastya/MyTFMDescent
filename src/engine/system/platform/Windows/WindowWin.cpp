@@ -54,6 +54,8 @@ namespace MHelmet
 			// GLFWmonitor -> opaque monitor object
 			// GLFWmonitor** glfwGetMonitors(int* count) // array de monitores conectados
 			
+			WARN("FullScreen?");
+
 			GLFWmonitor* PrimaryMonitor = glfwGetPrimaryMonitor();
 			const GLFWvidmode* m = glfwGetVideoMode(PrimaryMonitor);
 

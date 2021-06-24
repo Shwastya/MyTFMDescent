@@ -54,8 +54,7 @@ namespace MHelmet
 
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		const char* glsl_version = "#version 410";
-		ImGui_ImplOpenGL3_Init(glsl_version);
-		
+		ImGui_ImplOpenGL3_Init(glsl_version);		
 	}
 
 	void ImGuiLayer::Free()

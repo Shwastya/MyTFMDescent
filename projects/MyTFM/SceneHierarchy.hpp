@@ -14,10 +14,14 @@ namespace MHelmet
 		void SetContext(const RefCount<Scene>& context);
 
 		void OnImGuiRender();
+
 	private:
-		void DrawEntityNode(Entity entity);
+		void DrawNodes(Entity entity);
+		void DrawComponents(Entity entity);
+
 	private:
 		RefCount<Scene> m_Context;
+		Entity m_CollectionContext;
 
 	};
 }

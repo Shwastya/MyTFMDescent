@@ -29,7 +29,7 @@ private:
 
 	bool m_IsActivedImGui = true;
 	bool m_IsViewportOnFocus = false;
-	bool m_CameraMouse = true;
+	
 
 	// FrameBuffer textura en el frame de ImGui
 	RefCount<FrameBuffer> m_FrameBuffer;
@@ -38,7 +38,7 @@ private:
 	RefCount<Scene> m_Scene;
 
 	// cameramans Ents
-	Entity Ent_CameraMan1;
+	Entity Ent_CameraMan1; bool m_Editor_Cam_FirtsUse = true;
 	Entity Ent_CameraMan2;
 
 	bool m_PrimaryCam = true;	
@@ -58,25 +58,25 @@ private:
 
 
 	// Shader Library
-	ShaderLib m_S; 
-	RefCount<Shader> Shader;
+	//ShaderLib m_S; 
+	//RefCount<Shader> Shader;
 
-	RefCount<VAO> m_VAO;
+	//RefCount<VAO> m_VAO;
 	
 	
-	RefCount<Texture2D> m_Texture, m_AlphaTree;
+	//RefCount<Texture2D> m_Texture, m_AlphaTree;
 
-	RefCount<Texture2D> m_BoardTexture;
+	//RefCount<Texture2D> m_BoardTexture;
 
 	
 	
 	/* ATRIBUTOS LUZ */
 	
-	glm::vec3 m_LightPos{ 0.0f, 8.0f, 14.5f };
+	//glm::vec3 m_LightPos{ 0.0f, 8.0f, 14.5f };
 
 	/* ATRIBUTOS MODELO */
-	ModelTransform m_Model;
-	glm::vec3 m_ModelColor{ 1.0f, 0.0f, 0.5f };		// para shader color solo
+	//ModelTransform m_Model;
+	//glm::vec3 m_ModelColor{ 1.0f, 0.0f, 0.5f };		// para shader color solo
 
 
 	// para IMGUI

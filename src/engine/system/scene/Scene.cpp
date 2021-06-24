@@ -81,6 +81,7 @@ namespace MHelmet
 	Entity Scene::CreateEntity(const std::string& name)
 	{		
 		Entity e = { m_Registry.create(), this};
+		//e.AddComponent<>
 		e.AddComponent<TagComponent>(name);	
 		return e;
 	}

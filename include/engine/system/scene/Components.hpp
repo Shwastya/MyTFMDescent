@@ -9,7 +9,7 @@ namespace MHelmet
 		glm::vec3 T = glm::vec3(0.0f);
 		glm::vec3 R = glm::vec3(1.0f);
 		glm::vec3 S = glm::vec3(1.0f);
-		float Degrees = 0.0f;
+		float Degrees = 0.3f;
 
 		bool IsDirty = true;
 

@@ -131,7 +131,7 @@ namespace MHelmet
 
     void CameraMan::OnEvent(Event& e)
     {
-        if (e.GetEventType() == IsType::MH_MOUSE_MOVED && _Mouse)
+        if (e.GetEventType() == IsType::MH_MOUSE_MOVED)
         {
             MouseMoved((OnMouseMoved&)e);
         }
@@ -157,7 +157,7 @@ namespace MHelmet
         m_LastX = e.GetX();
         m_LastY = e.GetY();
 
-        m_Cam.HandleMouseMovement(Xoffset, Yoffset);
+        if (_Mouse) m_Cam.HandleMouseMovement(Xoffset, Yoffset);
         return false;
     }
 }

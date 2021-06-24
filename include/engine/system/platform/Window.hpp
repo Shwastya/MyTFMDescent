@@ -20,7 +20,7 @@ namespace MHelmet
 		WindowSpec(const std::string& title = "Mhelmet window", uint32_t W = 1920, uint32_t H = 1080)
 			: Title(title), 
 			  Size{ W, H },
-			  FullScreen(false),
+			  FullScreen(true),
 			  VSync(true) {}
 
 		std::string Title;

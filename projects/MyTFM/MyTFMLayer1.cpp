@@ -13,8 +13,9 @@ MyTFMDescent::MyTFMDescent()
 
 void MyTFMDescent::Join()
 {
+    
     // temporal 
-    m_BoardTexture = Texture2D::Create("../assets/textures/blue_blocks.jpg", Texture2D::Format::RGB);
+   // m_BoardTexture = Texture2D::Create("../assets/textures/blue_blocks.jpg", Texture2D::Format::RGB);
 
     // Framebuffer instancia y texture specs
     FBTextureProps fbspec{ Engine::p().GetWindow().GetWidth(), Engine::p().GetWindow().GetHeight() };
@@ -27,15 +28,17 @@ void MyTFMDescent::Join()
     // ENTITIES
 
     // CameraMans
-    Ent_CameraMan1 = m_Scene->CreateEntity("ImGuiFrame CameraMan");
+    Ent_CameraMan1 = m_Scene->CreateEntity("Camera1");
     Ent_CameraMan1.AddComponent<CameraManComponent>(glm::vec3(0.0f, 1.0f, 6.5f), W, H);
+  //  Ent_CameraMan2.GetComponent<CameraManComponent>().Cameraman._Mouse = false;
 
-    Ent_CameraMan2 = m_Scene->CreateEntity("ClipSpace CameraMan");
+
+    Ent_CameraMan2 = m_Scene->CreateEntity("Camera2");
     Ent_CameraMan2.AddComponent<CameraManComponent>(glm::vec3(0.0f, 1.0f, 6.5f), W, H);
     Ent_CameraMan2.GetComponent<CameraManComponent>().Primary = false;
 
     // Light
-    Ent_Light = m_Scene->CreateEntity("Scene Light");
+    Ent_Light = m_Scene->CreateEntity("LightScene");
     Ent_Light.AddComponent<LightComponent>();
 
     
@@ -148,10 +151,11 @@ void MyTFMDescent::ImGuiRender()
         ImGui::EndMenuBar();
     }
 
-
-
+    /*************************************/
+    ImGui::SetWindowFontScale(1.1f);
+    //ImGui::Dummy(ImVec2(6.0f, 20.0f));
     m_HierarchyPanel.OnImGuiRender();
-    
+    /****************************************/
 
 
     /* My ImGui SETTINGS */
@@ -223,19 +227,39 @@ void MyTFMDescent::ImGuiRender()
 
 void MyTFMDescent::OnEvent(Event& event) 
 {
-	if (m_CameraMouse) // m_CameraMan.OnEvent(event);
+	
+    if (Ent_CameraMan1.GetComponent<CameraManComponent>().Primary)
     {
-        if (Ent_CameraMan1.GetComponent<CameraManComponent>().Primary)
+        auto& cam = Ent_CameraMan1.GetComponent<CameraManComponent>();
+
+        if (m_Editor_Cam_FirtsUse)
         {
-            auto& cam = Ent_CameraMan1.GetComponent<CameraManComponent>();
-            if (cam.IsHovered) cam.Cameraman.OnEvent(event);
+            m_Editor_Cam_FirtsUse = false;
+
+            cam.Cameraman._Mouse = false;
         }
-        else
+        
+        if (cam.IsHovered)
         {
-            auto& cam = Ent_CameraMan2.GetComponent<CameraManComponent>();
-            if (cam.IsHovered) cam.Cameraman.OnEvent(event);            
+                
+            if (event.GetEventType() == IsType::MH_MOUSE_BUTTON_PRESSED) 
+            {
+                cam.Cameraman._Mouse = true;
+            }
+            if (event.GetEventType() == IsType::MH_MOUSE_BUTTON_RELEASED)
+            {
+                cam.Cameraman._Mouse = false;
+            }
+
+            cam.Cameraman.OnEvent(event);                
         }
     }
+    else
+    {
+        auto& cam = Ent_CameraMan2.GetComponent<CameraManComponent>();
+        if (cam.IsHovered) cam.Cameraman.OnEvent(event);            
+    }
+    
 
 
 	if (event.GetEventType() == IsType::MH_KEY_PRESSED)
@@ -247,10 +271,6 @@ void MyTFMDescent::OnEvent(Event& event)
 
         if (e.GetKeyCode() == MH_KEY_O)	m_IsActivedImGui = false;
         if (e.GetKeyCode() == MH_KEY_P)	m_IsActivedImGui = true;
-
-        if (e.GetKeyCode() == MH_KEY_M) m_CameraMouse = true;
-        if (e.GetKeyCode() == MH_KEY_N) m_CameraMouse = false;
-
 	}
 }
 

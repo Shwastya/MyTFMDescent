@@ -63,6 +63,15 @@ namespace MHelmet
 
 		// para que la clase hierarchy pueda recoger el entitywarp como uint32_t
 		operator uint32_t() const { return static_cast<uint32_t>(m_EntityWrap); }
+
+		bool operator==(const Entity& other) const 
+		{ 
+			return m_EntityWrap == other.m_EntityWrap && m_Scene == other.m_Scene;
+		}
+		bool operator!=(const Entity& other) const
+		{
+			return !(*this == other);
+		}
 	private:
 		Scene* m_Scene = nullptr;
 		entt::entity m_EntityWrap{ entt::null };

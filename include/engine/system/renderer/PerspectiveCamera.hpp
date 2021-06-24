@@ -58,8 +58,10 @@ namespace MHelmet
         float m_Fov;
 
     private:
-        float m_Speed = 3.5f;
+        float m_Speed = 13.5f;
         float m_Sensitivity = 0.1f;
+
+       
     };
 
 
@@ -90,7 +92,8 @@ namespace MHelmet
         PerspectiveCamera m_Cam;
         glm::vec3 m_InitalPosition;
 
-    private: // Mouse attributes        
+    private: // Mouse attributes
+       // bool m_mouseCapture = true;
         bool m_FirstMouse = true;
         float m_LastX = 0.0f;
         float m_LastY = 0.0f;        
