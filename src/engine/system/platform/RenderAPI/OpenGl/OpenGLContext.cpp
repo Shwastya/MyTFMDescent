@@ -27,8 +27,9 @@ namespace MHelmet
 		}	
 
 		CORE_INFO("------------------------------------------------");
-		CORE_INFO("GPU:    {}", glGetString(GL_RENDERER));
-		CORE_INFO("OpenGL: {}", glGetString(GL_VERSION));
+		CORE_INFO("GPU:         {}", glGetString(GL_VENDOR));
+		CORE_INFO("Renderer:    {}", glGetString(GL_RENDERER));
+		CORE_INFO("Version:     {}", glGetString(GL_VERSION));
 		CORE_INFO("------------------------------------------------");
 	}
 

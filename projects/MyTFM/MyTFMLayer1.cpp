@@ -156,20 +156,24 @@ void MyTFMDescent::ImGuiRender()
     //ImGui::Dummy(ImVec2(6.0f, 20.0f));
     m_HierarchyPanel.OnImGuiRender();
     /****************************************/
-
+    
 
     /* My ImGui SETTINGS */
     ImGui::Begin("Settings"); // begin 1
+    ImGui::NewLine();
+    ImGui::Text("GPU:      NVIDIA Corporation");
+    ImGui::Text("Renderer: NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2");
+    ImGui::Text("Version:  N4.6.0 NVIDIA 466.77");
+    ImGui::NewLine();
+    //if (Ent_TeaPot.HasComponent<MaterialComponent>())
+    //{
+    //    ImGui::Separator();
+    //    auto& EntityTag = Ent_TeaPot.GetComponent<TagComponent>().Tag;
+    //    ImGui::Text("%s", EntityTag.c_str());
 
-    if (Ent_TeaPot.HasComponent<MaterialComponent>())
-    {
-        ImGui::Separator();
-        auto& EntityTag = Ent_TeaPot.GetComponent<TagComponent>().Tag;
-        ImGui::Text("%s", EntityTag.c_str());
-
-        auto& teaPot_Ambient = Ent_TeaPot.GetComponent<MaterialComponent>().Ambient;
-        ImGui::ColorEdit3("Square Color", glm::value_ptr(teaPot_Ambient)); // begin 2
-    }
+    //    auto& teaPot_Ambient = Ent_TeaPot.GetComponent<MaterialComponent>().Ambient;
+    //    ImGui::ColorEdit3("Square Color", glm::value_ptr(teaPot_Ambient)); // begin 2
+    //}
 
     ImGui::NewLine();
     ImGui::Text("Camera Settings");
@@ -179,7 +183,7 @@ void MyTFMDescent::ImGuiRender()
         Ent_CameraMan2.GetComponent<CameraManComponent>().Primary = !m_PrimaryCam;
         Ent_CameraMan1.GetComponent<CameraManComponent>().Primary =  m_PrimaryCam;
     }
-    auto& _near = Ent_CameraMan1.GetComponent<CameraManComponent>().Near;
+   // auto& _near = Ent_CameraMan1.GetComponent<CameraManComponent>().Near;
   
     /* SCENE FRAME */
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });

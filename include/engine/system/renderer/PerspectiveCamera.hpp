@@ -40,6 +40,9 @@ namespace MHelmet
         void Left(float dt);
         void Right(float dt);
 
+        void  SetFov(float fov) { m_Fov = fov; }
+     
+
         void SetSpeed(float speed) { m_Speed = speed; };
         void SetSensitivity(float sens) { m_Sensitivity = sens; };       
 
@@ -83,6 +86,8 @@ namespace MHelmet
 
         void Speed(float speed) { m_Cam.SetSpeed(speed); }
         void Sensitivity(float Sensitivity) { m_Cam.SetSensitivity(Sensitivity); };
+
+        void SetFOV(float& fov) { m_Cam.SetFov(fov); }
 
         bool _Input  = true;
         bool _Mouse  = true;

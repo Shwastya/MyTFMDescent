@@ -78,9 +78,9 @@ namespace MHelmet
 
     void PerspectiveCamera::HandleMouseScroll(float yoffset)
     {
-        if (m_Fov >= 1.0f && m_Fov <= 45.0f) m_Fov -= yoffset;
-        if (m_Fov <= 1.0f) m_Fov = 1.0f;
-        if (m_Fov >= 45.0f) m_Fov = 45.0f;
+        if (m_Fov >= 0.1f && m_Fov <= 140.0f) m_Fov -= yoffset;
+        if (m_Fov <= 0.1f) m_Fov = 0.1f;
+        if (m_Fov >= 140.0f) m_Fov = 140.0f;
     }
 
     void PerspectiveCamera::Forward(float dt)
@@ -140,6 +140,7 @@ namespace MHelmet
         {
             OnMouseScrolled& event = (OnMouseScrolled&)e;
             m_Cam.HandleMouseScroll(event.GetYOffset());
+            
         }
     }
 

@@ -22,6 +22,7 @@ namespace MHelmet
 	private:
 		RefCount<Scene> m_Context;
 		Entity m_CollectionContext;
+		bool m_PrimaryCam = true;
 
 	};
 }

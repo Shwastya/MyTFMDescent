@@ -83,14 +83,71 @@ namespace MHelmet
 				ImGui::TreePop();
 			}
 			
-			auto& rotat = ent.GetComponent<TransformComponent>().R;
+			/*auto& rotat = ent.GetComponent<TransformComponent>().R;
 			auto& scale = ent.GetComponent<TransformComponent>().S;
 			ImGui::DragFloat3("Rotate", glm::value_ptr(rotat), 0.25f);		
-			ImGui::DragFloat3("Scale", glm::value_ptr(scale), 0.1f);
-
-			//ImGui::DragFloat("Degrees", (degrees), 0.1f);
-			
-			
+			ImGui::DragFloat3("Scale", glm::value_ptr(scale), 0.1f);*/
+			//ImGui::DragFloat("Degrees", (degrees), 0.1f);			
 		}
+		if (ent.HasComponent<CameraManComponent>())
+		{
+			
+			if (ImGui::TreeNodeEx((void*)typeid(CameraManComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Camera"))
+			{
+				auto& cameraComp = ent.GetComponent<CameraManComponent>();
+
+				if (cameraComp.Primary) WARN("HOLA SOY LA PRIMARIA");
+				else WARN("PUES YO NO LO SOY");
+				
+
+				float fov = ent.GetComponent<CameraManComponent>().Cameraman.Get().GetFOV();
+				static float FOV = 0.0f;
+				if (ImGui::DragFloat("Fov", &fov));
+				{
+					if (fov >= 0.1f && fov <= 100.0f) FOV = fov;
+					if (fov <= 0.1f) FOV = 0.1f;
+					if (fov >= 140.0f) FOV = 140.0f;
+					ent.GetComponent<CameraManComponent>().Cameraman.SetFOV(FOV);
+				}
+			
+
+				auto& Near = ent.GetComponent<CameraManComponent>().Near;
+				if (ImGui::DragFloat("Near", &Near));
+				ent.GetComponent<CameraManComponent>().Near = Near;
+
+				auto& Far = ent.GetComponent<CameraManComponent>().Far;
+				if (ImGui::DragFloat("Far", &Far));
+				ent.GetComponent<CameraManComponent>().Far = Far;
+				//ImGui::DragFloat3("Translate", glm::value_ptr(trans), 0.25f);
+
+				ImGui::TreePop();
+			}
+		}
+		if (ent.HasComponent<MaterialComponent>())
+		{
+			if (ImGui::TreeNodeEx((void*)typeid(MaterialComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Material Basic Phong"))
+			{
+				auto& ambient = ent.GetComponent<MaterialComponent>().Ambient;
+				ImGui::ColorEdit3("Ambient", glm::value_ptr(ambient));
+				
+
+				auto& difusse = ent.GetComponent<MaterialComponent>().Difusse;
+				ImGui::ColorEdit3("Difusse", glm::value_ptr(difusse));
+				
+
+				auto& specular = ent.GetComponent<MaterialComponent>().Specular;
+				ImGui::ColorEdit3("Specular", glm::value_ptr(specular));
+			
+
+				auto& Shininess = ent.GetComponent<MaterialComponent>().Shininess;
+				if (ImGui::DragInt("Shininess", &Shininess));
+				ent.GetComponent<MaterialComponent>().Shininess = Shininess;
+
+				ImGui::TreePop();
+			}
+
+
+		}
+		
 	}
 }

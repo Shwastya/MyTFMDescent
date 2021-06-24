@@ -32,6 +32,7 @@ namespace MHelmet
 		float ViewportX = 0.0f;
 		float ViewportY = 0.0f;
 
+		
 		float Near = 0.1f;
 		float Far = 100.0f;
 
