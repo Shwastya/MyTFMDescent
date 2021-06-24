@@ -45,7 +45,7 @@ namespace MHelmet
 		return layout;
 	}
 
-	static void SetMaterial(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const int& shininess)
+	void SetMaterial(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const int& shininess)
 	{
 		SHADER_C->Uniform("u_material.ambient", ambient);
 		SHADER_C->Uniform("u_material.diffuse", diffuse);
@@ -53,7 +53,7 @@ namespace MHelmet
 		SHADER_C->Uniform("u_material.shininess", shininess); 
 	}
 
-	static void SettLight(const glm::vec3& position, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
+	void SettLight(const glm::vec3& position, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
 	{
 		SHADER_C->Uniform("u_light.position", position);
 		SHADER_C->Uniform("u_light.ambient", ambient);
@@ -176,97 +176,57 @@ namespace MHelmet
 		SettLight(L.Position, L.Ambient, L.Difusse, L.Specular);		
 	}
 
-	void RendererGeometry::BeginScene(const PerspectiveCamera& camera, const glm::vec3& LightPos, const glm::vec2& viewport)
-	{
-		SHADER_C->Bind();
-
-		glm::mat4 view = glm::mat4(1.0f);
-		view = camera.GetViewMatrix();		
-
-		SHADER_C->Uniform("u_view", view);
-		
-		SHADER_C->Uniform("u_proj", glm::perspective(glm::radians(camera.GetFOV()), viewport.x / viewport.y, 0.1f, 100.0f));
-		// SHADER_C->Uniform("u_proj", glm::perspective(glm::radians(camera.GetFOV()), W_ / H_, 0.1f, 100.0f));
 	
-		SHADER_C->Uniform("u_viewPos", camera.GetPosition());
-
-		// LIGHT
-		SHADER_C->Uniform("u_light.position", LightPos);
-		SHADER_C->Uniform("u_light.ambient", 0.8f, 0.1f, 0.1f);
-		SHADER_C->Uniform("u_light.diffuse", 0.5f, 0.5f, 0.5f);
-		SHADER_C->Uniform("u_light.specular", 1.0f, 1.0f, 1.0f);
-	}
 
 	
-	void RendererGeometry::DrawTriangle(const glm::vec3 position, const glm::vec3& size, const glm::vec3& rotate, const float& degrees)
+	void RendererGeometry::DrawTriangle(const glm::mat4& trans, const MaterialComponent& m)
 	{
-		glm::mat4 T_model = glm::mat4(1.0f);		 
+		glm::mat4 model = trans;
 
-		T_model = glm::translate(T_model, position);
-		T_model = glm::rotate(T_model, degrees, rotate);
-		T_model = glm::scale(T_model, size);
+		SetMaterial(m.Ambient, m.Difusse, m.Specular, m.Shininess);
 
-		// ambient  // diffuse  // specular // sininess  
-		SetMaterial({ 0.7f, 0.5f, 0.4f }, { 0.7f, 0.5f, 0.4f }, { 0.5f, 0.5f, 0.5f }, 32);
-
-		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(T_model))));
-		SHADER_C->Uniform("u_model", T_model);
+		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(model))));
+		SHADER_C->Uniform("u_model", model);
 		  
 		s_Data->VAO[triangle]->Bind();
 		RenderDrawCall::Draw(s_Data->VAO[triangle]);
 	}
 
-	void RendererGeometry::DrawQuad(const glm::vec3 position, const glm::vec3& size, const glm::vec3& rotate, const float& degrees)
+	void RendererGeometry::DrawQuad(const glm::mat4& trans, const MaterialComponent& m)
 	{
-		glm::mat4 Q_model = glm::mat4(1.0f);
+		glm::mat4 model = trans;
 
-		Q_model = glm::translate(Q_model, position);
-		Q_model = glm::rotate(Q_model, degrees, rotate);
-		Q_model = glm::scale(Q_model, size);
+		SetMaterial(m.Ambient, m.Difusse, m.Specular, m.Shininess);
 
-
-		// ambient  // diffuse  // specular // sininess  
-		SetMaterial({ 0.7f, 0.5f, 0.4f }, { 0.7f, 0.5f, 0.4f }, { 0.5f, 0.5f, 0.5f }, 32);
-
-		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(Q_model))));
-		SHADER_C->Uniform("u_model", Q_model);
+		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(model))));
+		SHADER_C->Uniform("u_model", model);
 
 		s_Data->VAO[quad]->Bind();
 		RenderDrawCall::Draw(s_Data->VAO[quad]);
 	}	
 
-	void RendererGeometry::DrawCube(const glm::vec3 position, const glm::vec3& size, const glm::vec3& rotate, const float& degrees)
+	void RendererGeometry::DrawCube(const glm::mat4& trans, const MaterialComponent& m)
 	{
 		
-		glm::mat4 C_model = glm::mat4(1.0f);
+		glm::mat4 model = trans;
 
-		C_model = glm::translate(C_model, position);
-		C_model = glm::rotate(C_model, degrees, rotate);
-		C_model = glm::scale(C_model, size);
+		SetMaterial(m.Ambient, m.Difusse, m.Specular, m.Shininess);
 
-		// ambient  // diffuse  // specular // sininess  
-		SetMaterial({ 0.7f, 0.5f, 0.4f }, { 0.7f, 0.5f, 0.4f }, { 0.5f, 0.5f, 0.5f }, 32);
-
-		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(C_model))));
-		SHADER_C->Uniform("u_model", C_model);
+		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(model))));
+		SHADER_C->Uniform("u_model", model);
 
 		s_Data->VAO[cube]->Bind();
 		RenderDrawCall::Draw(s_Data->VAO[cube]);
 	}
 
-	void RendererGeometry::DrawSphere(const glm::vec3 position, const glm::vec3& size, const glm::vec3& rotate, const float& degrees)
+	void RendererGeometry::DrawSphere(const glm::mat4& trans, const MaterialComponent& m)
 	{		
-		glm::mat4 S_model = glm::mat4(1.0f);
+		glm::mat4 model = trans;
 
-		S_model = glm::translate(S_model, position);
-		S_model = glm::rotate(S_model, degrees, rotate);
-		S_model = glm::scale(S_model, size);
+		SetMaterial(m.Ambient, m.Difusse, m.Specular, m.Shininess);
 
-		// ambient  // diffuse  // specular // sininess  
-		SetMaterial({0.7f, 0.5f, 0.4f}, {0.7f, 0.5f, 0.4f}, {0.5f, 0.5f, 0.5f}, 32);
-		
-		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(S_model))));
-		SHADER_C->Uniform("u_model", S_model);		
+		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(model))));
+		SHADER_C->Uniform("u_model", model);
 
 		s_Data->VAO[sphere]->Bind();
 		RenderDrawCall::Draw(s_Data->VAO[sphere]);
@@ -275,14 +235,7 @@ namespace MHelmet
 	void RendererGeometry::DrawTeapot(const glm::mat4& trans, const MaterialComponent& m)
 	{
 		glm::mat4 model = trans;
-		
-	//	model = trans;
 
-		/*model = glm::translate(model, trans.T);
-		model = glm::rotate(model, trans.Degrees, trans.R);
-		model = glm::scale(model, trans.S);*/
-
-		// ambient  // diffuse  // specular // sininess  
 		SetMaterial(m.Ambient, m.Difusse, m.Specular, m.Shininess);
 
 		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(model))));

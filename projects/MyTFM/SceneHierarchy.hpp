@@ -19,10 +19,11 @@ namespace MHelmet
 		void DrawNodes(Entity entity);
 		void DrawComponents(Entity entity);
 
+	
+		void DrawComponentLight(Entity entity);
+
 	private:
 		RefCount<Scene> m_Context;
 		Entity m_CollectionContext;
-		//bool m_PrimaryCam = true;
-
 	};
 }

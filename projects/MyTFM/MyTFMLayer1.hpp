@@ -48,6 +48,7 @@ private:
 
 	// Geometries Ents
 	Entity Ent_TeaPot;
+	Entity Ent_Cube;
 
 	// panels
 	SceneHierarchy m_HierarchyPanel;

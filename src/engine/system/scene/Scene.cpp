@@ -105,16 +105,23 @@ namespace MHelmet
 						}
 					}
 				}
-			}
-
-			// geometries
+			}			
+					
 			auto group = m_Registry.group<TransformComponent>(entt::get<MaterialComponent>);
 			for (auto entity : group)
 			{
 				auto& [transform, material] = group.get<TransformComponent, MaterialComponent>(entity);
 
-				RendererGeometry::DrawTeapot(transform.GetTransform(), material);
-			}			
+				if (transform.ID == 0) // DRAW EMPTY Entity
+				{
+					material.Ambient  = glm::vec3(1.0f, 1.0f, 1.0f);
+					material.Difusse  = glm::vec3(1.0f, 0.829f, 0.8298f);
+					material.Specular = glm::vec3(0.296648f, 0.296648f, 0.296648f);
+					RendererGeometry::DrawSphere(transform.GetTransform(), material);
+				}
+				if (transform.ID == 1) RendererGeometry::DrawCube(transform.GetTransform(), material);
+				if (transform.ID == 2) RendererGeometry::DrawTeapot(transform.GetTransform(), material);				
+			}									
 		}
 		// END SCENE
 		RendererGeometry::EndScene();

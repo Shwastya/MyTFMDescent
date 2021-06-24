@@ -22,19 +22,18 @@ namespace MHelmet
 		static void ShutDown();
 
 		static void BeginScene(const CameraManComponent& camera, const LightComponent& light);
-		static void BeginScene(const PerspectiveCamera& camera, const glm::vec3& LightPos, const glm::vec2& viewport); // pasar struct de Light
 		static void EndScene();
 
 		// primitives
-		static void DrawTriangle(const glm::vec3 position, const glm::vec3& size = glm::vec3{ 1.0f }, const glm::vec3& rotate = glm::vec3{ 1.0f }, const float& degrees = 0.0f);
+		static void DrawTriangle(const glm::mat4& transform, const MaterialComponent& material);
 
-		static void DrawQuad(const glm::vec3 position,  const glm::vec3& size = glm::vec3{ 1.0f }, const glm::vec3& rotate = glm::vec3{ 1.0f }, const float& degrees = 0.0f);
+		static void DrawQuad(const glm::mat4& transform, const MaterialComponent& material);
 
 	
 
-		static void DrawCube(const glm::vec3 position,  const glm::vec3& size = glm::vec3{ 1.0f }, const glm::vec3& rotate = glm::vec3{ 1.0f }, const float& degrees = 0.0f);
+		static void DrawCube(const glm::mat4& transform, const MaterialComponent& material);
 
-		static void DrawSphere(const glm::vec3 position,  const glm::vec3& size = glm::vec3{ 1.0f }, const glm::vec3& rotate = glm::vec3{ 1.0f }, const float& degrees = 0.0f);
+		static void DrawSphere(const glm::mat4& transform, const MaterialComponent& material);
 		
 		static void DrawTeapot(const glm::mat4& transform, const MaterialComponent& material);
 

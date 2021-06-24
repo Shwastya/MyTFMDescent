@@ -39,11 +39,12 @@ namespace MHelmet
 	
 
 		bool IsDirty = true;
+		uint32_t ID;
 
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
-		TransformComponent(const glm::vec3& translation)
-			: T(translation) {}
+		TransformComponent(const glm::vec3& translation, const uint32_t id = 0)
+			: T(translation), ID(id) {}
 
 		glm::mat4 GetTransform() const
 		{
@@ -62,10 +63,10 @@ namespace MHelmet
 
 	struct LightComponent
 	{
-		glm::vec3 Position = glm::vec3{ 0.0f, 10.0f, 12.0f };
-		glm::vec3 Ambient = glm::vec3{ 0.3f, 0.3f, 0.3f };
-		glm::vec3 Difusse = glm::vec3{ 0.5f, 0.5f, 0.5f };
-		glm::vec3 Specular = glm::vec3{ 1.0f, 1.0f, 1.0f };
+		glm::vec3 Position = glm::vec3{ -3.0f, 4.0f, 1.0f };
+		glm::vec3 Ambient = glm::vec3{ 0.8f, 0.8f, 0.8f };
+		glm::vec3 Difusse = glm::vec3{ 1.0f, 1.0f, 1.0f };
+		glm::vec3 Specular = glm::vec3{ 0.8f, 0.8f, 0.8f };
 
 		bool IsDirty = true;
 
@@ -81,9 +82,9 @@ namespace MHelmet
 	
 	struct MaterialComponent // u_material.ambient
 	{
-		glm::vec3 Ambient  = glm::vec3{ 1.0f, 0.5f, 0.31f };
-		glm::vec3 Difusse  = glm::vec3{ 1.0f, 0.5f, 0.31f };
-		glm::vec3 Specular = glm::vec3{ 0.5f, 0.5f, 0.5f  };
+		glm::vec3 Ambient  = glm::vec3{ 0.5f, 0.0f, 0.0f };
+		glm::vec3 Difusse  = glm::vec3{ 0.5f, 0.0f, 0.0f };
+		glm::vec3 Specular = glm::vec3{ 0.7f, 0.6f, 0.6f };
 		int Shininess	   = 32;
 
 		bool IsDirty = true;
@@ -93,7 +94,7 @@ namespace MHelmet
 		MaterialComponent(const glm::vec3& ambient, const glm::vec3& difusse, const glm::vec3& specular, const int& shininess)
 			: Ambient(ambient), Difusse(difusse), Specular(specular), Shininess(shininess) {}
 
-		//operator glm::vec3& () { return Material; }
+		operator glm::vec3& () { return Ambient; }
 		//operator const glm::vec3& () { return Material; }
 	};
 

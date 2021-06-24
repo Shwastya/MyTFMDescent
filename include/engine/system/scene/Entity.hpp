@@ -25,8 +25,8 @@ namespace MHelmet
 			if (HasComponent<T>())
 			{
 				CORE_ERROR("Entity already has component!");
-				//break;
 			}
+			else
 			return m_Scene->m_Registry.emplace<T>(m_EntityWrap, std::forward<Args>(args)...);
 		}
 
@@ -36,10 +36,9 @@ namespace MHelmet
 			if (!HasComponent<T>())
 			{
 				CORE_ERROR("Not have component!");
-				//break;
-			}
-			
 
+			}
+			else
 			return m_Scene->m_Registry.get<T>(m_EntityWrap);
 		}
 
@@ -55,9 +54,10 @@ namespace MHelmet
 			if (!HasComponent<T>())
 			{
 				CORE_WARN("Not have component to remove!");
-				//break;
+				
 			}
-			m_Scene->m_Registry.remove<T>>(m_EntityWrap);
+			else
+			m_Scene->m_Registry.remove<T>(m_EntityWrap);
 		}
 		operator bool() const { return m_EntityWrap != entt::null; }
 	

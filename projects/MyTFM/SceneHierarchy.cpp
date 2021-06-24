@@ -1,12 +1,11 @@
 #include "SceneHierarchy.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui_internal.h>
-
+#include "engine/system/scene/Components.hpp"
 namespace MHelmet
 {
 	static void DrawVec3(const std::string& label, glm::vec3& values, float reset = 0.0f, float columnWidth = 100.0f)
 	{
-
 		ImGui::PushID(label.c_str()); // cada Vec3 control tiene un unico label
 		{
 			ImGui::Columns(2);
@@ -46,7 +45,6 @@ namespace MHelmet
 			ImGui::SameLine();
 			ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f"); // ## NO MUESTRA LABEL
 			ImGui::PopItemWidth();
-		//	ImGui::SameLine();
 			ImGui::PopStyleVar(); // final pop var
 			ImGui::Columns(1);
 		}
@@ -68,21 +66,17 @@ namespace MHelmet
 		
 		m_Context->m_Registry.each([&](auto IDentity)
 		{
-			//Entity  = m_Context->m_Registry.get<TagComponent>(entity);
 			Entity entity{ IDentity, m_Context.get() };
-			DrawNodes(entity);
-			//ImGui::Text("%s", t.Tag.c_str());
+			DrawNodes(entity);			
 		});
-				
-		//ImGui::End();
+
 
 		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) // click derecho en blank space
 		{
 			m_CollectionContext = {};
-			//WARN("CLICLK");
 		}
 
-		
+		// al pulsat boton emerge menu
 		if (ImGui::BeginPopupContextWindow(0, 1, false)) // TRIGGER al anyadir un item
 		{
 			if (ImGui::MenuItem("Create Empty Entity")) 
@@ -93,9 +87,40 @@ namespace MHelmet
 		ImGui::End();
 
 		ImGui::Begin("Properties");		
-		if (m_CollectionContext) 
+		//ImGui::NewLine();
+		if (m_CollectionContext)
+		{
 			DrawComponents(m_CollectionContext);
-		
+			ImGui::NewLine();
+			ImGui::Separator();
+			ImGui::NewLine();
+			if (ImGui::Button("Add Component"))	ImGui::OpenPopup("AddComponent"); // AddComponent ID 
+			 
+			if (ImGui::BeginPopup("AddComponent")) // if ID button
+			{
+				if (ImGui::MenuItem("Material"))
+				{
+					if (m_CollectionContext.HasComponent<CameraManComponent>()) 
+						WARN("The camera cannot have a material component!");
+					else
+					{
+						m_CollectionContext.AddComponent<MaterialComponent>();
+						ImGui::CloseCurrentPopup();
+					}
+				}
+				ImGui::EndPopup();
+			}
+		}		
+		ImGui::End();
+
+		ImGui::Begin("Scene Light");
+		m_Context->m_Registry.each([&](auto IDentity)
+		{
+			Entity entity{ IDentity, m_Context.get() };
+			if (entity.HasComponent<LightComponent>())
+				DrawComponentLight(entity);
+		});
+	
 		ImGui::End();
 	}
 
@@ -129,8 +154,8 @@ namespace MHelmet
 		{
 			//srand(time(NULL)); // one more hack // hash number
 			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow;
-			// intenta acceder al tag, si se ha destruido no existe
-			bool opened = ImGui::TreeNodeEx((void*)978657, flags, tag.c_str()); 
+			srand(time(NULL));
+			bool opened = ImGui::TreeNodeEx((void*)rand(), flags, tag.c_str()); 
 			if (opened)
 				ImGui::TreePop();
 			ImGui::TreePop();
@@ -138,30 +163,45 @@ namespace MHelmet
 
 		if (entityDeleted)
 		{
-			m_Context->DestroyEntity(ent);
-			if (m_CollectionContext == ent)
-				m_CollectionContext = {};
-		}
+			if (ent.HasComponent<CameraManComponent>()) WARN("Cameras cannot be deleted at the moment due to a bad approach in its components");
 		
+			else
+			{
+				m_Context->DestroyEntity(ent);
+				if (m_CollectionContext == ent)
+					m_CollectionContext = {};
+			}			
+		}		
 	}
+
+	// DRAWING COMPONENTS
 	void SceneHierarchy::DrawComponents(Entity ent)
 	{
 		auto& tag = ent.GetComponent<TagComponent>().Tag;
 
+		// DIBUJADO DE LABEL componente
 		char buffer[256];
 		memset(buffer, 0, sizeof(buffer));
 		strcpy_s(buffer, sizeof(buffer), tag.c_str());
+		ImGui::NewLine();
 		if (ImGui::InputText("Label", buffer, sizeof(buffer)))
 		{
-			tag = std::string(buffer);
+			tag = std::string(buffer); 
 		}
+		ImGui::NewLine();
+		const ImGuiTreeNodeFlags treenodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap;
 
 
-		if (ent.HasComponent<TransformComponent>())
+		// DIBUJADO DE TRANSFORM componente
+		const bool hasTransform = ent.HasComponent<TransformComponent>();
+		
+		if (hasTransform)
 		{
-
-			// collapsa paneles y ayuda a organizarlo un poco mejor
-			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
+			ImGui::Separator();
+			ImGui::NewLine();
+			bool open = ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), treenodeFlags, "Transform");	
+			
+			if (open)
 			{
 				auto& TC = ent.GetComponent<TransformComponent>();
 				DrawVec3("Translation", TC.T);
@@ -170,18 +210,23 @@ namespace MHelmet
 				TC.R = glm::radians(rotation);
 				DrawVec3("Scale", TC.S, 1.0f);
 				ImGui::TreePop();
+
+				if (ent.HasComponent<LightComponent>())
+				{
+					ent.GetComponent<LightComponent>().Position = TC.T;
+				}
 			}
-			
-			/*auto& rotat = ent.GetComponent<TransformComponent>().R;
-			auto& scale = ent.GetComponent<TransformComponent>().S;
-			ImGui::DragFloat3("Rotate", glm::value_ptr(rotat), 0.25f);		
-			ImGui::DragFloat3("Scale", glm::value_ptr(scale), 0.1f);*/
-			//ImGui::DragFloat("Degrees", (degrees), 0.1f);			
+			ImGui::NewLine();	
 		}
-		if (ent.HasComponent<CameraManComponent>())
+	
+		// DIBUJADO DE CAMARA componente
+		const bool hasCamera = ent.HasComponent<CameraManComponent>();
+		
+		if (hasCamera)
 		{
-			
-			if (ImGui::TreeNodeEx((void*)typeid(CameraManComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Camera"))
+			ImGui::Separator();
+			ImGui::NewLine();
+			if (ImGui::TreeNodeEx((void*)typeid(CameraManComponent).hash_code(), treenodeFlags, "Camera"))
 			{
 				
 				float fov = ent.GetComponent<CameraManComponent>().Cameraman.Get().GetFOV();
@@ -207,9 +252,39 @@ namespace MHelmet
 				ImGui::TreePop();
 			}
 		}
-		if (ent.HasComponent<MaterialComponent>())
+		
+		// DIBUJADO DE MATERIAL componente
+		const bool hasMaterial = ent.HasComponent<MaterialComponent>();		
+	
+		if (hasMaterial)
 		{
-			if (ImGui::TreeNodeEx((void*)typeid(MaterialComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Material Basic Phong"))
+			ImGui::Separator();
+			ImGui::NewLine();
+			bool open = ImGui::TreeNodeEx((void*)typeid(MaterialComponent).hash_code(), treenodeFlags, "Material");
+
+			ImGui::SameLine();
+			if (ImGui::Button("-"))
+			{
+				ImGui::OpenPopup("ComponentSettings");
+			}
+
+			bool remove = false;
+
+			ImGui::NewLine();
+
+			if (ImGui::BeginPopup("ComponentSettings"))
+			{
+				
+				if (ImGui::MenuItem("Remove component"))
+				{
+					remove = true;
+				}
+				ImGui::EndPopup();
+			}
+
+
+
+			if (open)
 			{
 				auto& ambient = ent.GetComponent<MaterialComponent>().Ambient;
 				ImGui::ColorEdit3("Ambient", glm::value_ptr(ambient));
@@ -229,9 +304,33 @@ namespace MHelmet
 
 				ImGui::TreePop();
 			}
-
-
+			if (remove) ent.RemoveComponent<MaterialComponent>();
 		}
 		
+	}
+
+	void SceneHierarchy::DrawComponentLight(Entity ent)
+	{
+		const bool hasLight = ent.HasComponent<LightComponent>();
+		if (hasLight)
+		{
+			ImGui::NewLine();			
+			ImGui::Text("Shader Properties:  "); 
+			ImGui::NewLine();
+
+			auto& ambient = ent.GetComponent<LightComponent>().Ambient;
+			ImGui::DragFloat3("Ambient", glm::value_ptr(ambient), 0.25f);
+			
+
+
+			auto& difusse = ent.GetComponent<LightComponent>().Difusse;
+			ImGui::DragFloat3("Difusse", glm::value_ptr(difusse), 0.25f);
+
+
+			auto& specular = ent.GetComponent<LightComponent>().Specular;
+			ImGui::DragFloat3("Specular", glm::value_ptr(specular), 0.25f);
+			ImGui::NewLine();
+			ImGui::Separator();
+		}
 	}
 }
