@@ -1,38 +1,19 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include "engine/system/renderer/PerspectiveCamera.hpp"
 
 namespace MHelmet
 {	
-	struct TransformComponent
-	{
-		glm::vec3 T = glm::vec3(0.0f);
-		glm::vec3 R = glm::vec3(1.0f);
-		glm::vec3 S = glm::vec3(1.0f);
-		float Degrees = 0.3f;
-
-		bool IsDirty = true;
-
-		TransformComponent() = default;
-		TransformComponent(const TransformComponent&) = default;
-		TransformComponent(const glm::mat4& transform, const glm::vec3& _t, const glm::vec3& _r, const glm::vec3& _s)
-			: T(_t), R(_r), S(_s) {}
-
-		//operator glm::mat4& () { return Transform; }
-		//operator const glm::mat4& () { return Transform; }
-
-	};
 
 	struct CameraManComponent
 	{
+		CameraMan Cameraman;
 
-
-		CameraMan Cameraman = glm::vec3(0.0f, 1.0f, 6.5f);
-		
 		float ViewportX = 0.0f;
 		float ViewportY = 0.0f;
 
-		
+
 		float Near = 0.1f;
 		float Far = 100.0f;
 
@@ -44,13 +25,40 @@ namespace MHelmet
 
 		CameraManComponent() = default;
 		CameraManComponent(const CameraManComponent&) = default;
-		CameraManComponent(const CameraMan& _camera, const float viewport_X, const float viewport_Y, const float& _near = 0.1f, const float& _far = 100.0f)
-			: Cameraman(_camera), ViewportX(viewport_X), ViewportY(viewport_Y), Near(_near), Far(_far)  {}
-
-		//operator glm::vec3& () { return Material; }
-		//operator const CameraMan& () { return Cameraman; }
+		CameraManComponent(const CameraMan& _camera = glm::vec3(0.0f, 1.0f, 6.5f), const float viewport_X = 0.0f, const float viewport_Y = 0.0f, const float& _near = 0.1f, const float& _far = 100.0f)
+			: Cameraman(_camera), ViewportX(viewport_X), ViewportY(viewport_Y), Near(_near), Far(_far) {}
 
 	};
+
+
+	struct TransformComponent
+	{
+		glm::vec3 T = glm::vec3(0.0f, 0.0f, 0.0f);
+		glm::vec3 R = glm::vec3(0.0f, 0.0f, 0.0f);
+		glm::vec3 S = glm::vec3(1.0f, 1.0f, 1.0f);
+	
+
+		bool IsDirty = true;
+
+		TransformComponent() = default;
+		TransformComponent(const TransformComponent&) = default;
+		TransformComponent(const glm::vec3& translation)
+			: T(translation) {}
+
+		glm::mat4 GetTransform() const
+		{
+			glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), R.x, { 1, 0, 0 })
+				* glm::rotate(glm::mat4(1.0f), R.x, { 0, 1, 0 })
+				* glm::rotate(glm::mat4(1.0f), R.z, { 0, 0, 1 });
+
+			return  glm::translate(glm::mat4(1.0f), T) * rotation * glm::scale(glm::mat4(1.0f), S);
+		}
+
+	};
+
+
+
+	
 
 	struct LightComponent
 	{

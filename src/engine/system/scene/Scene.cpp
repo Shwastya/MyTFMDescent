@@ -119,7 +119,7 @@ namespace MHelmet
 			{
 				auto& [transform, material] = group.get<TransformComponent, MaterialComponent>(entity);
 
-				RendererGeometry::DrawTeapot(transform, material);
+				RendererGeometry::DrawTeapot(transform.GetTransform(), material);
 			}			
 		}
 		// END SCENE

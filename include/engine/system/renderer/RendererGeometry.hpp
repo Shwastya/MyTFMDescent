@@ -36,7 +36,7 @@ namespace MHelmet
 
 		static void DrawSphere(const glm::vec3 position,  const glm::vec3& size = glm::vec3{ 1.0f }, const glm::vec3& rotate = glm::vec3{ 1.0f }, const float& degrees = 0.0f);
 		
-		static void DrawTeapot(const TransformComponent& transform, const MaterialComponent& material);
+		static void DrawTeapot(const glm::mat4& transform, const MaterialComponent& material);
 
 
 

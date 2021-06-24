@@ -25,7 +25,7 @@ public:
 	void OnEvent(Event& event) override;
 
 private:
-	CameraMan m_CameraMan;
+	//CameraMan m_CameraMan;
 
 	bool m_IsActivedImGui = true;
 	bool m_IsViewportOnFocus = false;

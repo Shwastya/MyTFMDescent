@@ -272,13 +272,15 @@ namespace MHelmet
 		RenderDrawCall::Draw(s_Data->VAO[sphere]);
 	}	
 
-	void RendererGeometry::DrawTeapot(const TransformComponent& trans, const MaterialComponent& m)
+	void RendererGeometry::DrawTeapot(const glm::mat4& trans, const MaterialComponent& m)
 	{
-		glm::mat4 model = glm::mat4(1.0f);
+		glm::mat4 model = trans;
+		
+	//	model = trans;
 
-		model = glm::translate(model, trans.T);
+		/*model = glm::translate(model, trans.T);
 		model = glm::rotate(model, trans.Degrees, trans.R);
-		model = glm::scale(model, trans.S);
+		model = glm::scale(model, trans.S);*/
 
 		// ambient  // diffuse  // specular // sininess  
 		SetMaterial(m.Ambient, m.Difusse, m.Specular, m.Shininess);

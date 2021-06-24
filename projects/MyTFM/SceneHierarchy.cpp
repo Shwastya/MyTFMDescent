@@ -1,8 +1,58 @@
 #include "SceneHierarchy.hpp"
 #include <glm/gtc/type_ptr.hpp>
+#include <imgui_internal.h>
 
 namespace MHelmet
 {
+	static void DrawVec3(const std::string& label, glm::vec3& values, float reset = 0.0f, float columnWidth = 100.0f)
+	{
+
+		ImGui::PushID(label.c_str()); // cada Vec3 control tiene un unico label
+		{
+			ImGui::Columns(2);
+			ImGui::SetColumnWidth(0, columnWidth);
+			ImGui::Text(label.c_str());
+			ImGui::NextColumn();
+			ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+			float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0;
+			ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
+			// colores de los botones
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2, 1.0f });
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+			if (ImGui::Button("X", buttonSize)) values.x = reset;
+			ImGui::PopStyleColor(3);
+			ImGui::SameLine();
+			ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.2f"); // ## NO MUESTRA LABEL
+			ImGui::PopItemWidth();
+			ImGui::SameLine();
+			// colores de los botones
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.3f, 0.8f, 0.3, 1.0f });
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.3f, 0.7f, 0.2f, 1.0f });
+			if (ImGui::Button("Y", buttonSize)) values.y = reset;
+			ImGui::PopStyleColor(3);
+			ImGui::SameLine();
+			ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f"); // ## NO MUESTRA LABEL
+			ImGui::PopItemWidth();
+			ImGui::SameLine();
+			// colores de los botones
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.2f, 0.35f, 0.9, 1.0f });
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
+			if (ImGui::Button("Z", buttonSize)) values.z = reset;
+			ImGui::PopStyleColor(3);
+			ImGui::SameLine();
+			ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f"); // ## NO MUESTRA LABEL
+			ImGui::PopItemWidth();
+		//	ImGui::SameLine();
+			ImGui::PopStyleVar(); // final pop var
+			ImGui::Columns(1);
+		}
+		ImGui::PopID();
+	}
+
 	SceneHierarchy::SceneHierarchy(const RefCount<Scene>& context) { SetContext(context); }
 
 	void SceneHierarchy::SetContext(const RefCount<Scene>& context)	{ m_Context = context;}
@@ -77,9 +127,12 @@ namespace MHelmet
 			// collapsa paneles y ayuda a organizarlo un poco mejor
 			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
 			{
-				auto& trans = ent.GetComponent<TransformComponent>().T;
-				ImGui::DragFloat3("Translate", glm::value_ptr(trans), 0.25f);
-
+				auto& TC = ent.GetComponent<TransformComponent>();
+				DrawVec3("Translation", TC.T);
+				glm::vec3 rotation = glm::degrees(TC.R);
+				DrawVec3("Rotation", rotation);
+				TC.R = glm::radians(rotation);
+				DrawVec3("Scale", TC.S, 1.0f);
 				ImGui::TreePop();
 			}
 			

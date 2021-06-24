@@ -3,26 +3,15 @@
 #define W static_cast<float>(Engine::p().GetWindow().GetWidth())
 #define H static_cast<float>(Engine::p().GetWindow().GetHeight())
 
-MyTFMDescent::MyTFMDescent() 
-    : NodeLayer("TestingLayer"), m_CameraMan(glm::vec3(0.0f, 1.0f, 6.5f))
-{
-	m_CameraMan.Speed(10.0f);	
-   // m_ViewPortSize = glm::vec2{ (float)Engine::p().GetWindow().GetWidth(), (float)Engine::p().GetWindow().GetHeight() };    
-}
-
+MyTFMDescent::MyTFMDescent() : NodeLayer("TestingLayer") {}
 
 void MyTFMDescent::Join()
 {
-    
-    // temporal 
-   // m_BoardTexture = Texture2D::Create("../assets/textures/blue_blocks.jpg", Texture2D::Format::RGB);
-
     // Framebuffer instancia y texture specs
     FBTextureProps fbspec{ Engine::p().GetWindow().GetWidth(), Engine::p().GetWindow().GetHeight() };
     m_FrameBuffer = FrameBuffer::Create(fbspec);
 
     // Create scene ECS   
-
     m_Scene = std::make_shared<Scene>();
 
     // ENTITIES
@@ -30,8 +19,6 @@ void MyTFMDescent::Join()
     // CameraMans
     Ent_CameraMan1 = m_Scene->CreateEntity("Camera1");
     Ent_CameraMan1.AddComponent<CameraManComponent>(glm::vec3(0.0f, 1.0f, 6.5f), W, H);
-  //  Ent_CameraMan2.GetComponent<CameraManComponent>().Cameraman._Mouse = false;
-
 
     Ent_CameraMan2 = m_Scene->CreateEntity("Camera2");
     Ent_CameraMan2.AddComponent<CameraManComponent>(glm::vec3(0.0f, 1.0f, 6.5f), W, H);
@@ -54,28 +41,15 @@ void MyTFMDescent::Join()
 void MyTFMDescent::Free() { }
 
 void MyTFMDescent::Update(DeltaTime dt) 
-{
-    glGetString(GL_RENDERER);
-
-	////////////////////// UPDATE ///////////////////////////////////  
-
-    // update Camera
-    if (m_IsViewportOnFocus) m_CameraMan.Update(dt);
-
-    // FBO update
+{ 
     m_FrameBuffer->Bind();
+    {
+        RenderDrawCall::ClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+        RenderDrawCall::clear();
 
-    RenderDrawCall::ClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-    RenderDrawCall::clear();    
-
-    ////////////////////// RENDER ///////////////////////////////////
-
-	{		
-       m_Scene->Update(dt);        
+        m_Scene->Update(dt);
     }
-
-    m_FrameBuffer->Unbind();
-	
+    m_FrameBuffer->Unbind();	
 }
 
 void MyTFMDescent::ImGuiRender()
@@ -152,30 +126,20 @@ void MyTFMDescent::ImGuiRender()
     }
 
     /*************************************/
-   // ImGui::SetWindowFontScale(1.1f);
-    //ImGui::Dummy(ImVec2(6.0f, 20.0f));
     m_HierarchyPanel.OnImGuiRender();
-    /****************************************/
+    /*************************************/
     
 
     /* My ImGui SETTINGS */
-    ImGui::Begin("Settings"); // begin 1
+    ImGui::Begin("Specifications:"); // begin 1
     ImGui::NewLine();
     ImGui::Text("GPU:      NVIDIA Corporation");
     ImGui::Text("Renderer: NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2");
     ImGui::Text("Version:  N4.6.0 NVIDIA 466.77");
     ImGui::NewLine();
-    //if (Ent_TeaPot.HasComponent<MaterialComponent>())
-    //{
-    //    ImGui::Separator();
-    //    auto& EntityTag = Ent_TeaPot.GetComponent<TagComponent>().Tag;
-    //    ImGui::Text("%s", EntityTag.c_str());
+ 
 
-    //    auto& teaPot_Ambient = Ent_TeaPot.GetComponent<MaterialComponent>().Ambient;
-    //    ImGui::ColorEdit3("Square Color", glm::value_ptr(teaPot_Ambient)); // begin 2
-    //}
-
-    ImGui::NewLine();
+   // ImGui::NewLine();
     ImGui::Text("Active camera");
     // checkbox
     if (ImGui::Checkbox("Editor Camera", &m_PrimaryCam))
@@ -183,17 +147,15 @@ void MyTFMDescent::ImGuiRender()
         Ent_CameraMan2.GetComponent<CameraManComponent>().Primary = !m_PrimaryCam;
         Ent_CameraMan1.GetComponent<CameraManComponent>().Primary =  m_PrimaryCam;
     }
-   // auto& _near = Ent_CameraMan1.GetComponent<CameraManComponent>().Near;
   
     /* SCENE FRAME */
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
     ImGui::Begin("Scene Frame");
 
-    /* FLAG */ // Si hay foco del mouse sobre el frame del window // no bloquees los eventos desde Event System     
-   // m_IsViewportOnFocus = ImGui::IsWindowHovered(); // onfocus no pirula, pero hovered si     ;
+    /* FLAG */ // Si hay foco del mouse sobre el frame del window // no bloquees los eventos desde Event System
     Ent_CameraMan1.GetComponent<CameraManComponent>().IsHovered = ImGui::IsWindowHovered();
                                     
-                                                    /*-----*/
+                                             
         
     /* FLAG */ // Si cambia el ViewPort del frameImGui donde esta la textura de la escena
     ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
@@ -214,9 +176,7 @@ void MyTFMDescent::ImGuiRender()
     {
         Ent_CameraMan2.GetComponent<CameraManComponent>().ViewportX = viewportPanelSize.x;
         Ent_CameraMan2.GetComponent<CameraManComponent>().ViewportY = viewportPanelSize.y;
-    }
-
-  
+    }  
 
 
     uint32_t textureID = m_FrameBuffer->GetFBOTexture(); // FBO  
@@ -263,8 +223,6 @@ void MyTFMDescent::OnEvent(Event& event)
         auto& cam = Ent_CameraMan2.GetComponent<CameraManComponent>();
         if (cam.IsHovered) cam.Cameraman.OnEvent(event);            
     }
-    
-
 
 	if (event.GetEventType() == IsType::MH_KEY_PRESSED)
 	{
@@ -277,5 +235,3 @@ void MyTFMDescent::OnEvent(Event& event)
         if (e.GetKeyCode() == MH_KEY_P)	m_IsActivedImGui = true;
 	}
 }
-
-// float degrees = Engine::GetTime() * glm::radians(20.0f);
