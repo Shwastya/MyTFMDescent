@@ -94,12 +94,7 @@ namespace MHelmet
 			
 			if (ImGui::TreeNodeEx((void*)typeid(CameraManComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Camera"))
 			{
-				auto& cameraComp = ent.GetComponent<CameraManComponent>();
-
-				if (cameraComp.Primary) WARN("HOLA SOY LA PRIMARIA");
-				else WARN("PUES YO NO LO SOY");
 				
-
 				float fov = ent.GetComponent<CameraManComponent>().Cameraman.Get().GetFOV();
 				static float FOV = 0.0f;
 				if (ImGui::DragFloat("Fov", &fov));

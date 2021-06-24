@@ -152,7 +152,7 @@ void MyTFMDescent::ImGuiRender()
     }
 
     /*************************************/
-    ImGui::SetWindowFontScale(1.1f);
+   // ImGui::SetWindowFontScale(1.1f);
     //ImGui::Dummy(ImVec2(6.0f, 20.0f));
     m_HierarchyPanel.OnImGuiRender();
     /****************************************/
@@ -176,7 +176,7 @@ void MyTFMDescent::ImGuiRender()
     //}
 
     ImGui::NewLine();
-    ImGui::Text("Camera Settings");
+    ImGui::Text("Active camera");
     // checkbox
     if (ImGui::Checkbox("Editor Camera", &m_PrimaryCam))
     {
