@@ -31,7 +31,7 @@ void MyTFMDescent::Join()
     
     // teapot
     Ent_TeaPot = m_Scene->CreateEntity("TeaPot");
-    Ent_TeaPot.AddComponent<TransformComponent>();
+   //Ent_TeaPot.AddComponent<TransformComponent>();
     Ent_TeaPot.AddComponent<MaterialComponent>();
 
     // le damos el con
@@ -130,14 +130,13 @@ void MyTFMDescent::ImGuiRender()
     /*************************************/
     
 
-    /* My ImGui SETTINGS */
+    /* My ImGui SETTINGS */ 
     ImGui::Begin("Specifications:"); // begin 1
     ImGui::NewLine();
     ImGui::Text("GPU:      NVIDIA Corporation");
     ImGui::Text("Renderer: NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2");
     ImGui::Text("Version:  N4.6.0 NVIDIA 466.77");
-    ImGui::NewLine();
- 
+    ImGui::NewLine(); 
 
    // ImGui::NewLine();
     ImGui::Text("Active camera");
@@ -154,9 +153,7 @@ void MyTFMDescent::ImGuiRender()
 
     /* FLAG */ // Si hay foco del mouse sobre el frame del window // no bloquees los eventos desde Event System
     Ent_CameraMan1.GetComponent<CameraManComponent>().IsHovered = ImGui::IsWindowHovered();
-                                    
-                                             
-        
+    
     /* FLAG */ // Si cambia el ViewPort del frameImGui donde esta la textura de la escena
     ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 
@@ -178,7 +175,6 @@ void MyTFMDescent::ImGuiRender()
         Ent_CameraMan2.GetComponent<CameraManComponent>().ViewportY = viewportPanelSize.y;
     }  
 
-
     uint32_t textureID = m_FrameBuffer->GetFBOTexture(); // FBO  
     ImGui::Image((void*)textureID, ImVec2{ viewportPanelSize.x, viewportPanelSize.y}, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
@@ -199,21 +195,16 @@ void MyTFMDescent::OnEvent(Event& event)
         if (m_Editor_Cam_FirtsUse)
         {
             m_Editor_Cam_FirtsUse = false;
-
             cam.Cameraman._Mouse = false;
         }
         
         if (cam.IsHovered)
-        {
-                
-            if (event.GetEventType() == IsType::MH_MOUSE_BUTTON_PRESSED) 
-            {
+        {                
+            if (event.GetEventType() == IsType::MH_MOUSE_BUTTON_PRESSED)             
                 cam.Cameraman._Mouse = true;
-            }
-            if (event.GetEventType() == IsType::MH_MOUSE_BUTTON_RELEASED)
-            {
-                cam.Cameraman._Mouse = false;
-            }
+            
+            if (event.GetEventType() == IsType::MH_MOUSE_BUTTON_RELEASED)            
+                cam.Cameraman._Mouse = false;            
 
             cam.Cameraman.OnEvent(event);                
         }

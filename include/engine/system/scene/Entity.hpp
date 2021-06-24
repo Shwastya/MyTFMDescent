@@ -60,8 +60,8 @@ namespace MHelmet
 			m_Scene->m_Registry.remove<T>>(m_EntityWrap);
 		}
 		operator bool() const { return m_EntityWrap != entt::null; }
-
-		// para que la clase hierarchy pueda recoger el entitywarp como uint32_t
+	
+		operator entt::entity() const { return m_EntityWrap; }
 		operator uint32_t() const { return static_cast<uint32_t>(m_EntityWrap); }
 
 		bool operator==(const Entity& other) const 
@@ -75,6 +75,8 @@ namespace MHelmet
 	private:
 		Scene* m_Scene = nullptr;
 		entt::entity m_EntityWrap{ entt::null };
+		
+		
 		
 	};
 }

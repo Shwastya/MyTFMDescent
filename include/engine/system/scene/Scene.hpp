@@ -14,6 +14,7 @@ namespace MHelmet
 		~Scene();
 
 		Entity CreateEntity(const std::string& name = "unnamed");
+		void DestroyEntity(Entity entity);
 
  
 		void Update(DeltaTime dt);

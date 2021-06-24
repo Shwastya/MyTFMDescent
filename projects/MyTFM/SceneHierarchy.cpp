@@ -65,27 +65,37 @@ namespace MHelmet
 	{
 		
 		ImGui::Begin("Hierarchy");
+		
+		m_Context->m_Registry.each([&](auto IDentity)
 		{
-			m_Context->m_Registry.each([&](auto IDentity)
-			{
-				//Entity  = m_Context->m_Registry.get<TagComponent>(entity);
-				Entity entity{ IDentity, m_Context.get() };
-				DrawNodes(entity);
-				//ImGui::Text("%s", t.Tag.c_str());
-			});
-		}		
+			//Entity  = m_Context->m_Registry.get<TagComponent>(entity);
+			Entity entity{ IDentity, m_Context.get() };
+			DrawNodes(entity);
+			//ImGui::Text("%s", t.Tag.c_str());
+		});
+				
+		//ImGui::End();
+
+		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) // click derecho en blank space
+		{
+			m_CollectionContext = {};
+			//WARN("CLICLK");
+		}
+
+		
+		if (ImGui::BeginPopupContextWindow(0, 1, false)) // TRIGGER al anyadir un item
+		{
+			if (ImGui::MenuItem("Create Empty Entity")) 
+				m_Context->CreateEntity("Empty Entity");
+			ImGui::EndPopup();
+
+		}
 		ImGui::End();
 
-		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered)
-		{
-
-		}
-
-
-		ImGui::Begin("Properties");
-		{
-			if (m_CollectionContext) DrawComponents(m_CollectionContext);
-		}
+		ImGui::Begin("Properties");		
+		if (m_CollectionContext) 
+			DrawComponents(m_CollectionContext);
+		
 		ImGui::End();
 	}
 
@@ -101,11 +111,37 @@ namespace MHelmet
 		
 		// 64_t para puntero void en sistemas x64
 		//bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
-		bool opened = ImGui::TreeNodeEx((void*)(uint32_t)ent, flags, tag.c_str());
+		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)ent, flags, tag.c_str());
+		if (ImGui::IsItemClicked())
+		{
+			m_CollectionContext = ent;
+		}
+
+		bool entityDeleted = false;
+		if (ImGui::BeginPopupContextItem()) 
+		{
+			if (ImGui::MenuItem("Delete Entity")) 
+				 entityDeleted = true;
+			ImGui::EndPopup();
+		}		
 		
-		if (ImGui::IsItemClicked()) m_CollectionContext = ent;
-		
-		if (opened) ImGui::TreePop();
+		if (opened)
+		{
+			//srand(time(NULL)); // one more hack // hash number
+			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow;
+			// intenta acceder al tag, si se ha destruido no existe
+			bool opened = ImGui::TreeNodeEx((void*)978657, flags, tag.c_str()); 
+			if (opened)
+				ImGui::TreePop();
+			ImGui::TreePop();
+		} 
+
+		if (entityDeleted)
+		{
+			m_Context->DestroyEntity(ent);
+			if (m_CollectionContext == ent)
+				m_CollectionContext = {};
+		}
 		
 	}
 	void SceneHierarchy::DrawComponents(Entity ent)

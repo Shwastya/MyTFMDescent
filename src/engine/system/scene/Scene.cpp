@@ -64,28 +64,22 @@ namespace MHelmet
 
 
 
-	//	
-	//		
-
-
-
-	//
 	//}
 
-	Scene::~Scene()
-	{
-	}
-
-
+	Scene::~Scene() {}
 
 	Entity Scene::CreateEntity(const std::string& name)
 	{		
 		Entity e = { m_Registry.create(), this};
-		//e.AddComponent<>
+		e.AddComponent<TransformComponent>();
 		e.AddComponent<TagComponent>(name);	
 		return e;
 	}
-	
+
+	void Scene::DestroyEntity(Entity entity)
+	{
+		m_Registry.destroy(entity);
+	}	
 	
 	void Scene::Update(DeltaTime dt)
 	{		
