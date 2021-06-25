@@ -55,13 +55,8 @@ namespace MHelmet
 
 	void SceneHierarchy::SetContext(const RefCount<Scene>& context)	{ m_Context = context;}
 
-
-
-
-
 	void SceneHierarchy::OnImGuiRender()
-	{
-		
+	{		
 		ImGui::Begin("Hierarchy");
 		
 		m_Context->m_Registry.each([&](auto IDentity)
@@ -69,7 +64,6 @@ namespace MHelmet
 			Entity entity{ IDentity, m_Context.get() };
 			DrawNodes(entity);			
 		});
-
 
 		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) // click derecho en blank space
 		{
@@ -82,7 +76,6 @@ namespace MHelmet
 			if (ImGui::MenuItem("Create Empty Entity")) 
 				m_Context->CreateEntity("Empty Entity");
 			ImGui::EndPopup();
-
 		}
 		ImGui::End();
 
@@ -94,12 +87,20 @@ namespace MHelmet
 			ImGui::NewLine();
 			ImGui::Separator();
 			ImGui::NewLine();
-			if (ImGui::Button("Add Component"))	ImGui::OpenPopup("AddComponent"); // AddComponent ID 
-			 
-			if (ImGui::BeginPopup("AddComponent")) // if ID button
+
+
+			if (ImGui::Button("Add Component"))
 			{
+				ImGui::OpenPopup("AddComponent"); // AddComponent ID 
+			}				
+			
+			if (ImGui::BeginPopup("AddComponent")) // if ID button
+			{					
+				
+				ImGui::Indent();
 				if (ImGui::MenuItem("Material"))
 				{
+
 					if (m_CollectionContext.HasComponent<MaterialComponent>())
 					{
 						m_Log = "The entity already has material";
@@ -112,13 +113,45 @@ namespace MHelmet
 					}					
 					else
 					{
+						if (m_CollectionContext.HasComponent<TextureComponent>())
+						{
+							m_CollectionContext.RemoveComponent<TextureComponent>();
+						}
+
 						m_CollectionContext.AddComponent<MaterialComponent>();
 						ImGui::CloseCurrentPopup();
 					}
 				}
-				ImGui::EndPopup();
+				ImGui::NewLine();
+				if (ImGui::MenuItem("Texture"))
+				{
+					if (m_CollectionContext.HasComponent<TextureComponent>())
+					{
+						m_Log = "The entity already has texture";
+						WARN("{0}", m_Log);
+					}
+					else if (m_CollectionContext.HasComponent<CameraManComponent>())
+					{
+						m_Log = "The camera cannot have a texture component!";
+						WARN("{0}", m_Log);
+					}
+					else
+					{
+						if (m_CollectionContext.HasComponent<MaterialComponent>())
+						{
+							m_CollectionContext.RemoveComponent<MaterialComponent>();
+						}
+
+						m_CollectionContext.AddComponent<TextureComponent>(Texture2D::Format::RGB);
+						m_CollectionContext.GetComponent<TextureComponent>().SetComponentTexture();
+						ImGui::CloseCurrentPopup();
+					}
+				}
+				ImGui::Unindent();
+				ImGui::EndPopup();		
 			}
-		}		
+		}
+
 		ImGui::End();
 
 		ImGui::Begin("Scene Light");
@@ -151,21 +184,15 @@ namespace MHelmet
 		ImGui::End();
 	}
 
-
-
-
-
 	void SceneHierarchy::DrawNodes(Entity ent)
 	{
 		auto& tag = ent.GetComponent<TagComponent>().Tag;
 
 		ImGuiTreeNodeFlags flags = ((m_CollectionContext == ent) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
-		
-
-		
+					
 		// 64_t para puntero void en sistemas x64
 		//bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
-		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)ent, flags, tag.c_str());
+		bool opened = ImGui::TreeNodeEx((void*)(uint32_t)ent, flags, tag.c_str());
 		if (ImGui::IsItemClicked())
 		{
 			m_CollectionContext = ent;
@@ -248,6 +275,7 @@ namespace MHelmet
 				if (ent.HasComponent<LightComponent>())
 				{
 					ent.GetComponent<LightComponent>().Position = TC.T;
+					ent.GetComponent<LightComponent>().Direction = TC.R;
 				}
 			}
 			ImGui::NewLine();	
@@ -375,8 +403,14 @@ namespace MHelmet
 
 		
 		const bool hasTransform = m_CollectionContext.HasComponent<TransformComponent>();
+		const bool isLightReference = m_CollectionContext.HasComponent<LightComponent>();
 
-		if (hasTransform)
+		if (isLightReference)
+		{
+			m_Log = "Triangle helps to know the direction of light";
+		}
+
+		if (hasTransform && (!isLightReference))
 		{
 			ImGui::NewLine();
 			ImGui::Text("Choose an asset for the selected entity:");

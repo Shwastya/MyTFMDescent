@@ -42,6 +42,7 @@ private:
 
 	// light
 	Entity Ent_Light;
+	Entity Ent_PointLight;
 
 	// panels
 	SceneHierarchy m_HierarchyPanel;

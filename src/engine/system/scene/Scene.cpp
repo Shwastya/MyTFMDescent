@@ -108,8 +108,13 @@ namespace MHelmet
 			}			
 					
 			auto group1 = m_Registry.group<TransformComponent>(entt::get<MaterialComponent>);
+
+			//auto m = group1.size()
+			//if (m)WARN("CONTIENE TEXTURAS");
+
 			for (auto entity : group1)
 			{
+				// c++ 17
 				auto& [transform, material] = group1.get<TransformComponent, MaterialComponent>(entity);
 
 				if (transform.ID == 0) // DRAW EMPTY Entity
@@ -128,24 +133,25 @@ namespace MHelmet
 
 
 			auto group2 = m_Registry.group<TextureComponent>(entt::get<TransformComponent>);
+
+			//auto t = group2.size();
+			//if (t)WARN("CONTIENE TEXTURAS");
+
 			for (auto entity : group2)
 			{
-				auto& [texture, transform] = group2.get<TextureComponent, TransformComponent>(entity);
+				// c++ 17
+				auto& [texture, transform] = group2.get<TextureComponent, TransformComponent>(entity);				
 
-				
-
-				//if (transform.ID == 0) // DRAW EMPTY Entity
-				//{
-				//	material.Ambient = glm::vec3(1.0f, 1.0f, 1.0f);
-				//	material.Difusse = glm::vec3(1.0f, 0.829f, 0.8298f);
-				//	material.Specular = glm::vec3(0.296648f, 0.296648f, 0.296648f);
-				//	RendererGeometry::DrawSphere(transform.GetTransform(), material);
-				//}
+				if (transform.ID == 0)
+				{
+					texture.SetToDefault();
+					RendererGeometry::DrawSphere(transform.GetTransform(), texture);
+				}								
 				if (transform.ID == 1) RendererGeometry::DrawCube(transform.GetTransform(), texture);
-				//if (transform.ID == 2) RendererGeometry::DrawTeapot(transform.GetTransform(), material);
-				//if (transform.ID == 3) RendererGeometry::DrawTriangle(transform.GetTransform(), material);
-				//if (transform.ID == 4) RendererGeometry::DrawQuad(transform.GetTransform(), material);
-				//if (transform.ID == 5) RendererGeometry::DrawSphere(transform.GetTransform(), material);
+				if (transform.ID == 2) RendererGeometry::DrawTeapot(transform.GetTransform(), texture);
+				if (transform.ID == 3) RendererGeometry::DrawTriangle(transform.GetTransform(), texture);
+				if (transform.ID == 4) RendererGeometry::DrawQuad(transform.GetTransform(), texture);
+				if (transform.ID == 5) RendererGeometry::DrawSphere(transform.GetTransform(), texture);
 			}
 		}
 		// END SCENE

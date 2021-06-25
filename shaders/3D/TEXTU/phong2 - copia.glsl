@@ -72,9 +72,12 @@ struct Material
 uniform Material u_material;
 //MATERIAL STRUCT BEGIN
 
+
+
+
 struct Light
 {
-  vec3 direction;
+    vec3 direction;
 
     vec3 ambient;
     vec3 diffuse;
@@ -82,19 +85,6 @@ struct Light
 };
 uniform Light u_light;
 
-struct PointLight
-{
-  vec3 position;
-
-  vec3 ambient;
-  vec3 diffuse;
-  vec3 specular;
-
-  float constant;
-  float linear;
-  float quadratic;
-};
-uniform PointLight u_pointLight;
 
 uniform vec3  u_viewPos;
 
@@ -102,18 +92,13 @@ uniform vec3  u_viewPos;
 void main()
 {
 
-    float distance = length(u_pointLight.position - fragpos);
-    float attenuation = 1.0 / (u_pointLight.constant + u_pointLight.linear  * distance + u_pointLight.quadratic * distance * distance);
-
     // MATERIAL
     if (v_IsMaterial > 0)
     {
         vec3 ambient = u_material.ambient * u_light.ambient;
 
         vec3 norm =     normalize(v_normal);
-        // vec3 lightDir = normalize(-u_light.direction); // LIGHT DIR
-        vec3 lightDir = normalize(u_pointLight.direction - fragpos); // pl
-
+        vec3 lightDir = normalize(-u_light.direction);
         float diff =    max(dot(norm, lightDir), 0.0);
         vec3 diffuse =  diff * u_material.diffuse * u_light.diffuse;
 
@@ -123,7 +108,7 @@ void main()
         float spec =      pow(max(dot(norm, halfwayDir), 0.0), u_material.shininess);
         vec3 specular =   spec * u_material.specular * u_light.specular;
 
-        vec3 phong = (ambient + diffuse + specular) * attenuation;
+        vec3 phong = ambient + diffuse + specular;
         FragColor = vec4(phong, 1.0f);
     }
 
@@ -136,9 +121,7 @@ void main()
         vec3 ambient = albedo * u_light.ambient;
 
         vec3 norm =     normalize(v_normal);
-
-        // vec3 lightDir = normalize(-u_light.direction); // LIGHT DIR
-        vec3 lightDir = normalize(u_pointLight.direction - fragpos); // pl
+        vec3 lightDir = normalize(-u_light.direction);
         float diff =    max(dot(norm, lightDir), 0.0);
         vec3 diffuse =  diff * albedo * u_light.diffuse;
 
@@ -148,7 +131,7 @@ void main()
         float spec =      pow(max(dot(norm, halfwayDir), 0.0), u_material.shininess);
         vec3 specular =   spec * vec3(texture(u_matTexture.specular, v_UVS)) * u_light.specular;
 
-        vec3 phong = (ambient + diffuse + specular) * attenuation;
+        vec3 phong = ambient + diffuse + specular;
         FragColor = vec4(phong, 1.0f);
 
 

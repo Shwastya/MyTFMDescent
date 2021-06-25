@@ -25,18 +25,14 @@ void MyTFMDescent::Join()
     Ent_CameraMan2.GetComponent<CameraManComponent>().Primary = false;
 
     // Light
-    Ent_Light = m_Scene->CreateEntity("Light Reference");
+    Ent_Light = m_Scene->CreateEntity("Directional Light");
     Ent_Light.AddComponent<LightComponent>();
     Ent_Light.AddComponent<MaterialComponent>();
+    Ent_Light.GetComponent<MaterialComponent>().SetDefault();
+    Ent_Light.GetComponent<TransformComponent>().ID = 3;
     Ent_Light.GetComponent<TransformComponent>().T = Ent_Light.GetComponent<LightComponent>().Position;
-    Ent_Light.GetComponent<TransformComponent>().S = glm::vec3(0.5f, 0.5f, 0.5f);    
-
-
-    // PROBANDO COMPONENTE TEXTURA BORRAR DESPUES
-    Ent_probandoTexturas = m_Scene->CreateEntity("prueba textura");
-    Ent_probandoTexturas.AddComponent<TextureComponent>(Texture2D::Format::RGB);
-   // Ent_probandoTexturas.GetComponent<TextureComponent>().SetAlbedo();
-    Ent_probandoTexturas.GetComponent<TransformComponent>().ID = 1;
+    Ent_Light.GetComponent<TransformComponent>().R = Ent_Light.GetComponent<LightComponent>().Direction;
+    Ent_Light.GetComponent<TransformComponent>().S = glm::vec3(1.5f, 1.0f, 1.0f);    
     
     
     m_HierarchyPanel.SetContext(m_Scene);
@@ -47,7 +43,6 @@ void MyTFMDescent::Free() { }
 void MyTFMDescent::Update(DeltaTime dt) 
 { 
     m_IsEditScene = Ent_CameraMan1.GetComponent<CameraManComponent>().Primary;
-
 
     if (m_IsEditScene) m_FrameBuffer->Bind();
     {
@@ -318,6 +313,11 @@ void MyTFMDescent::OnEvent(Event& event)
                 break;
             case Key::D3:
                 m_GizmoType = ImGuizmo::OPERATION::SCALE;
+                break;
+
+            case Key::M:
+                // hack -> recupera el puntero del raton en el editor
+                Engine::p().GetWindow().SetCaptureMode(false);
                 break;
         }        
 	}

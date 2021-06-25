@@ -7,13 +7,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "engine/Engine.hpp"
 
-#define W_     static_cast<float>(Engine::p().GetWindow().GetWidth())
-#define H_    static_cast<float>(Engine::p().GetWindow().GetHeight())
+#define W_ static_cast<float>(Engine::p().GetWindow().GetWidth())
+#define H_ static_cast<float>(Engine::p().GetWindow().GetHeight())
 
-#define SHADER_C    std::reinterpret_pointer_cast<OpenGLShader>(s_Data->SLib.Get("PhongC"))
-#define SHADER_T    std::reinterpret_pointer_cast<OpenGLShader>(s_Data->SLib.Get("PhongT"))
-
-#define CT_SINGLE   std::reinterpret_pointer_cast<OpenGLShader>(s_Data->SLib.Get("simpleT"))
+#define SHADER std::reinterpret_pointer_cast<OpenGLShader>(s_Data->SLib.Get("PhongT"))
 
 
 
@@ -26,7 +23,7 @@ namespace MHelmet
 	struct RendererGeometryAssets
 	{
 		RefCount<VAO> VAO[5];
-		ShaderLib SLib; // SHADER_C LIBRARY // La idea es textura o color
+		ShaderLib SLib; // SHADER LIBRARY // La idea es textura o color
 
 		RefCount<Texture2D> WhiteTextu;
 	};
@@ -45,20 +42,38 @@ namespace MHelmet
 		return layout;
 	}
 
-	void SetMaterial(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const int& shininess)
+	static void SetMaterial(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const int& shininess)
 	{
-		SHADER_C->Uniform("u_material.ambient", ambient);
-		SHADER_C->Uniform("u_material.diffuse", diffuse);
-		SHADER_C->Uniform("u_material.specular", specular);
-		SHADER_C->Uniform("u_material.shininess", shininess); 
+		
+		SHADER->Uniform("u_IsMaterial", 1);
+		SHADER->Uniform("u_material.ambient", ambient);
+		SHADER->Uniform("u_material.diffuse", diffuse);
+		SHADER->Uniform("u_material.specular", specular);
+		SHADER->Uniform("u_material.shininess", shininess); 
+	}
+	static void SetTexture(const Texture2D& albedo, const Texture2D& specular)
+	{
+			SHADER->Uniform("u_IsMaterial", 0);
+			albedo.Bind(0);
+			SHADER->Uniform("u_matTexture.diffuse", 0);
+			specular.Bind(1);
+			SHADER->Uniform("u_matTexture.specular", 1);
 	}
 
-	void SettLight(const glm::vec3& position, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
+	static void SettLight(const glm::vec3& direction, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
 	{
-		SHADER_C->Uniform("u_light.position", position);
-		SHADER_C->Uniform("u_light.ambient", ambient);
-		SHADER_C->Uniform("u_light.diffuse", diffuse);
-		SHADER_C->Uniform("u_light.specular", specular);
+		SHADER->Uniform("u_light.direction", direction);
+		SHADER->Uniform("u_light.ambient", ambient);
+		SHADER->Uniform("u_light.diffuse", diffuse);
+		SHADER->Uniform("u_light.specular", specular);
+	}
+	static void SubmitModelToScene(const glm::mat4& model, const Geometries& vao)
+	{
+		SHADER->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(model))));
+		SHADER->Uniform("u_model", model);
+
+		s_Data->VAO[vao]->Bind();
+		RenderDrawCall::Draw(s_Data->VAO[vao]);
 	}
 
 	void RendererGeometry::Init() // Inicializacion statica (1 instancia)
@@ -147,21 +162,17 @@ namespace MHelmet
 				
 	}
 
-	void RendererGeometry::ShutDown()
-	{
-		//delete s_Data;
-	}
+	void RendererGeometry::EndScene() { SHADER->Unbind(); }
+//	void RendererGeometry::ShutDown() {}
 
 	void RendererGeometry::BeginScene(const CameraManComponent& C, const LightComponent& L)
 	{
-		SHADER_C->Bind();
 
+		SHADER->Bind();
 		glm::mat4 view = glm::mat4(1.0f);
 		view = C.Cameraman.Get().GetViewMatrix();		
-
-		SHADER_C->Uniform("u_view", view);
-		
-		SHADER_C->Uniform("u_proj", glm::perspective
+		SHADER->Uniform("u_view", view);		
+		SHADER->Uniform("u_proj", glm::perspective
 		(
 			glm::radians
 			(
@@ -170,93 +181,93 @@ namespace MHelmet
 				C.Near, C.Far
 			)
 		);	
-
-		SHADER_C->Uniform("u_viewPos", C.Cameraman.Get().GetPosition());
-
-		SettLight(L.Position, L.Ambient, L.Difusse, L.Specular);		
+		SHADER->Uniform("u_viewPos", C.Cameraman.Get().GetPosition());
+		SettLight(L.Direction, L.Ambient, L.Difusse, L.Specular);		
 	}
 
 	
 
-	
+	// TRIANGLES
 	void RendererGeometry::DrawTriangle(const glm::mat4& trans, const MaterialComponent& m)
 	{
 		glm::mat4 model = trans;
-
 		SetMaterial(m.Ambient, m.Difusse, m.Specular, m.Shininess);
-
-		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(model))));
-		SHADER_C->Uniform("u_model", model);
-		  
-		s_Data->VAO[triangle]->Bind();
-		RenderDrawCall::Draw(s_Data->VAO[triangle]);
+		SubmitModelToScene(model, triangle);
 	}
 
+	void RendererGeometry::DrawTriangle(const glm::mat4& trans, const TextureComponent& texture)
+	{
+		glm::mat4 model = trans;
+		SetTexture(*texture.Albedo, *texture.Specular);
+		SubmitModelToScene(model, triangle);
+	}
+
+
+	// QUADS
 	void RendererGeometry::DrawQuad(const glm::mat4& trans, const MaterialComponent& m)
 	{
 		glm::mat4 model = trans;
-
 		SetMaterial(m.Ambient, m.Difusse, m.Specular, m.Shininess);
+		SubmitModelToScene(model, quad);
+	}
+	void RendererGeometry::DrawQuad(const glm::mat4& trans, const TextureComponent& texture)
+	{
+		glm::mat4 model = trans;
+		SetTexture(*texture.Albedo, *texture.Specular);
+		SubmitModelToScene(model, quad);
+	}
 
-		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(model))));
-		SHADER_C->Uniform("u_model", model);
 
-		s_Data->VAO[quad]->Bind();
-		RenderDrawCall::Draw(s_Data->VAO[quad]);
-	}	
 
+	// CUBES
 	void RendererGeometry::DrawCube(const glm::mat4& trans, const MaterialComponent& m)
 	{
 		
 		glm::mat4 model = trans;
-
 		SetMaterial(m.Ambient, m.Difusse, m.Specular, m.Shininess);
-
-		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(model))));
-		SHADER_C->Uniform("u_model", model);
-
-		s_Data->VAO[cube]->Bind();
-		RenderDrawCall::Draw(s_Data->VAO[cube]);
+		SubmitModelToScene(model, cube);
 	}
-
-	void RendererGeometry::DrawCube(const glm::mat4& transform, const TextureComponent& material)
+	void RendererGeometry::DrawCube(const glm::mat4& trans, const TextureComponent& texture)
 	{
-		WARN("ESTOY DIBUJANDO");
+		glm::mat4 model = trans;		
+		SetTexture(*texture.Albedo, *texture.Specular);
+		SubmitModelToScene(model, cube);
 	}
 
+
+    // SPHERES
 	void RendererGeometry::DrawSphere(const glm::mat4& trans, const MaterialComponent& m)
 	{		
 		glm::mat4 model = trans;
-
 		SetMaterial(m.Ambient, m.Difusse, m.Specular, m.Shininess);
+		SubmitModelToScene(model, sphere);
+	}
+	void RendererGeometry::DrawSphere(const glm::mat4& trans, const TextureComponent& texture)
+	{
+		glm::mat4 model = trans;
+		SetTexture(*texture.Albedo, *texture.Specular);
+		SubmitModelToScene(model, sphere);
+	}
 
-		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(model))));
-		SHADER_C->Uniform("u_model", model);
 
-		s_Data->VAO[sphere]->Bind();
-		RenderDrawCall::Draw(s_Data->VAO[sphere]);
-	}	
 
+	// TEAPOTS
 	void RendererGeometry::DrawTeapot(const glm::mat4& trans, const MaterialComponent& m)
 	{
 		glm::mat4 model = trans;
-
 		SetMaterial(m.Ambient, m.Difusse, m.Specular, m.Shininess);
-
-		SHADER_C->Uniform("u_normalMat", glm::inverse(glm::transpose(glm::mat3(model))));
-		SHADER_C->Uniform("u_model", model);
-
-		s_Data->VAO[teapot]->Bind();
-		RenderDrawCall::Draw(s_Data->VAO[teapot]);		
+		SubmitModelToScene(model, teapot);
 	}
 
-
-	void RendererGeometry::EndScene()
+	void RendererGeometry::DrawTeapot(const glm::mat4& trans, const TextureComponent& texture)
 	{
-		SHADER_C->Unbind();
-		SHADER_T->Unbind();
-		CT_SINGLE->Unbind();
+		glm::mat4 model = trans;
+		SetTexture(*texture.Albedo, *texture.Specular);
+		SubmitModelToScene(model, teapot);
 	}
+
+
+	
 
 
 
@@ -284,55 +295,55 @@ namespace MHelmet
 
 	/* SIMPLE QUAD Texture */
 
-	void RendererGeometry::DrawSimpleTextureQuad(const PerspectiveCamera& camera, const RefCount<Texture2D>& texture, const glm::vec3& position, const glm::vec3& size)
-	{
-		CT_SINGLE->Bind();
+	//void RendererGeometry::DrawSimpleTextureQuad(const PerspectiveCamera& camera, const RefCount<Texture2D>& texture, const glm::vec3& position, const glm::vec3& size)
+	//{
+	//	CT_SINGLE->Bind();
 
 
-		// Color or texture
-		CT_SINGLE->Uniform("u_color", glm::vec4(1.0f));
-		texture->Bind(0);
-		CT_SINGLE->Uniform("u_text", 0);
+	//	// Color or texture
+	//	CT_SINGLE->Uniform("u_color", glm::vec4(1.0f));
+	//	texture->Bind(0);
+	//	CT_SINGLE->Uniform("u_text", 0);
 
 
-		// model transformations and movidas
-		glm::mat4 view = glm::mat4(1.0f);
-		view = camera.GetViewMatrix();
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::scale(model, size);
-		model = glm::translate(model, position);
+	//	// model transformations and movidas
+	//	glm::mat4 view = glm::mat4(1.0f);
+	//	view = camera.GetViewMatrix();
+	//	glm::mat4 model = glm::mat4(1.0f);
+	//	model = glm::scale(model, size);
+	//	model = glm::translate(model, position);
 
-		CT_SINGLE->Uniform("u_view", view);
-		CT_SINGLE->Uniform("u_proj", glm::perspective(glm::radians(camera.GetFOV()), W_WIDTH / W_HEIGHT, 0.1f, 100.0f));
-		CT_SINGLE->Uniform("u_model", model);
-		// VAO BIND
-		s_Data->VAO[quad]->Bind();
-		RenderDrawCall::Draw(s_Data->VAO[quad]);
-	}
+	//	CT_SINGLE->Uniform("u_view", view);
+	//	CT_SINGLE->Uniform("u_proj", glm::perspective(glm::radians(camera.GetFOV()), W_WIDTH / W_HEIGHT, 0.1f, 100.0f));
+	//	CT_SINGLE->Uniform("u_model", model);
+	//	// VAO BIND
+	//	s_Data->VAO[quad]->Bind();
+	//	RenderDrawCall::Draw(s_Data->VAO[quad]);
+	//}
 
-	/* SIMPLE QUAD color */
+	///* SIMPLE QUAD color */
 
-	void RendererGeometry::DrawSimpleColorQuad(const PerspectiveCamera& camera, const glm::vec4& color, const glm::vec3& position)
-	{
-		CT_SINGLE->Bind();
+	//void RendererGeometry::DrawSimpleColorQuad(const PerspectiveCamera& camera, const glm::vec4& color, const glm::vec3& position)
+	//{
+	//	CT_SINGLE->Bind();
 
-		// Color or texture
-		CT_SINGLE->Uniform("u_color", color);
-		s_Data->WhiteTextu->Bind(0);
+	//	// Color or texture
+	//	CT_SINGLE->Uniform("u_color", color);
+	//	s_Data->WhiteTextu->Bind(0);
 
 
-		// Model transformations
-		glm::mat4 view = glm::mat4(1.0f);
-		view = camera.GetViewMatrix();
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, position);
+	//	// Model transformations
+	//	glm::mat4 view = glm::mat4(1.0f);
+	//	view = camera.GetViewMatrix();
+	//	glm::mat4 model = glm::mat4(1.0f);
+	//	model = glm::translate(model, position);
 
-		CT_SINGLE->Uniform("u_view", view);
-		CT_SINGLE->Uniform("u_proj", glm::perspective(glm::radians(camera.GetFOV()), W_WIDTH / W_HEIGHT, 0.1f, 100.0f));
-		CT_SINGLE->Uniform("u_model", model);
-		// VAO BIND
-		s_Data->VAO[quad]->Bind();
-		RenderDrawCall::Draw(s_Data->VAO[quad]);
-	}
+	//	CT_SINGLE->Uniform("u_view", view);
+	//	CT_SINGLE->Uniform("u_proj", glm::perspective(glm::radians(camera.GetFOV()), W_WIDTH / W_HEIGHT, 0.1f, 100.0f));
+	//	CT_SINGLE->Uniform("u_model", model);
+	//	// VAO BIND
+	//	s_Data->VAO[quad]->Bind();
+	//	RenderDrawCall::Draw(s_Data->VAO[quad]);
+	//}
 
 }
