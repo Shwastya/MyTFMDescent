@@ -25,7 +25,7 @@
 #include "engine/system/utils/Descompose.hpp"
 
 
-#include "engine/system/renderer/Texture.hpp"
+//#include "engine/system/renderer/Texture.hpp"
 #include "engine/system/renderer/FrameBuffer.hpp"
 
 /* DE momento super cutrisiiiimo para facilitar un poco el tema */

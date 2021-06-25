@@ -32,24 +32,12 @@ namespace MHelmet
 	
 
 		static void DrawCube(const glm::mat4& transform, const MaterialComponent& material);
+		static void DrawCube(const glm::mat4& transform, const TextureComponent& material);
+
 
 		static void DrawSphere(const glm::mat4& transform, const MaterialComponent& material);
 		
 		static void DrawTeapot(const glm::mat4& transform, const MaterialComponent& material);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 		static void DrawSimpleTextureQuad(const PerspectiveCamera& camera, const RefCount<Texture2D>& texture, const glm::vec3& position = glm::vec3{ 0.0f }, const glm::vec3& size = glm::vec3{ 1.0f });

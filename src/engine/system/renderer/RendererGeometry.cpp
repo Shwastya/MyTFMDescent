@@ -219,6 +219,11 @@ namespace MHelmet
 		RenderDrawCall::Draw(s_Data->VAO[cube]);
 	}
 
+	void RendererGeometry::DrawCube(const glm::mat4& transform, const TextureComponent& material)
+	{
+		WARN("ESTOY DIBUJANDO");
+	}
+
 	void RendererGeometry::DrawSphere(const glm::mat4& trans, const MaterialComponent& m)
 	{		
 		glm::mat4 model = trans;

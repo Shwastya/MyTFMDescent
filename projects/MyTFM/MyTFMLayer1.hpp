@@ -25,30 +25,23 @@ public:
 	void OnEvent(Event& event) override;
 
 private:
-	//CameraMan m_CameraMan;
-
-	//bool m_IsActivedImGui = true;
-	bool m_IsViewportOnFocus = false;
 	
+	//bool m_IsViewportOnFocus = false;	
 
 	// FrameBuffer textura en el frame de ImGui
 	RefCount<FrameBuffer> m_FrameBuffer;
 	 
 	// ECS Scene
 	RefCount<Scene> m_Scene;
+	bool m_IsEditScene = true;
 
 	// cameramans Ents
 	Entity Ent_CameraMan1; bool m_Editor_Cam_FirtsUse = true;
 	Entity Ent_CameraMan2;
-
 	bool m_PrimaryCam = true;	
 
 	// light
 	Entity Ent_Light;
-
-	// Geometries Ents
-	Entity Ent_TeaPot;
-	Entity Ent_Cube;
 
 	// panels
 	SceneHierarchy m_HierarchyPanel;
@@ -57,7 +50,8 @@ private:
 	int m_GizmoType = -1;
 
 
-
+	// de prueba
+	Entity Ent_probandoTexturas;
 
 
 

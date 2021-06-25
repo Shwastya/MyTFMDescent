@@ -17,7 +17,7 @@ namespace MHelmet
 			float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0;
 			ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
 			// colores de los botones
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.6f, 0.1f, 0.15f, 1.0f });
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2, 1.0f });
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
 			if (ImGui::Button("X", buttonSize)) values.x = reset;
@@ -27,7 +27,7 @@ namespace MHelmet
 			ImGui::PopItemWidth();
 			ImGui::SameLine();
 			// colores de los botones
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.4f, 0.6f, 0.3f, 1.0f });
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.3f, 0.8f, 0.3, 1.0f });
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.3f, 0.7f, 0.2f, 1.0f });
 			if (ImGui::Button("Y", buttonSize)) values.y = reset;
@@ -100,8 +100,16 @@ namespace MHelmet
 			{
 				if (ImGui::MenuItem("Material"))
 				{
-					if (m_CollectionContext.HasComponent<CameraManComponent>()) 
-						WARN("The camera cannot have a material component!");
+					if (m_CollectionContext.HasComponent<MaterialComponent>())
+					{
+						m_Log = "The entity already has material";
+						WARN("{0}", m_Log);
+					}
+					else if (m_CollectionContext.HasComponent<CameraManComponent>())
+					{
+						m_Log = "The camera cannot have a material component!";
+						WARN("{0}", m_Log);
+					}					
 					else
 					{
 						m_CollectionContext.AddComponent<MaterialComponent>();
@@ -122,6 +130,25 @@ namespace MHelmet
 		});
 	
 		ImGui::End();
+
+		ImGui::Begin("Assets Store");
+		
+		if (m_CollectionContext)
+		{
+			AssetStore();
+		}
+		ImGui::End();
+
+		ImGui::Begin("Log Info");
+		//ImGui::NewLine();
+		ImGui::Text("  Last log message:");
+		ImGui::Separator();
+		ImGui::NewLine();
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+		ImGui::Text(m_Log.c_str());
+		ImGui::PopStyleColor();
+		
+		ImGui::End();
 	}
 
 
@@ -133,6 +160,8 @@ namespace MHelmet
 		auto& tag = ent.GetComponent<TagComponent>().Tag;
 
 		ImGuiTreeNodeFlags flags = ((m_CollectionContext == ent) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
+		
+
 		
 		// 64_t para puntero void en sistemas x64
 		//bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
@@ -148,6 +177,7 @@ namespace MHelmet
 			if (ImGui::MenuItem("Delete Entity")) 
 				 entityDeleted = true;
 			ImGui::EndPopup();
+
 		}		
 		
 		if (opened)
@@ -163,7 +193,11 @@ namespace MHelmet
 
 		if (entityDeleted)
 		{
-			if (ent.HasComponent<CameraManComponent>()) WARN("Cameras cannot be deleted at the moment due to a bad approach in its components");
+			if (ent.HasComponent<CameraManComponent>())
+			{
+				m_Log = "Cameras cannot be deleted yet.....";
+			}
+				
 		
 			else
 			{
@@ -324,17 +358,62 @@ namespace MHelmet
 
 			auto& ambient = ent.GetComponent<LightComponent>().Ambient;
 			ImGui::DragFloat3("Ambient", glm::value_ptr(ambient), 0.25f);
-			
 
 
 			auto& difusse = ent.GetComponent<LightComponent>().Difusse;
 			ImGui::DragFloat3("Difusse", glm::value_ptr(difusse), 0.25f);
-
 
 			auto& specular = ent.GetComponent<LightComponent>().Specular;
 			ImGui::DragFloat3("Specular", glm::value_ptr(specular), 0.25f);
 			ImGui::NewLine();
 			ImGui::Separator();
 		}
+	}
+	void SceneHierarchy::AssetStore()
+	{
+		
+
+		
+		const bool hasTransform = m_CollectionContext.HasComponent<TransformComponent>();
+
+		if (hasTransform)
+		{
+			ImGui::NewLine();
+			ImGui::Text("Choose an asset for the selected entity:");
+			ImGui::NewLine();
+
+			if (ImGui::Button("Triangle", ImVec2{ 100, 20 }))
+			{
+				m_CollectionContext.GetComponent<TransformComponent>().ID = 3;
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Quad", ImVec2{ 100, 20 }))
+			{
+				m_CollectionContext.GetComponent<TransformComponent>().ID = 4;			
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Cube", ImVec2{ 100, 20 }))
+			{
+				m_CollectionContext.GetComponent<TransformComponent>().ID = 1;
+			}
+			ImGui::Separator();
+
+			if (ImGui::Button("Sphere", ImVec2{ 100, 20 }))
+			{
+				m_CollectionContext.GetComponent<TransformComponent>().ID = 5;
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Tea Pot", ImVec2{ 100, 20 }))
+			{
+				m_CollectionContext.GetComponent<TransformComponent>().ID = 2;
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Reset", ImVec2{ 100, 20 }))
+			{
+				m_CollectionContext.GetComponent<TransformComponent>().ID = 0;
+			}
+				
+		}
+				
 	}
 }

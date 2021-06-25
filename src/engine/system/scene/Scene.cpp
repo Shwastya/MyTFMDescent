@@ -107,10 +107,10 @@ namespace MHelmet
 				}
 			}			
 					
-			auto group = m_Registry.group<TransformComponent>(entt::get<MaterialComponent>);
-			for (auto entity : group)
+			auto group1 = m_Registry.group<TransformComponent>(entt::get<MaterialComponent>);
+			for (auto entity : group1)
 			{
-				auto& [transform, material] = group.get<TransformComponent, MaterialComponent>(entity);
+				auto& [transform, material] = group1.get<TransformComponent, MaterialComponent>(entity);
 
 				if (transform.ID == 0) // DRAW EMPTY Entity
 				{
@@ -120,8 +120,33 @@ namespace MHelmet
 					RendererGeometry::DrawSphere(transform.GetTransform(), material);
 				}
 				if (transform.ID == 1) RendererGeometry::DrawCube(transform.GetTransform(), material);
-				if (transform.ID == 2) RendererGeometry::DrawTeapot(transform.GetTransform(), material);				
-			}									
+				if (transform.ID == 2) RendererGeometry::DrawTeapot(transform.GetTransform(), material);
+				if (transform.ID == 3) RendererGeometry::DrawTriangle(transform.GetTransform(), material);
+				if (transform.ID == 4) RendererGeometry::DrawQuad(transform.GetTransform(), material);
+				if (transform.ID == 5) RendererGeometry::DrawSphere(transform.GetTransform(), material);
+			}		
+
+
+			auto group2 = m_Registry.group<TextureComponent>(entt::get<TransformComponent>);
+			for (auto entity : group2)
+			{
+				auto& [texture, transform] = group2.get<TextureComponent, TransformComponent>(entity);
+
+				
+
+				//if (transform.ID == 0) // DRAW EMPTY Entity
+				//{
+				//	material.Ambient = glm::vec3(1.0f, 1.0f, 1.0f);
+				//	material.Difusse = glm::vec3(1.0f, 0.829f, 0.8298f);
+				//	material.Specular = glm::vec3(0.296648f, 0.296648f, 0.296648f);
+				//	RendererGeometry::DrawSphere(transform.GetTransform(), material);
+				//}
+				if (transform.ID == 1) RendererGeometry::DrawCube(transform.GetTransform(), texture);
+				//if (transform.ID == 2) RendererGeometry::DrawTeapot(transform.GetTransform(), material);
+				//if (transform.ID == 3) RendererGeometry::DrawTriangle(transform.GetTransform(), material);
+				//if (transform.ID == 4) RendererGeometry::DrawQuad(transform.GetTransform(), material);
+				//if (transform.ID == 5) RendererGeometry::DrawSphere(transform.GetTransform(), material);
+			}
 		}
 		// END SCENE
 		RendererGeometry::EndScene();

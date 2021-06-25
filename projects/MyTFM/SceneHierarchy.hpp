@@ -22,8 +22,12 @@ namespace MHelmet
 		void DrawComponents(Entity entity);	
 		void DrawComponentLight(Entity entity);
 
+		void AssetStore();
+
 	private:
 		RefCount<Scene> m_Context;
 		Entity m_CollectionContext;
+
+		std::string m_Log;
 	};
 }

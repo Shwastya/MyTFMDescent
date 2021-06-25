@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "engine/system/renderer/PerspectiveCamera.hpp"
-
+#include "engine/system/renderer/Texture.hpp"
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
@@ -42,7 +42,7 @@ namespace MHelmet
 	
 
 		bool IsDirty = true;
-		uint32_t ID;
+		uint32_t ID = 0;
 
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
@@ -114,6 +114,34 @@ namespace MHelmet
 
 		//operator glm::vec3& () { return Light; }
 		operator const std::string& () { return Tag; }
+	};
+
+	struct TextureComponent
+	{
+		// default textures
+		std::string P_A = "../assets/textures/bricks_albedo.png"; 
+		std::string P_S = "../assets/textures/bricks_specular.png"; ;
+		std::string P_N = "../assets/textures/bricks_normal.png"; 
+
+		Texture2D::Format Format = Texture2D::Format::RGB;
+
+		RefCount<Texture2D> Albedo;
+		RefCount<Texture2D> Specular;
+		RefCount<Texture2D> Normal;
+		
+		TextureComponent() = default;
+		TextureComponent(const TextureComponent&) = default;
+		TextureComponent(Texture2D::Format format = Texture2D::Format::RGB)
+			: Format(format) {}
+
+		void SetAlbedo()
+		{
+			Albedo = nullptr;
+			Albedo = Texture2D::Create(P_A, Format);
+		}
+
+		operator Texture2D::Format& () { return Format; }
+
 	};
 }
 	
