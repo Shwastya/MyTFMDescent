@@ -27,7 +27,7 @@ public:
 private:
 	//CameraMan m_CameraMan;
 
-	bool m_IsActivedImGui = true;
+	//bool m_IsActivedImGui = true;
 	bool m_IsViewportOnFocus = false;
 	
 
@@ -52,6 +52,9 @@ private:
 
 	// panels
 	SceneHierarchy m_HierarchyPanel;
+
+	// Gizmo
+	int m_GizmoType = -1;
 
 
 

@@ -3,6 +3,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "engine/system/renderer/PerspectiveCamera.hpp"
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/quaternion.hpp>
+
 namespace MHelmet
 {	
 
@@ -48,11 +51,11 @@ namespace MHelmet
 
 		glm::mat4 GetTransform() const
 		{
-			glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), R.x, { 1, 0, 0 })
-				* glm::rotate(glm::mat4(1.0f), R.x, { 0, 1, 0 })
-				* glm::rotate(glm::mat4(1.0f), R.z, { 0, 0, 1 });
+			glm::mat4 rotation = glm::toMat4(glm::quat(R));
 
-			return  glm::translate(glm::mat4(1.0f), T) * rotation * glm::scale(glm::mat4(1.0f), S);
+			return  glm::translate(glm::mat4(1.0f), T) 
+				* rotation 
+				* glm::scale(glm::mat4(1.0f), S);
 		}
 
 	};

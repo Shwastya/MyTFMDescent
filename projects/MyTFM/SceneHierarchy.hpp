@@ -15,11 +15,11 @@ namespace MHelmet
 
 		void OnImGuiRender();
 
+		Entity GetCollectedEntity() const { return m_CollectionContext; }
+
 	private:
 		void DrawNodes(Entity entity);
-		void DrawComponents(Entity entity);
-
-	
+		void DrawComponents(Entity entity);	
 		void DrawComponentLight(Entity entity);
 
 	private:

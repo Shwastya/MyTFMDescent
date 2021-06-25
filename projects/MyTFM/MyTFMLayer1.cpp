@@ -1,7 +1,9 @@
 #include "MyTFMLayer1.hpp"
-
-#define W static_cast<float>(Engine::p().GetWindow().GetWidth())
-#define H static_cast<float>(Engine::p().GetWindow().GetHeight())
+#include <ImGuizmo.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#define W_ static_cast<float>(Engine::p().GetWindow().GetWidth())
+#define H_ static_cast<float>(Engine::p().GetWindow().GetHeight())
 
 MyTFMDescent::MyTFMDescent() : NodeLayer("TestingLayer") {}
 
@@ -18,10 +20,10 @@ void MyTFMDescent::Join()
 
     // CameraMans
     Ent_CameraMan1 = m_Scene->CreateEntity("Camera 1");
-    Ent_CameraMan1.AddComponent<CameraManComponent>(glm::vec3(0.0f, 1.0f, 15.5f), W, H);
+    Ent_CameraMan1.AddComponent<CameraManComponent>(glm::vec3(0.0f, 1.0f, 15.5f), W_, H_);
 
     Ent_CameraMan2 = m_Scene->CreateEntity("Camera 2");
-    Ent_CameraMan2.AddComponent<CameraManComponent>(glm::vec3(0.0f, 1.0f, 15.5f), W, H);
+    Ent_CameraMan2.AddComponent<CameraManComponent>(glm::vec3(0.0f, 1.0f, 15.5f), W_, H_);
     Ent_CameraMan2.GetComponent<CameraManComponent>().Primary = false;
 
     // Light
@@ -197,6 +199,54 @@ void MyTFMDescent::ImGuiRender()
     uint32_t textureID = m_FrameBuffer->GetFBOTexture(); // FBO  
     ImGui::Image((void*)textureID, ImVec2{ viewportPanelSize.x, viewportPanelSize.y}, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
+
+
+    // Gizmo
+    Entity EntSelected = m_HierarchyPanel.GetCollectedEntity();
+
+    if (EntSelected && m_GizmoType != -1 && Ent_CameraMan1.GetComponent<CameraManComponent>().Primary)
+    {
+        ImGuizmo::SetOrthographic(false);
+        ImGuizmo::SetDrawlist();
+
+        float wWidth  = (float)ImGui::GetWindowWidth();
+        float wHeight = (float)ImGui::GetWindowHeight();
+
+        ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, wWidth, wHeight);
+
+        const auto& ECam = Ent_CameraMan1.GetComponent<CameraManComponent>();
+
+        // CAMERA
+        glm::mat4& Projection = glm::perspective(
+            glm::radians
+            (
+                ECam.Cameraman.Get().GetFOV()),
+                ECam.ViewportX / ECam.ViewportY,
+                ECam.Near, ECam.Far
+            );
+        glm::mat4  ViewMatrix = ECam.Cameraman.Get().GetViewMatrix();      
+
+       // ENTITY TRANSFORM
+        auto& TC = EntSelected.GetComponent<TransformComponent>();
+        glm::mat4 T = TC.GetTransform();
+        
+
+        ImGuizmo::Manipulate(glm::value_ptr(ViewMatrix), glm::value_ptr(Projection),
+            (ImGuizmo::OPERATION)m_GizmoType,
+            ImGuizmo::LOCAL,
+            glm::value_ptr(T));
+
+        if (ImGuizmo::IsUsing())
+        {
+            glm::vec3 Tra, Rot, Sca;
+            DecomposeTransform(T, Tra, Rot, Sca);
+            glm::vec3 DeltaRot = Rot - TC.R;
+            TC.T = Tra;
+            TC.R += DeltaRot;
+            TC.S = Sca;
+        }
+    }
+
     ImGui::End(); // end 1
     ImGui::PopStyleVar(); // pop -> PushStyleVar(ImGuiStyleVar_WindowPadding)
     ImGui::End(); // end 2    
@@ -225,10 +275,29 @@ void MyTFMDescent::OnEvent(Event& event)
             if (cam.IsHovered)
             {
                 if (event.GetEventType() == IsType::MH_MOUSE_BUTTON_PRESSED)
-                    cam.Cameraman._Mouse = true;
+                {
+                    
+
+                    OnMouseButtonPressed& e = (OnMouseButtonPressed&)event;
+                    
+
+                    if (e.GetMouseButton() == 1)
+                    {
+                        cam.Cameraman._Mouse = true;
+                        Engine::p().GetWindow().SetCaptureMode(true);
+                    }
+
+                    //if (e.GetMouseButton() == 1) WARN("has apretado el boton derecho");
+                    //if (e.GetMouseButton() == 0) WARN("has apretado el boton IZQUIERDO");
+                }
+                    
 
                 if (event.GetEventType() == IsType::MH_MOUSE_BUTTON_RELEASED)
+                {
                     cam.Cameraman._Mouse = false;
+                    Engine::p().GetWindow().SetCaptureMode(false);
+                }
+                    
 
                 cam.Cameraman.OnEvent(event);
             }
@@ -248,9 +317,23 @@ void MyTFMDescent::OnEvent(Event& event)
 		OnKeyPressed& e = (OnKeyPressed&)event;
 
 		if (e.GetKeyCode() == MH_KEY_Q)	Engine::p().GetWindow().SetCaptureMode(true);		
-		if (e.GetKeyCode() == MH_KEY_E)	Engine::p().GetWindow().SetCaptureMode(false);		
+		//if (e.GetKeyCode() == MH_KEY_E)	Engine::p().GetWindow().SetCaptureMode(false);	
 
-        if (e.GetKeyCode() == MH_KEY_O)	m_IsActivedImGui = false;
-        if (e.GetKeyCode() == MH_KEY_P)	m_IsActivedImGui = true;
+        switch (e.GetKeyCode())
+        {
+            case Key::Q:
+                m_GizmoType = -1;
+                break;
+            case Key::E:
+                m_GizmoType = ImGuizmo::OPERATION::SCALE;
+                break;
+            case Key::R:
+                m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+                break;
+            case Key::T:
+                m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+                break;
+        }
+        
 	}
 }

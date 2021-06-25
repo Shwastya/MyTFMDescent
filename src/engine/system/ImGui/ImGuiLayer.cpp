@@ -2,14 +2,9 @@
 #include "engine/system/ImGui/ImGuiLayer.hpp"
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
-
-
 #include "engine/Engine.hpp"
 
-// temporal
-//#include <GLFW/glfw3.h>
-//#include <glad/glad.h>
-
+#include <ImGuizmo.h>
 
 
 namespace MHelmet
@@ -70,6 +65,8 @@ namespace MHelmet
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+
+		ImGuizmo::BeginFrame();
 	}
 
 	void ImGuiLayer::End()

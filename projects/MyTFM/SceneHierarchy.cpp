@@ -260,17 +260,21 @@ namespace MHelmet
 		{
 			ImGui::Separator();
 			ImGui::NewLine();
+
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
 			bool open = ImGui::TreeNodeEx((void*)typeid(MaterialComponent).hash_code(), treenodeFlags, "Material");
 
-			ImGui::SameLine();
-			if (ImGui::Button("-"))
+			//ImGui::SameLine();
+			ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
+			if (ImGui::Button("-", ImVec2{20, 20}))
 			{
 				ImGui::OpenPopup("ComponentSettings");
 			}
+			ImGui::PopStyleVar();
 
 			bool remove = false;
 
-			ImGui::NewLine();
+			//ImGui::NewLine();
 
 			if (ImGui::BeginPopup("ComponentSettings"))
 			{
@@ -315,7 +319,7 @@ namespace MHelmet
 		if (hasLight)
 		{
 			ImGui::NewLine();			
-			ImGui::Text("Shader Properties:  "); 
+			ImGui::Text("Shader Properties:"); 
 			ImGui::NewLine();
 
 			auto& ambient = ent.GetComponent<LightComponent>().Ambient;

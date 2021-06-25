@@ -94,6 +94,7 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/utils/utils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/utils/Library.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/utils/MaterialsLibrary.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/system/utils/Descompose.cpp
 
 
     # TestingparticlesTesting
@@ -200,6 +201,7 @@ set(ENGINE_HEADER_FILES
     # Utils
       ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/utils/utils.hpp
       ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/utils/MaterialsLibrary.hpp
+      ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/utils/Descompose.hpp
 
 
     # Testing

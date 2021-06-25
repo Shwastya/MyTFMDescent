@@ -8,6 +8,7 @@ set(INCLUDE_PATHS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/spdlog/include
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/spdlog/include
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/entt
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGuizmo
     )
 
 #Common Dependency Files
@@ -33,6 +34,9 @@ set(DEPS_SRC_FILES_COMMON
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui/imstb_textedit.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGui/imstb_truetype.h
     
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGuizmo/ImGuizmo.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/deps/ImGuizmo/ImGuizmo.cpp
 
     #${CMAKE_CURRENT_SOURCE_DIR}/src/deps/spdlog/include/spdlog
 
