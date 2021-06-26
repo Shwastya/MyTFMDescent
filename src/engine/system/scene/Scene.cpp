@@ -100,18 +100,40 @@ namespace MHelmet
 							for (auto L_entity : view_light)
 							{
 								auto& light = view_light.get<LightComponent>(L_entity);
+							
 								RendererGeometry::BeginScene(cameraman, light);
+
+																
 							}
 						}
 					}
 				}
 			}			
-					
+			auto point_light = m_Registry.view<PointLightComponent>();
+			{
+				uint32_t Pidx = 0;
+				for (auto PL_entity : point_light)
+				{
+					auto& Plight = point_light.get<PointLightComponent>(PL_entity);
+					RendererGeometry::DrawPointLights(Plight, Pidx);
+					Pidx++;			
+				}
+				Pidx = 0;
+			}
+
+			auto spot_light = m_Registry.view<SpotLightComponent>();
+			{
+				uint32_t Sidx = 0;
+				for (auto SL_entity : spot_light)
+				{
+					auto& Slight = spot_light.get<SpotLightComponent>(SL_entity);
+					RendererGeometry::DrawSpotLights(Slight, Sidx);
+					Sidx++;
+				}
+				Sidx = 0;
+			}
+
 			auto group1 = m_Registry.group<TransformComponent>(entt::get<MaterialComponent>);
-
-			//auto m = group1.size()
-			//if (m)WARN("CONTIENE TEXTURAS");
-
 			for (auto entity : group1)
 			{
 				// c++ 17
@@ -133,10 +155,6 @@ namespace MHelmet
 
 
 			auto group2 = m_Registry.group<TextureComponent>(entt::get<TransformComponent>);
-
-			//auto t = group2.size();
-			//if (t)WARN("CONTIENE TEXTURAS");
-
 			for (auto entity : group2)
 			{
 				// c++ 17

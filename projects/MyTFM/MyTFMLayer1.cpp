@@ -35,6 +35,38 @@ void MyTFMDescent::Join()
     Ent_Light.GetComponent<TransformComponent>().S = glm::vec3(1.5f, 1.0f, 1.0f);    
     
     
+    Ent_PointLight1 = m_Scene->CreateEntity("Point Ligth1");
+    Ent_PointLight1.AddComponent<PointLightComponent>();
+    Ent_PointLight1.GetComponent<TransformComponent>().T = Ent_PointLight1.GetComponent<PointLightComponent>().Position;
+    Ent_PointLight1.GetComponent<TransformComponent>().S = glm::vec3{ 0.3f, 0.3f, 0.3f };
+    
+    Ent_PointLight1.AddComponent<MaterialComponent>();
+    Ent_PointLight1.GetComponent<MaterialComponent>().SetDefault();
+
+    Ent_PointLight2 = m_Scene->CreateEntity("Point Ligth2");
+    Ent_PointLight2.AddComponent<PointLightComponent>();
+    Ent_PointLight2.GetComponent<TransformComponent>().T = Ent_PointLight2.GetComponent<PointLightComponent>().Position;
+    Ent_PointLight2.GetComponent<TransformComponent>().S = glm::vec3{ 0.3f, 0.3f, 0.3f };
+    Ent_PointLight2.AddComponent<MaterialComponent>();
+    Ent_PointLight2.GetComponent<MaterialComponent>().SetDefault();
+
+    Ent_SpotLight1 = m_Scene->CreateEntity("Spot Ligth1");
+    Ent_SpotLight1.AddComponent<SpotLightComponent>(); 
+    Ent_SpotLight1.GetComponent<TransformComponent>().T = Ent_SpotLight1.GetComponent<SpotLightComponent>().Position;
+    Ent_SpotLight1.GetComponent<TransformComponent>().R = Ent_SpotLight1.GetComponent<SpotLightComponent>().Direction;
+    Ent_SpotLight1.GetComponent<TransformComponent>().S = glm::vec3{ 0.3f, 0.3f, 0.3f };
+    Ent_SpotLight1.AddComponent<MaterialComponent>();
+    Ent_SpotLight1.GetComponent<MaterialComponent>().SetDefault();
+
+    Ent_SpotLight2 = m_Scene->CreateEntity("Spot Ligth2");
+    Ent_SpotLight2.AddComponent<SpotLightComponent>();
+    Ent_SpotLight2.GetComponent<TransformComponent>().T = Ent_SpotLight2.GetComponent<SpotLightComponent>().Position;
+    Ent_SpotLight2.GetComponent<TransformComponent>().R = Ent_SpotLight2.GetComponent<SpotLightComponent>().Direction;
+    Ent_SpotLight2.GetComponent<TransformComponent>().S = glm::vec3{ 0.3f, 0.3f, 0.3f };
+    Ent_SpotLight2.AddComponent<MaterialComponent>();
+    Ent_SpotLight2.GetComponent<MaterialComponent>().SetDefault();
+
+
     m_HierarchyPanel.SetContext(m_Scene);
 }
 

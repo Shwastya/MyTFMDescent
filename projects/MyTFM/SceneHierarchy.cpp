@@ -73,8 +73,11 @@ namespace MHelmet
 		// al pulsat boton emerge menu
 		if (ImGui::BeginPopupContextWindow(0, 1, false)) // TRIGGER al anyadir un item
 		{
-			if (ImGui::MenuItem("Create Empty Entity")) 
-				m_Context->CreateEntity("Empty Entity");
+			if (ImGui::MenuItem("Create Empty Entity"))
+			{
+				m_Context->CreateEntity("Empty Entity");				
+			}
+				
 			ImGui::EndPopup();
 		}
 		ImGui::End();
@@ -119,6 +122,9 @@ namespace MHelmet
 						}
 
 						m_CollectionContext.AddComponent<MaterialComponent>();
+
+						//m_CollectionContext.
+
 						ImGui::CloseCurrentPopup();
 					}
 				}
@@ -154,7 +160,7 @@ namespace MHelmet
 
 		ImGui::End();
 
-		ImGui::Begin("Scene Light");
+		ImGui::Begin("Directional Light");
 		m_Context->m_Registry.each([&](auto IDentity)
 		{
 			Entity entity{ IDentity, m_Context.get() };
@@ -195,7 +201,10 @@ namespace MHelmet
 		bool opened = ImGui::TreeNodeEx((void*)(uint32_t)ent, flags, tag.c_str());
 		if (ImGui::IsItemClicked())
 		{
+			
 			m_CollectionContext = ent;
+
+			
 		}
 
 		bool entityDeleted = false;
@@ -264,6 +273,7 @@ namespace MHelmet
 			
 			if (open)
 			{
+				
 				auto& TC = ent.GetComponent<TransformComponent>();
 				DrawVec3("Translation", TC.T);
 				glm::vec3 rotation = glm::degrees(TC.R);
@@ -276,6 +286,17 @@ namespace MHelmet
 				{
 					ent.GetComponent<LightComponent>().Position = TC.T;
 					ent.GetComponent<LightComponent>().Direction = TC.R;
+				}
+
+				if (ent.HasComponent<PointLightComponent>())
+				{
+					ent.GetComponent<PointLightComponent>().Position = TC.T;
+				}
+
+				if (ent.HasComponent<SpotLightComponent>())
+				{
+					ent.GetComponent<SpotLightComponent>().Position = TC.T;					
+					ent.GetComponent<SpotLightComponent>().Direction = TC.R;
 				}
 			}
 			ImGui::NewLine();	
@@ -314,7 +335,108 @@ namespace MHelmet
 				ImGui::TreePop();
 			}
 		}
-		
+		// DIBUJADO DE MATERIAL componente
+		const bool hasLight = ent.HasComponent<LightComponent>();
+
+		if (hasLight)
+		{
+			ImGui::Separator();
+			ImGui::NewLine();
+			if (ImGui::TreeNodeEx((void*)typeid(LightComponent).hash_code(), treenodeFlags, "Light"))
+			{
+
+				auto& ambient = ent.GetComponent<LightComponent>().Ambient;
+				ImGui::ColorEdit3("Ambient", glm::value_ptr(ambient));
+
+
+				auto& difusse = ent.GetComponent<LightComponent>().Difusse;
+				ImGui::ColorEdit3("Difusse", glm::value_ptr(difusse));
+
+				auto& specular = ent.GetComponent<LightComponent>().Specular;
+				ImGui::ColorEdit3("Specular", glm::value_ptr(specular));
+
+
+				ImGui::TreePop();
+
+			}
+			ImGui::NewLine();
+		}
+
+		// DIBUJADO DE POINTLIGHT componente
+		const bool pointLight = ent.HasComponent<PointLightComponent>();
+
+		if (pointLight)
+		{
+			ImGui::Separator();
+			ImGui::NewLine();
+			if (ImGui::TreeNodeEx((void*)typeid(PointLightComponent).hash_code(), treenodeFlags, "PointLight"))
+			{
+
+				auto& ambient = ent.GetComponent<PointLightComponent>().Ambient;
+				ImGui::ColorEdit3("Ambient", glm::value_ptr(ambient));
+
+
+				auto& difusse = ent.GetComponent<PointLightComponent>().Difusse;
+				ImGui::ColorEdit3("Difusse", glm::value_ptr(difusse));
+
+				auto& specular = ent.GetComponent<PointLightComponent>().Specular;
+				ImGui::ColorEdit3("Specular", glm::value_ptr(specular));
+
+				auto& linear = ent.GetComponent<PointLightComponent>().Linear;
+				if (ImGui::DragFloat("Linear", &linear));
+				ent.GetComponent<PointLightComponent>().Linear = linear;
+			
+				auto& quadratic = ent.GetComponent<PointLightComponent>().Quadratic;
+				if (ImGui::DragFloat("Quadratic", &quadratic));
+				ent.GetComponent<PointLightComponent>().Quadratic = quadratic;
+
+				ImGui::TreePop();
+
+			}
+			ImGui::NewLine();
+		}
+
+
+
+		// DIBUJADO DE SPOTLIGHT componente
+		const bool spotLight = ent.HasComponent<SpotLightComponent>();
+
+		if (spotLight)
+		{
+			ImGui::Separator();
+			ImGui::NewLine();
+			if (ImGui::TreeNodeEx((void*)typeid(SpotLightComponent).hash_code(), treenodeFlags, "SpotLight"))
+			{
+
+				auto& ambient = ent.GetComponent<SpotLightComponent>().Ambient;
+				ImGui::ColorEdit3("Ambient", glm::value_ptr(ambient));
+
+
+				auto& difusse = ent.GetComponent<SpotLightComponent>().Difusse;
+				ImGui::ColorEdit3("Difusse", glm::value_ptr(difusse));
+
+				auto& specular = ent.GetComponent<SpotLightComponent>().Specular;
+				ImGui::ColorEdit3("Specular", glm::value_ptr(specular));
+
+				auto& linear = ent.GetComponent<SpotLightComponent>().Linear;
+				if (ImGui::DragFloat("Linear", &linear));
+				ent.GetComponent<SpotLightComponent>().Linear = linear;
+
+				auto& quadratic = ent.GetComponent<SpotLightComponent>().Quadratic;
+				if (ImGui::DragFloat("Quadratic", &quadratic));
+				ent.GetComponent<SpotLightComponent>().Quadratic = quadratic;
+
+				auto& outerCutOff = ent.GetComponent<SpotLightComponent>().outerCutOff;
+				if (ImGui::DragFloat("outerCutOff", &outerCutOff));
+				ent.GetComponent<SpotLightComponent>().outerCutOff = outerCutOff;
+
+				ImGui::TreePop();
+
+			}
+			ImGui::NewLine();
+		}
+
+
 		// DIBUJADO DE MATERIAL componente
 		const bool hasMaterial = ent.HasComponent<MaterialComponent>();		
 	
@@ -372,29 +494,73 @@ namespace MHelmet
 			}
 			if (remove) ent.RemoveComponent<MaterialComponent>();
 		}
+
+		// DIBUJADO DE TEXTURA componente
+		const bool hasTexture = ent.HasComponent<TextureComponent>();
+
+		if (hasTexture)
+		{
+			ImGui::Separator();
+			ImGui::NewLine();
+
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+			bool open = ImGui::TreeNodeEx((void*)typeid(TextureComponent).hash_code(), treenodeFlags, "Material");
+
+			//ImGui::SameLine();
+			ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
+			if (ImGui::Button("-", ImVec2{ 20, 20 }))
+			{
+				ImGui::OpenPopup("ComponentSettings");
+			}
+			ImGui::PopStyleVar();
+
+			bool remove = false;
+
+			//ImGui::NewLine();
+
+			if (ImGui::BeginPopup("ComponentSettings"))
+			{
+
+				if (ImGui::MenuItem("Remove component"))
+				{
+					remove = true;
+				}
+				ImGui::EndPopup();
+			}
+
+
+
+			if (open)
+			{
+				
+
+
+
+
+				ImGui::TreePop();
+			}
+			if (remove) ent.RemoveComponent<MaterialComponent>();
+		}
+
+
+		
+		
 		
 	}
 
 	void SceneHierarchy::DrawComponentLight(Entity ent)
 	{
+
 		const bool hasLight = ent.HasComponent<LightComponent>();
 		if (hasLight)
 		{
-			ImGui::NewLine();			
-			ImGui::Text("Shader Properties:"); 
+
 			ImGui::NewLine();
-
-			auto& ambient = ent.GetComponent<LightComponent>().Ambient;
-			ImGui::DragFloat3("Ambient", glm::value_ptr(ambient), 0.25f);
-
-
-			auto& difusse = ent.GetComponent<LightComponent>().Difusse;
-			ImGui::DragFloat3("Difusse", glm::value_ptr(difusse), 0.25f);
-
-			auto& specular = ent.GetComponent<LightComponent>().Specular;
-			ImGui::DragFloat3("Specular", glm::value_ptr(specular), 0.25f);
+			auto& direction = ent.GetComponent<LightComponent>().Direction;
+			DrawVec3("Direction", direction);
 			ImGui::NewLine();
-			ImGui::Separator();
+			auto& position = ent.GetComponent<LightComponent>().Position;
+			DrawVec3("Position", position);			
 		}
 	}
 	void SceneHierarchy::AssetStore()
