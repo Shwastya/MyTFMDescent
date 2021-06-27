@@ -23,24 +23,14 @@ void main()
 
     v_IsMaterial = u_IsMaterial;
 
-    uv = aUv;
-    normal = normalMat * aNormal;
-    fragPos = vec3(model * vec4(aPos, 1.0));
-    gl_Position = proj * view * model * vec4(aPos, 1.0);
+
+
+      uv = aUv;
+      normal = normalMat * aNormal;
+      fragPos = vec3(model * vec4(aPos, 1.0));
+      gl_Position = proj * view * model * vec4(aPos, 1.0);
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #TYPE F
 #version 330 core
@@ -72,6 +62,7 @@ uniform MaterialM materialM;
 
 struct DirLight {
 
+    vec3 position;
     vec3 direction;
 
     vec3 ambient;
@@ -121,7 +112,7 @@ vec3 calcDirectionalLight(DirLight light, vec3 normal, vec3 viewDir, vec3 albedo
 
     vec3 ambient = albedoMap * light.ambient;
 
-    vec3 lightDir = normalize(-light.direction);
+    vec3 lightDir = normalize(light.position - fragPos);
     float diff = max(dot(normal, lightDir), 0.0);
     vec3 diffuse = diff * albedoMap * light.diffuse;
 
@@ -138,7 +129,7 @@ vec3 calcDirectionalLightM(DirLight light, vec3 normal, vec3 viewDir)
 
     vec3 ambient = materialM.ambient * light.ambient;
 
-    vec3 lightDir = normalize(-light.direction);
+    vec3 lightDir = normalize(light.position - fragPos);
     float diff = max(dot(normal, lightDir), 0.0);
     vec3 diffuse = diff * materialM.diffuse * light.diffuse;
 

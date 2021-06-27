@@ -43,8 +43,7 @@ private:
 	// light
 	Entity Ent_Light;
 
-	Entity Ent_PointLight1;
-	Entity Ent_PointLight2;
+	Entity E_PL[10];
 
 	Entity Ent_SpotLight1;
 	Entity Ent_SpotLight2;

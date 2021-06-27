@@ -34,23 +34,20 @@ void MyTFMDescent::Join()
     Ent_Light.GetComponent<TransformComponent>().R = Ent_Light.GetComponent<LightComponent>().Direction;
     Ent_Light.GetComponent<TransformComponent>().S = glm::vec3(1.5f, 1.0f, 1.0f);    
     
-    
-    Ent_PointLight1 = m_Scene->CreateEntity("Point Ligth1");
-    Ent_PointLight1.AddComponent<PointLightComponent>();
-    Ent_PointLight1.GetComponent<TransformComponent>().T = Ent_PointLight1.GetComponent<PointLightComponent>().Position;
-    Ent_PointLight1.GetComponent<TransformComponent>().S = glm::vec3{ 0.3f, 0.3f, 0.3f };
-    
-    Ent_PointLight1.AddComponent<MaterialComponent>();
-    Ent_PointLight1.GetComponent<MaterialComponent>().SetDefault();
+    for (size_t i = 0; i < 10; ++i)
+    {
+        const std::string idx = "Point Light_" + std::to_string(i + 1);
 
-    Ent_PointLight2 = m_Scene->CreateEntity("Point Ligth2");
-    Ent_PointLight2.AddComponent<PointLightComponent>();
-    Ent_PointLight2.GetComponent<TransformComponent>().T = Ent_PointLight2.GetComponent<PointLightComponent>().Position;
-    Ent_PointLight2.GetComponent<TransformComponent>().S = glm::vec3{ 0.3f, 0.3f, 0.3f };
-    Ent_PointLight2.AddComponent<MaterialComponent>();
-    Ent_PointLight2.GetComponent<MaterialComponent>().SetDefault();
+        E_PL[i] = m_Scene->CreateEntity(idx);
+        E_PL[i].AddComponent<PointLightComponent>();
+        E_PL[i].GetComponent<TransformComponent>().T = E_PL[i].GetComponent<PointLightComponent>().Position;
+        E_PL[i].GetComponent<TransformComponent>().S = glm::vec3{ 0.3f, 0.3f, 0.3f };
 
-    Ent_SpotLight1 = m_Scene->CreateEntity("Spot Ligth1");
+        E_PL[i].AddComponent<MaterialComponent>();
+        E_PL[i].GetComponent<MaterialComponent>().SetDefault();
+    }   
+
+    Ent_SpotLight1 = m_Scene->CreateEntity("Spot Ligth_1");
     Ent_SpotLight1.AddComponent<SpotLightComponent>(); 
     Ent_SpotLight1.GetComponent<TransformComponent>().T = Ent_SpotLight1.GetComponent<SpotLightComponent>().Position;
     Ent_SpotLight1.GetComponent<TransformComponent>().R = Ent_SpotLight1.GetComponent<SpotLightComponent>().Direction;
@@ -58,7 +55,7 @@ void MyTFMDescent::Join()
     Ent_SpotLight1.AddComponent<MaterialComponent>();
     Ent_SpotLight1.GetComponent<MaterialComponent>().SetDefault();
 
-    Ent_SpotLight2 = m_Scene->CreateEntity("Spot Ligth2");
+    Ent_SpotLight2 = m_Scene->CreateEntity("Spot Ligth_2");
     Ent_SpotLight2.AddComponent<SpotLightComponent>();
     Ent_SpotLight2.GetComponent<TransformComponent>().T = Ent_SpotLight2.GetComponent<SpotLightComponent>().Position;
     Ent_SpotLight2.GetComponent<TransformComponent>().R = Ent_SpotLight2.GetComponent<SpotLightComponent>().Direction;

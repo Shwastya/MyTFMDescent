@@ -504,7 +504,7 @@ namespace MHelmet
 			ImGui::NewLine();
 
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
-			bool open = ImGui::TreeNodeEx((void*)typeid(TextureComponent).hash_code(), treenodeFlags, "Material");
+			bool open = ImGui::TreeNodeEx((void*)typeid(TextureComponent).hash_code(), treenodeFlags, "Texture");
 
 			//ImGui::SameLine();
 			ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
@@ -533,13 +533,97 @@ namespace MHelmet
 			if (open)
 			{
 				
-
+				auto& Shininess = ent.GetComponent<TextureComponent>().Shininess;
+				if (ImGui::DragInt("Shininess", &Shininess));
+				ent.GetComponent<TextureComponent>().Shininess = Shininess;
 
 
 
 				ImGui::TreePop();
 			}
-			if (remove) ent.RemoveComponent<MaterialComponent>();
+			if (remove) ent.RemoveComponent<TextureComponent>();
+
+			ImGui::NewLine();
+			ImGui::Text("Choose a texture for the selected entity:");
+			ImGui::NewLine();
+
+			if (ImGui::Button("Skulls", ImVec2{ 100, 20 }))
+			{
+				m_CollectionContext.GetComponent<TextureComponent>().P_A = "../assets/textures/skull_low/Skulls_base.png";
+				m_CollectionContext.GetComponent<TextureComponent>().P_S = "../assets/textures/skull_low/Skulls_specular.png";
+				m_CollectionContext.GetComponent<TextureComponent>().P_N = "../assets/textures/skull_low/Skulls_normal.png";
+				m_CollectionContext.GetComponent<TextureComponent>().SetComponentTexture();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Broken", ImVec2{ 100, 20 }))
+			{
+				m_CollectionContext.GetComponent<TextureComponent>().P_A = "../assets/textures/low_broken/BrokenLimestoneBrickPath_basecolor.png";
+				m_CollectionContext.GetComponent<TextureComponent>().P_S = "../assets/textures/low_broken/BrokenLimestoneBrickPath_height.png";
+				m_CollectionContext.GetComponent<TextureComponent>().P_N = "../assets/textures/low_broken/BrokenLimestoneBrickPath_normal.png";
+				m_CollectionContext.GetComponent<TextureComponent>().SetComponentTexture();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Brain", ImVec2{ 100, 20 }))
+			{
+				m_CollectionContext.GetComponent<TextureComponent>().P_A = "../assets/textures/brain/Brain_Matter_001_COLOR.jpg";
+				m_CollectionContext.GetComponent<TextureComponent>().P_S = "../assets/textures/brain/Brain_Matter_001_SPEC.jpg";
+				m_CollectionContext.GetComponent<TextureComponent>().P_N = "../assets/textures/brain/Brain_Matter_001_NORM.jpg";
+				m_CollectionContext.GetComponent<TextureComponent>().SetComponentTexture();
+			}
+			ImGui::Separator();
+
+			if (ImGui::Button("Alien", ImVec2{ 100, 20 }))
+			{
+				m_CollectionContext.GetComponent<TextureComponent>().P_A = "../assets/textures/alien/Metal_Alien_001_AO.jpg";
+				m_CollectionContext.GetComponent<TextureComponent>().P_S = "../assets/textures/alien/Metal_Alien_001_COLOR.jpg";
+				m_CollectionContext.GetComponent<TextureComponent>().P_N = "../assets/textures/alien/Metal_Alien_001_NRM.jpg";
+				m_CollectionContext.GetComponent<TextureComponent>().SetComponentTexture();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("FlatRing", ImVec2{ 100, 20 }))
+			{
+				m_CollectionContext.GetComponent<TextureComponent>().P_A = "../assets/textures/FlatRing_low/FlatRingChainmailArmor_basecolor.png";
+				m_CollectionContext.GetComponent<TextureComponent>().P_S = "../assets/textures/FlatRing_low/FlatRingChainmailArmor_height.png";
+				m_CollectionContext.GetComponent<TextureComponent>().P_N = "../assets/textures/FlatRing_low/FlatRingChainmailArmor_normal.png";
+				m_CollectionContext.GetComponent<TextureComponent>().SetComponentTexture();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Organic", ImVec2{ 100, 20 }))
+			{
+				m_CollectionContext.GetComponent<TextureComponent>().P_A = "../assets/textures/organic/Organic_matter_001_COLOR.jpg";
+				m_CollectionContext.GetComponent<TextureComponent>().P_S = "../assets/textures/organic/Organic_matter_001_SPEC.jpg";
+				m_CollectionContext.GetComponent<TextureComponent>().P_N = "../assets/textures/organic/Organic_matter_001_NORM.jpg";
+				m_CollectionContext.GetComponent<TextureComponent>().SetComponentTexture();
+			}
+			ImGui::Separator();
+			if (ImGui::Button("Gems", ImVec2{ 100, 20 }))
+			{
+				m_CollectionContext.GetComponent<TextureComponent>().P_A = "../assets/textures/gems/Incrusted_Gems_001_COLOR.jpg";
+				m_CollectionContext.GetComponent<TextureComponent>().P_S = "../assets/textures/gems/Incrusted_Gems_001_NORM.jpg";
+				m_CollectionContext.GetComponent<TextureComponent>().P_N = "../assets/textures/gems/Incrusted_Gems_001_SPEC.jpg";
+				m_CollectionContext.GetComponent<TextureComponent>().SetComponentTexture();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Abstract", ImVec2{ 100, 20 }))
+			{
+				m_CollectionContext.GetComponent<TextureComponent>().P_A = "../assets/textures/abstract/Abstract_001_COLOR.jpg";
+				m_CollectionContext.GetComponent<TextureComponent>().P_S = "../assets/textures/abstract/Abstract_001_DISP.png";
+				m_CollectionContext.GetComponent<TextureComponent>().P_N = "../assets/textures/abstract/Abstract_001_NRM.jpg";
+				m_CollectionContext.GetComponent<TextureComponent>().SetComponentTexture();
+			}
+
+
+
+
+
+			ImGui::SameLine();
+			if (ImGui::Button("Reset", ImVec2{ 100, 20 }))
+			{
+				m_CollectionContext.GetComponent<TextureComponent>().P_A = m_CollectionContext.GetComponent<TextureComponent>().D_A;
+				m_CollectionContext.GetComponent<TextureComponent>().P_S = m_CollectionContext.GetComponent<TextureComponent>().D_S;
+				m_CollectionContext.GetComponent<TextureComponent>().P_N = m_CollectionContext.GetComponent<TextureComponent>().D_N;
+				m_CollectionContext.GetComponent<TextureComponent>().SetComponentTexture();
+			}
 		}
 
 

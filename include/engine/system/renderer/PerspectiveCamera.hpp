@@ -61,7 +61,7 @@ namespace MHelmet
         float m_Fov;
 
     private:
-        float m_Speed = 13.5f;
+        float m_Speed = 7.5f;
         float m_Sensitivity = 0.1f;
 
        

@@ -4,9 +4,8 @@
 layout (location=0) in vec3 aPos;
 layout (location=1) in vec2 aUv;
 layout (location=2) in vec3 aNormal;
-
-layout (location=3) in vec3 aTanget;
-layout (location=4) in vec3 aBTanget;
+layout (location=3) in vec3 aTangent;
+layout (location=4) in vec3 aBitangent;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -15,9 +14,10 @@ uniform mat3 normalMat;
 
 uniform int u_IsMaterial;
 
-out vec3 normal;
+out vec3 normali;
 out vec3 fragPos;
 out vec2 uv;
+out mat3 TBN;
 
 flat out int v_IsMaterial;
 
@@ -26,10 +26,30 @@ void main()
 
     v_IsMaterial = u_IsMaterial;
 
-    uv = aUv;
-    normal = normalMat * aNormal;
-    fragPos = vec3(model * vec4(aPos, 1.0));
-    gl_Position = proj * view * model * vec4(aPos, 1.0);
+
+    if (v_IsMaterial > 0)
+    {
+      uv = aUv;
+      normali = normalMat * aNormal;
+      fragPos = vec3(model * vec4(aPos, 1.0));
+      gl_Position = proj * view * model * vec4(aPos, 1.0);
+    }
+    else
+    {
+      uv = aUv;
+
+      vec3 T = normalize(normalMat * aTangent);
+      vec3 N = normalize(normalMat * aNormal);
+      T = normalize(T - dot(T, N) * N);
+      vec3 B = cross(N, T);
+
+      TBN = mat3(T, B, N); // world space
+     //mat3 TBN = transpose(mat3(T, B, N)); // tangent space
+
+      fragPos = vec3(model * vec4(aPos, 1.0));
+      gl_Position = proj * view * model * vec4(aPos, 1.0);
+    }
+
 }
 
 
@@ -50,9 +70,10 @@ void main()
 
 out vec4 FragColor;
 
-in vec3 normal;
+in vec3 normali;
 in vec3 fragPos;
 in vec2 uv;
+in mat3 TBN;
 
 flat in int v_IsMaterial;
 
@@ -76,6 +97,7 @@ uniform MaterialM materialM;
 
 struct DirLight {
 
+  //  vec3 position;
     vec3 direction;
 
     vec3 ambient;
@@ -96,7 +118,7 @@ struct PointLight {
     float linear;
     float quadratic;
 };
-#define NUMBER_POINT_LIGHTS 2
+#define NUMBER_POINT_LIGHTS 10
 uniform PointLight pointLight[NUMBER_POINT_LIGHTS];
 
 struct SpotLight {
@@ -252,7 +274,7 @@ void main() {
   {
 
 
-    vec3 norm =     normalize(normal);
+    vec3 norm =     normalize(normali);
     vec3 viewDir =    normalize(viewPos - fragPos);
 
     vec3 finalColor = calcDirectionalLightM(dirLight, norm, viewDir);
@@ -274,7 +296,9 @@ void main() {
     vec3 albedo = vec3(texture(material.diffuse, uv));
     vec3 specular = vec3(texture(material.specular, uv));
 
-    vec3 norm = normalize(normal);
+    vec3 norm = vec3(texture(material.normal, uv));
+    norm = normalize(norm * 2.0 - 1.0);
+    norm = normalize(TBN * norm);
     vec3 viewDir = normalize(viewPos - fragPos);
 
     vec3 finalColor = calcDirectionalLight(dirLight, norm, viewDir, albedo, specular);

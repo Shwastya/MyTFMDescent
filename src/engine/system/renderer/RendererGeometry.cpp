@@ -51,26 +51,32 @@ namespace MHelmet
 		SHADER->Uniform("materialM.specular", specular);
 		SHADER->Uniform("materialM.shininess", shininess); 
 	}
-	static void SetTexture(const Texture2D& albedo, const Texture2D& specular, const int& shininn = 32)
+	static void SetTexture(const Texture2D& albedo, const Texture2D& specular, const Texture2D& normal, const int& shininn = 32)
 	{
 			SHADER->Uniform("u_IsMaterial", 0);
+
 			albedo.Bind(0);
 			SHADER->Uniform("material.diffuse", 0);
+
 			specular.Bind(1);
 			SHADER->Uniform("material.specular", 1);
-			specular.Bind(2);
+
+			normal.Bind(2);
 			SHADER->Uniform("material.normal", 2);
 
 			SHADER->Uniform("material.shininess", shininn);
 	}
 
-	static void SettLight(const glm::vec3& direction, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
+	static void SettLight(const glm::vec3& direction, const glm::vec3& position, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
 	{
 		SHADER->Uniform("dirLight.direction", direction);
+		//SHADER->Uniform("dirLight.position", position);
 		SHADER->Uniform("dirLight.ambient", ambient);
 		SHADER->Uniform("dirLight.diffuse", diffuse);
 		SHADER->Uniform("dirLight.specular", specular);
 	}	
+
+	
 
 	static void SubmitModelToScene(const glm::mat4& model, const Geometries& vao, bool rotate = false)
 	{
@@ -182,8 +188,10 @@ namespace MHelmet
 			)
 		);	
 		SHADER->Uniform("viewPos", C.Cameraman.Get().GetPosition());
+		SHADER->Uniform("TFMviewPos", C.Cameraman.Get().GetPosition()); // NORMAL MAPPING
 
-		SettLight(L.Direction, L.Ambient, L.Difusse, L.Specular);		
+		SettLight(L.Direction, L.Position, L.Ambient, L.Difusse, L.Specular);
+		
 	}
 
 	// POINT LIGHTS
@@ -236,7 +244,7 @@ namespace MHelmet
 	void RendererGeometry::DrawTriangle(const glm::mat4& trans, const TextureComponent& texture)
 	{
 		glm::mat4 model = trans;
-		SetTexture(*texture.Albedo, *texture.Specular, texture.Shininess);
+		SetTexture(*texture.Albedo, *texture.Specular, *texture.Normal, texture.Shininess);
 		SubmitModelToScene(model, triangle);
 	}
 
@@ -251,7 +259,7 @@ namespace MHelmet
 	void RendererGeometry::DrawQuad(const glm::mat4& trans, const TextureComponent& texture)
 	{
 		glm::mat4 model = trans;
-		SetTexture(*texture.Albedo, *texture.Specular, texture.Shininess);
+		SetTexture(*texture.Albedo, *texture.Specular, *texture.Normal, texture.Shininess);
 		SubmitModelToScene(model, quad);
 	}
 
@@ -268,7 +276,7 @@ namespace MHelmet
 	void RendererGeometry::DrawCube(const glm::mat4& trans, const TextureComponent& texture, bool rotate)
 	{
 		glm::mat4 model = trans;		
-		SetTexture(*texture.Albedo, *texture.Specular, texture.Shininess);
+		SetTexture(*texture.Albedo, *texture.Specular, *texture.Normal, texture.Shininess);
 		SubmitModelToScene(model, cube);
 	}
 
@@ -285,7 +293,7 @@ namespace MHelmet
 	void RendererGeometry::DrawSphere(const glm::mat4& trans, const TextureComponent& texture)
 	{
 		glm::mat4 model = trans;
-		SetTexture(*texture.Albedo, *texture.Specular, texture.Shininess);
+		SetTexture(*texture.Albedo, *texture.Specular, *texture.Normal, texture.Shininess);
 		SubmitModelToScene(model, sphere);
 	}
 
@@ -302,7 +310,7 @@ namespace MHelmet
 	void RendererGeometry::DrawTeapot(const glm::mat4& trans, const TextureComponent& texture)
 	{
 		glm::mat4 model = trans;
-		SetTexture(*texture.Albedo, *texture.Specular, texture.Shininess);
+		SetTexture(*texture.Albedo, *texture.Specular, *texture.Normal, texture.Shininess);
 		SubmitModelToScene(model, teapot);
 	}
 }

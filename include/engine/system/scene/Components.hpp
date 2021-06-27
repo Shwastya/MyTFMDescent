@@ -213,25 +213,29 @@ namespace MHelmet
 
 		void SetAlbedo()
 		{
-			Albedo = nullptr;
+			//Albedo = nullptr;
 			Albedo = Texture2D::Create(P_A, Format);
 		}
 		void SetSpecular()
 		{
-			Specular = nullptr;
+		//	Specular = nullptr;
 			Specular = Texture2D::Create(P_S, Format);
 		}
 
 		void SetNormal()
 		{
-			Normal = nullptr;
+			//Normal = nullptr;
 			Normal = Texture2D::Create(P_N, Format);
 		}
 
 		void SetComponentTexture()
 		{
+			Albedo = Texture2D::Create("../assets/textures/bricks_albedo.png", Format);
+			Specular = Texture2D::Create("../assets/textures/bricks_specular.png", Format);
+			Normal = Texture2D::Create("../assets/textures/bricks_normal.png", Format);
 			SetAlbedo();
 			SetSpecular();
+			SetNormal();				
 		}
 
 		void SetToDefault()

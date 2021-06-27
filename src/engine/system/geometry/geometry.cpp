@@ -68,7 +68,7 @@ namespace MHelmet
 
     void Geometry::setData(const float* positions, const float* uvs, const float* normals, const uint32_t* indices, float* VBO, bool TangBitang)
     {
-        const size_t length = NV * 3;
+        const size_t length = static_cast<size_t>(_nVertices) * 3;
         const auto tangents = new float[length];
         const auto biTangents = new float[length];
        
@@ -78,7 +78,7 @@ namespace MHelmet
         // en caso de la geometria de sphere o teapot
         // que no se calculan bien tangentes ni bitangentes
 
-        if (!TangBitang) // its an Hack solution!!
+        if (!TangBitang) 
         {
             memset(tangents, 0.0f, length * sizeof(float));
             memset(biTangents, 0.0f, length * sizeof(float));
@@ -123,45 +123,11 @@ namespace MHelmet
             idxVbo += 14;            
         }        
 
-        delete[] tangents;
-        delete[] biTangents; 
+      
 
-        int i1 = 0;
-        int i2 = 0;
-
-
-
-    /*    std::cout << uvs[2] << std::endl;
-        std::cout << VBO[5] << std::endl;*/
-        //for (int i = 0; i < _nVertices; ++i)
-        //{
-        //    // positions
-        //    std::cout << VBO[i] << ", ";
-        //    std::cout << VBO[i + 1] << ", ";
-        //    std::cout << VBO[i + 2] << " - "; 
-
-        //    // uvs
-        //    std::cout << VBO[i + 3] << ", ";
-        //    std::cout << VBO[i + 4] << " - ";
-
-        //    // normals
-        //    std::cout << VBO[i + 5] << ", ";
-        //    std::cout << VBO[i + 6] << ", ";
-        //    std::cout << VBO[i + 7] << " - ";
-
-        //    // tangents
-        //    std::cout << VBO[i + 8] << ", ";
-        //    std::cout << VBO[i + 9] << ", ";
-        //    std::cout << VBO[i + 10] << " - ";
-
-        //    // bitangents
-        //    std::cout << VBO[i + 11] << ", ";
-        //    std::cout << VBO[i + 12] << ", ";
-        //    std::cout << VBO[i + 13] << " - ";
-
-        //    std::cout << std::endl;
-
-        //}
+       delete[] tangents;
+       delete[] biTangents; 
+     
     }
 }
 
