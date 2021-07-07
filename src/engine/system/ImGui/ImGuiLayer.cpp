@@ -42,6 +42,10 @@ namespace MHelmet
 		{
 			style.WindowRounding = 0.0f;
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+			//style.Colors[ImGuiCol_WindowBg].x = 0.5f;
+			//style.Colors[ImGuiCol_WindowBg].y = 0.2f;
+			//style.Colors[ImGuiCol_WindowBg].z = 0.6f;
+		
 		}
 
 		// Setup Platform/Renderer bindings
@@ -65,7 +69,6 @@ namespace MHelmet
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-
 		ImGuizmo::BeginFrame();
 	}
 

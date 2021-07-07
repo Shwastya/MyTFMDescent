@@ -48,8 +48,7 @@ namespace MHelmet
 	}
 	void OpenGLFrameBuffer::ColorDepthAttachment()
 	{
-		if (m_FboID) OpenGLFrameBuffer::~OpenGLFrameBuffer();		
-
+		if (m_FboID) OpenGLFrameBuffer::~OpenGLFrameBuffer();
 		// generar el FBO
 		glGenFramebuffers(1, &m_FboID);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_FboID);
@@ -72,7 +71,6 @@ namespace MHelmet
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_RenderBuffer);
 
 		CheckFrameBufferStatus();
-
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);		
 	}
 }

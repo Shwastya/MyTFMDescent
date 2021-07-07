@@ -4,7 +4,7 @@
 #include "engine/system/events/AppEvents/OnAppEvents.hpp"
 #include "engine/system/events/KeyEvents/OnKeyEvents.hpp"
 #include "engine/system/events/MouseEvents/OnMouseEvents.hpp"
-
+#include "engine/system/renderer/Renderer.hpp"
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLContext.hpp"
 
 namespace MHelmet 
@@ -59,45 +59,48 @@ namespace MHelmet
 			GLFWmonitor* PrimaryMonitor = glfwGetPrimaryMonitor();
 			const GLFWvidmode* m = glfwGetVideoMode(PrimaryMonitor);
 
-			m_Window = glfwCreateWindow(m->width, m->height, m_Data.Title.c_str() , PrimaryMonitor, nullptr);
-		
-			
+			m_Window = glfwCreateWindow(m->width, m->height, m_Data.Title.c_str() , PrimaryMonitor, nullptr);					
 		}
 		else 
 		{
-				m_Window = glfwCreateWindow(
-				static_cast<int>(m_Spec.Size.Width), 
-				static_cast<int>(m_Spec.Size.Height), 
-				m_Data.Title.c_str(), nullptr, nullptr
-				);
-				
-		}		
-		
-		////////////// OpenGL Contex - END -   //////////////	
+				m_Window = glfwCreateWindow(m_Spec.Size.Width, m_Spec.Size.Height, 
+				m_Data.Title.c_str(), nullptr, nullptr);				
+		}
 
-		/*glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4.1);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4.1);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);			
+		/// glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4.1);
+		/// glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4.1);
+		/// glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);			
 	
-		glfwMakeContextCurrent(m_Window);    
-		int result = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);*/
-
-		/////////////////////////////////////////////////////	
-
-		m_Context = new OpenGLContext(m_Window);
-		m_Context->Init();
+		/// glfwMakeContextCurrent(m_Window);    
+		/// int result = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+					
+		switch (Renderer::GetAPI())
+		{		
+			case RendererAPI::API::OpenGL: 
+			{
+				m_Context = new OpenGLContext(m_Window);
+				break;
+			}
+			case RendererAPI::API::DirectX:  
+				/* DirectX Context */
+				break;
+			
+			case RendererAPI::API::Vulkan: 
+				/* Vulkan Context  */
+				break;
+		}
 		
+		m_Context->Init();			
 
 		// Puntero a la instancia actual del window
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-
 
 		/*********************************************************/
 		/*                   GLFW callbacks set                  */
 		/*********************************************************/
 		#define WD_CAST reinterpret_cast<WindowData*>
 
-		/// On Window Close
+		// On Window Close
 		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
 		{
 			auto& data = *(WD_CAST(glfwGetWindowUserPointer(window)));
@@ -206,15 +209,12 @@ namespace MHelmet
 			data.CallBack(event);
 		});
 	}
-
-	//void WindowWin::SwapBuffers() 
+	
 	void WindowWin::SwapBuffers()
 	{
 		glfwPollEvents();
-
-		//glfwSwapBuffers(m_Window);
-		// SwapBuffers se situa donde se ha creado
-		// el contexto de render
+		// glfwSwapBuffers(m_Window);
+		// SwapBuffers se situa donde se ha creado el contexto de render
 		m_Context->SwapBuffers(); 
 	}
 

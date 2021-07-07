@@ -36,35 +36,37 @@ void MyTFMDescent::Join()
     
     for (size_t i = 0; i < 10; ++i)
     {
-        const std::string idx = "Point Light_" + std::to_string(i + 1);
+        const std::string idx = "Point Light " + std::to_string(i + 1);
 
-        E_PL[i] = m_Scene->CreateEntity(idx);
-        E_PL[i].AddComponent<PointLightComponent>();
-        E_PL[i].GetComponent<TransformComponent>().T = E_PL[i].GetComponent<PointLightComponent>().Position;
-        E_PL[i].GetComponent<TransformComponent>().S = glm::vec3{ 0.3f, 0.3f, 0.3f };
-
-        E_PL[i].AddComponent<MaterialComponent>();
-        E_PL[i].GetComponent<MaterialComponent>().SetDefault();
+        Ent_PL[i] = m_Scene->CreateEntity(idx);
+        Ent_PL[i].AddComponent<PointLightComponent>();
+        Ent_PL[i].GetComponent<TransformComponent>().T = Ent_PL[i].GetComponent<PointLightComponent>().Position;
+        Ent_PL[i].GetComponent<TransformComponent>().S = glm::vec3{ 0.3f, 0.3f, 0.3f };
+     
+        Ent_PL[i].AddComponent<MaterialComponent>();
+        Ent_PL[i].GetComponent<MaterialComponent>().SetDefault();
     }   
 
-    Ent_SpotLight1 = m_Scene->CreateEntity("Spot Ligth_1");
-    Ent_SpotLight1.AddComponent<SpotLightComponent>(); 
-    Ent_SpotLight1.GetComponent<TransformComponent>().T = Ent_SpotLight1.GetComponent<SpotLightComponent>().Position;
-    Ent_SpotLight1.GetComponent<TransformComponent>().R = Ent_SpotLight1.GetComponent<SpotLightComponent>().Direction;
-    Ent_SpotLight1.GetComponent<TransformComponent>().S = glm::vec3{ 0.3f, 0.3f, 0.3f };
-    Ent_SpotLight1.AddComponent<MaterialComponent>();
-    Ent_SpotLight1.GetComponent<MaterialComponent>().SetDefault();
+    for (size_t i = 0; i < 2; ++i)
+    {
+        const std::string idx = "Spot Light " + std::to_string(i + 1);
 
-    Ent_SpotLight2 = m_Scene->CreateEntity("Spot Ligth_2");
-    Ent_SpotLight2.AddComponent<SpotLightComponent>();
-    Ent_SpotLight2.GetComponent<TransformComponent>().T = Ent_SpotLight2.GetComponent<SpotLightComponent>().Position;
-    Ent_SpotLight2.GetComponent<TransformComponent>().R = Ent_SpotLight2.GetComponent<SpotLightComponent>().Direction;
-    Ent_SpotLight2.GetComponent<TransformComponent>().S = glm::vec3{ 0.3f, 0.3f, 0.3f };
-    Ent_SpotLight2.AddComponent<MaterialComponent>();
-    Ent_SpotLight2.GetComponent<MaterialComponent>().SetDefault();
+        Ent_SL[i] = m_Scene->CreateEntity(idx);
+        Ent_SL[i].AddComponent<SpotLightComponent>();
+        Ent_SL[i].GetComponent<TransformComponent>().T = Ent_SL[i].GetComponent<SpotLightComponent>().Position;
+        Ent_SL[i].GetComponent<TransformComponent>().R = Ent_SL[i].GetComponent<SpotLightComponent>().Direction;
+        Ent_SL[i].GetComponent<TransformComponent>().S = glm::vec3{ 0.3f, 0.3f, 0.3f };
+        Ent_SL[i].AddComponent<MaterialComponent>();
+        Ent_SL[i].GetComponent<MaterialComponent>().SetDefault();
+    } 
 
 
     m_HierarchyPanel.SetContext(m_Scene);
+
+    // INFO
+    m_Vendor   = RenderDrawCall::GetVendor();
+    m_Renderer = RenderDrawCall::GetRedenrer();
+    m_Version  = RenderDrawCall::GetVersion();
 }
 
 void MyTFMDescent::Free() { }
@@ -75,7 +77,7 @@ void MyTFMDescent::Update(DeltaTime dt)
 
     if (m_IsEditScene) m_FrameBuffer->Bind();
     {
-        RenderDrawCall::ClearColor({ 0.1f, 0.1f, 6.0f, 1.0f });
+        RenderDrawCall::ClearColor({ m_BackGroundColor, 1.0f });
         RenderDrawCall::clear();
 
         m_Scene->Update(dt);
@@ -92,8 +94,8 @@ void MyTFMDescent::ImGuiRender()
         static bool opt_padding = false;
         static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
-        // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
-        // because it would be confusing to have two docking targets within each others.
+        // Estamos usando la bandera ImGuiWindowFlags_NoDocking para hacer que la ventana principal no se pueda acoplar,
+        // porque sería confuso tener dos objetivos de acoplamiento entre sí.
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
         if (opt_fullscreen)
         {
@@ -163,13 +165,12 @@ void MyTFMDescent::ImGuiRender()
 
 
         /* My ImGui SETTINGS */
-        // 
       
-        ImGui::Begin("Specifications:"); // begin 1
+        ImGui::Begin("Rendering"); // begin 1
         ImGui::NewLine();
-        ImGui::Text("GPU:      NVIDIA Corporation");
-        ImGui::Text("Renderer: NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2");
-        ImGui::Text("Version:  N4.6.0 NVIDIA 466.77");
+       // ImGui::Text(m_Vendor.c_str()  );
+        ImGui::Text(m_Renderer.c_str());
+        ImGui::Text(m_Version.c_str());
         ImGui::NewLine();
         ImGui::Separator();
         ImGui::NewLine();
@@ -180,11 +181,18 @@ void MyTFMDescent::ImGuiRender()
             Ent_CameraMan2.GetComponent<CameraManComponent>().Primary = !m_PrimaryCam;
             Ent_CameraMan1.GetComponent<CameraManComponent>().Primary = m_PrimaryCam;
         }
+        ImGui::NewLine();
+        ImGui::Separator();
+        ImGui::NewLine();
+        ImGui::Text("Background");
+        ImGui::ColorEdit3("Color", glm::value_ptr(m_BackGroundColor));
+        
 
         /* SCENE FRAME */
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-        ImGui::Begin("Scene Frame");
 
+        ImGui::Begin("Scene Frame");
+   
         /* FLAG */ // Si cambia el ViewPort del frameImGui donde esta la textura de la escena
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
         {
@@ -212,8 +220,9 @@ void MyTFMDescent::ImGuiRender()
         }
 
         uint32_t textureID = m_FrameBuffer->GetFBOTexture(); // FBO  
+    //    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1.0f, 0.0f, 0.0f, 1.0f)); // Set window background to red
         ImGui::Image((void*)textureID, ImVec2{ viewportPanelSize.x, viewportPanelSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-
+      //  ImGui::PopStyleColor();
 
 
         // Gizmo
@@ -272,10 +281,6 @@ void MyTFMDescent::ImGuiRender()
         Ent_CameraMan2.GetComponent<CameraManComponent>().ViewportX = W_;
         Ent_CameraMan2.GetComponent<CameraManComponent>().ViewportY = H_;
     }   
-
-    //static bool show_demo_window = true;
-    //ImGui::ShowDemoWindow(&show_demo_window);
-     
 }
 
 void MyTFMDescent::OnEvent(Event& event) 
@@ -297,7 +302,7 @@ void MyTFMDescent::OnEvent(Event& event)
             {
                 if (event.GetEventType() == IsType::MH_MOUSE_BUTTON_PRESSED)
                 {
-                    OnMouseButtonPressed& e = (OnMouseButtonPressed&)event;                    
+                    OnMouseButtonPressed& e = dynamic_cast<OnMouseButtonPressed&>(event);                    
 
                     if (e.GetMouseButton() == 1)
                     {
@@ -327,27 +332,38 @@ void MyTFMDescent::OnEvent(Event& event)
 
 	if (event.GetEventType() == IsType::MH_KEY_PRESSED)
 	{
-		OnKeyPressed& e = (OnKeyPressed&)event;
+		OnKeyPressed& e = dynamic_cast<OnKeyPressed&>(event);
 
         switch (e.GetKeyCode())
         {
             case Key::Q:
-                m_GizmoType = -1;
-                break;
+                m_GizmoType = -1; break;
             case Key::D1:
-                m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
-                break;
+                m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;  break;
             case Key::D2:
-                m_GizmoType = ImGuizmo::OPERATION::ROTATE;
-                break;
+                m_GizmoType = ImGuizmo::OPERATION::ROTATE;     break;
             case Key::D3:
-                m_GizmoType = ImGuizmo::OPERATION::SCALE;
-                break;
+                m_GizmoType = ImGuizmo::OPERATION::SCALE;      break;
 
             case Key::M:
                 // hack -> recupera el puntero del raton en el editor
                 Engine::p().GetWindow().SetCaptureMode(false);
                 break;
+
+            case Key::C:
+            {
+                m_PrimaryCam = false;
+                Ent_CameraMan2.GetComponent<CameraManComponent>().Primary = true;
+                Ent_CameraMan1.GetComponent<CameraManComponent>().Primary = false;
+                break;
+            }
+            case Key::V:
+            {
+                m_PrimaryCam =  true;
+                Ent_CameraMan2.GetComponent<CameraManComponent>().Primary = false;
+                Ent_CameraMan1.GetComponent<CameraManComponent>().Primary = true;
+                break;
+            }                
         }        
 	}
 }

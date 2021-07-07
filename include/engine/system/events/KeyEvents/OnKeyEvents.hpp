@@ -6,25 +6,27 @@ namespace MHelmet
 {
 	struct OnKeyPressed : public KeyEvent
 	{
-		OnKeyPressed(KeyCode keycode, int repeatCount)
+		OnKeyPressed(KeyCode keycode, int repeatCount = 1)
 			: KeyEvent(keycode), m_RepeatCount(repeatCount) {}
 
 		int GetRepeatCount() const { return m_RepeatCount; }
 
-		static  IsType GetStaticType() { return IsType::MH_KEY_PRESSED; }
-		virtual IsType GetEventType() const override { return GetStaticType(); }
+		virtual IsType GetEventType() const override { return m_Type; }
 		
-	private:
-
+	private:		
 		int m_RepeatCount;
+		const static IsType m_Type = IsType::MH_KEY_PRESSED;
 	};
 
 	struct OnKeyReleased : public KeyEvent
 	{
-		OnKeyReleased(KeyCode keycode): KeyEvent(keycode) {}		
+		OnKeyReleased(KeyCode keycode, int repeat = 1): KeyEvent(keycode), m_RepeatCount(repeat) {}		
 
-		static  IsType GetStaticType() { return IsType::MH_KEY_RELEASED; }
-		virtual IsType GetEventType() const override { return GetStaticType(); }
+		virtual IsType GetEventType() const override { return m_Type; }
+
+	private:
+		int m_RepeatCount;
+		const static IsType m_Type = IsType::MH_KEY_RELEASED;
 		
 	};
 
@@ -32,8 +34,10 @@ namespace MHelmet
 	{
 		OnKeyTyped(KeyCode keycode) : KeyEvent(keycode) {}		
 
-		static  IsType GetStaticType() { return IsType::MH_KEY_TYPED; }
-		virtual IsType GetEventType() const override { return GetStaticType(); }
+		virtual IsType GetEventType() const override {  return m_Type; }
+
+	private:
+		const static IsType m_Type = IsType::MH_KEY_TYPED;
 	};
 
 

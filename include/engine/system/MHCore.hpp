@@ -18,7 +18,7 @@
 		#define CORE_FATAL(...) ENGINE_LOG->fatal (__VA_ARGS__)
 
 
-	// CORE Client
+	// CLIENT Logs
 
 		#define TRACE(...) CLIENT_LOG->trace (__VA_ARGS__)
 		#define INFO(...)  CLIENT_LOG->info  (__VA_ARGS__)
@@ -47,9 +47,5 @@ namespace CORE
 	inline void Init() { CORE_TRACE(MH_ENGINE, MH_VERSION); } // Log Singleton init in first use
 	inline void Stop() { CORE_TRACE("Shutdown MHelmet Engine"); CLOSE__LOG; }
 }
-
-// Perform Event Tasks
-#define BIND_E_FN(E) std::bind(&##E, this, std::placeholders::_1)
-#define BINDIMGUIEVENT(x) std::bind(&ImGuiLayer::x, this, std::placeholders::_1)
 
 

@@ -8,8 +8,6 @@ namespace MHelmet
 	// entity tendra una referencia a escena
 	class Entity
 	{
-
-
 	public:
 		Entity() = default;
 		Entity(entt::entity wrap, Scene* scene);
@@ -33,11 +31,7 @@ namespace MHelmet
 		template<typename T>
 		T& GetComponent()
 		{
-			if (!HasComponent<T>())
-			{
-				CORE_ERROR("Not have component!");
-
-			}
+			if (!HasComponent<T>()) CORE_ERROR("Not have component!");			
 			else
 			return m_Scene->m_Registry.get<T>(m_EntityWrap);
 		}
@@ -53,8 +47,7 @@ namespace MHelmet
 		{
 			if (!HasComponent<T>())
 			{
-				CORE_WARN("Not have component to remove!");
-				
+				CORE_WARN("Not have component to remove!");				
 			}
 			else
 			m_Scene->m_Registry.remove<T>(m_EntityWrap);
@@ -74,9 +67,6 @@ namespace MHelmet
 		}
 	private:
 		Scene* m_Scene = nullptr;
-		entt::entity m_EntityWrap{ entt::null };
-		
-		
-		
+		entt::entity m_EntityWrap{ entt::null };		
 	};
 }

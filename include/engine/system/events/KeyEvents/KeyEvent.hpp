@@ -12,18 +12,10 @@ namespace MHelmet
 	class KeyEvent : public Event
 	{
 	public:
-		inline KeyCode GetKeyCode() const 
-        { 
-            return m_KeyCode; 
-        }
-		inline virtual int GetCategoryFlags() const override 
-        { 
-            return MH_CATG_KEYBOARD | MH_CATG_INPUT;
-        }
+		KeyCode GetKeyCode() const { return m_KeyCode; }
 
 	protected:
 		KeyEvent(KeyCode keycode) : m_KeyCode(keycode) {}
-
 		KeyCode m_KeyCode;
 	};
 }

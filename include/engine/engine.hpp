@@ -2,13 +2,10 @@
 #include "../src/engine/mhpch.cpp"
 #include "engine/system/platform/Window.hpp"
 #include "engine/system/ImGui/ImGuiLayer.hpp"
-//#include "engine/system/events/AppEvents/OnAppEvents.hpp"
-
 #include <GLFW/glfw3.h>
 
 namespace MHelmet 
 {
-
 	class Engine 
 	{
 
@@ -32,10 +29,9 @@ namespace MHelmet
 		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 
 		static float GetTime();
-
 		
 	private: 
-		bool WindowCloseCallBack(OnWindowClose& event); // perform event
+		bool WindowCloseCallBack(OnWindowClose& event); 
 		bool WindowResizeCallBack(OnWindowResize& event);
 
 	private:
@@ -50,12 +46,9 @@ namespace MHelmet
 		float m_LastFrame = 0.0f;
 		DeltaTime m_DeltaTime;
 
-	private:
-		
+	private:		
 		static Engine* s_Instance;
 	};
-	
-	//Unique<Engine> createApp(); // definido en cliente
 }
 
 

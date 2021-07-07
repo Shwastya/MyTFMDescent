@@ -4,15 +4,17 @@
 #define MH_ENABLE_CORE true
 
 namespace MHelmet
-{	OpenGLContext::OpenGLContext(GLFWwindow* _GLFWwindow)
+{	
+	
+	
+	OpenGLContext::OpenGLContext(GLFWwindow* _GLFWwindow)
 		: m_GLFWwindow(_GLFWwindow)
 	{}
 
 	void OpenGLContext::Init()
 	{
 		if (MH_ENABLE_CORE) // temporal 
-		{
-			
+		{			
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4.6);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4.6);
 			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);			
@@ -21,16 +23,8 @@ namespace MHelmet
 		glfwMakeContextCurrent(m_GLFWwindow);
 		int result = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
-		if (!result)
-		{
-			CORE_ERROR("Error initializing GLAD! {0}:", result);
-		}	
-
-		CORE_INFO("------------------------------------------------");
-		CORE_INFO("GPU:         {}", glGetString(GL_VENDOR));
-		CORE_INFO("Renderer:    {}", glGetString(GL_RENDERER));
-		CORE_INFO("Version:     {}", glGetString(GL_VERSION));
-		CORE_INFO("------------------------------------------------");
+		if (!result) CORE_ERROR("Error initializing GLAD! {0}:", result);
+			
 	}
 
 	void OpenGLContext::SwapBuffers()

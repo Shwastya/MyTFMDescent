@@ -3,7 +3,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "engine/system/renderer/PerspectiveCamera.hpp"
 #include "engine/system/renderer/Texture.hpp"
-#define GLM_ENABLE_EXPERIMENTAL
+
+//#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
 namespace MHelmet
@@ -38,26 +39,21 @@ namespace MHelmet
 	{
 		glm::vec3 T = glm::vec3(0.0f, 0.0f, 0.0f);
 		glm::vec3 R = glm::vec3(0.0f, 0.0f, 0.0f);
-		glm::vec3 S = glm::vec3(1.0f, 1.0f, 1.0f);
-	
+		glm::vec3 S = glm::vec3(1.0f, 1.0f, 1.0f);	
 
-		bool IsDirty = true;
+		//bool IsDirty = true; // de momento sin flags
 		uint32_t ID = 0;
-
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
 		TransformComponent(const glm::vec3& translation, const uint32_t id = 0)
 			: T(translation), ID(id) {}
 
-		glm::mat4 GetTransform() const
-		{
+		glm::mat4 GetTransform() const		{
 			glm::mat4 rotation = glm::toMat4(glm::quat(R));
-
 			return  glm::translate(glm::mat4(1.0f), T) 
 				* rotation 
 				* glm::scale(glm::mat4(1.0f), S);
 		}
-
 	};
 
 	//struct LightComponent
@@ -128,7 +124,6 @@ namespace MHelmet
 	struct PointLightComponent
 	{
 		glm::vec3 Position = glm::vec3{ 2.0f, 2.0f, 0.0f };
-
 		glm::vec3 Ambient = glm::vec3{ 0.02f, 0.02f, 0.02f };
 		glm::vec3 Difusse = glm::vec3{ 0.2f, 0.0f, 0.0f };
 		glm::vec3 Specular = glm::vec3{ 0.5f, 0.0f, 0.0f };

@@ -13,11 +13,6 @@ namespace MHelmet
 		MH_WINDOW_LOST_FOCUS,
 		MH_WINDOW_MOVED,
 
-		/* App types */
-		MH_APP_TICK,
-		MH_APP_UPDATE,
-		MH_APP_RENDER,
-
 		/* Key types */
 		MH_KEY_PRESSED,
 		MH_KEY_RELEASED,
@@ -30,30 +25,12 @@ namespace MHelmet
 		MH_MOUSE_SCROLLED,
 	};	
 
-	enum IsInCategory
-	{
-		NONE = 0,
-		MH_CATG_APP			  = (1 << 0),
-		MH_CATG_INPUT		  = (1 << 1),
-		MH_CATG_KEYBOARD	  = (1 << 2),
-		MH_CATG_MOUSE		  = (1 << 3),
-		MH__CATG_MOUSE_BUTTON = (1 << 4),
-	};
-
 	class Event
 	{
 	public:
 		bool Handled = false;
-
 		virtual ~Event() = default;
-
 		virtual IsType GetEventType()	const = 0;	
-		virtual int GetCategoryFlags()		const = 0;
-
-		inline bool IsInCategory(IsInCategory category)
-		{
-			return GetCategoryFlags() & category;
-		}
 	};	
 
 

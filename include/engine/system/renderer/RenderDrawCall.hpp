@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "engine/system/renderer/RendererApi.hpp"
 
 namespace MHelmet
@@ -10,7 +9,7 @@ namespace MHelmet
 	{
 	public:
 
-		inline static void Init()
+		static void Init()
 		{
 			s_RenderererAPI->Init();
 		}
@@ -26,10 +25,11 @@ namespace MHelmet
 
 		static void Draw(const RefCount<VAO>& _VAO) { s_RenderererAPI->Draw(_VAO); }
 
-		
+		static std::string GetVendor()   { return s_RenderererAPI->GetVendor();   };
+		static std::string GetRedenrer() { return s_RenderererAPI->GetRenderer(); };
+		static std::string GetVersion()  { return s_RenderererAPI->GetVersion();  };
 
 	private:
-
 		static RendererAPI* s_RenderererAPI;
 	};
 }

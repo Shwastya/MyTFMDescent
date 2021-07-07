@@ -6,13 +6,13 @@
 
 namespace MHelmet
 {
+
 	// ejemplos
 	//static void OnTransformConstruct() // on construct conectamos con esta funcion
+	
 	//{
-
 	//}
-
-
+	
 	//Scene::Scene()
 	//{		
 	//	// componentes sin ningun tipo de polimorfismo
@@ -101,14 +101,13 @@ namespace MHelmet
 							{
 								auto& light = view_light.get<LightComponent>(L_entity);
 							
-								RendererGeometry::BeginScene(cameraman, light);
-
-																
+								RendererGeometry::BeginScene(cameraman, light);																
 							}
 						}
 					}
 				}
-			}			
+			}
+
 			auto point_light = m_Registry.view<PointLightComponent>();
 			{
 				uint32_t Pidx = 0;
@@ -118,6 +117,7 @@ namespace MHelmet
 					RendererGeometry::DrawPointLights(Plight, Pidx);
 					Pidx++;			
 				}
+				//WARN("numero de PL {0}", Pidx);
 				Pidx = 0;
 			}
 

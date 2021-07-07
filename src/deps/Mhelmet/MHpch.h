@@ -18,7 +18,7 @@
 #include <fstream>
 
 #include "engine/system/events/Event.hpp"
-#include "engine/system/events/EventSender.hpp"
+#include "engine/system/events/EventHandler.hpp"
 
 /* ImGui System */
 

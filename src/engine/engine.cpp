@@ -12,14 +12,17 @@ namespace MHelmet
 		s_Instance = this;
 		m_Window = Window::Create(WindowSpec(name));
 		
-		m_Window->SetVSync(true);
-		m_Window->SetCallBack(BIND_E_FN(Engine::OnEvent));
+		m_Window->SetVSync(true);	
+
+		// Bindeamos las callbacks a la funcion miembro OnEvent()
+		m_Window->SetCallBack(std::bind(&Engine::OnEvent, this, std::placeholders::_1));
 
 		Renderer::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);	
-		
+
+		CORE_INFO("Mhelmet Engine running!");		
 	}
 
 	Engine::~Engine() 
@@ -32,25 +35,15 @@ namespace MHelmet
 	}		
 	
 	void Engine::run()								 
-	{												 
-		CORE_INFO("Mhelmet Engine running!");		
-
-	
-
+	{	
 		while (m_Alive)
 		{
 			if (!m_Minimized)
-			{
-				for (NodeLayer* layer : m_Layers) layer->Update(m_DeltaTime);
-			}
-
+			for (NodeLayer* layer : m_Layers) layer->Update(m_DeltaTime);
 
 			m_ImGuiLayer->Begin();
-			{
-				for (NodeLayer* layer : m_Layers) layer->ImGuiRender();
-			}
+			for (NodeLayer* layer : m_Layers) layer->ImGuiRender();			
 			m_ImGuiLayer->End();
-
 
 			m_Window->SwapBuffers();
 
@@ -63,19 +56,22 @@ namespace MHelmet
 
 
 	void Engine::OnEvent(Event& e)
-	{
-		EventHandler handle(e);
+	{	
 
-		handle.CallBack <OnWindowClose  > (BIND_E_FN( Engine::WindowCloseCallBack  ));
-		handle.CallBack <OnWindowResize > (BIND_E_FN( Engine::WindowResizeCallBack ));
+		if (e.GetEventType() == IsType::MH_WINDOW_CLOSE)
+		{
+			OnWindowClose& event = dynamic_cast<OnWindowClose&>(e);
+			WindowCloseCallBack(event);
+		}
 
-
-		for (auto it = m_Layers.end(); it != m_Layers.begin();)
-		{			
-			if (e.Handled) break;
-			(*--it)->OnEvent(e);
-			
-		}		
+		if (e.GetEventType() == IsType::MH_WINDOW_RESIZE)
+		{
+			OnWindowResize& event = dynamic_cast<OnWindowResize&>(e);
+			WindowResizeCallBack(event);
+		}	
+		
+		for (auto it = m_Layers.end(); it != m_Layers.begin();) 
+			(*--it)->OnEvent(e); 
 	}
 
 	void Engine::PushLayer(NodeLayer* layer)
@@ -92,7 +88,10 @@ namespace MHelmet
 
 	float Engine::GetTime() // for only used in main loop
 	{
-		 return static_cast<float>(glfwGetTime()); 
+		const float getTime = static_cast<float>(glfwGetTime());
+
+		return getTime;
+		 //return static_cast<float>(glfwGetTime()); 
 	}
 
 	bool Engine::WindowCloseCallBack(OnWindowClose& e)

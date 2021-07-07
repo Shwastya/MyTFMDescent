@@ -19,14 +19,10 @@ public:
 	void Free() override;
 
 	void Update(DeltaTime dt) override;
-
 	void ImGuiRender();
-
 	void OnEvent(Event& event) override;
 
 private:
-	
-	//bool m_IsViewportOnFocus = false;	
 
 	// FrameBuffer textura en el frame de ImGui
 	RefCount<FrameBuffer> m_FrameBuffer;
@@ -43,10 +39,8 @@ private:
 	// light
 	Entity Ent_Light;
 
-	Entity E_PL[10];
-
-	Entity Ent_SpotLight1;
-	Entity Ent_SpotLight2;
+	Entity Ent_PL[10]; // Points Light
+	Entity Ent_SL[2];  // Spots  Light
 
 	// panels
 	SceneHierarchy m_HierarchyPanel;
@@ -54,35 +48,15 @@ private:
 	// Gizmo
 	int m_GizmoType = -1;
 
+	// BackGround Color
+	glm::vec3 m_BackGroundColor = glm::vec3(0.171f, 0.328f, 0.485f);
 
 	// de prueba
 	Entity Ent_probandoTexturas;
 
-
-
-	// Shader Library
-	//ShaderLib m_S; 
-	//RefCount<Shader> Shader;
-
-	//RefCount<VAO> m_VAO;
-	
-	
-	//RefCount<Texture2D> m_Texture, m_AlphaTree;
-
-	//RefCount<Texture2D> m_BoardTexture;
-
-	
-	
-	/* ATRIBUTOS LUZ */
-	
-	//glm::vec3 m_LightPos{ 0.0f, 8.0f, 14.5f };
-
-	/* ATRIBUTOS MODELO */
-	//ModelTransform m_Model;
-	//glm::vec3 m_ModelColor{ 1.0f, 0.0f, 0.5f };		// para shader color solo
-
-
-	// para IMGUI
-	//glm::vec2 m_ViewPortSize;
+	// info system
+	std::string m_Vendor;
+	std::string m_Renderer;
+	std::string m_Version;
 
 };

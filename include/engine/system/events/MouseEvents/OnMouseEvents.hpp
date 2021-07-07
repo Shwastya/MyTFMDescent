@@ -9,10 +9,9 @@ namespace MHelmet
 	{
 		OnMouseButtonPressed(int button)
 			: MouseButtonEvent(button) {}
-
-		
-		static  IsType GetStaticType() { return IsType::MH_MOUSE_BUTTON_PRESSED; }
-		virtual IsType GetEventType() const override { return GetStaticType(); }
+		virtual IsType GetEventType() const override { return m_Type; }
+	private:
+		const static IsType m_Type = IsType::MH_MOUSE_BUTTON_PRESSED;
 	};
 
 	struct OnMouseButtonReleased : public MouseButtonEvent
@@ -20,8 +19,9 @@ namespace MHelmet
 		OnMouseButtonReleased(int button)
 			: MouseButtonEvent(button) {}		
 
-		static  IsType GetStaticType() { return IsType::MH_MOUSE_BUTTON_RELEASED; }
-		virtual IsType GetEventType() const override { return GetStaticType(); }
+		virtual IsType GetEventType() const override { return m_Type; }
+	private:
+		const static IsType m_Type = IsType::MH_MOUSE_BUTTON_RELEASED;
 		
 	};
 
@@ -33,12 +33,11 @@ namespace MHelmet
 		float GetX() const { return m_MouseX; }
 		float GetY() const { return m_MouseY; }		
 
-		static  IsType GetStaticType() { return IsType::MH_MOUSE_MOVED; }
-		virtual IsType GetEventType() const override { return GetStaticType(); }
-		virtual int GetCategoryFlags()   const override { return MH_CATG_MOUSE | MH_CATG_INPUT; }		
+		virtual IsType GetEventType() const override { return m_Type; }
 
 	private:
 		float m_MouseX, m_MouseY;
+		const static IsType m_Type = IsType::MH_MOUSE_MOVED;
 	};
 
 
@@ -50,13 +49,11 @@ namespace MHelmet
 		float GetXOffset() const { return m_XOffset; }
 		float GetYOffset() const { return m_YOffset; }
 
-		
-		static  IsType GetStaticType() { return IsType::MH_MOUSE_SCROLLED; }
-		virtual IsType GetEventType() const override { return GetStaticType(); }			
-		virtual int GetCategoryFlags()	const override { return MH_CATG_MOUSE | MH_CATG_INPUT; }
+		virtual IsType GetEventType() const override { return m_Type; }
 
 	private:
 		float m_XOffset, m_YOffset;
+		const static IsType m_Type = IsType::MH_MOUSE_SCROLLED;
 	};
 
 }

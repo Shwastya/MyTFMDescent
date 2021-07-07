@@ -25,7 +25,7 @@ namespace MHelmet
 
 	void OpenGlRendererAPI::ClearColor(const glm::vec4& color)
 	{
-		glClearColor(color.r, color.g, color.r, color.a);
+		glClearColor(color.r, color.g, color.b, color.a);
 	}
 
 	void OpenGlRendererAPI::clear() // clear the color and the depth buffer // Temporal
@@ -41,5 +41,17 @@ namespace MHelmet
 
 		glDrawElements(GL_TRIANGLES, _VAO->GetEBO()->Count(), GL_UNSIGNED_INT, nullptr);
 	}
-}
 
+	std::string OpenGlRendererAPI::GetVendor()   const
+	{		
+		return (const char*)glGetString(GL_VENDOR);
+	}
+	std::string OpenGlRendererAPI::GetRenderer() const
+	{
+		return (const char*)glGetString(GL_RENDERER);
+	}
+	std::string OpenGlRendererAPI::GetVersion()  const
+	{
+		return (const char*)glGetString(GL_VERSION);
+	}
+}

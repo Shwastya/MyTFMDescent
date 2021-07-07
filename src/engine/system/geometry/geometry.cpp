@@ -84,15 +84,7 @@ namespace MHelmet
             memset(biTangents, 0.0f, length * sizeof(float));
         }      
 
-        
-
-
-
-        uint32_t idx  = 0;
-        uint32_t idxUvs = 0;  
-        uint32_t idxVbo = 0;
-
- 
+        uint32_t idx  = 0, idxUvs = 0, idxVbo = 0; 
 
         for (size_t i = 0; i < _nVertices; i++)
         {          

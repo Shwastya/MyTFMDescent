@@ -4,32 +4,21 @@
 
 namespace MHelmet
 {
-	RefCount<VBO> VBO::Create(float* vertices, uint32_t size)
+	std::shared_ptr<VBO> VBO::Create(float* vertices, uint32_t size)
 	{
-
-		//return new OpenGLVBO(vertices, size);
-
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None:
-			// PONER MENSAJE DE ERROR (NOT SUPPORTED)
-			break;
-		case RendererAPI::API::OpenGL:
+			case RendererAPI::API::None: // MENSAJE DE ERROR(NOT SUPPORTED)
+				
+			case RendererAPI::API::OpenGL:
 
-			//return new OpenGLVBO(vertices, size);
-			return std::make_shared<OpenGLVBO>(vertices, size);
-		
+				return std::make_shared<OpenGLVBO>(vertices, size);		
 	
-		case RendererAPI::API::DirectX:
-			// NADA DE MOMENTO
-			break;
-		case RendererAPI::API::Vulkan:
-			// CON Vulkan PODEMOS FLIPAR
-			break;
-		default:
-			// MENSAJE DE ERROR (API desconocida)
-			return nullptr;
-			break;
+			case RendererAPI::API::DirectX:  // Devolveria DirectX			
+		
+			case RendererAPI::API::Vulkan:   // Devolveria Vulkan			
+		
+			default: return nullptr; // MENSAJE DE ERROR (API desconocida)						
 		}
 	}
 }

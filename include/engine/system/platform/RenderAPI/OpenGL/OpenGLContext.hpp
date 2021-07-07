@@ -18,4 +18,7 @@ namespace MHelmet
 	private:
 		GLFWwindow* m_GLFWwindow;
 	};
+
+
+
 }

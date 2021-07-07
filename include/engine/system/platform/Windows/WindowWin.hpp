@@ -17,9 +17,8 @@ namespace MHelmet {
 		{
 			std::string Title;
 			Size	    Size;
-			bool        VSync;
-
-			// Event System CallBacks from GLFWwindow* callbacks lambda functions
+			bool        VSync = false;
+			// Event System CallBacks lambda functions
 			std::function<void(Event&)> CallBack;
 		};
 
@@ -41,7 +40,7 @@ namespace MHelmet {
 		inline virtual void* GetOriginalWindow() const override { return m_Window;  };
 
 
-		inline virtual void SetCallBack(const std::function<void(Event&)>& cb) override
+		virtual void SetCallBack(const std::function<void(Event&)>& cb) override
 		{
 			m_Data.CallBack = cb;
 		}

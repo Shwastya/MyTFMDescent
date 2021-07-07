@@ -2,62 +2,32 @@
 #include <sstream>
 #include "../Event.hpp"
 
-namespace MHelmet {
-	
+namespace MHelmet 
+{	
 	struct OnWindowResize : public Event
 	{
-		OnWindowResize(unsigned int width, unsigned int height)
+		OnWindowResize(uint32_t width, uint32_t height)
 			: m_Width(width), m_Height(height) // previous size?
-		{ } 
+		{} 
 
-		unsigned int GetWidth()  const { return m_Width; }
-		unsigned int GetHeight() const { return m_Height; }
+		uint32_t GetWidth()  const { return m_Width;  }
+		uint32_t GetHeight() const { return m_Height; }
 
-		static  IsType GetStaticType() { return IsType::MH_WINDOW_RESIZE; }
-		virtual IsType GetEventType() const override { return GetStaticType(); }		
-		virtual int GetCategoryFlags()   const override { return MH_CATG_APP; }
+		virtual IsType GetEventType()  const override { return m_Type; }		
 
 	private:
-		unsigned int m_Width, m_Height;
-		
-	};
+		uint32_t m_Width, m_Height;	
+		const static IsType m_Type = IsType::MH_WINDOW_RESIZE;
+	}; 
 
 	struct OnWindowClose : public Event
 	{
 		OnWindowClose() = default;
+		virtual IsType GetEventType() const override { return m_Type; }
 
-		static  IsType GetStaticType() { return IsType::MH_WINDOW_CLOSE; }
-		virtual IsType GetEventType() const override { return GetStaticType(); }		
-		virtual int GetCategoryFlags()   const override { return MH_CATG_APP; }
-	};
+	private:
+		uint32_t m_Width, m_Height;
+		const static IsType m_Type = IsType::MH_WINDOW_CLOSE;
 
-	struct OnAppTick : public Event
-	{
-		OnAppTick() {}
-
-		static  IsType GetStaticType() { return IsType::MH_APP_TICK; }
-
-		virtual IsType GetEventType() const override { return GetStaticType(); }	
-		virtual int GetCategoryFlags()   const override { return MH_CATG_APP; }
-	};
-
-	struct OnAppUpdate : public Event
-	{
-		OnAppUpdate() {}
-
-		static  IsType GetStaticType() { return IsType::MH_APP_UPDATE; }
-
-		virtual IsType GetEventType() const override { return GetStaticType(); }	
-		virtual int GetCategoryFlags()   const override { return MH_CATG_APP; }
-	};
-
-	struct OnAppRender : public Event
-	{
-		OnAppRender() {}
-
-		static  IsType GetStaticType() { return IsType::MH_APP_RENDER; }
-
-		virtual IsType GetEventType() const override { return GetStaticType(); }
-		virtual int GetCategoryFlags()   const override { return MH_CATG_APP; }
 	};
 }

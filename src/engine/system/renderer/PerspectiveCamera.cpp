@@ -49,7 +49,7 @@ namespace MHelmet
     {
         const float velocity = m_Speed * dt.Seconds();
 
-        // SEGURAMENTE NO LO VOLVERE A USAR (BORRAR?)
+        // Ahora mismo no se esta usando
         switch (direction)
         {
             case Movement::Forward:  m_Position += m_Front * velocity; break;
@@ -133,14 +133,12 @@ namespace MHelmet
     {
         if (e.GetEventType() == IsType::MH_MOUSE_MOVED)
         {
-            MouseMoved((OnMouseMoved&)e);
+            MouseMoved(dynamic_cast<OnMouseMoved&>(e));
         }
 
         if (e.GetEventType() == IsType::MH_MOUSE_SCROLLED && _Scroll)
         {
-            OnMouseScrolled& event = (OnMouseScrolled&)e;
-            m_Cam.HandleMouseScroll(event.GetYOffset());
-            
+            m_Cam.HandleMouseScroll(dynamic_cast<OnMouseScrolled&>(e).GetYOffset());            
         }
     }
 
