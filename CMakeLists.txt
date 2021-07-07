@@ -145,7 +145,6 @@ set(ENGINE_HEADER_FILES
 
     # events & event sender     
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/events/Event.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/events/EventSender.hpp
         # KeyEvents : event
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/system/events/KeyEvents/KeyEvent.hpp
             # OnKeyEvents : KeyEvents : event
