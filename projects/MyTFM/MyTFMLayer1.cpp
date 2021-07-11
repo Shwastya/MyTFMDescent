@@ -1,10 +1,15 @@
 #include "MyTFMLayer1.hpp"
 #include <ImGuizmo.h>
+#include "engine/system/scene/SerializerScene.hpp"
+#include "engine/system/events/MouseEvents/OnMouseEvents.hpp"
+#include "engine/system/events/KeyEvents/OnKeyEvents.hpp"
+
 
 #define W_ static_cast<float>(Engine::p().GetWindow().GetWidth())
 #define H_ static_cast<float>(Engine::p().GetWindow().GetHeight())
 
-MyTFMDescent::MyTFMDescent() : NodeLayer("TestingLayer") {}
+MyTFMDescent::MyTFMDescent() 
+    : NodeLayer("TestingLayer"), m_Cam1(glm::vec3(0.0f, 1.0f, 15.5f)), m_Cam2(glm::vec3(0.0f, 1.0f, 15.5f)) {}
 
 void MyTFMDescent::Join()
 {
@@ -17,13 +22,16 @@ void MyTFMDescent::Join()
 
     // ENTITIES
     // CameraMans
-    Ent_CameraMan1 = m_Scene->CreateEntity("Camera 1");
-    Ent_CameraMan1.AddComponent<CameraManComponent>(glm::vec3(0.0f, 1.0f, 15.5f), W_, H_);
+    /*Ent_CameraMan1 = m_Scene->CreateEntity("Camera 1");
+    Ent_CameraMan1.AddComponent<CameraComponent>(m_Cam1, glm::vec3(0.0f, 1.0f, 15.5f), W_, H_);
+    m_CamMan1.TakeCamera(Ent_CameraMan1.GetComponent<CameraComponent>().Camera);*/
+    m_CamMan1.TakeCamera(m_Cam1);
+    m_CamMan1.SetViewport({W_, H_});
 
     Ent_CameraMan2 = m_Scene->CreateEntity("Camera 2");
-    Ent_CameraMan2.AddComponent<CameraManComponent>(glm::vec3(0.0f, 1.0f, 15.5f), W_, H_);
-    Ent_CameraMan2.GetComponent<CameraManComponent>().Primary = false;
-
+    Ent_CameraMan2.AddComponent<CameraComponent>(m_Cam2, glm::vec3(0.0f, 1.0f, 15.5f), W_, H_);
+    Ent_CameraMan2.GetComponent<CameraComponent>().Primary = false;
+    m_CamMan2.TakeCamera(Ent_CameraMan2.GetComponent<CameraComponent>().Camera);
     // Light
     Ent_Light = m_Scene->CreateEntity("Directional Light");
     Ent_Light.AddComponent<LightComponent>();
@@ -40,7 +48,6 @@ void MyTFMDescent::Join()
 
         Ent_PL[i] = m_Scene->CreateEntity(idx);
         Ent_PL[i].AddComponent<PointLightComponent>();
-        Ent_PL[i].GetComponent<TransformComponent>().T = Ent_PL[i].GetComponent<PointLightComponent>().Position;
         Ent_PL[i].GetComponent<TransformComponent>().S = glm::vec3{ 0.3f, 0.3f, 0.3f };
      
         Ent_PL[i].AddComponent<MaterialComponent>();
@@ -53,8 +60,6 @@ void MyTFMDescent::Join()
 
         Ent_SL[i] = m_Scene->CreateEntity(idx);
         Ent_SL[i].AddComponent<SpotLightComponent>();
-        Ent_SL[i].GetComponent<TransformComponent>().T = Ent_SL[i].GetComponent<SpotLightComponent>().Position;
-        Ent_SL[i].GetComponent<TransformComponent>().R = Ent_SL[i].GetComponent<SpotLightComponent>().Direction;
         Ent_SL[i].GetComponent<TransformComponent>().S = glm::vec3{ 0.3f, 0.3f, 0.3f };
         Ent_SL[i].AddComponent<MaterialComponent>();
         Ent_SL[i].GetComponent<MaterialComponent>().SetDefault();
@@ -62,6 +67,8 @@ void MyTFMDescent::Join()
 
 
     m_HierarchyPanel.SetContext(m_Scene);
+    SerializerScene serializer(m_Scene);
+    serializer.Serialize("../assets/scenes/MyTFMScene.mh");
 
     // INFO
     m_Vendor   = RenderDrawCall::GetVendor();
@@ -73,16 +80,24 @@ void MyTFMDescent::Free() { }
 
 void MyTFMDescent::Update(DeltaTime dt) 
 { 
-    m_IsEditScene = Ent_CameraMan1.GetComponent<CameraManComponent>().Primary;
+    m_IsEditScene = Ent_CameraMan1.GetComponent<CameraComponent>().Primary;
 
-    if (m_IsEditScene) m_FrameBuffer->Bind();
+    if (m_IsEditScene)
+    {
+        m_CamMan1.Update(dt);
+        m_FrameBuffer->Bind();
+    }
+    else m_CamMan2.Update(dt);
     {
         RenderDrawCall::ClearColor({ m_BackGroundColor, 1.0f });
         RenderDrawCall::clear();
 
         m_Scene->Update(dt);
     }
-    if (m_IsEditScene) m_FrameBuffer->Unbind();
+    if (m_IsEditScene)
+    {
+        m_FrameBuffer->Unbind();    }
+    
 }
 
 void MyTFMDescent::ImGuiRender()
@@ -134,11 +149,16 @@ void MyTFMDescent::ImGuiRender()
 
         // DockSpace
         ImGuiIO& io = ImGui::GetIO();
+        ImGuiStyle& style = ImGui::GetStyle();
+        float minWinSizeX = style.WindowMinSize.x;
+        style.WindowMinSize.x = 370.0f;
         if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
         {
             ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
+
+        style.WindowMinSize.x = minWinSizeX;
 
         if (ImGui::BeginMenuBar())
         {
@@ -178,8 +198,8 @@ void MyTFMDescent::ImGuiRender()
         // checkbox
         if (ImGui::Checkbox("Editor Camera", &m_PrimaryCam))
         {
-            Ent_CameraMan2.GetComponent<CameraManComponent>().Primary = !m_PrimaryCam;
-            Ent_CameraMan1.GetComponent<CameraManComponent>().Primary = m_PrimaryCam;
+            Ent_CameraMan2.GetComponent<CameraComponent>().Primary = !m_PrimaryCam;
+            Ent_CameraMan1.GetComponent<CameraComponent>().Primary = m_PrimaryCam;
         }
         ImGui::NewLine();
         ImGui::Separator();
@@ -197,38 +217,27 @@ void MyTFMDescent::ImGuiRender()
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
         {
             /* FLAG */ // Si hay foco del mouse sobre el frame del window // no bloquees los eventos desde Event System
-            Ent_CameraMan1.GetComponent<CameraManComponent>().IsHovered = ImGui::IsWindowHovered();
+           // Ent_CameraMan1.GetComponent<CameraManComponent>().IsHovered = ImGui::IsWindowHovered();
+            m_CamMan1._IsWindowHovered = ImGui::IsWindowHovered();
+            m_CamMan1._IsWindowFocused = ImGui::IsWindowFocused();
 
-            const float X = Ent_CameraMan1.GetComponent<CameraManComponent>().ViewportX;
-            const float Y = Ent_CameraMan1.GetComponent<CameraManComponent>().ViewportY;
+            const float X = Ent_CameraMan1.GetComponent<CameraComponent>().ViewportX;
+            const float Y = Ent_CameraMan1.GetComponent<CameraComponent>().ViewportY;
 
             if ((X != viewportPanelSize.x) || (Y != viewportPanelSize.y))
             {
-                Ent_CameraMan1.GetComponent<CameraManComponent>().ViewportX = viewportPanelSize.x;
-                Ent_CameraMan1.GetComponent<CameraManComponent>().ViewportY = viewportPanelSize.y;
-            }
-        }
-        {
-            const float X2 = Ent_CameraMan2.GetComponent<CameraManComponent>().ViewportX;
-            const float Y2 = Ent_CameraMan2.GetComponent<CameraManComponent>().ViewportY;
-
-            if ((X2 != viewportPanelSize.x) || (Y2 != viewportPanelSize.y))
-            {
-                Ent_CameraMan2.GetComponent<CameraManComponent>().ViewportX = viewportPanelSize.x;
-                Ent_CameraMan2.GetComponent<CameraManComponent>().ViewportY = viewportPanelSize.y;
+                Ent_CameraMan1.GetComponent<CameraComponent>().ViewportX = viewportPanelSize.x;
+                Ent_CameraMan1.GetComponent<CameraComponent>().ViewportY = viewportPanelSize.y;
             }
         }
 
-        uint32_t textureID = m_FrameBuffer->GetFBOTexture(); // FBO  
-    //    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1.0f, 0.0f, 0.0f, 1.0f)); // Set window background to red
+        uint32_t textureID = m_FrameBuffer->GetFBOTexture();
         ImGui::Image((void*)textureID, ImVec2{ viewportPanelSize.x, viewportPanelSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-      //  ImGui::PopStyleColor();
-
 
         // Gizmo
         Entity EntSelected = m_HierarchyPanel.GetCollectedEntity();
 
-        if (EntSelected && m_GizmoType != -1 && Ent_CameraMan1.GetComponent<CameraManComponent>().Primary)
+        if (EntSelected && m_GizmoType != -1 && Ent_CameraMan1.GetComponent<CameraComponent>().Primary)
         {
             ImGuizmo::SetOrthographic(false);
             ImGuizmo::SetDrawlist();
@@ -238,17 +247,18 @@ void MyTFMDescent::ImGuiRender()
 
             ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, wWidth, wHeight);
 
-            const auto& ECam = Ent_CameraMan1.GetComponent<CameraManComponent>();
+            const auto& ECam = Ent_CameraMan1.GetComponent<CameraComponent>();
 
             // CAMERA
             glm::mat4& Projection = glm::perspective(
                 glm::radians
                 (
-                    ECam.Cameraman.Get().GetFOV()),
-                ECam.ViewportX / ECam.ViewportY,
-                ECam.Near, ECam.Far
-            );
-            glm::mat4  ViewMatrix = ECam.Cameraman.Get().GetViewMatrix();
+                    ECam.Camera.GetFOV()),
+                    ECam.ViewportX / ECam.ViewportY,
+                    ECam.Near, ECam.Far
+                );
+
+            glm::mat4  ViewMatrix = ECam.Camera.GetViewMatrix();
 
             // ENTITY TRANSFORM
             auto& TC = EntSelected.GetComponent<TransformComponent>();
@@ -278,8 +288,8 @@ void MyTFMDescent::ImGuiRender()
     }
     else
     {
-        Ent_CameraMan2.GetComponent<CameraManComponent>().ViewportX = W_;
-        Ent_CameraMan2.GetComponent<CameraManComponent>().ViewportY = H_;
+        Ent_CameraMan2.GetComponent<CameraComponent>().ViewportX = W_;
+        Ent_CameraMan2.GetComponent<CameraComponent>().ViewportY = H_;
     }   
 }
 
@@ -288,82 +298,84 @@ void MyTFMDescent::OnEvent(Event& event)
 	
     if (Ent_CameraMan1)
     {
-        if (Ent_CameraMan1.GetComponent<CameraManComponent>().Primary)
+        if (Ent_CameraMan1.GetComponent<CameraComponent>().Primary)
         {
-            auto& cam = Ent_CameraMan1.GetComponent<CameraManComponent>();
 
             if (m_Editor_Cam_FirtsUse)
             {
                 m_Editor_Cam_FirtsUse = false;
-                cam.Cameraman._Mouse = false;
+                m_CamMan1._Mouse = false;
             }
 
-            if (cam.IsHovered)
+            if (m_CamMan1._IsWindowHovered)
             {
                 if (event.GetEventType() == IsType::MH_MOUSE_BUTTON_PRESSED)
                 {
-                    OnMouseButtonPressed& e = dynamic_cast<OnMouseButtonPressed&>(event);                    
-
-                    if (e.GetMouseButton() == 1)
+                    if (dynamic_cast<OnMouseButtonPressed&>(event).GetMouseButton() == 1)
                     {
-                        cam.Cameraman._Mouse = true;
-                        Engine::p().GetWindow().SetCaptureMode(true);
+                        m_CamMan1._Mouse = true;
+                        m_CamMan1.SetCaptureMode(true);
                     }
-                }                    
+                }
 
                 if (event.GetEventType() == IsType::MH_MOUSE_BUTTON_RELEASED)
                 {
-                    cam.Cameraman._Mouse = false;
-                    Engine::p().GetWindow().SetCaptureMode(false);
-                }                    
-
-                cam.Cameraman.OnEvent(event);
+                    m_CamMan1._Mouse = false;
+                    m_CamMan1.SetCaptureMode(false);
+                }
             }
+            
+          
+            m_CamMan1.OnEvent(event);
         }
     }
     if (Ent_CameraMan2)
     {
-        if (Ent_CameraMan2.GetComponent<CameraManComponent>().Primary)
+        if (Ent_CameraMan2.GetComponent<CameraComponent>().Primary)
         {
-            auto& cam = Ent_CameraMan2.GetComponent<CameraManComponent>();
-            if (cam.IsHovered) cam.Cameraman.OnEvent(event);
+            m_CamMan2.OnEvent(event);
         }
     }
 
 	if (event.GetEventType() == IsType::MH_KEY_PRESSED)
 	{
-		OnKeyPressed& e = dynamic_cast<OnKeyPressed&>(event);
 
-        switch (e.GetKeyCode())
+
+        if (m_CamMan1._IsWindowFocused || m_CamMan1._IsWindowHovered)
         {
-            case Key::Q:
-                m_GizmoType = -1; break;
-            case Key::D1:
-                m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;  break;
-            case Key::D2:
-                m_GizmoType = ImGuizmo::OPERATION::ROTATE;     break;
-            case Key::D3:
-                m_GizmoType = ImGuizmo::OPERATION::SCALE;      break;
+            OnKeyPressed& e = dynamic_cast<OnKeyPressed&>(event);
 
-            case Key::M:
-                // hack -> recupera el puntero del raton en el editor
-                Engine::p().GetWindow().SetCaptureMode(false);
-                break;
-
-            case Key::C:
+            switch (e.GetKeyCode())
             {
-                m_PrimaryCam = false;
-                Ent_CameraMan2.GetComponent<CameraManComponent>().Primary = true;
-                Ent_CameraMan1.GetComponent<CameraManComponent>().Primary = false;
-                break;
+                case Key::Q:
+                    m_GizmoType = -1; break;
+                case Key::D1:
+                    m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;  break;
+                case Key::D2:
+                    m_GizmoType = ImGuizmo::OPERATION::ROTATE;     break;
+                case Key::D3:
+                    m_GizmoType = ImGuizmo::OPERATION::SCALE;      break;
+
+                case Key::M:
+                    // hack -> recupera el puntero del raton en el editor
+                    Engine::p().GetWindow().SetCaptureMode(false);
+                    break;
+
+                case Key::C:
+                {
+                    m_PrimaryCam = false;
+                    Ent_CameraMan2.GetComponent<CameraComponent>().Primary = true;
+                    Ent_CameraMan1.GetComponent<CameraComponent>().Primary = false;
+                    break;
+                }
+                case Key::V:
+                {
+                    m_PrimaryCam = true;
+                    Ent_CameraMan2.GetComponent<CameraComponent>().Primary = false;
+                    Ent_CameraMan1.GetComponent<CameraComponent>().Primary = true;
+                    break;
+                }
             }
-            case Key::V:
-            {
-                m_PrimaryCam =  true;
-                Ent_CameraMan2.GetComponent<CameraManComponent>().Primary = false;
-                Ent_CameraMan1.GetComponent<CameraManComponent>().Primary = true;
-                break;
-            }                
-        }        
+        }		       
 	}
 }

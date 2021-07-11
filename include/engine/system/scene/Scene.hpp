@@ -15,6 +15,8 @@ namespace MHelmet
 
 		Entity CreateEntity(const std::string& name = "unnamed");
 		void DestroyEntity(Entity entity); 
+
+		void Update
 		void Update(DeltaTime dt);
 
 	private:
@@ -23,5 +25,6 @@ namespace MHelmet
 
 		 friend class Entity;
 		 friend class SceneHierarchy;
+		 friend class SerializerScene;
 	};
 }

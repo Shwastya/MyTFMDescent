@@ -1,9 +1,6 @@
 #pragma once
 #include "engine/system/node/NodeLayer.hpp"
-#include "engine/system/events/KeyEvents/OnKeyEvents.hpp"
-#include "engine/system/events/MouseEvents/OnMouseEvents.hpp"
-#include "engine/system/events/AppEvents/OnAppEvents.hpp"
-#include "engine/system/events/EventHandler.hpp"
+
 
 namespace MHelmet 
 {	
@@ -16,8 +13,9 @@ namespace MHelmet
 		virtual void Free()   override;
 		
 		void Begin();
-		void End();		
+		void End();	
 
+		void SetMHelmetColors();
 	private:		
 		float m_Time = 0.0f;
 	};	

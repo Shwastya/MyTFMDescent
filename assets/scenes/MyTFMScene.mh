@@ -1,0 +1,47 @@
+Scene: Unntitled
+Entities:
+  - Entity: 124234123424320
+    TagComponent:
+      Tag: Spot Light 2
+  - Entity: 124234123424320
+    TagComponent:
+      Tag: Spot Light 1
+  - Entity: 124234123424320
+    TagComponent:
+      Tag: Point Light 10
+  - Entity: 124234123424320
+    TagComponent:
+      Tag: Point Light 9
+  - Entity: 124234123424320
+    TagComponent:
+      Tag: Point Light 8
+  - Entity: 124234123424320
+    TagComponent:
+      Tag: Point Light 7
+  - Entity: 124234123424320
+    TagComponent:
+      Tag: Point Light 6
+  - Entity: 124234123424320
+    TagComponent:
+      Tag: Point Light 5
+  - Entity: 124234123424320
+    TagComponent:
+      Tag: Point Light 4
+  - Entity: 124234123424320
+    TagComponent:
+      Tag: Point Light 3
+  - Entity: 124234123424320
+    TagComponent:
+      Tag: Point Light 2
+  - Entity: 124234123424320
+    TagComponent:
+      Tag: Point Light 1
+  - Entity: 124234123424320
+    TagComponent:
+      Tag: Directional Light
+  - Entity: 124234123424320
+    TagComponent:
+      Tag: Camera 2
+  - Entity: 124234123424320
+    TagComponent:
+      Tag: Camera 1

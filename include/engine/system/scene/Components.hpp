@@ -3,20 +3,20 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "engine/system/renderer/PerspectiveCamera.hpp"
 #include "engine/system/renderer/Texture.hpp"
-
+#include "engine/system/cameraManager/CameraFirstPerson.hpp"
 //#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
 namespace MHelmet
 {	
 
-	struct CameraManComponent
+	struct CameraComponent
 	{
-		CameraMan Cameraman;
+		PerspectiveCamera Camera;
+		//CameraFirstPerson Cameraman;
 
 		float ViewportX = 0.0f;
 		float ViewportY = 0.0f;
-
 
 		float Near = 0.1f;
 		float Far = 100.0f;
@@ -26,12 +26,15 @@ namespace MHelmet
 		bool IsHovered = true;
 		bool IsDirty = true;
 
-
-		CameraManComponent() = default;
-		CameraManComponent(const CameraManComponent&) = default;
-		CameraManComponent(const CameraMan& _camera = glm::vec3(0.0f, 1.0f, 6.5f), const float viewport_X = 0.0f, const float viewport_Y = 0.0f, const float& _near = 0.1f, const float& _far = 100.0f)
-			: Cameraman(_camera), ViewportX(viewport_X), ViewportY(viewport_Y), Near(_near), Far(_far) {}
-
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
+		CameraComponent(PerspectiveCamera& _camera, const glm::vec3& pos = glm::vec3(0.0f, 1.0f, 6.5f), const float viewport_X = 0.0f, const float viewport_Y = 0.0f, const float& _near = 0.1f, const float& _far = 100.0f)
+		:	 ViewportX(viewport_X), ViewportY(viewport_Y), Near(_near), Far(_far) 
+		{		
+			Camera = pos;
+		//	_camera = pos;
+		//	Cameraman.TakeCamera(_camera);
+		}
 	};
 
 
@@ -48,43 +51,23 @@ namespace MHelmet
 		TransformComponent(const glm::vec3& translation, const uint32_t id = 0)
 			: T(translation), ID(id) {}
 
-		glm::mat4 GetTransform() const		{
+		glm::mat4 GetTransform() const		
+		{
 			glm::mat4 rotation = glm::toMat4(glm::quat(R));
 			return  glm::translate(glm::mat4(1.0f), T) 
 				* rotation 
 				* glm::scale(glm::mat4(1.0f), S);
 		}
-	};
-
-	//struct LightComponent
-	//{
-	//	glm::vec3 Position = glm::vec3{ -3.0f, 4.0f, 1.0f };
-	//	glm::vec3 Ambient = glm::vec3{ 0.6f, 0.6f, 0.6f };
-	//	glm::vec3 Difusse = glm::vec3{ 1.0f, 1.0f, 1.0f };
-	//	glm::vec3 Specular = glm::vec3{ 0.8f, 0.8f, 0.8f };
-
-	//	bool IsDirty = true;
-
-	//	LightComponent() = default;
-	//	LightComponent(const LightComponent&) = default;
-	//	LightComponent(const glm::vec3& pos, const glm::vec3& ambient, const glm::vec3& difusse, const glm::vec3& specular)
-	//		: Position(pos), Ambient(ambient), Difusse(difusse), Specular(specular) {}
-
-	//	//operator glm::vec3& () { return Light; }
-	//	operator const glm::vec3& () { return Position; }
-	//};
-
-	
+	};	
 
 	struct LightComponent
 	{
-
-		glm::vec3 Position = glm::vec3{ -3.0f, 4.0f, 1.0f }; // orientativo
+		glm::vec3 Position  = glm::vec3{ -3.0f, 4.0f, 1.0f }; // orientativo
 
 		glm::vec3 Direction = glm::vec3{ 0.0f, -1.0f, 0.0f };
-		glm::vec3 Ambient = glm::vec3{ 0.02f, 0.02f, 0.02f };
-		glm::vec3 Difusse = glm::vec3{ 0.1f, 0.1f, 0.1f };
-		glm::vec3 Specular = glm::vec3{ 0.2f, 0.2f, 0.2f };	
+		glm::vec3 Ambient   = glm::vec3{ 0.02f, 0.02f, 0.02f };
+		glm::vec3 Difusse   = glm::vec3{ 0.1f, 0.1f, 0.1f };
+		glm::vec3 Specular  = glm::vec3{ 0.2f, 0.2f, 0.2f };	
 
 		LightComponent() = default;
 		LightComponent(const LightComponent&) = default;
@@ -98,26 +81,25 @@ namespace MHelmet
 
 	struct SpotLightComponent
 	{
+		//glm::vec3 Position = glm::vec3{ -2.0f, 4.0f, 1.0f }; // orientativo
 
-		glm::vec3 Position = glm::vec3{ -2.0f, 4.0f, 1.0f }; // orientativo
-
-		glm::vec3 Direction = glm::vec3{ -0.2f, -1.0f, 0.0f };
+		//glm::vec3 Direction = glm::vec3{ -0.2f, -1.0f, 0.0f };
 		glm::vec3 Ambient = glm::vec3{ 0.6f, 0.6f, 0.6f };
 		glm::vec3 Difusse = glm::vec3{ 0.0f, 0.0f, 0.4f };
 		glm::vec3 Specular = glm::vec3{ 0.4f, 0.8f, 0.8f };
 
-		float Constant = 1.0f; // const??
+		float Constant = 1.0f; // const
 		float Linear = 0.09f;
 		float Quadratic = 0.032;
 		float CutOff = 30.0f;
-		float outerCutOff = 40.0f;
+		float OuterCutOff = 40.0f;
 
 		SpotLightComponent() = default;
 		SpotLightComponent(const SpotLightComponent&) = default;
-		SpotLightComponent(const glm::vec3& dir)
-			: Direction(dir) {}
+		SpotLightComponent(const glm::vec3& ambient)
+			: Ambient(ambient) {}
 
-		operator glm::vec3& () { return Position; }
+		operator glm::vec3& () { return Ambient; }
 			
 	};
 
@@ -142,8 +124,6 @@ namespace MHelmet
 
 	struct MaterialComponent // u_material.ambient
 	{
-
-
 		glm::vec3 Ambient  = glm::vec3{ 0.5f, 0.0f, 0.0f };
 		glm::vec3 Difusse  = glm::vec3{ 0.5f, 0.0f, 0.0f };
 		glm::vec3 Specular = glm::vec3{ 0.7f, 0.6f, 0.6f };
@@ -181,11 +161,10 @@ namespace MHelmet
 
 	struct TextureComponent
 	{
+		
+		std::string P_A, P_S, P_N; 
+		
 		// default textures
-		std::string P_A;
-		std::string P_S;
-		std::string P_N; 
-
 		std::string D_A = "../assets/textures/bricks_albedo.png";
 		std::string D_S = "../assets/textures/bricks_specular.png"; ;
 		std::string D_N = "../assets/textures/bricks_normal.png";
@@ -206,40 +185,20 @@ namespace MHelmet
 			P_A = D_A; P_S = D_S; P_N = D_N;
 		}
 
-		void SetAlbedo()
-		{
-			//Albedo = nullptr;
-			Albedo = Texture2D::Create(P_A, Format);
-		}
-		void SetSpecular()
-		{
-		//	Specular = nullptr;
-			Specular = Texture2D::Create(P_S, Format);
-		}
-
-		void SetNormal()
-		{
-			//Normal = nullptr;
-			Normal = Texture2D::Create(P_N, Format);
-		}
+		void SetAlbedo()   { Albedo   = Texture2D::Create(P_A, Format);	}
+		void SetSpecular() { Specular = Texture2D::Create(P_S, Format);	}
+		void SetNormal()   { Normal   = Texture2D::Create(P_N, Format);	}
 
 		void SetComponentTexture()
 		{
-			Albedo = Texture2D::Create("../assets/textures/bricks_albedo.png", Format);
-			Specular = Texture2D::Create("../assets/textures/bricks_specular.png", Format);
-			Normal = Texture2D::Create("../assets/textures/bricks_normal.png", Format);
 			SetAlbedo();
 			SetSpecular();
 			SetNormal();				
 		}
 
-		void SetToDefault()
-		{
-			P_A = D_A; P_S = D_S; P_N = D_N;
-		}
+		void SetToDefault() { P_A = D_A; P_S = D_S; P_N = D_N; }
 
 		operator int& () { return Shininess; }
-
 	};
 }
 	

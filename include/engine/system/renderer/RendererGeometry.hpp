@@ -21,11 +21,12 @@ namespace MHelmet
 		static void Init();
 		//static void ShutDown();
 
-		static void BeginScene(const CameraManComponent& camera, const LightComponent& light);
+		static void BeginScene(const CameraFirstPerson& camera);
 		static void EndScene();
 
-		static void DrawPointLights(const PointLightComponent& PL, const uint32_t idx = 0);
-		static void DrawSpotLights(const SpotLightComponent& SL, const uint32_t idx = 0);
+		static void DrawDirectionalLight(const LightComponent& light);
+		static void DrawPointLights(const PointLightComponent& PL, const glm::vec3& position, const uint32_t idx = 0);
+		static void DrawSpotLights(const SpotLightComponent& SL, const glm::vec3& position, const glm::vec3& direction, const uint32_t idx = 0);
 
 		//static void DrawSpotLights(const PointLightComponent& PL);
 

@@ -85,15 +85,15 @@ namespace MHelmet
 	{		
 		// BEGIN ESCENE
 		{
-			auto view_cameraman = m_Registry.view<CameraManComponent>();
+			auto view_cameraman = m_Registry.view<CameraComponent>();
 			{
 				for (auto C_entity : view_cameraman)
 				{
-					auto& cameraman = view_cameraman.get<CameraManComponent>(C_entity);
+					auto& cameraman = view_cameraman.get<CameraComponent>(C_entity);
 
 					if (cameraman.Primary)
 					{
-						if (cameraman.IsHovered) cameraman.Cameraman.Update(dt);
+						//cameraman.Cameraman.Update(dt);
 
 						auto view_light = m_Registry.view<LightComponent>();
 						{
@@ -107,37 +107,32 @@ namespace MHelmet
 					}
 				}
 			}
-
-			auto point_light = m_Registry.view<PointLightComponent>();
-			{
-				uint32_t Pidx = 0;
-				for (auto PL_entity : point_light)
-				{
-					auto& Plight = point_light.get<PointLightComponent>(PL_entity);
-					RendererGeometry::DrawPointLights(Plight, Pidx);
-					Pidx++;			
-				}
-				//WARN("numero de PL {0}", Pidx);
-				Pidx = 0;
-			}
-
-			auto spot_light = m_Registry.view<SpotLightComponent>();
-			{
-				uint32_t Sidx = 0;
-				for (auto SL_entity : spot_light)
-				{
-					auto& Slight = spot_light.get<SpotLightComponent>(SL_entity);
-					RendererGeometry::DrawSpotLights(Slight, Sidx);
-					Sidx++;
-				}
-				Sidx = 0;
-			}
-
-			auto group1 = m_Registry.group<TransformComponent>(entt::get<MaterialComponent>);
-			for (auto entity : group1)
+			
+			auto groupPL = m_Registry.group<PointLightComponent>(entt::get<TransformComponent>);
+			uint32_t idx = 0;
+			for (auto entity : groupPL)
 			{
 				// c++ 17
-				auto& [transform, material] = group1.get<TransformComponent, MaterialComponent>(entity);
+				auto& [pointLight, transform] = groupPL.get<PointLightComponent, TransformComponent>(entity);
+				RendererGeometry::DrawPointLights(pointLight, transform.T, idx);
+				idx++;
+			}
+			
+			auto groupSP = m_Registry.group<SpotLightComponent>(entt::get<TransformComponent>);
+			idx = 0;
+			for (auto entity : groupSP)
+			{
+				// c++ 17
+				auto& [spotLight, transform] = groupSP.get<SpotLightComponent, TransformComponent>(entity);
+				RendererGeometry::DrawSpotLights(spotLight, transform.T, transform.R, idx);
+				idx++;
+			}
+
+			auto groupMat = m_Registry.group<TransformComponent>(entt::get<MaterialComponent>);
+			for (auto entity : groupMat)
+			{
+				// c++ 17
+				auto& [transform, material] = groupMat.get<TransformComponent, MaterialComponent>(entity);
 
 				if (transform.ID == 0) // DRAW EMPTY Entity
 				{
@@ -151,14 +146,13 @@ namespace MHelmet
 				if (transform.ID == 3) RendererGeometry::DrawTriangle(transform.GetTransform(), material);
 				if (transform.ID == 4) RendererGeometry::DrawQuad(transform.GetTransform(), material);
 				if (transform.ID == 5) RendererGeometry::DrawSphere(transform.GetTransform(), material);
-			}		
+			}
 
-
-			auto group2 = m_Registry.group<TextureComponent>(entt::get<TransformComponent>);
-			for (auto entity : group2)
+			auto groupTex = m_Registry.group<TextureComponent>(entt::get<TransformComponent>);
+			for (auto entity : groupTex)
 			{
 				// c++ 17
-				auto& [texture, transform] = group2.get<TextureComponent, TransformComponent>(entity);				
+				auto& [texture, transform] = groupTex.get<TextureComponent, TransformComponent>(entity);				
 
 				if (transform.ID == 0)
 				{

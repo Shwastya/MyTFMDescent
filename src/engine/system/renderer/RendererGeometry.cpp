@@ -94,7 +94,7 @@ namespace MHelmet
 
 		// Librerias de shaders
 		//s_Data->SLib.Load("Vuelta", "../shaders/3D/TEXTU/phong2pointlight.glsl");
-		s_Data->SLib.Load("PhongT", "../shaders/3D/TEXTU/phong2.glsl");
+		s_Data->SLib.Load("PhongT", "../assets/shaders/3D/TEXTU/phong2.glsl");
 
 		
 		/////////////// Triangle ///////////////
@@ -171,38 +171,43 @@ namespace MHelmet
 	
 //	void RendererGeometry::ShutDown() {}
 
-	void RendererGeometry::BeginScene(const CameraManComponent& C, const LightComponent& L)
+	void RendererGeometry::BeginScene(const CameraFirstPerson& C)
 	{
 
 		SHADER->Bind();
 		glm::mat4 view = glm::mat4(1.0f);
-		view = C.Cameraman.Get().GetViewMatrix();		
+		view = C.Get().GetViewMatrix();
 		SHADER->Uniform("view", view);		
 		SHADER->Uniform("proj", glm::perspective
 		(
 			glm::radians
 			(
-				C.Cameraman.Get().GetFOV()),
-				C.ViewportX / C.ViewportY,
+				C.Get().GetFOV()),
+				C.Get(). .ViewportX / C.ViewportY,
 				C.Near, C.Far
 			)
 		);	
 		SHADER->Uniform("viewPos", C.Cameraman.Get().GetPosition());
 		SHADER->Uniform("TFMviewPos", C.Cameraman.Get().GetPosition()); // NORMAL MAPPING
 
-		SettLight(L.Direction, L.Position, L.Ambient, L.Difusse, L.Specular);
+		
 		
 	}
 
+	void RendererGeometry::DrawDirectionalLight(const LightComponent& L)
+	{
+		SettLight(L.Direction, L.Position, L.Ambient, L.Difusse, L.Specular);
+	}
+
 	// POINT LIGHTS
-	void RendererGeometry::DrawPointLights(const PointLightComponent& PL, const uint32_t idx)
+	void RendererGeometry::DrawPointLights(const PointLightComponent& PL, const glm::vec3& position, const uint32_t idx)
 	{
 		
 		const std::string prefixPoint = "pointLight[";
 		
 			const std::string lightName = prefixPoint + std::to_string(idx) + "].";
 
-			SHADER->Uniform((lightName + "position").c_str(),  PL.Position);
+			SHADER->Uniform((lightName + "position").c_str(),  position);
 			SHADER->Uniform((lightName + "ambient").c_str(),   PL.Ambient);
 			SHADER->Uniform((lightName + "diffuse").c_str(),   PL.Difusse);
 			SHADER->Uniform((lightName + "specular").c_str(),  PL.Specular);
@@ -213,14 +218,14 @@ namespace MHelmet
 					
 	}
 
-	void RendererGeometry::DrawSpotLights(const SpotLightComponent& SL, const uint32_t idx)
+	void RendererGeometry::DrawSpotLights(const SpotLightComponent& SL, const glm::vec3& position, const glm::vec3& direction, const uint32_t idx)
 	{
 		const std::string prefixPoint = "spotLight[";
 		
 			const std::string lightName = prefixPoint + std::to_string(idx) + "].";
 		
-			SHADER->Uniform((lightName + "position").c_str(),  SL.Position);
-			SHADER->Uniform((lightName + "direction").c_str(), SL.Direction);
+			SHADER->Uniform((lightName + "position").c_str(),  position);
+			SHADER->Uniform((lightName + "direction").c_str(), direction);
 			SHADER->Uniform((lightName + "ambient").c_str(),   SL.Ambient);
 			SHADER->Uniform((lightName + "diffuse").c_str(),   SL.Difusse);
 			SHADER->Uniform((lightName + "specular").c_str(),  SL.Specular);
@@ -229,8 +234,7 @@ namespace MHelmet
 			SHADER->Uniform((lightName + "linear").c_str(),    SL.Linear);
 			SHADER->Uniform((lightName + "quadratic").c_str(), SL.Quadratic);
 			SHADER->Uniform((lightName + "cutOff").c_str(),    glm::cos(glm::radians(SL.CutOff)));
-			SHADER->Uniform((lightName + "outerCutOff").c_str(), glm::cos(glm::radians(SL.outerCutOff)));
-		
+			SHADER->Uniform((lightName + "outerCutOff").c_str(), glm::cos(glm::radians(SL.OuterCutOff)));
 	}
 
 	// TRIANGLES

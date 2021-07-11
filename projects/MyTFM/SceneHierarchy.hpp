@@ -9,7 +9,7 @@ namespace MHelmet
 	public:
 
 		SceneHierarchy() = default;
-		SceneHierarchy(const RefCount<Scene>& context);
+		SceneHierarchy(const RefCount<Scene>& context) { SetContext(context); };
 
 		void SetContext(const RefCount<Scene>& context);
 
@@ -20,7 +20,6 @@ namespace MHelmet
 	private:
 		void DrawNodes(Entity entity);
 		void DrawComponents(Entity entity);	
-		void DrawComponentLight(Entity entity);
 
 		void AssetStore();
 

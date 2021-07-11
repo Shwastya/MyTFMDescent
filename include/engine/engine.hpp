@@ -6,9 +6,11 @@
 
 namespace MHelmet 
 {
+	struct OnWindowClose;
+	struct OnWindowResize;
+
 	class Engine 
 	{
-
 	public:
 
 		Engine(const std::string& name = "MHelmetProject");
