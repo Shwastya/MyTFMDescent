@@ -4,7 +4,7 @@
 
 namespace MHelmet
 {
-	RefCount<FrameBuffer> FrameBuffer::Create(const FBTextureProps& textureProps)
+	RefCount<FrameBuffer> FrameBuffer::Create(const FBProps& textureProps)
 	{
 		switch (Renderer::GetAPI())
 		{

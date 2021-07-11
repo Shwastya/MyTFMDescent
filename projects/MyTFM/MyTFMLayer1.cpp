@@ -14,8 +14,12 @@ MyTFMDescent::MyTFMDescent()
 void MyTFMDescent::Join()
 {
     // Framebuffer instancia y texture specs
-    FBTextureProps fbspec{ Engine::p().GetWindow().GetWidth(), Engine::p().GetWindow().GetHeight() };
-    m_FrameBuffer = FrameBuffer::Create(fbspec);
+    FBProps fbprops;
+    fbprops.List = { FBTextureFormat::RGB, FBTextureFormat::Depth };
+    fbprops.W = Engine::p().GetWindow().GetWidth();
+    fbprops.H = Engine::p().GetWindow().GetHeight();
+
+    m_FBEditorCam = FrameBuffer::Create(fbprops);
 
     // Create scene ECS   
     m_Scene = std::make_shared<Scene>();
@@ -91,7 +95,7 @@ void MyTFMDescent::Update(DeltaTime dt)
     if (m_IsEditScene)
     {
         m_CamMan1.Update(dt);
-        m_FrameBuffer->Bind();
+        m_FBEditorCam->Bind();
     }
     else m_CamMan2.Update(dt);
 
@@ -106,7 +110,7 @@ void MyTFMDescent::Update(DeltaTime dt)
 
     if (m_IsEditScene)
     {
-        m_FrameBuffer->Unbind();    
+        m_FBEditorCam->Unbind();
     }
     
 }
@@ -241,7 +245,7 @@ void MyTFMDescent::ImGuiRender()
             }
         }
 
-        uint32_t textureID = m_FrameBuffer->GetFBOTexture();
+        uint32_t textureID = m_FBEditorCam->GetFBOTexture();
         ImGui::Image((void*)textureID, ImVec2{ viewportPanelSize.x, viewportPanelSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
         // Gizmo

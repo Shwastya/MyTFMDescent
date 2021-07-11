@@ -27,7 +27,7 @@ public:
 private:
 
 	// FrameBuffer textura en el frame de ImGui
-	RefCount<FrameBuffer> m_FrameBuffer;
+	RefCount<FrameBuffer> m_FBEditorCam;
 	 
 	// ECS Scene
 	RefCount<Scene> m_Scene;

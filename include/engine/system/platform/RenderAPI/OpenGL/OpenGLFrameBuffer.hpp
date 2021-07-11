@@ -7,7 +7,7 @@ namespace MHelmet
 	{
 	public:
 
-		OpenGLFrameBuffer(const FBTextureProps& textureProps);
+		OpenGLFrameBuffer(const FBProps& spec);
 		virtual ~OpenGLFrameBuffer();
 
 		virtual void Bind() const override;
@@ -15,17 +15,25 @@ namespace MHelmet
 
 		virtual void Resize(uint32_t W, uint32_t H) override;
 
-		virtual uint32_t GetFBOTexture() const override { return m_TextColor; }
+		virtual uint32_t GetFBOTexture(uint32_t idx) const override { return m_Colors[idx]; }
 		//virtual uint32_t GetDepthTexture() const override { return m_TextDepth; }
 
-		virtual const FBTextureProps& GetSpecification() const override { return m_TextProps; };
+		virtual const FBProps& GetSpecification() const override { return m_TextProps; };
 
 		void ColorDepthAttachment();
 
 	private:
 		uint32_t m_FboID;
-		uint32_t m_TextColor;
-		uint32_t m_RenderBuffer;
-		FBTextureProps m_TextProps;
-	};
+		//uint32_t m_TextColor, m_RenderBuffer;
+
+
+
+		FBProps m_TextProps;		
+
+		std::vector<FBTextureProps> m_ColorListProps;
+		std::vector<uint32_t> m_Colors;
+
+		FBTextureProps m_DepthBufferProp = FBTextureFormat::NONE;
+		uint32_t m_Depth = 0;
+	}; 
 }
