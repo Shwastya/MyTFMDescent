@@ -9,7 +9,7 @@
 #define H_ static_cast<float>(Engine::p().GetWindow().GetHeight())
 
 MyTFMDescent::MyTFMDescent() 
-    : NodeLayer("TestingLayer"), m_Cam1(glm::vec3(0.0f, 1.0f, 15.5f)), m_Cam2(glm::vec3(0.0f, 1.0f, 15.5f)) {}
+    : NodeLayer("TestingLayer"){}
 
 void MyTFMDescent::Join()
 {
@@ -25,13 +25,19 @@ void MyTFMDescent::Join()
     /*Ent_CameraMan1 = m_Scene->CreateEntity("Camera 1");
     Ent_CameraMan1.AddComponent<CameraComponent>(m_Cam1, glm::vec3(0.0f, 1.0f, 15.5f), W_, H_);
     m_CamMan1.TakeCamera(Ent_CameraMan1.GetComponent<CameraComponent>().Camera);*/
-    m_CamMan1.TakeCamera(m_Cam1);
-    m_CamMan1.SetViewport({W_, H_});
 
-    Ent_CameraMan2 = m_Scene->CreateEntity("Camera 2");
+    m_Cam1 = glm::vec3(0.0f, 1.0f, 15.5f);
+    m_CamMan1.TakeCamera(m_Cam1);
+    m_CamMan1.SetViewport({ W_, H_ });
+
+    m_Cam2 = glm::vec3(0.0f, 1.0f, 15.5f);
+    m_CamMan2.TakeCamera(m_Cam2);
+    m_CamMan2.SetViewport({ W_, H_ });
+
+    /*Ent_CameraMan2 = m_Scene->CreateEntity("Camera 2");
     Ent_CameraMan2.AddComponent<CameraComponent>(m_Cam2, glm::vec3(0.0f, 1.0f, 15.5f), W_, H_);
     Ent_CameraMan2.GetComponent<CameraComponent>().Primary = false;
-    m_CamMan2.TakeCamera(Ent_CameraMan2.GetComponent<CameraComponent>().Camera);
+    m_CamMan2.TakeCamera(Ent_CameraMan2.GetComponent<CameraComponent>().Camera);*/
     // Light
     Ent_Light = m_Scene->CreateEntity("Directional Light");
     Ent_Light.AddComponent<LightComponent>();
@@ -80,7 +86,7 @@ void MyTFMDescent::Free() { }
 
 void MyTFMDescent::Update(DeltaTime dt) 
 { 
-    m_IsEditScene = Ent_CameraMan1.GetComponent<CameraComponent>().Primary;
+ //   m_IsEditScene = true;//Ent_CameraMan1.GetComponent<CameraComponent>().Primary;
 
     if (m_IsEditScene)
     {
@@ -88,15 +94,20 @@ void MyTFMDescent::Update(DeltaTime dt)
         m_FrameBuffer->Bind();
     }
     else m_CamMan2.Update(dt);
+
     {
         RenderDrawCall::ClearColor({ m_BackGroundColor, 1.0f });
         RenderDrawCall::clear();
 
+        if (m_IsEditScene) m_Scene->UpdateEditorCamera(dt, m_CamMan1);
+        else m_Scene->UpdateEditorCamera(dt, m_CamMan2);
         m_Scene->Update(dt);
     }
+
     if (m_IsEditScene)
     {
-        m_FrameBuffer->Unbind();    }
+        m_FrameBuffer->Unbind();    
+    }
     
 }
 
@@ -191,15 +202,17 @@ void MyTFMDescent::ImGuiRender()
        // ImGui::Text(m_Vendor.c_str()  );
         ImGui::Text(m_Renderer.c_str());
         ImGui::Text(m_Version.c_str());
+
         ImGui::NewLine();
         ImGui::Separator();
         ImGui::NewLine();
         ImGui::Text("Active camera");
         // checkbox
-        if (ImGui::Checkbox("Editor Camera", &m_PrimaryCam))
+        if (ImGui::Checkbox("Editor Camera", &m_IsEditScene))
         {
-            Ent_CameraMan2.GetComponent<CameraComponent>().Primary = !m_PrimaryCam;
-            Ent_CameraMan1.GetComponent<CameraComponent>().Primary = m_PrimaryCam;
+            m_IsEditScene = (m_IsEditScene) ? true : false;
+            //nt_CameraMan2.GetComponent<CameraComponent>().Primary = !m_PrimaryCam;
+            //Ent_CameraMan1.GetComponent<CameraComponent>().Primary = m_PrimaryCam;
         }
         ImGui::NewLine();
         ImGui::Separator();
@@ -221,13 +234,10 @@ void MyTFMDescent::ImGuiRender()
             m_CamMan1._IsWindowHovered = ImGui::IsWindowHovered();
             m_CamMan1._IsWindowFocused = ImGui::IsWindowFocused();
 
-            const float X = Ent_CameraMan1.GetComponent<CameraComponent>().ViewportX;
-            const float Y = Ent_CameraMan1.GetComponent<CameraComponent>().ViewportY;
 
-            if ((X != viewportPanelSize.x) || (Y != viewportPanelSize.y))
+            if ((m_CamMan1.GetViewPort().x != viewportPanelSize.x) || (m_CamMan1.GetViewPort().y != viewportPanelSize.y))
             {
-                Ent_CameraMan1.GetComponent<CameraComponent>().ViewportX = viewportPanelSize.x;
-                Ent_CameraMan1.GetComponent<CameraComponent>().ViewportY = viewportPanelSize.y;
+                m_CamMan1.SetViewport({ viewportPanelSize.x, viewportPanelSize.y });
             }
         }
 
@@ -237,7 +247,7 @@ void MyTFMDescent::ImGuiRender()
         // Gizmo
         Entity EntSelected = m_HierarchyPanel.GetCollectedEntity();
 
-        if (EntSelected && m_GizmoType != -1 && Ent_CameraMan1.GetComponent<CameraComponent>().Primary)
+        if (EntSelected && m_GizmoType != -1 && m_IsEditScene)
         {
             ImGuizmo::SetOrthographic(false);
             ImGuizmo::SetDrawlist();
@@ -247,18 +257,20 @@ void MyTFMDescent::ImGuiRender()
 
             ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, wWidth, wHeight);
 
-            const auto& ECam = Ent_CameraMan1.GetComponent<CameraComponent>();
+            // const auto& ECam = Ent_CameraMan1.GetComponent<CameraComponent>();
 
-            // CAMERA
-            glm::mat4& Projection = glm::perspective(
+             // CAMERA
+            glm::mat4& Projection = glm::perspective
+            (
                 glm::radians
                 (
-                    ECam.Camera.GetFOV()),
-                    ECam.ViewportX / ECam.ViewportY,
-                    ECam.Near, ECam.Far
+                    m_CamMan1.Get().GetFOV()),
+                    m_CamMan1.GetViewPort().x / m_CamMan1.GetViewPort().y,
+                    m_CamMan1.GetNear(), m_CamMan1.GetFar()
+                
                 );
 
-            glm::mat4  ViewMatrix = ECam.Camera.GetViewMatrix();
+            glm::mat4  ViewMatrix = m_CamMan1.Get().GetViewMatrix();
 
             // ENTITY TRANSFORM
             auto& TC = EntSelected.GetComponent<TransformComponent>();
@@ -288,17 +300,17 @@ void MyTFMDescent::ImGuiRender()
     }
     else
     {
-        Ent_CameraMan2.GetComponent<CameraComponent>().ViewportX = W_;
-        Ent_CameraMan2.GetComponent<CameraComponent>().ViewportY = H_;
+       // Ent_CameraMan2.GetComponent<CameraComponent>().ViewportX = W_;
+       // Ent_CameraMan2.GetComponent<CameraComponent>().ViewportY = H_;
     }   
 }
 
 void MyTFMDescent::OnEvent(Event& event) 
 {
 	
-    if (Ent_CameraMan1)
+    //if (Ent_CameraMan1)
     {
-        if (Ent_CameraMan1.GetComponent<CameraComponent>().Primary)
+        if (m_IsEditScene)
         {
 
             if (m_Editor_Cam_FirtsUse)
@@ -328,14 +340,19 @@ void MyTFMDescent::OnEvent(Event& event)
           
             m_CamMan1.OnEvent(event);
         }
+        else
+        {
+            m_CamMan2.SetCaptureMode(true);
+            m_CamMan2.OnEvent(event);
+        }
     }
-    if (Ent_CameraMan2)
+    /*if (Ent_CameraMan2)
     {
         if (Ent_CameraMan2.GetComponent<CameraComponent>().Primary)
         {
             m_CamMan2.OnEvent(event);
         }
-    }
+    }*/
 
 	if (event.GetEventType() == IsType::MH_KEY_PRESSED)
 	{
@@ -343,9 +360,9 @@ void MyTFMDescent::OnEvent(Event& event)
 
         if (m_CamMan1._IsWindowFocused || m_CamMan1._IsWindowHovered)
         {
-            OnKeyPressed& e = dynamic_cast<OnKeyPressed&>(event);
+            //OnKeyPressed& e = dynamic_cast<OnKeyPressed&>(event);
 
-            switch (e.GetKeyCode())
+            switch (dynamic_cast<OnKeyPressed&>(event).GetKeyCode())
             {
                 case Key::Q:
                     m_GizmoType = -1; break;
@@ -363,16 +380,18 @@ void MyTFMDescent::OnEvent(Event& event)
 
                 case Key::C:
                 {
-                    m_PrimaryCam = false;
+                    m_IsEditScene = true;
+                   /* m_PrimaryCam = false;
                     Ent_CameraMan2.GetComponent<CameraComponent>().Primary = true;
-                    Ent_CameraMan1.GetComponent<CameraComponent>().Primary = false;
+                    Ent_CameraMan1.GetComponent<CameraComponent>().Primary = false;*/
                     break;
                 }
                 case Key::V:
                 {
-                    m_PrimaryCam = true;
+                    m_IsEditScene = false;
+                    /*m_PrimaryCam = true;
                     Ent_CameraMan2.GetComponent<CameraComponent>().Primary = false;
-                    Ent_CameraMan1.GetComponent<CameraComponent>().Primary = true;
+                    Ent_CameraMan1.GetComponent<CameraComponent>().Primary = true;*/
                     break;
                 }
             }

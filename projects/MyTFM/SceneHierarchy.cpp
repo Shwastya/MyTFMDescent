@@ -207,13 +207,13 @@ namespace MHelmet
 
 		if (entityDeleted)
 		{
-			if (ent.HasComponent<CameraComponent>())
+			/*if (ent.HasComponent<CameraComponent>())
 			{
 				m_Log = "Cameras cannot be deleted yet.....";
-			}
+			}*/
 				
 		
-			else
+			//else
 			{
 				m_Context->DestroyEntity(ent);
 				if (m_CollectionContext == ent)
@@ -259,11 +259,11 @@ namespace MHelmet
 					m_Log = "The entity already has material";
 					WARN("{0}", m_Log);
 				}
-				else if (m_CollectionContext.HasComponent<CameraComponent>())
+				/*else if (m_CollectionContext.HasComponent<CameraComponent>())
 				{
 					m_Log = "The camera cannot have a material component!";
 					WARN("{0}", m_Log);
-				}
+				}*/
 				else
 				{
 					if (m_CollectionContext.HasComponent<TextureComponent>())
@@ -286,11 +286,11 @@ namespace MHelmet
 					m_Log = "The entity already has texture";
 					WARN("{0}", m_Log);
 				}
-				else if (m_CollectionContext.HasComponent<CameraComponent>())
+				/*else if (m_CollectionContext.HasComponent<CameraComponent>())
 				{
 					m_Log = "The camera cannot have a texture component!";
 					WARN("{0}", m_Log);
-				}
+				}*/
 				else
 				{
 					if (m_CollectionContext.HasComponent<MaterialComponent>())
@@ -311,11 +311,11 @@ namespace MHelmet
 					m_Log = "The entity already has a Point Light";
 					WARN("{0}", m_Log);
 				}
-				else if (m_CollectionContext.HasComponent<CameraComponent>())
+			/*	else if (m_CollectionContext.HasComponent<CameraComponent>())
 				{
 					m_Log = "The camera cannot have a Point LiGHT!";
 					WARN("{0}", m_Log);
-				}
+				}*/
 				else if (m_CollectionContext.HasComponent<LightComponent>())
 				{
 					m_Log = "The Directional Light cannot have a Point LiGHT!";

@@ -4,7 +4,7 @@
 
 namespace MHelmet
 {   
-    struct CameraFirstPerson
+    struct CameraEditor
     {
         enum class Movement
         {
@@ -14,9 +14,9 @@ namespace MHelmet
             Right    = 3,
         };       
 
-        CameraFirstPerson() = default;
+        CameraEditor() = default;
 
-        void TakeCamera(PerspectiveCamera& camera) { CAM = camera; };
+        void TakeCamera(const PerspectiveCamera& camera) { CAM = camera; };
 
         void Update(DeltaTime dt);
         void OnEvent(Event& e);
@@ -50,16 +50,6 @@ namespace MHelmet
         void HandleMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
         void HandleMouseScroll(float yoffset);
 
-        void MousePan(const glm::vec2& delta);
-        void MouseRotate(const glm::vec2& delta);
-        void MouseZoom(float delta);
-
-        glm::vec3 CalculatePosition() const;
-
-       // std::pair<float, float> PanSpeed() const;
-        float RotationSpeed() const;
-        float ZoomSpeed() const;
-
     private:
         PerspectiveCamera CAM;
 
@@ -73,16 +63,12 @@ namespace MHelmet
         float m_Speed = 7.5f;
         float m_Sensitivity = 0.1f;
 
-
-
     private:
        
         bool m_FlightMode = true;      
 
     private:
-            
-        glm::vec2 m_InitialMousePosition;
-
+    
         bool  m_FirstMouse = true;
         float m_LastX = 0.0f;
         float m_LastY = 0.0f;

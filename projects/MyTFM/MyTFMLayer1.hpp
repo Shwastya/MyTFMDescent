@@ -1,5 +1,7 @@
 #include <MHelmet.h>
 #include "SceneHierarchy.hpp"
+#include "engine/system/cameraManager/CameraFirstPerson.hpp"
+#include "engine/system/cameraManager/CameraEditor.hpp"
 
 using namespace MHelmet;
 
@@ -38,9 +40,10 @@ private:
 	CameraFirstPerson m_CamMan1;
 	CameraFirstPerson m_CamMan2;
 
-	Entity Ent_CameraMan1; bool m_Editor_Cam_FirtsUse = true;
-	Entity Ent_CameraMan2;
-	bool m_PrimaryCam = true;	
+	bool m_Editor_Cam_FirtsUse = true;
+	//Entity Ent_CameraMan1;
+	//Entity Ent_CameraMan2;
+	//bool m_PrimaryCam = true;	
 
 	// light
 	Entity Ent_Light;

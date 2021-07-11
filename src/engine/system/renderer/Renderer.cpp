@@ -6,7 +6,7 @@
 
 namespace MHelmet
 {
-	Renderer::DataScene* Renderer::Scene = new Renderer::DataScene;
+	//Renderer::DataScene* Renderer::Scene = new Renderer::DataScene;
 
 	void Renderer::Init()
 	{

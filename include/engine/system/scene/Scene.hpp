@@ -6,7 +6,7 @@
 namespace MHelmet
 {
 	class Entity;
-
+	class CameraFirstPerson;
 	class Scene
 	{
 	public:
@@ -16,7 +16,7 @@ namespace MHelmet
 		Entity CreateEntity(const std::string& name = "unnamed");
 		void DestroyEntity(Entity entity); 
 
-		void Update
+		void UpdateEditorCamera(DeltaTime dt, const CameraFirstPerson& cam);
 		void Update(DeltaTime dt);
 
 	private:

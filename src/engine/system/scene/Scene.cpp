@@ -3,6 +3,7 @@
 #include "engine/system/scene/Components.hpp"
 #include "engine/system/renderer/RendererGeometry.hpp"
 #include "engine/system/scene/Entity.hpp"
+#include "engine/system/cameraManager/CameraFirstPerson.hpp"
 
 namespace MHelmet
 {
@@ -81,30 +82,39 @@ namespace MHelmet
 		m_Registry.destroy(entity);
 	}	
 	
+	void Scene::UpdateEditorCamera(DeltaTime dt, const CameraFirstPerson& cam)
+	{
+		RendererGeometry::BeginScene(cam);
+	}
+
 	void Scene::Update(DeltaTime dt)
 	{		
 		// BEGIN ESCENE
 		{
-			auto view_cameraman = m_Registry.view<CameraComponent>();
+			//auto view_cameraman = m_Registry.view<CameraComponent>();
+			//{
+			//	for (auto C_entity : view_cameraman)
+			//	{
+			//		auto& cameraman = view_cameraman.get<CameraComponent>(C_entity);
+
+			//		if (cameraman.Primary)
+			//		{
+			//			//cameraman.Cameraman.Update(dt);
+
+			//			
+			//		}
+			//	}
+			//}
+
+
+
+			auto view_light = m_Registry.view<LightComponent>();
 			{
-				for (auto C_entity : view_cameraman)
+				for (auto L_entity : view_light)
 				{
-					auto& cameraman = view_cameraman.get<CameraComponent>(C_entity);
+					auto& light = view_light.get<LightComponent>(L_entity);
 
-					if (cameraman.Primary)
-					{
-						//cameraman.Cameraman.Update(dt);
-
-						auto view_light = m_Registry.view<LightComponent>();
-						{
-							for (auto L_entity : view_light)
-							{
-								auto& light = view_light.get<LightComponent>(L_entity);
-							
-								RendererGeometry::BeginScene(cameraman, light);																
-							}
-						}
-					}
+					RendererGeometry::DrawDirectionalLight(light);
 				}
 			}
 			

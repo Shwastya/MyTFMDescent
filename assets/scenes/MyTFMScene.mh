@@ -39,9 +39,3 @@ Entities:
   - Entity: 124234123424320
     TagComponent:
       Tag: Directional Light
-  - Entity: 124234123424320
-    TagComponent:
-      Tag: Camera 2
-  - Entity: 124234123424320
-    TagComponent:
-      Tag: Camera 1

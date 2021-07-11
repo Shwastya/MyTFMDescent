@@ -183,12 +183,12 @@ namespace MHelmet
 			glm::radians
 			(
 				C.Get().GetFOV()),
-				C.Get(). .ViewportX / C.ViewportY,
-				C.Near, C.Far
+				C.GetViewPort().x / C.GetViewPort().y,
+				C.GetNear(), C.GetFar()
 			)
 		);	
-		SHADER->Uniform("viewPos", C.Cameraman.Get().GetPosition());
-		SHADER->Uniform("TFMviewPos", C.Cameraman.Get().GetPosition()); // NORMAL MAPPING
+		SHADER->Uniform("viewPos", C.Get().GetPosition());
+		SHADER->Uniform("TFMviewPos", C.Get().GetPosition()); // NORMAL MAPPING
 
 		
 		
