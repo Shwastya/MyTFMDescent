@@ -26,5 +26,6 @@ namespace MHelmet
 
 		static RefCount<Texture2D> Create(const std::string& path, Texture2D::Format format);
 		static RefCount<Texture2D> Create(uint32_t widh, uint32_t height);
+	
 	};
 }

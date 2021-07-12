@@ -14,7 +14,7 @@ public:
 	using RenderDrawCall = RenderDrawCall;
 	using GeometryRender = RendererGeometry;
 
-	MyTFMDescent();	
+	MyTFMDescent();
 	~MyTFMDescent() = default;
 
 	void Join() override;
@@ -27,8 +27,10 @@ public:
 private:
 
 	// FrameBuffer textura en el frame de ImGui
-	RefCount<FrameBuffer> m_FBEditorCam;
-	 
+	RefCount<FrameBuffer> m_FramebufferFirstScene;
+	RefCount<FrameBuffer> m_FramebufferImGuiFrame;
+	//RefCount<FrameBuffer> m_FramebufferRedChannel;
+
 	// ECS Scene
 	RefCount<Scene> m_Scene;
 	bool m_IsEditScene = true;
@@ -44,6 +46,8 @@ private:
 	//Entity Ent_CameraMan1;
 	//Entity Ent_CameraMan2;
 	//bool m_PrimaryCam = true;	
+	glm::vec2 m_ViewPortBounds[2];
+	glm::vec2 m_viewPortSize = {0.0f, 0.0f};
 
 	// light
 	Entity Ent_Light;
@@ -58,7 +62,7 @@ private:
 	int m_GizmoType = -1;
 
 	// BackGround Color
-	glm::vec3 m_BackGroundColor = glm::vec3(0.171f, 0.328f, 0.485f);
+	glm::vec3 m_BackGroundColor = glm::vec3(0.1f, 0.1f, 0.1f);
 
 	// info system
 	std::string m_Vendor;

@@ -63,6 +63,7 @@ namespace MHelmet
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	}
+
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
 		glDeleteTextures(1, &m_TextID);		
@@ -72,8 +73,9 @@ namespace MHelmet
 		glActiveTexture(GL_TEXTURE0 + unit);
 		glBindTexture(GL_TEXTURE_2D, m_TextID);
 		
-		//std::reinterpret_pointer_cast<OpenGLShader>(shader)->Uniform(name, static_cast<int32_t>(unit));
+		
 	}
+	
 	void OpenGLTexture2D::SetData(void* data, uint32_t size)
 	{
 		uint32_t bytesXpixel = m_DataFormat == GL_RGBA ? 4 : 3;

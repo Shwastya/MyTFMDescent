@@ -15,11 +15,25 @@ void MyTFMDescent::Join()
 {
     // Framebuffer instancia y texture specs
     FBProps fbprops;
-    fbprops.List = { FBTextureFormat::RGB, FBTextureFormat::Depth };
-    fbprops.W = Engine::p().GetWindow().GetWidth();
-    fbprops.H = Engine::p().GetWindow().GetHeight();
+    fbprops.List = { FBTextureFormat::RGBA8, FBTextureFormat::REDINTEGER, FBTextureFormat::DEPTHCOMPONENT24};
 
-    m_FBEditorCam = FrameBuffer::Create(fbprops);
+    fbprops.W = 1176;
+    fbprops.H = 1036;
+    
+    FBProps fbprops2;
+    fbprops2.List = { FBTextureFormat::RGBA8};
+
+    fbprops2.W = 1176;
+    fbprops2.H = 1036;
+
+ /*   FBProps fbprops3;
+    fbprops3.List = { FBTextureFormat::REDINTEGER };
+    fbprops3.W = Engine::p().GetWindow().GetWidth();
+    fbprops3.H = Engine::p().GetWindow().GetHeight();*/
+
+    m_FramebufferFirstScene = FrameBuffer::Create(fbprops);
+    m_FramebufferImGuiFrame = FrameBuffer::Create(fbprops2);
+   // m_FramebufferRedChannel = FrameBuffer::Create(fbprops3);
 
     // Create scene ECS   
     m_Scene = std::make_shared<Scene>();
@@ -32,7 +46,7 @@ void MyTFMDescent::Join()
 
     m_Cam1 = glm::vec3(0.0f, 1.0f, 15.5f);
     m_CamMan1.TakeCamera(m_Cam1);
-    m_CamMan1.SetViewport({ W_, H_ });
+    m_CamMan1.SetViewport({ 1176.0f, 1036.0f });
 
     m_Cam2 = glm::vec3(0.0f, 1.0f, 15.5f);
     m_CamMan2.TakeCamera(m_Cam2);
@@ -92,27 +106,122 @@ void MyTFMDescent::Update(DeltaTime dt)
 { 
  //   m_IsEditScene = true;//Ent_CameraMan1.GetComponent<CameraComponent>().Primary;
 
+   // if (m_IsEditScene)
+   // {
+   //     m_CamMan1.Update(dt);
+   //     RenderDrawCall::ClearColor({ m_BackGroundColor, 1.0f });
+
+   //     // FIRST PASS        
+   //   //  {
+   //         
+   //         m_FBEditorCam->Bind();
+   //         
+   //         RenderDrawCall::clear();
+
+   //         m_Scene->UpdateEditorCamera(dt, m_CamMan1);
+
+   //         m_Scene->Update(dt);
+
+   //       
+
+   //         m_FBEditorCam->Unbind();            
+   //    // }  
+   //     // SECOND PASS
+   //  
+   ////     {      
+   //       //  RenderDrawCall::DisableDepthTest();
+   //        // RenderDrawCall::ClearColorBufferOnly();
+
+   //       //  m_Scene->UpdateScreenTexture(dt, m_FBEditorCam->GetFBOTexture(), m_QuadScreen);        
+   //        
+   // //    }
+   // }
+   // else
+   // {
+   //     m_CamMan2.Update(dt);
+   //     RenderDrawCall::ClearColor({ m_BackGroundColor, 1.0f });
+   //     RenderDrawCall::clear();
+
+   //    // m_QuadScreen->SetData(m_FBEditorCam->GetDepthBuffer(), sizeof(uint32_t));
+
+   //   //  m_Scene->UpdateScreenTexture(dt, m_FBEditorCam->GetFBOTexture(), m_QuadScreen);
+
+   //     m_Scene->UpdateEditorCamera(dt, m_CamMan2);
+
+   //     m_Scene->Update(dt);
+   // }       
+
+
+
     if (m_IsEditScene)
-    {
-        m_CamMan1.Update(dt);
-        m_FBEditorCam->Bind();
-    }
-    else m_CamMan2.Update(dt);
+    {        
+        m_CamMan1.Update(dt);        
+        // FIRST RENDER PASS
+        {
+           
+            m_FramebufferFirstScene->Bind();
+            RenderDrawCall::ClearColor({ m_BackGroundColor, 1.0f });
+            RenderDrawCall::clear();
+            
 
-    {
-        RenderDrawCall::ClearColor({ m_BackGroundColor, 1.0f });
-        RenderDrawCall::clear();
+            m_Scene->UpdateEditorCamera(dt, m_CamMan1);    
 
-        if (m_IsEditScene) m_Scene->UpdateEditorCamera(dt, m_CamMan1);
-        else m_Scene->UpdateEditorCamera(dt, m_CamMan2);
-        m_Scene->Update(dt);
+
+            //auto [mx, my] = ImGui::GetMousePos();
+            //mx -= m_ViewPortBounds[0].x;
+            //my -= m_ViewPortBounds[0].y;
+            //glm::vec2 viewportSize = m_ViewPortBounds[1] - m_ViewPortBounds[0];
+
+            //int mouseX = (int)mx;
+            //int mouseY = (int)my;
+
+            //if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+            //{
+            //    int pixelData = m_FramebufferFirstScene->ReadPixel(1, mouseX, mouseY);
+            //    CORE_WARN("Mpixe lData {0}", pixelData);
+            //   // CORE_WARN("Mouse {0}, {1}", mouseX, mouseY);
+            //}
+            
+            m_FramebufferFirstScene->Unbind();
+        }
+        // SECOND PASS
+        {
+            m_FramebufferImGuiFrame->Bind();
+
+            RenderDrawCall::DisableDepthTest();
+            RenderDrawCall::ClearColorBufferOnly();
+
+            
+            //   m_FBEditorCam->ActiveTexture(0);
+            m_Scene->UpdateScreenTexture(m_FramebufferFirstScene);
+
+            m_FramebufferImGuiFrame->Unbind();
+        }
+        // THIRD FRAME GAME PLAY
+        {
+
+        }
+       
+    }
+    else
+    {    
+         m_CamMan2.Update(dt);
+         RenderDrawCall::ClearColor({ m_BackGroundColor, 1.0f });
+         RenderDrawCall::clear();
+         m_Scene->UpdateEditorCamera(dt, m_CamMan2);   
     }
 
-    if (m_IsEditScene)
-    {
-        m_FBEditorCam->Unbind();
-    }
+
     
+    
+
+
+
+    
+
+
+
+   // m_FBEditorCam->Unbind();
 }
 
 void MyTFMDescent::ImGuiRender()
@@ -229,25 +338,47 @@ void MyTFMDescent::ImGuiRender()
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 
         ImGui::Begin("Scene Frame");
-   
+      /*  auto viewportOffset = ImGui::GetCursorPos();
+        auto windowSize = ImGui::GetWindowSize();
+        ImVec2 minBound = ImGui::GetWindowPos();
+        minBound.x += viewportOffset.x;
+        minBound.y += viewportOffset.y;
+
+        ImVec2 maxBound = { minBound.x + windowSize.x, minBound.y + windowSize.y };
+        m_ViewPortBounds[0] = { minBound.x, minBound.y };
+        m_ViewPortBounds[1] = { maxBound.x, maxBound.y };*/
         /* FLAG */ // Si cambia el ViewPort del frameImGui donde esta la textura de la escena
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
         {
+            
             /* FLAG */ // Si hay foco del mouse sobre el frame del window // no bloquees los eventos desde Event System
            // Ent_CameraMan1.GetComponent<CameraManComponent>().IsHovered = ImGui::IsWindowHovered();
             m_CamMan1._IsWindowHovered = ImGui::IsWindowHovered();
             m_CamMan1._IsWindowFocused = ImGui::IsWindowFocused();
 
-
-            if ((m_CamMan1.GetViewPort().x != viewportPanelSize.x) || (m_CamMan1.GetViewPort().y != viewportPanelSize.y))
+            if (m_viewPortSize != *((glm::vec2*)&viewportPanelSize))
             {
+                WARN("{0}, {1}", viewportPanelSize.x, viewportPanelSize.y);
                 m_CamMan1.SetViewport({ viewportPanelSize.x, viewportPanelSize.y });
-            }
-        }
 
-        uint32_t textureID = m_FBEditorCam->GetFBOTexture();
+                m_FramebufferFirstScene->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
+                //m_FramebufferImGuiFrame->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
+                m_viewPortSize = { viewportPanelSize.x, viewportPanelSize.y };
+                
+            }
+
+        }
+      //  uint32_t originalTexture = m_FramebufferFirstScene->GetFBOTexture(1);
+      //  uint32_t TEST = m_FramebufferRedChannel->GetFBOTexture(0);
+        uint32_t textureID = m_FramebufferImGuiFrame->GetFBOTexture(0);
         ImGui::Image((void*)textureID, ImVec2{ viewportPanelSize.x, viewportPanelSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
+        
+
+    
+
+
+         
         // Gizmo
         Entity EntSelected = m_HierarchyPanel.GetCollectedEntity();
 
@@ -350,13 +481,6 @@ void MyTFMDescent::OnEvent(Event& event)
             m_CamMan2.OnEvent(event);
         }
     }
-    /*if (Ent_CameraMan2)
-    {
-        if (Ent_CameraMan2.GetComponent<CameraComponent>().Primary)
-        {
-            m_CamMan2.OnEvent(event);
-        }
-    }*/
 
 	if (event.GetEventType() == IsType::MH_KEY_PRESSED)
 	{

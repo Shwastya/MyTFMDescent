@@ -11,6 +11,7 @@ namespace MHelmet
 		// color
 		RGBA8,
 		RGB,
+		REDINTEGER,
 
 		// depth & stencil
 		DEPTH24STENCIL8,
@@ -45,8 +46,6 @@ namespace MHelmet
 		FBPropCollection List;
 
 		uint32_t Samples = 1;
-
-		//bool SwapChainTarget = false;
 	};
 
 	
@@ -60,10 +59,15 @@ namespace MHelmet
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
+		virtual void ActiveTexture(uint32_t idx) const = 0;
+
 		virtual void Resize(uint32_t W, uint32_t H) = 0;
 
+
+		virtual int ReadPixel(uint32_t attachment, int x, int y) = 0;
+
 		virtual uint32_t GetFBOTexture(uint32_t idx = 0) const = 0;
-		//virtual uint32_t GetDepthTexture() const = 0;
+		virtual uint32_t GetDepthBuffer() const = 0;
 		// get image specifications 
 		virtual const FBProps& GetSpecification() const = 0;
 

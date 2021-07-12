@@ -13,12 +13,12 @@ namespace MHelmet
 
 	void OpenGLContext::Init()
 	{
-		if (MH_ENABLE_CORE) // temporal 
-		{			
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4.6);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4.6);
-			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);			
-		}
+		//if (MH_ENABLE_CORE) // temporal 
+		//{			
+		//	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4.6);
+		//	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4.6);
+		//	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);			
+		//}
 
 		glfwMakeContextCurrent(m_GLFWwindow);
 		int result = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);

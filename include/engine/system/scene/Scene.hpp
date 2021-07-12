@@ -6,7 +6,8 @@
 namespace MHelmet
 {
 	class Entity;
-	class CameraFirstPerson;
+	class FrameBuffer;
+	struct CameraFirstPerson;
 	class Scene
 	{
 	public:
@@ -17,7 +18,11 @@ namespace MHelmet
 		void DestroyEntity(Entity entity); 
 
 		void UpdateEditorCamera(DeltaTime dt, const CameraFirstPerson& cam);
+		void UpdateScreenTexture(const RefCount<FrameBuffer>& fbotexture);
 		void Update(DeltaTime dt);
+
+
+		//void SetMode(bool mode);
 
 	private:
 

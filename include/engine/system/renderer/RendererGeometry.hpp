@@ -5,7 +5,7 @@
 #include "engine/system/geometry/cube.hpp"
 #include "engine/system/geometry/sphere.hpp"
 #include "engine/system/geometry/teapot.hpp"
-#include "PerspectiveCamera.hpp"
+//#include "PerspectiveCamera.hpp"
 #include "engine/system/scene/Components.hpp"
 
 
@@ -15,6 +15,10 @@ namespace MHelmet
 {
 	struct Texture2D;
 
+	struct CameraFirstPerson;
+
+	class FrameBuffer;
+
 	class RendererGeometry
 	{
 	public:
@@ -23,6 +27,8 @@ namespace MHelmet
 
 		static void BeginScene(const CameraFirstPerson& camera);
 		static void EndScene();
+
+		static void DrawQuadScreenTexture(const RefCount<FrameBuffer>& fbotexture);
 
 		static void DrawDirectionalLight(const LightComponent& light);
 		static void DrawPointLights(const PointLightComponent& PL, const glm::vec3& position, const uint32_t idx = 0);
@@ -46,6 +52,10 @@ namespace MHelmet
 		
 		static void DrawTeapot(const glm::mat4& transform, const MaterialComponent& material);
 		static void DrawTeapot(const glm::mat4& transform, const TextureComponent& texture);
+
+		//static void SetRedChannel(bool mode);
 	public:
+
+		
 	};
 }

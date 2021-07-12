@@ -48,16 +48,18 @@ namespace MHelmet
 	}
 	/*********/
 	/*********/
-	static void AttachColorTexture(uint32_t id, int samples, GLenum format, uint32_t w, uint32_t h, int idx)
+	static void AttachTexture(uint32_t id, int samples, GLenum interanlformat, GLenum format, uint32_t w, uint32_t h, int idx)
 	{
+		
 		bool multisampled = samples > 1;
 		if (multisampled)			
-		{
-			glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, format, w, h, GL_FALSE);			
+		{			
+			glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, interanlformat, w, h, GL_FALSE);
 		}
 		else
 		{
-			glTexImage2D(GL_TEXTURE_2D, 0, format, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+			
+			glTexImage2D(GL_TEXTURE_2D, 0, interanlformat, w, h, 0, format, GL_UNSIGNED_BYTE, NULL);
 
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -80,6 +82,7 @@ namespace MHelmet
 		}
 		else
 		{
+		
 			glRenderbufferStorage(GL_RENDERBUFFER, format, W, H);
 			glBindRenderbuffer(GL_RENDERBUFFER, 0);
 		}	
@@ -98,6 +101,9 @@ namespace MHelmet
 		return false;
 
 	}
+
+
+
 	// close namespace
 
 	OpenGLFrameBuffer::OpenGLFrameBuffer(const FBProps& props)
@@ -125,13 +131,22 @@ namespace MHelmet
 	{
 		// PINTA SOBRE EL FBO
 		glBindFramebuffer(GL_FRAMEBUFFER, m_FboID);
-		RenderDrawCall::SetWiewPort(0, 0, m_TextProps.W, m_TextProps.H);
+		glViewport(0, 0, m_TextProps.W, m_TextProps.H);
+
+		
 		
 	}
 	void OpenGLFrameBuffer::Unbind() const
 	{
 		// DEJA DE PINTAR SOBRE EL FBO
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		
+
+	}
+	void OpenGLFrameBuffer::ActiveTexture(uint32_t idx) const
+	{
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, m_Colors[idx]);
 
 	}
 	void OpenGLFrameBuffer::Resize(uint32_t W, uint32_t H)
@@ -140,9 +155,25 @@ namespace MHelmet
 		m_TextProps.H = H;
 		ColorDepthAttachment();
 	}
+	int OpenGLFrameBuffer::ReadPixel(uint32_t attachmentIdx, int x, int y)
+	{
+		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIdx);
+		int pixelData;
+		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
+		return pixelData;
+	}
 	void OpenGLFrameBuffer::ColorDepthAttachment()
 	{
-		if (m_FboID) OpenGLFrameBuffer::~OpenGLFrameBuffer();
+		if (m_FboID)
+		{
+			glDeleteFramebuffers(1, &m_FboID);
+			glDeleteTextures(m_Colors.size(), m_Colors.data());
+			glDeleteRenderbuffers(1, &m_Depth);
+
+
+			m_Colors.clear();
+			m_Depth = 0;
+		}
 		// generar el FBO
 		glGenFramebuffers(1, &m_FboID);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_FboID);
@@ -161,8 +192,14 @@ namespace MHelmet
 
 				switch (m_ColorListProps[i].TextureFormat)
 				{
-				case FBTextureFormat::RGB:
-					AttachColorTexture(m_Colors[i], m_TextProps.Samples, GL_RGB, m_TextProps.W, m_TextProps.H, i); break;
+				case FBTextureFormat::RGBA8:
+					AttachTexture(m_Colors[i], m_TextProps.Samples, GL_RGBA8, GL_RGBA, m_TextProps.W, m_TextProps.H, i); break;
+				
+				case FBTextureFormat::REDINTEGER:
+				{
+					AttachTexture(m_Colors[i], m_TextProps.Samples, GL_R32I, GL_RED_INTEGER, m_TextProps.W, m_TextProps.H, i); break;
+				}
+					
 				}
 			}
 		}
@@ -171,13 +208,16 @@ namespace MHelmet
 
 		if (m_DepthBufferProp.TextureFormat != FBTextureFormat::NONE)
 		{
+			
 			CreateRenderBuffer(&m_Depth, 1);
 			BinRenderBuffer(isMultiSample, m_Depth);
 
 			switch (m_DepthBufferProp.TextureFormat)
 			{
 			case FBTextureFormat::DEPTHCOMPONENT24:
-				AttachRenderBuffer(m_Depth, isMultiSample, GL_DEPTH_COMPONENT24, GL_COLOR_ATTACHMENT0, m_TextProps.W, m_TextProps.H); break;
+				AttachRenderBuffer(m_Depth, isMultiSample, GL_DEPTH_COMPONENT24, GL_DEPTH_ATTACHMENT, m_TextProps.W, m_TextProps.H); break;
+			//case FBTextureFormat::DEPTH24STENCIL8:
+				//AttachTexture(m_Depth, m_TextProps.Samples, GL_DEPTH24_STENCIL8, m_TextProps.W, m_TextProps.H); break;
 			}
 		}
 

@@ -6,6 +6,8 @@
 #include <engine/system/platform/RenderAPI/OpenGL/OpenGLEBO.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "engine/Engine.hpp"
+#include "engine/system/cameraManager/CameraFirstPerson.hpp"
+#include "engine/system/renderer/Framebuffer.hpp"
 
 #define W_ static_cast<float>(Engine::p().GetWindow().GetWidth())
 #define H_ static_cast<float>(Engine::p().GetWindow().GetHeight())
@@ -13,16 +15,18 @@
 //#define SHADER std::reinterpret_pointer_cast<OpenGLShader>(s_Data->SLib.Get("Vuelta"))
 
 #define SHADER std::reinterpret_pointer_cast<OpenGLShader>(s_Data->SLib.Get("PhongT"))
+#define ScreenTexture std::reinterpret_pointer_cast<OpenGLShader>(s_Data->SLib.Get("ScreenTexture"))
+#define TextureID std::reinterpret_pointer_cast<OpenGLShader>(s_Data->SLib.Get("TextureID"))
 
 
 namespace MHelmet
 {
 
-	enum  Geometries { triangle = 0, quad, cube, sphere, teapot };
+	enum  Geometries { triangle = 0, quad, screen, cube, sphere, teapot };
 
 	struct RendererGeometryAssets
 	{
-		RefCount<VAO> VAO[5];
+		RefCount<VAO> VAO[6];
 		ShaderLib SLib; // SHADER LIBRARY // La idea es textura o color
 
 		RefCount<Texture2D> WhiteTextu;
@@ -34,8 +38,8 @@ namespace MHelmet
 		BUFFER::Layout layout = 
 		{
 			{BUFFER::DataType::Float3, "aPos"         },
-			{BUFFER::DataType::Float2, "aUv"         },
-			{BUFFER::DataType::Float3, "aNormal"     },
+			{BUFFER::DataType::Float2, "aUv"          },
+			{BUFFER::DataType::Float3, "aNormal"      },
 			{BUFFER::DataType::Float3, "aTangents"    },
 			{BUFFER::DataType::Float3, "aBiTangents"  }
 		};
@@ -67,6 +71,11 @@ namespace MHelmet
 			SHADER->Uniform("material.shininess", shininn);
 	}
 
+	static void SetTextureQuadScreen()
+	{
+
+	}
+
 	static void SettLight(const glm::vec3& direction, const glm::vec3& position, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
 	{
 		SHADER->Uniform("dirLight.direction", direction);
@@ -87,6 +96,8 @@ namespace MHelmet
 		RenderDrawCall::Draw(s_Data->VAO[vao]);
 	}
 
+	
+
 	void RendererGeometry::Init() // Inicializacion statica (1 instancia)
 	{
 		// Instancia de los recursos para las 
@@ -95,6 +106,8 @@ namespace MHelmet
 		// Librerias de shaders
 		//s_Data->SLib.Load("Vuelta", "../shaders/3D/TEXTU/phong2pointlight.glsl");
 		s_Data->SLib.Load("PhongT", "../assets/shaders/3D/TEXTU/phong2.glsl");
+		s_Data->SLib.Load("ScreenTexture", "../assets/shaders/3D/TEXTU/FBQuad.glsl");
+		s_Data->SLib.Load("TextureID", "../assets/shaders/3D/TEXTU/textureID.glsl");
 
 		
 		/////////////// Triangle ///////////////
@@ -124,6 +137,18 @@ namespace MHelmet
 			s_Data->VAO[quad]->Add__EBO(EBO_Q);
 		}
 
+		/////////////// SCREEN///////////////
+		{
+			Quad SCREEN(2.0f);
+			s_Data->VAO[screen] = VAO::Create();
+
+			RefCount<VBO> VBO_Screen = VBO::Create(SCREEN.Get(), SCREEN.SizeVBO());
+			VBO_Screen->SetLayout(GetLayout());
+			s_Data->VAO[screen]->Add__VBO(VBO_Screen);
+
+			RefCount<EBO> EBO_Screen = std::make_shared<OpenGLEBO>(SCREEN.Indices(), SCREEN.SizeIndices());
+			s_Data->VAO[screen]->Add__EBO(EBO_Screen);
+		}
 		/////////////// Cube ///////////////
 		{
 			Cube C(1.0f);
@@ -167,9 +192,18 @@ namespace MHelmet
 				
 	}
 
-	void RendererGeometry::EndScene() { SHADER->Unbind(); }
-	
-//	void RendererGeometry::ShutDown() {}
+	void RendererGeometry::EndScene() {	SHADER->Unbind(); ScreenTexture->Unbind(); }
+
+	void RendererGeometry::DrawQuadScreenTexture(const RefCount<FrameBuffer>& fbotexture)
+	{
+		ScreenTexture->Bind();		
+
+		fbotexture->ActiveTexture(0);
+		ScreenTexture->Uniform("screenTexture", 0);
+
+		s_Data->VAO[screen]->Bind();
+		RenderDrawCall::Draw(s_Data->VAO[screen]);
+	}	
 
 	void RendererGeometry::BeginScene(const CameraFirstPerson& C)
 	{

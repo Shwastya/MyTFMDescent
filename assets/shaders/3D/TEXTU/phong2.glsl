@@ -7,6 +7,10 @@ layout (location=2) in vec3 aNormal;
 layout (location=3) in vec3 aTangent;
 layout (location=4) in vec3 aBitangent;
 
+
+
+
+
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 proj;
@@ -68,7 +72,11 @@ void main()
 #TYPE F
 #version 330 core
 
-out vec4 FragColor;
+
+//out vec4 FragColor;
+
+layout(location = 0) out vec4 FragColor;
+layout(location = 1) out int ColorID;
 
 in vec3 normali;
 in vec3 fragPos;
@@ -268,7 +276,11 @@ vec3 calcSpotLightM(SpotLight light, vec3 normal, vec3 viewDir, vec3 fragPos)
     return (ambient + (diffuse * intensity) + (specular * intensity)) * attenuation;
 };
 
+
+
 void main() {
+
+
 
   if (v_IsMaterial > 0)
   {
@@ -290,6 +302,7 @@ void main() {
 	  }
 
     FragColor = vec4(finalColor, 1.0f);
+
   }
   else
   {
@@ -313,6 +326,13 @@ void main() {
         finalColor += calcSpotLight(spotLight[i], norm, viewDir, fragPos, albedo, specular);
 	  }
 
+
+
+
     FragColor = vec4(finalColor, 1.0);
+
   }
+
+  //ColorID = 50;
+  ColorID = 50;
 }

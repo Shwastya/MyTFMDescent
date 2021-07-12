@@ -4,7 +4,8 @@
 #include "engine/system/renderer/RendererGeometry.hpp"
 #include "engine/system/scene/Entity.hpp"
 #include "engine/system/cameraManager/CameraFirstPerson.hpp"
-
+#include "engine/system/renderer/Texture.hpp"
+#include "engine/system/renderer/Framebuffer.hpp"
 namespace MHelmet
 {
 
@@ -85,6 +86,12 @@ namespace MHelmet
 	void Scene::UpdateEditorCamera(DeltaTime dt, const CameraFirstPerson& cam)
 	{
 		RendererGeometry::BeginScene(cam);
+		Update(dt);
+	}
+
+	void Scene::UpdateScreenTexture(const RefCount<FrameBuffer>& fbotexture)
+	{
+		RendererGeometry::DrawQuadScreenTexture(fbotexture);
 	}
 
 	void Scene::Update(DeltaTime dt)
@@ -178,5 +185,10 @@ namespace MHelmet
 		}
 		// END SCENE
 		RendererGeometry::EndScene();
-	}	
+	}
+	//void Scene::SetMode(bool mode)
+	//{
+	//	RendererGeometry::SetRedChannel(mode);
+	//}
+
 }
