@@ -40,7 +40,7 @@ namespace MHelmet
 		while (m_Alive)
 		{
 			if (!m_Minimized)
-			for (NodeLayer* layer : m_Layers) layer->Update(m_DeltaTime);
+			for (NodeLayer* layer : m_Layers) layer->Update(m_TimeStep);
 
 			m_ImGuiLayer->Begin();
 			for (NodeLayer* layer : m_Layers) layer->ImGuiRender();			
@@ -50,7 +50,7 @@ namespace MHelmet
 
 
 			float time = GetTime();
-			m_DeltaTime = time - m_LastFrame;
+			m_TimeStep = time - m_LastFrame;
 			m_LastFrame = time;
 		}											 
 	}								

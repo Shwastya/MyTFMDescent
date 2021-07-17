@@ -3,17 +3,18 @@
 #include "engine/system/scene/SerializerScene.hpp"
 #include "engine/system/events/MouseEvents/OnMouseEvents.hpp"
 #include "engine/system/events/KeyEvents/OnKeyEvents.hpp"
-
+#include "engine/system/scene/Components.hpp"
 
 #define W_ static_cast<float>(Engine::p().GetWindow().GetWidth())
 #define H_ static_cast<float>(Engine::p().GetWindow().GetHeight())
 
-MyTFMDescent::MyTFMDescent() 
-    : NodeLayer("TestingLayer"){}
+MyTFMDescent::MyTFMDescent() : NodeLayer("TestingLayer") {}
 
 void MyTFMDescent::Join()
-{
-    // Framebuffer instancia y texture specs
+{    
+
+    
+
     FBProps fbprops;
     fbprops.List = { FBTextureFormat::RGBA8, FBTextureFormat::REDINTEGER, FBTextureFormat::DEPTHCOMPONENT24};
 
@@ -26,23 +27,21 @@ void MyTFMDescent::Join()
     fbprops2.W = 1176;
     fbprops2.H = 1036;
 
- /*   FBProps fbprops3;
-    fbprops3.List = { FBTextureFormat::REDINTEGER };
-    fbprops3.W = Engine::p().GetWindow().GetWidth();
-    fbprops3.H = Engine::p().GetWindow().GetHeight();*/
+    FBProps fbprops3;
+    fbprops3.List = { FBTextureFormat::RGBA8 };
 
-    m_FramebufferFirstScene = FrameBuffer::Create(fbprops);
-    m_FramebufferImGuiFrame = FrameBuffer::Create(fbprops2);
-   // m_FramebufferRedChannel = FrameBuffer::Create(fbprops3);
+    fbprops3.W = Engine::p().GetWindow().GetWidth();
+    fbprops3.H = Engine::p().GetWindow().GetHeight();
+
+
+    m_FramebufferFirstScene   = FrameBuffer::Create(fbprops);
+    m_FramebufferImGuiFrame   = FrameBuffer::Create(fbprops2);
+    m_FramebufferPlayerCamera = FrameBuffer::Create(fbprops3);
 
     // Create scene ECS   
     m_Scene = std::make_shared<Scene>();
 
-    // ENTITIES
-    // CameraMans
-    /*Ent_CameraMan1 = m_Scene->CreateEntity("Camera 1");
-    Ent_CameraMan1.AddComponent<CameraComponent>(m_Cam1, glm::vec3(0.0f, 1.0f, 15.5f), W_, H_);
-    m_CamMan1.TakeCamera(Ent_CameraMan1.GetComponent<CameraComponent>().Camera);*/
+   
 
     m_Cam1 = glm::vec3(0.0f, 1.0f, 15.5f);
     m_CamMan1.TakeCamera(m_Cam1);
@@ -51,11 +50,7 @@ void MyTFMDescent::Join()
     m_Cam2 = glm::vec3(0.0f, 1.0f, 15.5f);
     m_CamMan2.TakeCamera(m_Cam2);
     m_CamMan2.SetViewport({ W_, H_ });
-
-    /*Ent_CameraMan2 = m_Scene->CreateEntity("Camera 2");
-    Ent_CameraMan2.AddComponent<CameraComponent>(m_Cam2, glm::vec3(0.0f, 1.0f, 15.5f), W_, H_);
-    Ent_CameraMan2.GetComponent<CameraComponent>().Primary = false;
-    m_CamMan2.TakeCamera(Ent_CameraMan2.GetComponent<CameraComponent>().Camera);*/
+    
     // Light
     Ent_Light = m_Scene->CreateEntity("Directional Light");
     Ent_Light.AddComponent<LightComponent>();
@@ -91,8 +86,8 @@ void MyTFMDescent::Join()
 
 
     m_HierarchyPanel.SetContext(m_Scene);
-    SerializerScene serializer(m_Scene);
-    serializer.Serialize("../assets/scenes/MyTFMScene.mh");
+   // SerializerScene serializer(m_Scene);
+   // serializer.Serialize("../assets/scenes/MyTFMScene.mh");
 
     // INFO
     m_Vendor   = RenderDrawCall::GetVendor();
@@ -102,342 +97,195 @@ void MyTFMDescent::Join()
 
 void MyTFMDescent::Free() { }
 
-void MyTFMDescent::Update(DeltaTime dt) 
-{ 
- //   m_IsEditScene = true;//Ent_CameraMan1.GetComponent<CameraComponent>().Primary;
-
-   // if (m_IsEditScene)
-   // {
-   //     m_CamMan1.Update(dt);
-   //     RenderDrawCall::ClearColor({ m_BackGroundColor, 1.0f });
-
-   //     // FIRST PASS        
-   //   //  {
-   //         
-   //         m_FBEditorCam->Bind();
-   //         
-   //         RenderDrawCall::clear();
-
-   //         m_Scene->UpdateEditorCamera(dt, m_CamMan1);
-
-   //         m_Scene->Update(dt);
-
-   //       
-
-   //         m_FBEditorCam->Unbind();            
-   //    // }  
-   //     // SECOND PASS
-   //  
-   ////     {      
-   //       //  RenderDrawCall::DisableDepthTest();
-   //        // RenderDrawCall::ClearColorBufferOnly();
-
-   //       //  m_Scene->UpdateScreenTexture(dt, m_FBEditorCam->GetFBOTexture(), m_QuadScreen);        
-   //        
-   // //    }
-   // }
-   // else
-   // {
-   //     m_CamMan2.Update(dt);
-   //     RenderDrawCall::ClearColor({ m_BackGroundColor, 1.0f });
-   //     RenderDrawCall::clear();
-
-   //    // m_QuadScreen->SetData(m_FBEditorCam->GetDepthBuffer(), sizeof(uint32_t));
-
-   //   //  m_Scene->UpdateScreenTexture(dt, m_FBEditorCam->GetFBOTexture(), m_QuadScreen);
-
-   //     m_Scene->UpdateEditorCamera(dt, m_CamMan2);
-
-   //     m_Scene->Update(dt);
-   // }       
-
-
-
+void MyTFMDescent::Update(TimeStep dt)
+{     
     if (m_IsEditScene)
-    {        
-        m_CamMan1.Update(dt);        
+    {
+        
+        m_CamMan1.Update(dt);     
+        RenderDrawCall::ClearColor({ m_BackGroundColor, 1.0f });
+        
+        
         // FIRST RENDER PASS
         {
            
             m_FramebufferFirstScene->Bind();
-            RenderDrawCall::ClearColor({ m_BackGroundColor, 1.0f });
-            RenderDrawCall::clear();
-            
-
-            m_Scene->UpdateEditorCamera(dt, m_CamMan1);    
-
-
-            //auto [mx, my] = ImGui::GetMousePos();
-            //mx -= m_ViewPortBounds[0].x;
-            //my -= m_ViewPortBounds[0].y;
-            //glm::vec2 viewportSize = m_ViewPortBounds[1] - m_ViewPortBounds[0];
-
-            //int mouseX = (int)mx;
-            //int mouseY = (int)my;
-
-            //if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
-            //{
-            //    int pixelData = m_FramebufferFirstScene->ReadPixel(1, mouseX, mouseY);
-            //    CORE_WARN("Mpixe lData {0}", pixelData);
-            //   // CORE_WARN("Mouse {0}, {1}", mouseX, mouseY);
-            //}
-            
+            {
+                RenderDrawCall::EnableDepthTest();
+                RenderDrawCall::clear();
+                m_Scene->UpdateFirstPersonCamera(dt, m_CamMan1);
+            }           
             m_FramebufferFirstScene->Unbind();
         }
         // SECOND PASS
         {
             m_FramebufferImGuiFrame->Bind();
-
-            RenderDrawCall::DisableDepthTest();
-            RenderDrawCall::ClearColorBufferOnly();
-
-            
-            //   m_FBEditorCam->ActiveTexture(0);
-            m_Scene->UpdateScreenTexture(m_FramebufferFirstScene);
-
+            {
+                RenderDrawCall::DisableDepthTest();
+                RenderDrawCall::ClearColorBufferOnly();
+                m_Scene->UpdateScreenTexture(m_FramebufferFirstScene);
+            }
             m_FramebufferImGuiFrame->Unbind();
         }
-        // THIRD FRAME GAME PLAY
+        // FRAME GAME PLAY
         {
+            RenderDrawCall::SetWiewPort(0, 0, Engine::p().GetWindow().GetWidth(), Engine::p().GetWindow().GetHeight());            
 
+            m_FramebufferPlayerCamera->Bind();
+            {    
+                RenderDrawCall::EnableDepthTest();
+                RenderDrawCall::clear();
+                m_Scene->UpdateFirstPersonCamera(dt, m_CamMan2);
+            }
+            m_FramebufferPlayerCamera->Unbind();
         }
        
     }
     else
-    {    
-         m_CamMan2.Update(dt);
-         RenderDrawCall::ClearColor({ m_BackGroundColor, 1.0f });
-         RenderDrawCall::clear();
-         m_Scene->UpdateEditorCamera(dt, m_CamMan2);   
+    {
+     m_CamMan2.SetViewport({ (float)Engine::p().GetWindow().GetWidth(), (float)Engine::p().GetWindow().GetHeight() });
+     m_CamMan2.Update(dt);
+    // RenderDrawCall::SetWiewPort(0, 0, Engine::p().GetWindow().GetWidth(), Engine::p().GetWindow().GetHeight());
+     
+     RenderDrawCall::clear();
+     m_Scene->UpdateFirstPersonCamera(dt, m_CamMan2);
+   
     }
-
-
-    
-    
-
-
-
-    
-
-
-
-   // m_FBEditorCam->Unbind();
 }
 
 void MyTFMDescent::ImGuiRender()
 {
     if (m_IsEditScene)
     {
-        static bool docksOpen = true;
-        static bool opt_fullscreen = true;
-        static bool opt_padding = false;
-        static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-
-        // Estamos usando la bandera ImGuiWindowFlags_NoDocking para hacer que la ventana principal no se pueda acoplar,
-        // porque sería confuso tener dos objetivos de acoplamiento entre sí.
-        ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-        if (opt_fullscreen)
+        m_DockSpace.Begin(); // INIT DOCKS SPACE
         {
-            ImGuiViewport* viewport = ImGui::GetMainViewport();
-            ImGui::SetNextWindowPos(viewport->GetWorkPos());
-            ImGui::SetNextWindowSize(viewport->GetWorkSize());
-            ImGui::SetNextWindowViewport(viewport->ID);
-            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-            ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-            window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-            window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-        }
-        else
-        {
-            dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
-        }
+            m_MenuBar.ImGuiRender();
+            m_HierarchyPanel.ImGuiRender();
+            m_BrowserPanel.ImGuiRender();
 
-        // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
-        // and handle the pass-thru hole, so we ask Begin() to not render a background.
-        if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-            window_flags |= ImGuiWindowFlags_NoBackground;
 
-        // Important: note that we proceed even if Begin() returns false (aka window is collapsed).
-        // This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
-        // all active windows docked into it will lose their parent and become undocked.
-        // We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
-        // any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
-        if (!opt_padding)
-            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-        ImGui::Begin("DockSpace Demo", &docksOpen, window_flags);
-        if (!opt_padding)
+
+            /* My ImGui SETTINGS */
+            ImGui::Begin("Rendering");
+
+            ImGui::Text("Active camera");
+            // checkbox
+            if (ImGui::Checkbox("Editor Camera", &m_IsEditScene))
+            {
+                m_IsEditScene = (m_IsEditScene) ? true : false;
+            }
+
+            if (ImGui::Checkbox("Activate post-process", &m_EnablePostProcess))
+            {
+                m_EnablePostProcess = (m_EnablePostProcess) ? true : false;
+            }
+            ImGui::Separator();
+            ImGui::Text("Background");
+            ImGui::ColorEdit3("Color", glm::value_ptr(m_BackGroundColor));
+
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+            ImGui::Begin("Player Camera");
+
+            {
+                ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+                {
+
+                    if (m_CamMan2.GetViewPort() != *((glm::vec2*)&viewportPanelSize))
+                    {
+                        m_CamMan2.SetViewport({ viewportPanelSize.x, viewportPanelSize.y });
+                    }
+                }
+                uint32_t texturePlayCamID = m_FramebufferPlayerCamera->GetFBOTexture(0);
+                ImGui::Image((void*)texturePlayCamID, ImVec2{ viewportPanelSize.x, viewportPanelSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+            }
+
+            ImGui::End();
             ImGui::PopStyleVar();
 
-        if (opt_fullscreen)
-            ImGui::PopStyleVar(2);
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 
-        // DockSpace
-        ImGuiIO& io = ImGui::GetIO();
-        ImGuiStyle& style = ImGui::GetStyle();
-        float minWinSizeX = style.WindowMinSize.x;
-        style.WindowMinSize.x = 370.0f;
-        if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-        {
-            ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-            ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-        }
-
-        style.WindowMinSize.x = minWinSizeX;
-
-        if (ImGui::BeginMenuBar())
-        {
-            if (ImGui::BeginMenu("File"))
+            ImGui::Begin("Scene Frame");
+            ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
             {
-                // Disabling fullscreen would allow the window to be moved to the front of other windows,
-                // which we can't undo at the moment without finer window depth/z control.
-                //ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
-                //ImGui::MenuItem("Padding", NULL, &opt_padding);
-                //ImGui::Separator();
+                m_CamMan1._IsWindowHovered = ImGui::IsWindowHovered();
+                m_CamMan1._IsWindowFocused = ImGui::IsWindowFocused();
 
-                if (ImGui::MenuItem("Exit")) Engine::p().Exit();
+                if (m_viewPortSize != *((glm::vec2*)&viewportPanelSize))
+                {
+                    m_CamMan1.SetViewport({ viewportPanelSize.x, viewportPanelSize.y });
 
+                    m_FramebufferFirstScene->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
+                    //m_FramebufferImGuiFrame->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
+                    m_viewPortSize = { viewportPanelSize.x, viewportPanelSize.y };
 
+                }
 
-                ImGui::EndMenu();
             }
-            ImGui::EndMenuBar();
-        }
+            //  uint32_t textureID = m_FramebufferImGuiFrame->GetFBOTexture(0);
+            if (m_EnablePostProcess)
+                ImGui::Image((void*)m_FramebufferImGuiFrame->GetFBOTexture(0), ImVec2{ viewportPanelSize.x, viewportPanelSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+            else
+                ImGui::Image((void*)m_FramebufferFirstScene->GetFBOTexture(0), ImVec2{ viewportPanelSize.x, viewportPanelSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
-        /*************************************/
-        m_HierarchyPanel.OnImGuiRender();
-        /*************************************/
+            ImGui::PopStyleVar(); // pop -> PushStyleVar(ImGuiStyleVar_WindowPadding)
 
 
-        /* My ImGui SETTINGS */
-      
-        ImGui::Begin("Rendering"); // begin 1
-        ImGui::NewLine();
-       // ImGui::Text(m_Vendor.c_str()  );
-        ImGui::Text(m_Renderer.c_str());
-        ImGui::Text(m_Version.c_str());
 
-        ImGui::NewLine();
-        ImGui::Separator();
-        ImGui::NewLine();
-        ImGui::Text("Active camera");
-        // checkbox
-        if (ImGui::Checkbox("Editor Camera", &m_IsEditScene))
-        {
-            m_IsEditScene = (m_IsEditScene) ? true : false;
-            //nt_CameraMan2.GetComponent<CameraComponent>().Primary = !m_PrimaryCam;
-            //Ent_CameraMan1.GetComponent<CameraComponent>().Primary = m_PrimaryCam;
-        }
-        ImGui::NewLine();
-        ImGui::Separator();
-        ImGui::NewLine();
-        ImGui::Text("Background");
-        ImGui::ColorEdit3("Color", glm::value_ptr(m_BackGroundColor));
-        
 
-        /* SCENE FRAME */
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 
-        ImGui::Begin("Scene Frame");
-      /*  auto viewportOffset = ImGui::GetCursorPos();
-        auto windowSize = ImGui::GetWindowSize();
-        ImVec2 minBound = ImGui::GetWindowPos();
-        minBound.x += viewportOffset.x;
-        minBound.y += viewportOffset.y;
+            // Gizmo
+            Entity EntSelected = m_HierarchyPanel.GetCollectedEntity();
 
-        ImVec2 maxBound = { minBound.x + windowSize.x, minBound.y + windowSize.y };
-        m_ViewPortBounds[0] = { minBound.x, minBound.y };
-        m_ViewPortBounds[1] = { maxBound.x, maxBound.y };*/
-        /* FLAG */ // Si cambia el ViewPort del frameImGui donde esta la textura de la escena
-        ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-        {
-            
-            /* FLAG */ // Si hay foco del mouse sobre el frame del window // no bloquees los eventos desde Event System
-           // Ent_CameraMan1.GetComponent<CameraManComponent>().IsHovered = ImGui::IsWindowHovered();
-            m_CamMan1._IsWindowHovered = ImGui::IsWindowHovered();
-            m_CamMan1._IsWindowFocused = ImGui::IsWindowFocused();
-
-            if (m_viewPortSize != *((glm::vec2*)&viewportPanelSize))
+            if (EntSelected && m_GizmoType != -1 && m_IsEditScene)
             {
-                WARN("{0}, {1}", viewportPanelSize.x, viewportPanelSize.y);
-                m_CamMan1.SetViewport({ viewportPanelSize.x, viewportPanelSize.y });
+                ImGuizmo::SetOrthographic(false);
+                ImGuizmo::SetDrawlist();
 
-                m_FramebufferFirstScene->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
-                //m_FramebufferImGuiFrame->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
-                m_viewPortSize = { viewportPanelSize.x, viewportPanelSize.y };
-                
-            }
+                float wWidth = (float)ImGui::GetWindowWidth();
+                float wHeight = (float)ImGui::GetWindowHeight();
 
-        }
-      //  uint32_t originalTexture = m_FramebufferFirstScene->GetFBOTexture(1);
-      //  uint32_t TEST = m_FramebufferRedChannel->GetFBOTexture(0);
-        uint32_t textureID = m_FramebufferImGuiFrame->GetFBOTexture(0);
-        ImGui::Image((void*)textureID, ImVec2{ viewportPanelSize.x, viewportPanelSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+                ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, wWidth, wHeight);
 
-        
+                // const auto& ECam = Ent_CameraMan1.GetComponent<CameraComponent>();
 
-    
-
-
-         
-        // Gizmo
-        Entity EntSelected = m_HierarchyPanel.GetCollectedEntity();
-
-        if (EntSelected && m_GizmoType != -1 && m_IsEditScene)
-        {
-            ImGuizmo::SetOrthographic(false);
-            ImGuizmo::SetDrawlist();
-
-            float wWidth = (float)ImGui::GetWindowWidth();
-            float wHeight = (float)ImGui::GetWindowHeight();
-
-            ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, wWidth, wHeight);
-
-            // const auto& ECam = Ent_CameraMan1.GetComponent<CameraComponent>();
-
-             // CAMERA
-            glm::mat4& Projection = glm::perspective
-            (
-                glm::radians
+                 // CAMERA
+                glm::mat4& Projection = glm::perspective
                 (
-                    m_CamMan1.Get().GetFOV()),
+                    glm::radians
+                    (
+                        m_CamMan1.Get().GetFOV()),
                     m_CamMan1.GetViewPort().x / m_CamMan1.GetViewPort().y,
                     m_CamMan1.GetNear(), m_CamMan1.GetFar()
-                
+
                 );
 
-            glm::mat4  ViewMatrix = m_CamMan1.Get().GetViewMatrix();
+                glm::mat4  ViewMatrix = m_CamMan1.Get().GetViewMatrix();
 
-            // ENTITY TRANSFORM
-            auto& TC = EntSelected.GetComponent<TransformComponent>();
-            glm::mat4 T = TC.GetTransform();
+                // ENTITY TRANSFORM
+                auto& TC = EntSelected.GetComponent<TransformComponent>();
+                glm::mat4 T = TC.GetTransform();
 
 
-            ImGuizmo::Manipulate(glm::value_ptr(ViewMatrix), glm::value_ptr(Projection),
-                (ImGuizmo::OPERATION)m_GizmoType,
-                ImGuizmo::LOCAL,
-                glm::value_ptr(T));
+                ImGuizmo::Manipulate(glm::value_ptr(ViewMatrix), glm::value_ptr(Projection),
+                    (ImGuizmo::OPERATION)m_GizmoType,
+                    ImGuizmo::LOCAL,
+                    glm::value_ptr(T));
 
-            if (ImGuizmo::IsUsing())
-            {
-                glm::vec3 Tra, Rot, Sca;
-                DecomposeTransform(T, Tra, Rot, Sca);
-                glm::vec3 DeltaRot = Rot - TC.R;
-                TC.T = Tra;
-                TC.R += DeltaRot;
-                TC.S = Sca;
+                if (ImGuizmo::IsUsing())
+                {
+                    glm::vec3 Tra, Rot, Sca;
+                    DecomposeTransform(T, Tra, Rot, Sca);
+                    glm::vec3 DeltaRot = Rot - TC.R;
+                    TC.T = Tra;
+                    TC.R += DeltaRot;
+                    TC.S = Sca;
+                }
             }
-        }
-
-        ImGui::End(); // end 1
-        ImGui::PopStyleVar(); // pop -> PushStyleVar(ImGuiStyleVar_WindowPadding)
-        ImGui::End(); // end 2    
-        ImGui::End(); // end 2 
+            ImGui::End(); // end 1
+            ImGui::End(); // end 2  
+        }        
+        m_DockSpace.End(); // END DOCK SPACE
     }
-    else
-    {
-       // Ent_CameraMan2.GetComponent<CameraComponent>().ViewportX = W_;
-       // Ent_CameraMan2.GetComponent<CameraComponent>().ViewportY = H_;
-    }   
 }
 
 void MyTFMDescent::OnEvent(Event& event) 
@@ -505,24 +353,16 @@ void MyTFMDescent::OnEvent(Event& event)
                     // hack -> recupera el puntero del raton en el editor
                     Engine::p().GetWindow().SetCaptureMode(false);
                     break;
-
-                case Key::C:
-                {
-                    m_IsEditScene = true;
-                   /* m_PrimaryCam = false;
-                    Ent_CameraMan2.GetComponent<CameraComponent>().Primary = true;
-                    Ent_CameraMan1.GetComponent<CameraComponent>().Primary = false;*/
-                    break;
-                }
-                case Key::V:
-                {
-                    m_IsEditScene = false;
-                    /*m_PrimaryCam = true;
-                    Ent_CameraMan2.GetComponent<CameraComponent>().Primary = false;
-                    Ent_CameraMan1.GetComponent<CameraComponent>().Primary = true;*/
-                    break;
-                }
+                
             }
-        }		       
+        }
+
+        if (dynamic_cast<OnKeyPressed&>(event).GetKeyCode() == MH_KEY_C) m_IsEditScene = false;
+        if (dynamic_cast<OnKeyPressed&>(event).GetKeyCode() == MH_KEY_V)
+        {
+            Engine::p().GetWindow().SetCaptureMode(false);
+            m_IsEditScene = true;
+        }
+            
 	}
 }

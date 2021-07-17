@@ -18,7 +18,7 @@ namespace MHelmet
 
         void TakeCamera(PerspectiveCamera& camera) { CAM = camera; };
 
-        void Update(DeltaTime dt);
+        void Update(TimeStep dt);
         void OnEvent(Event& e);
 
         bool MouseMoved(OnMouseMoved& e);
@@ -30,7 +30,7 @@ namespace MHelmet
         void SetSensitivity(const float& Sensitivity) { m_Sensitivity = Sensitivity; };
         void SetFlightMode(const bool mode) { m_FlightMode = mode; }
         void SetCaptureMode(const bool mode);
-        void SetViewport(const glm::vec2 viewport) { m_Viewport = viewport; }
+        void SetViewport(const glm::vec2& viewport) { m_Viewport = viewport; }
 
 
         float GetNear() const { return m_Near; }
@@ -46,19 +46,9 @@ namespace MHelmet
         bool _IsWindowFocused = true;        
 
     private:
-        void HandleKeyboard(Movement dir, DeltaTime dt);
+        void HandleKeyboard(Movement dir, TimeStep dt);
         void HandleMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
         void HandleMouseScroll(float yoffset);
-
-        void MousePan(const glm::vec2& delta);
-        void MouseRotate(const glm::vec2& delta);
-        void MouseZoom(float delta);
-
-        glm::vec3 CalculatePosition() const;
-
-       // std::pair<float, float> PanSpeed() const;
-        float RotationSpeed() const;
-        float ZoomSpeed() const;
 
     private:
         PerspectiveCamera CAM;

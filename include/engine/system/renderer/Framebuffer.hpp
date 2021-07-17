@@ -1,5 +1,5 @@
 #pragma once
-#include "../src/engine/mhpch.cpp"
+#include <MHpch.h>
 #include <glm/glm.hpp>
 #include <map>
 

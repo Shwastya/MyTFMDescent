@@ -2,7 +2,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "engine/system/Input.hpp"
 #include <engine/system/MHCore.hpp>
-#include "../src/engine/mhpch.cpp"
+#include <MHpch.h>
 #include "engine/system/utils/utils.hpp"
 #include "engine/system/events/AppEvents/OnAppEvents.hpp"
 #include "engine/system/events/KeyEvents/OnKeyEvents.hpp"
@@ -11,7 +11,7 @@
 
 namespace MHelmet
 {
-    void CameraEditor::Update(DeltaTime dt)
+    void CameraEditor::Update(TimeStep dt)
     {
         if (_IsWindowHovered)
         {
@@ -44,7 +44,7 @@ namespace MHelmet
 
     }
 
-    void CameraEditor::HandleKeyboard(Movement direction, DeltaTime dt)
+    void CameraEditor::HandleKeyboard(Movement direction, TimeStep dt)
     {
 
         const float velocity = m_Speed * dt.Seconds();

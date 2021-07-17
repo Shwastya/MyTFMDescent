@@ -4,15 +4,12 @@
 
 namespace MHelmet
 {
-	// RenderCommand tiene un puntero al rendererAPI
+	
 	class RenderDrawCall
 	{
 	public:
 
-		static void Init()
-		{
-			s_RenderererAPI->Init();
-		}
+		static void Init() { s_RenderererAPI->Init(); }
 
 		static void ClearColor(const glm::vec4& color) { s_RenderererAPI->ClearColor(color); }
 		
@@ -38,4 +35,6 @@ namespace MHelmet
 	private:
 		static RendererAPI* s_RenderererAPI;
 	};
+
+
 }

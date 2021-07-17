@@ -28,7 +28,7 @@
 //#include "engine/system/renderer/Texture.hpp"
 #include "engine/system/renderer/FrameBuffer.hpp"
 
-/* DE momento super cutrisiiiimo para facilitar un poco el tema */
+/* Revisar */
 #include "engine/system/utils/Library.hpp"
 
 /* Geometries manager */
@@ -42,15 +42,5 @@
 #include "engine/system/scene/Entity.hpp"
 
 
-/* No muy seguro de que sea el mejor lugar */
-
-struct ModelTransform
-{
-	glm::vec3 Translate = glm::vec3(1.0f);
-	glm::vec3 Rotate = glm::vec3(1.0f);
-	float Degrees = 0.0f;
-	glm::vec3 Scale = glm::vec3(1.0f);
-
-};
 
 

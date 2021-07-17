@@ -26,7 +26,7 @@
 //	public:
 //		ParticleSystem();
 //
-//		void OnUpdate(DeltaTime ts);
+//		void OnUpdate(TimeStep ts);
 //		void OnRender(PerspectiveCamera& camera);
 //
 //		void Emit(const ParticleProps& particleProps);

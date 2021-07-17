@@ -16,7 +16,7 @@ namespace MHelmet
 		virtual void Join() override = 0;	
 		virtual void Free() override = 0;
 
-		virtual void Update(DeltaTime dt) override {};	// Node base
+		virtual void Update(TimeStep dt) override {};	// Node base
 
 		virtual void ImGuiRender() {};		// propio
 

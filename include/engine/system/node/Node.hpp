@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../src/engine/mhpch.cpp"	
+#include <MHpch.h>
 
 namespace MHelmet
 {
@@ -14,6 +14,6 @@ namespace MHelmet
 		virtual void Free() = 0;
 
 
-		virtual void Update(DeltaTime dt) = 0;
+		virtual void Update(TimeStep dt) = 0;
 	};
 }

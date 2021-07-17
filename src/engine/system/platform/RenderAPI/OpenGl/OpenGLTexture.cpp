@@ -1,4 +1,4 @@
-#include "../src/engine/mhpch.cpp"
+#include <MHpch.h>
 #include <glad/glad.h>
 
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLTexture.hpp"

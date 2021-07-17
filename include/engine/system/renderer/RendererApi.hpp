@@ -8,6 +8,7 @@
 
 namespace MHelmet
 {
+
 	class RendererAPI
 	{
 	public:
@@ -17,9 +18,7 @@ namespace MHelmet
 		};
 
 	public:
-
 		virtual void Init() = 0;
-
 		virtual void ClearColor(const glm::vec4& color) = 0;
 
 		virtual void clear() = 0;
@@ -31,9 +30,7 @@ namespace MHelmet
 
 		
 		virtual void EnableDepthTest() = 0;
-		virtual void DisableDepthTest() = 0;
-
-		
+		virtual void DisableDepthTest() = 0;		
 		
 		static API GetAPI() { return s_API; }
 
@@ -43,7 +40,8 @@ namespace MHelmet
 		virtual std::string GetVersion()  const = 0;
 
 	private:
-		const static API s_API{ API::OpenGL };
-		//static API s_API;
+		const static API s_API{ API::OpenGL }; // de momento OpenGL constante		
 	};
+
+
 }

@@ -1,24 +1,15 @@
 #pragma once
 
-#include "engine/system/geometry/triangle.hpp"
-#include "engine/system/geometry/quad.hpp"
-#include "engine/system/geometry/cube.hpp"
-#include "engine/system/geometry/sphere.hpp"
-#include "engine/system/geometry/teapot.hpp"
-//#include "PerspectiveCamera.hpp"
-#include "engine/system/scene/Components.hpp"
-
-
-
-
 namespace MHelmet
 {
-	struct Texture2D;
-
 	struct CameraFirstPerson;
+	struct LightComponent;
+	struct PointLightComponent;
+	struct SpotLightComponent;
+	struct MaterialComponent;
+	struct TextureComponent;
 
 	class FrameBuffer;
-
 	class RendererGeometry
 	{
 	public:

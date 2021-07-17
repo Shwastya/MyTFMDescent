@@ -1,5 +1,5 @@
 #include "engine/system/MHCore.hpp"
-#include "../src/engine/mhpch.cpp"
+#include <MHpch.h>
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLShader.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <sstream>

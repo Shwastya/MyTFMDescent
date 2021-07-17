@@ -2,7 +2,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "engine/system/Input.hpp"
 #include <engine/system/MHCore.hpp>
-#include "../src/engine/mhpch.cpp"
+#include <MHpch.h>
 #include "engine/system/utils/utils.hpp"
 #include "engine/system/events/AppEvents/OnAppEvents.hpp"
 #include "engine/system/events/KeyEvents/OnKeyEvents.hpp"
@@ -12,7 +12,7 @@
 
 namespace MHelmet
 {
-    void CameraFirstPerson::Update(DeltaTime dt)
+    void CameraFirstPerson::Update(TimeStep dt)
     {
         if (_IsWindowHovered)
         {
@@ -39,20 +39,20 @@ namespace MHelmet
         
     }
 
-    void CameraFirstPerson::HandleKeyboard(Movement direction, DeltaTime dt)
+    void CameraFirstPerson::HandleKeyboard(Movement direction, TimeStep dt)
     {
         
             const float velocity = m_Speed * dt.Seconds();
 
             switch (direction)
             {
-            case Movement::Forward:  CAM.Position() += CAM.Front() * velocity; break;
+                case Movement::Forward:  CAM.Position() += CAM.Front() * velocity; break;
 
-            case Movement::Backward: CAM.Position() -= CAM.Front() * velocity; break;
+                case Movement::Backward: CAM.Position() -= CAM.Front() * velocity; break;
 
-            case Movement::Left:     CAM.Position() -= CAM.Right() * velocity; break;
+                case Movement::Left:     CAM.Position() -= CAM.Right() * velocity; break;
 
-            case Movement::Right:    CAM.Position() += CAM.Right() * velocity; break;
+                case Movement::Right:    CAM.Position() += CAM.Right() * velocity; break;
             }
 
             if (!m_FlightMode) CAM.Position().y = 0.0f;        

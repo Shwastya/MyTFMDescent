@@ -131,7 +131,8 @@ namespace MHelmet
 	{
 		// PINTA SOBRE EL FBO
 		glBindFramebuffer(GL_FRAMEBUFFER, m_FboID);
-		glViewport(0, 0, m_TextProps.W, m_TextProps.H);
+		RenderDrawCall::SetWiewPort(0, 0, m_TextProps.W, m_TextProps.H);
+		//glViewport(0, 0, m_TextProps.W, m_TextProps.H);
 
 		
 		

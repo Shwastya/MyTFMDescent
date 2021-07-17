@@ -1,11 +1,18 @@
-#include "../src/engine/mhpch.cpp"
+#include <MHpch.h>
+#include "engine/Engine.hpp"
+#include "engine/system/geometry/triangle.hpp"
+#include "engine/system/geometry/quad.hpp"
+#include "engine/system/geometry/cube.hpp"
+#include "engine/system/geometry/sphere.hpp"
+#include "engine/system/geometry/teapot.hpp"
 #include "engine/system/renderer/RendererGeometry.hpp"
+#include "engine/system/scene/Components.hpp"
 #include "engine/system/renderer/VAO.hpp"
 #include "engine/system/utils/Library.hpp"
 #include "engine/system/platform/RenderAPI/OpenGL/OpenGLShader.hpp"
 #include <engine/system/platform/RenderAPI/OpenGL/OpenGLEBO.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "engine/Engine.hpp"
+
 #include "engine/system/cameraManager/CameraFirstPerson.hpp"
 #include "engine/system/renderer/Framebuffer.hpp"
 
@@ -16,7 +23,6 @@
 
 #define SHADER std::reinterpret_pointer_cast<OpenGLShader>(s_Data->SLib.Get("PhongT"))
 #define ScreenTexture std::reinterpret_pointer_cast<OpenGLShader>(s_Data->SLib.Get("ScreenTexture"))
-#define TextureID std::reinterpret_pointer_cast<OpenGLShader>(s_Data->SLib.Get("TextureID"))
 
 
 namespace MHelmet
@@ -105,9 +111,9 @@ namespace MHelmet
 
 		// Librerias de shaders
 		//s_Data->SLib.Load("Vuelta", "../shaders/3D/TEXTU/phong2pointlight.glsl");
-		s_Data->SLib.Load("PhongT", "../assets/shaders/3D/TEXTU/phong2.glsl");
-		s_Data->SLib.Load("ScreenTexture", "../assets/shaders/3D/TEXTU/FBQuad.glsl");
-		s_Data->SLib.Load("TextureID", "../assets/shaders/3D/TEXTU/textureID.glsl");
+		s_Data->SLib.Load("PhongT", "../assets/shaders/phong.glsl");
+		s_Data->SLib.Load("ScreenTexture", "../assets/shaders/FBQuad.glsl");
+		
 
 		
 		/////////////// Triangle ///////////////

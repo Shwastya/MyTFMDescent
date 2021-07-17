@@ -18,7 +18,7 @@ namespace MHelmet
 
         void TakeCamera(const PerspectiveCamera& camera) { CAM = camera; };
 
-        void Update(DeltaTime dt);
+        void Update(TimeStep dt);
         void OnEvent(Event& e);
 
         bool MouseMoved(OnMouseMoved& e);
@@ -46,7 +46,7 @@ namespace MHelmet
         bool _IsWindowFocused = true;        
 
     private:
-        void HandleKeyboard(Movement dir, DeltaTime dt);
+        void HandleKeyboard(Movement dir, TimeStep dt);
         void HandleMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
         void HandleMouseScroll(float yoffset);
 

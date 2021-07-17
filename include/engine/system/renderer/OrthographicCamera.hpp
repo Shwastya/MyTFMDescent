@@ -16,7 +16,7 @@ namespace MHelmet
 		const glm::vec3& GetPosition() { return m_Position; }
 		float GetRotation() { return m_Rotation; }
 
-		void OnResize();
+	
 
 		const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
 		const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }

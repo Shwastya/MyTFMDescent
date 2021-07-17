@@ -1,4 +1,4 @@
-#include "../src/engine/mhpch.cpp"
+#include <MHpch.h>
 
 #include "engine/system/platform/windows/WindowWin.hpp"
 #include "engine/system/events/AppEvents/OnAppEvents.hpp"
@@ -93,6 +93,7 @@ namespace MHelmet
 		m_Context->Init();			
 
 		// Puntero a la instancia actual del window
+		// Asociacion de datos
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 
 		/*********************************************************/

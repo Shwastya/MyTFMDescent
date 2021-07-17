@@ -1,5 +1,5 @@
 #include "engine/system/utils/Library.hpp"
-#include "../src/engine/mhpch.cpp"
+#include <MHpch.h>
 #include "engine/system/MHCore.hpp"
 
 namespace MHelmet

@@ -3,7 +3,7 @@
 
 namespace MHelmet
 {    
-    struct DeltaTime;
+    struct TimeStep;
     struct OnMouseMoved;
     class  Event;
 
@@ -23,9 +23,6 @@ namespace MHelmet
         glm::vec3 GetPosition() const { return m_Position; };
 
         void UpdateCameraVectors();     
-
-        void SetSpeed(float speed) { m_Speed = speed; };
-        void SetSensitivity(float sens) { m_Sensitivity = sens; };  
 
         //  input movements
         glm::vec3& Position() { return m_Position; }
@@ -50,9 +47,14 @@ namespace MHelmet
         float m_Pitch;
         float m_Fov;
 
-    private:
-        float m_Speed = 7.5f;
-        float m_Sensitivity = 0.1f;
+        // las siguientes propiedades deben pertenecer a la camara perspective
+        // y no al manager. manejar desde el manager como clase derivada
+        float m_Near = 0.1f;
+        float m_Far = 100.0f;
+
+        glm::vec2 m_Viewport = glm::vec2{ 0.0f, 0.0f };
+
+ 
 
        
     };   

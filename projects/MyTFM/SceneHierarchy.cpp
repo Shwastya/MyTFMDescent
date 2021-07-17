@@ -1,4 +1,5 @@
 #include "SceneHierarchy.hpp"
+// #include "../src/engine/mhpch.cpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui_internal.h>
 #include "engine/system/scene/Components.hpp"
@@ -112,9 +113,9 @@ namespace MHelmet
 		ImGui::PopID();
 	}
 
-	void SceneHierarchy::SetContext(const RefCount<Scene>& context)	{ m_Context = context;}
+	void SceneHierarchyUI::SetContext(const RefCount<Scene>& context)	{ m_Context = context;}
 
-	void SceneHierarchy::OnImGuiRender()
+	void SceneHierarchyUI::ImGuiRender()
 	{		
 		ImGui::Begin("Hierarchy");
 		
@@ -170,7 +171,7 @@ namespace MHelmet
 		ImGui::End();
 	}
 
-	void SceneHierarchy::DrawNodes(Entity ent)
+	void SceneHierarchyUI::DrawNodes(Entity ent)
 	{
 		auto& tag = ent.GetComponent<TagComponent>().Tag;
 
@@ -223,7 +224,7 @@ namespace MHelmet
 	}
 
 	// DRAWING COMPONENTS
-	void SceneHierarchy::DrawComponents(Entity ent)
+	void SceneHierarchyUI::DrawComponents(Entity ent)
 	{
 		auto& tag = ent.GetComponent<TagComponent>().Tag;
 
@@ -397,10 +398,9 @@ namespace MHelmet
 
 		DrawComponent<TextureComponent>("Texture", ent, [](auto& component) 
 		{
-			ImGui::DragInt("Shininess", &component.Shininess);
-			ImGui::NewLine();
+			ImGui::DragInt("Shininess", &component.Shininess);	
+
 			ImGui::Text("Choose a texture for the selected entity:");
-			ImGui::NewLine();
 
 			if (ImGui::Button("Skulls", ImVec2{ 100, 20 }))
 			{
@@ -425,10 +425,56 @@ namespace MHelmet
 				component.P_N = "../assets/textures/brain/Brain_Matter_001_NORM.jpg";
 				component.SetComponentTexture();
 			}
+			if (ImGui::Button("Alien", ImVec2{ 100, 20 }))
+			{
+				component.P_A = "../assets/textures/alien/Metal_Alien_001_AO.jpg";
+				component.P_S = "../assets/textures/alien/Metal_Alien_001_COLOR.jpg";
+				component.P_N = "../assets/textures/alien/Metal_Alien_001_NRM.jpg";
+				component.SetComponentTexture();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("FlatRing", ImVec2{ 100, 20 }))
+			{
+				component.P_A = "../assets/textures/FlatRing_low/FlatRingChainmailArmor_basecolor.png";
+				component.P_S = "../assets/textures/FlatRing_low/FlatRingChainmailArmor_height.png";
+				component.P_N = "../assets/textures/FlatRing_low/FlatRingChainmailArmor_normal.png";
+				component.SetComponentTexture();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Organic", ImVec2{ 100, 20 }))
+			{
+				component.P_A = "../assets/textures/organic/Organic_matter_001_COLOR.jpg";
+				component.P_S = "../assets/textures/organic/Organic_matter_001_SPEC.jpg";
+				component.P_N = "../assets/textures/organic/Organic_matter_001_NORM.jpg";
+				component.SetComponentTexture();
+			}		
+			if (ImGui::Button("Gems", ImVec2{ 100, 20 }))
+			{
+				component.P_A = "../assets/textures/gems/Incrusted_Gems_001_COLOR.jpg";
+				component.P_S = "../assets/textures/gems/Incrusted_Gems_001_NORM.jpg";
+				component.P_N = "../assets/textures/gems/Incrusted_Gems_001_SPEC.jpg";
+				component.SetComponentTexture();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Abstract", ImVec2{ 100, 20 }))
+			{
+				component.P_A = "../assets/textures/abstract/Abstract_001_COLOR.jpg";
+				component.P_S = "../assets/textures/abstract/Abstract_001_DISP.png";
+				component.P_N = "../assets/textures/abstract/Abstract_001_NRM.jpg";
+				component.SetComponentTexture();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Reset", ImVec2{ 100, 20 }))
+			{
+				component.P_A = component.D_A;
+				component.P_S = component.D_S;
+				component.P_N = component.D_N;
+				component.SetComponentTexture();
+			}
 		});			
 	}
 	
-	void SceneHierarchy::AssetStore()
+	void SceneHierarchyUI::AssetStore()
 	{		
 		const bool hasTransform = m_CollectionContext.HasComponent<TransformComponent>();
 		const bool isLightReference = m_CollectionContext.HasComponent<LightComponent>();
@@ -440,9 +486,9 @@ namespace MHelmet
 
 		if (hasTransform && (!isLightReference))
 		{
-			ImGui::NewLine();
+		
 			ImGui::Text("Choose an asset for the selected entity:");
-			ImGui::NewLine();
+		
 
 			if (ImGui::Button("Triangle", ImVec2{ 100, 20 }))
 			{
@@ -458,7 +504,7 @@ namespace MHelmet
 			{
 				m_CollectionContext.GetComponent<TransformComponent>().ID = 1;
 			}
-			ImGui::Separator();
+			
 
 			if (ImGui::Button("Sphere", ImVec2{ 100, 20 }))
 			{
@@ -473,7 +519,7 @@ namespace MHelmet
 			if (ImGui::Button("Reset", ImVec2{ 100, 20 }))
 			{
 				m_CollectionContext.GetComponent<TransformComponent>().ID = 0;
-			}				
+			}
 		}				
 	}
 }

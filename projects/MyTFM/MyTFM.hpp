@@ -10,7 +10,7 @@ public:
 		PushLayer(new MyTFMDescent());
 	}
 
-	~MyTFM() { /* delete de layers responsabilidad del Engine */ }
+	~MyTFM() = default;
 };
 
 

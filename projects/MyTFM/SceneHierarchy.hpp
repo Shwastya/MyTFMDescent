@@ -4,16 +4,16 @@
 
 namespace MHelmet
 {
-	class SceneHierarchy
+	class SceneHierarchyUI
 	{
 	public:
 
-		SceneHierarchy() = default;
-		SceneHierarchy(const RefCount<Scene>& context) { SetContext(context); };
+		SceneHierarchyUI() = default;
+		SceneHierarchyUI(const RefCount<Scene>& context) { SetContext(context); };
 
 		void SetContext(const RefCount<Scene>& context);
 
-		void OnImGuiRender();
+		void ImGuiRender();
 
 		Entity GetCollectedEntity() const { return m_CollectionContext; }
 

@@ -17,9 +17,9 @@ namespace MHelmet
 		Entity CreateEntity(const std::string& name = "unnamed");
 		void DestroyEntity(Entity entity); 
 
-		void UpdateEditorCamera(DeltaTime dt, const CameraFirstPerson& cam);
+		void UpdateFirstPersonCamera(TimeStep dt, const CameraFirstPerson& cam);
 		void UpdateScreenTexture(const RefCount<FrameBuffer>& fbotexture);
-		void Update(DeltaTime dt);
+		void Update(TimeStep dt);
 
 
 		//void SetMode(bool mode);
@@ -29,7 +29,7 @@ namespace MHelmet
 		 entt::registry m_Registry;
 
 		 friend class Entity;
-		 friend class SceneHierarchy;
+		 friend class SceneHierarchyUI;
 		 friend class SerializerScene;
 	};
 }

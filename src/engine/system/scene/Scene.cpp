@@ -1,5 +1,5 @@
 #include "engine/system/scene/Scene.hpp"
-#include "../src/engine/mhpch.cpp"
+#include <MHpch.h>
 #include "engine/system/scene/Components.hpp"
 #include "engine/system/renderer/RendererGeometry.hpp"
 #include "engine/system/scene/Entity.hpp"
@@ -83,7 +83,7 @@ namespace MHelmet
 		m_Registry.destroy(entity);
 	}	
 	
-	void Scene::UpdateEditorCamera(DeltaTime dt, const CameraFirstPerson& cam)
+	void Scene::UpdateFirstPersonCamera(TimeStep dt, const CameraFirstPerson& cam)
 	{
 		RendererGeometry::BeginScene(cam);
 		Update(dt);
@@ -94,7 +94,7 @@ namespace MHelmet
 		RendererGeometry::DrawQuadScreenTexture(fbotexture);
 	}
 
-	void Scene::Update(DeltaTime dt)
+	void Scene::Update(TimeStep dt)
 	{		
 		// BEGIN ESCENE
 		{

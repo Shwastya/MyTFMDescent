@@ -16,7 +16,5 @@ namespace MHelmet
 		void End();	
 
 		void SetMHelmetColors();
-	private:		
-		float m_Time = 0.0f;
 	};	
 }

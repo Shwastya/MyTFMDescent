@@ -1,5 +1,6 @@
 #pragma once
-#include "../src/engine/mhpch.cpp"
+
+
 #include "engine/system/platform/Window.hpp"
 #include "engine/system/ImGui/ImGuiLayer.hpp"
 #include <GLFW/glfw3.h>
@@ -46,7 +47,7 @@ namespace MHelmet
 		ImGuiLayer* m_ImGuiLayer;
 
 		float m_LastFrame = 0.0f;
-		DeltaTime m_DeltaTime;
+		TimeStep m_TimeStep;
 
 	private:		
 		static Engine* s_Instance;

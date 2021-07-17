@@ -1,4 +1,4 @@
-#include "../src/engine/mhpch.cpp"
+#include <MHpch.h>
 #include "engine/system/scene/Entity.hpp"
 
 namespace MHelmet

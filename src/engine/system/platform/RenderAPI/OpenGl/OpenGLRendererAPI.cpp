@@ -12,7 +12,7 @@ namespace MHelmet
 
 
 		// Se habilita el test de profundidad para las geometrias 3D
-		EnableDepthTest();
+	//	EnableDepthTest();
 
 		// Se habilita el CULL_FACE para ahorrarse el pintado de las caras traseras
 		glEnable(GL_CULL_FACE);
